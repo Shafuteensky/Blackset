@@ -8,6 +8,3 @@
 !/Assets/
 !/Packages/
 !/ProjectSettings/
-
-# Запретить определенные папки проекта
-/Assets/Plugins/
