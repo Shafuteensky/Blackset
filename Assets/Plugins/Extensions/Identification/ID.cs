@@ -1,20 +1,19 @@
 using UnityEngine;
 
-namespace Extensions.ID
+namespace Extensions.Identification
 {
     /// <summary>
-    /// Универсальный идентификатор
+    /// РЈРЅРёРІРµСЂСЃР°Р»СЊРЅС‹Р№ РёРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ
     /// </summary>
     [CreateAssetMenu(menuName = "Extensions/" + nameof(ID))]
     public class ID : ScriptableObject
     {
         /// <summary>
-        /// Идентификатор
+        /// РРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ
         /// </summary>
         public string Id => id;
         
         [SerializeField]
         protected string id = string.Empty;
-        
     }
 }
