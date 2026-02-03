@@ -1,20 +1,20 @@
+using System;
+using System.Collections;
+using UnityEngine;
+
 namespace Extensions.Coroutines
 {
-    using System;
-    using System.Collections;
-    using UnityEngine;
-
     /// <summary>
-    /// Stateless-утилита для отложенного выполнения действия через корутину
+    /// Stateless-СѓС‚РёР»РёС‚Р° РґР»СЏ РѕС‚Р»РѕР¶РµРЅРЅРѕРіРѕ РІС‹РїРѕР»РЅРµРЅРёСЏ РґРµР№СЃС‚РІРёСЏ С‡РµСЂРµР· РєРѕСЂСѓС‚РёРЅСѓ
     /// </summary>
     public static class CoroutineDelay
     {
         /// <summary>
-        /// Запуск действия с задержкой перед исполнением
+        /// Р—Р°РїСѓСЃРє РґРµР№СЃС‚РІРёСЏ СЃ Р·Р°РґРµСЂР¶РєРѕР№ РїРµСЂРµРґ РёСЃРїРѕР»РЅРµРЅРёРµРј
         /// </summary>
-        /// <param name="owner">Хозяин корутины</param>
-        /// <param name="delay">Задержка в секундах</param>
-        /// <param name="action">Действие</param>
+        /// <param name="owner">РҐРѕР·СЏРёРЅ РєРѕСЂСѓС‚РёРЅС‹</param>
+        /// <param name="delay">Р—Р°РґРµСЂР¶РєР° РІ СЃРµРєСѓРЅРґР°С…</param>
+        /// <param name="action">Р”РµР№СЃС‚РІРёРµ</param>
         public static void Run(MonoBehaviour owner, float delay, Action action)
         {
             if (owner == null || !owner.isActiveAndEnabled)
