@@ -7,7 +7,7 @@ namespace Extensions.EditorTools.Viewpoints
     /// Структура данных точки вьюпорта SceneNavigatorWindow
     /// </summary>
     [System.Serializable]
-    public sealed class ViewpointsData : InMemoryDataEntry
+    public sealed class ViewpointsData : InMemoryDataItem
     {
         public string ScenePath;
         public string Name;

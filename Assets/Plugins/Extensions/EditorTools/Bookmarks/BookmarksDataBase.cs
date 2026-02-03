@@ -6,6 +6,6 @@ namespace Extensions.EditorTools.Bookmarks
     /// <summary>
     /// Сохранение и загрузка закладок ObjectBookmarksWindow
     /// </summary>
-    [CreateAssetMenu(fileName = nameof(BookmarksDataBase), menuName = "Extensions/EditorTools/" + nameof(BookmarksDataBase))]
-    public class BookmarksDataBase : InMemoryDataBase<BookmarkData> { }
+    [CreateAssetMenu(fileName = nameof(BookmarksDataBaseBase), menuName = "Extensions/EditorTools/" + nameof(BookmarksDataBaseBase))]
+    public class BookmarksDataBaseBase : InMemoryDataContainer<BookmarkData> { }
 }

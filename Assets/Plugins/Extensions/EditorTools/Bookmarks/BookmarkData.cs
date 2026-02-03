@@ -18,7 +18,7 @@ namespace Extensions.EditorTools.Bookmarks
     /// Структура данных сохранения закладок ObjectBookmarksWindow
     /// </summary>
     [Serializable]
-    public sealed class BookmarkData : InMemoryDataEntry
+    public sealed class BookmarkData : InMemoryDataItem
     {
         public string Name;
         public BookmarkType Type;

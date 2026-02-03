@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using Extensions.EditorTools.EditorTools;
+using Extensions.EditorTools;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
@@ -8,14 +8,14 @@ using UnityEngine.SceneManagement;
 namespace Extensions.EditorTools.Viewpoints
 {
     /// <summary>
-    /// Навигатор точек обзора
+    /// Навигатор точек обзора на сценах
     /// </summary>
     public sealed class EditorViewpointsWindow : EditorWindow
     {
         private const string WINDOW_NAME = "Viewpoints";
 
         [SerializeField]
-        private ViewpointsDataBase dataBase;
+        private ViewpointsDataBaseBase dataBaseBase;
 
         private GUIStyle _labelHeader;
         private GUIStyle _rowButton;
@@ -50,7 +50,7 @@ namespace Extensions.EditorTools.Viewpoints
 
         private void OnGUI()
         {
-            if (dataBase == null)
+            if (dataBaseBase == null)
             {
                 EditorGUILayout.HelpBox("ViewpointsDataBase не назначена", MessageType.Error);
                 return;
@@ -86,7 +86,7 @@ namespace Extensions.EditorTools.Viewpoints
                 return;
             }
 
-            IReadOnlyList<ViewpointsData> items = dataBase.DataBase;
+            IReadOnlyList<ViewpointsData> items = dataBaseBase.Data;
             bool any = false;
             ViewpointsData toRemove = null;
 
@@ -103,7 +103,7 @@ namespace Extensions.EditorTools.Viewpoints
 
             if (toRemove != null)
             {
-                dataBase.Remove(toRemove);
+                dataBaseBase.Remove(toRemove);
             }
 
             if (!any)
@@ -149,7 +149,7 @@ namespace Extensions.EditorTools.Viewpoints
                 Mode2D = sv.in2DMode
             };
 
-            dataBase.Add(data);
+            dataBaseBase.Add(data);
         }
 
         private void GoToViewpoint(ViewpointsData vp)
