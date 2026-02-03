@@ -1,22 +1,21 @@
 using UnityEngine;
+using Extensions.Identification;
 
 namespace Extensions.UIWindows
 {
-    using ID;
-    
     /// <summary>
-    /// Окно интерфейса
+    /// РћРєРЅРѕ РёРЅС‚РµСЂС„РµР№СЃР°
     /// </summary>
-    public class UIWindow : MonoBehaviour
+    public sealed class UIWindow : MonoBehaviour
     {
-        public ID Id => id;
-        public ID PreviousWindow => previousWindow;
+        public UIWindowID Id => id;
+        public UIWindowID PreviousWindow => previousWindow;
         
         [SerializeField]
-        protected ID id = default;
+        private UIWindowID id = default;
 
-        protected ID previousWindow = default;
+        private UIWindowID previousWindow = default;
         
-        public virtual void SetPreviousWindow(ID window) => previousWindow = window;
+        public void SetPreviousWindow(UIWindowID window) => previousWindow = window;
     }
 }

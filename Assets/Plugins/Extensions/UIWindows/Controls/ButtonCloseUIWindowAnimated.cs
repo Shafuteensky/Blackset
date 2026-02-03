@@ -1,22 +1,27 @@
-using DG.Tweening;
 using UnityEngine;
 using Extensions.Coroutines;
+using Extensions.Generics;
 #if UNITY_EDITOR
     using UnityEditor;
+#endif
+#if DOTWEEN
+    using DG.Tweening;
 #endif
 
 namespace Extensions.UIWindows
 {
     /// <summary>
-    /// Кнопка для закрытия окна интерфейса с анимацией
+    /// РљРЅРѕРїРєР° РґР»СЏ Р·Р°РєСЂС‹С‚РёСЏ РѕРєРЅР° РёРЅС‚РµСЂС„РµР№СЃР° СЃ Р°РЅРёРјР°С†РёРµР№ DOTWEEN
     /// </summary>
     public class ButtonCloseUIWindowAnimated : GenericButton
     {
+#if DOTWEEN
         [SerializeField]
         protected DOTweenAnimation beforeCloseAnimation;
+#endif
 
         /// <summary>
-        /// Закрытие текущего окна и открытие предыдущего с анимацией
+        /// Р—Р°РєСЂС‹С‚РёРµ С‚РµРєСѓС‰РµРіРѕ РѕРєРЅР° Рё РѕС‚РєСЂС‹С‚РёРµ РїСЂРµРґС‹РґСѓС‰РµРіРѕ СЃ Р°РЅРёРјР°С†РёРµР№
         /// </summary>
         public override void OnButtonClick()
         {
@@ -27,12 +32,14 @@ namespace Extensions.UIWindows
 
             windowsController.OpenPreviousWindow();
 
+#if DOTWEEN
             if (beforeCloseAnimation)
             {
                 beforeCloseAnimation.DORestart();
                 CoroutineDelay.Run(this, beforeCloseAnimation.duration, windowsController.CloseFocusedWindow);
                 return;
             }
+#endif
 
             windowsController.CloseFocusedWindow();
         }

@@ -1,3 +1,4 @@
+using Extensions.Generics;
 using UnityEngine;
 #if UNITY_EDITOR
     using UnityEditor;
@@ -6,12 +7,12 @@ using UnityEngine;
 namespace Extensions.UIWindows
 {
     /// <summary>
-    /// Кнопка для закрытия окна интерфейса
+    /// РљРЅРѕРїРєР° РґР»СЏ Р·Р°РєСЂС‹С‚РёСЏ РѕРєРЅР° РёРЅС‚РµСЂС„РµР№СЃР°
     /// </summary>
     public class ButtonCloseUIWindow : GenericButton
     {
         /// <summary>
-        /// Закрытие текущего окна в фокусе и открытие предыдущего
+        /// Р—Р°РєСЂС‹С‚РёРµ С‚РµРєСѓС‰РµРіРѕ РѕРєРЅР° РІ С„РѕРєСѓСЃРµ Рё РѕС‚РєСЂС‹С‚РёРµ РїСЂРµРґС‹РґСѓС‰РµРіРѕ
         /// </summary>
         public override void OnButtonClick()
         {

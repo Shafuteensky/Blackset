@@ -1,12 +1,12 @@
-using Extensions.Logs;
+using Extensions.Generics;
+using Extensions.Log;
+using Extensions.Identification;
 using UnityEngine;
 
 namespace Extensions.UIWindows
 {
-    using ID;
-    
     /// <summary>
-    /// Кнопка для открытия окна интерфейса
+    /// РљРЅРѕРїРєР° РґР»СЏ РѕС‚РєСЂС‹С‚РёСЏ РѕРєРЅР° РёРЅС‚РµСЂС„РµР№СЃР°
     /// </summary>
     public class ButtonOpenUIWindow : GenericButton
     {
@@ -17,7 +17,7 @@ namespace Extensions.UIWindows
         protected ID UIWindowToOpen = default;
         
         /// <summary>
-        /// Открытие нового окна по нажатию на кнопку
+        /// РћС‚РєСЂС‹С‚РёРµ РЅРѕРІРѕРіРѕ РѕРєРЅР° РїРѕ РЅР°Р¶Р°С‚РёСЋ РЅР° РєРЅРѕРїРєСѓ
         /// </summary>
         public override void OnButtonClick()
         {
