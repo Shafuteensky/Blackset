@@ -1,9 +1,9 @@
 using UnityEngine;
 
-namespace Extentions
+namespace Extentions.Generics
 {
     /// <summary>
-    /// Абстрактный триггер
+    /// РђР±СЃС‚СЂР°РєС‚РЅС‹Р№ С‚СЂРёРіРіРµСЂ
     /// </summary>
     public abstract class GenericTrigger<T> : MonoBehaviour where T : MonoBehaviour
     {
