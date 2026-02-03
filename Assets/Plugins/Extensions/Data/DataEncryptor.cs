@@ -1,6 +1,6 @@
 using System;
 using System.Text;
-using Extensions.Logs;
+using Extensions.Log;
 
 namespace Extensions.Data
 {

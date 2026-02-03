@@ -2,7 +2,7 @@ using System;
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
-using Extensions.Logs;
+using Extensions.Log;
 using UnityEngine;
 
 namespace Extensions.Data
@@ -30,31 +30,38 @@ namespace Extensions.Data
         /// <summary>
         /// Событие перед началом процесса сохранения
         /// </summary>
-        public static event Action<string> OnBeforeSave;
+        public static event Action<string> onBeforeSave;
         /// <summary>
         /// Событие после успешного завершения процесса сохранения
         /// </summary>
-        public static event Action<string> OnAfterSave;
+        public static event Action<string> onAfterSave;
         /// <summary>
         /// Событие ошибки процесса сохранения
         /// </summary>
-        public static event Action<string, Exception> OnSaveError;
+        public static event Action<string, Exception> onSaveError;
         
         /// <summary>
         /// Событие перед началом процесса загрузки
         /// </summary>
-        public static event Action<string> OnBeforeLoad;
+        public static event Action<string> onBeforeLoad;
         /// <summary>
         /// Событие после успешного завершения процесса загрузки
         /// </summary>
-        public static event Action<string> OnAfterLoad;
+        public static event Action<string> onAfterLoad;
         /// <summary>
         /// Событие ошибки процесса загрузки
         /// </summary>
-        public static event Action<string, Exception> OnLoadError;
+        public static event Action<string, Exception> onLoadError;
         
         #endregion
+        
+        private static int savingCount = 0;
 
+        /// <summary>
+        /// Состояние прцоесса сохранения
+        /// </summary>
+        public static bool IsSaving => savingCount > 0;
+        
         /// <summary>
         /// Активный профиль сохранения
         /// </summary>
@@ -112,41 +119,55 @@ namespace Extensions.Data
                 return false;
             }
 
-            OnBeforeSave?.Invoke(fileName);
-
-            SaveContainer<T> container = new SaveContainer<T>
-            {
-                Version = CURRENT_VERSION,
-                Profile = string.IsNullOrEmpty(CurrentProfile) ? DEFAULT_PROFILE_NAME : CurrentProfile,
-                DataType = typeof(T).AssemblyQualifiedName,
-                TimestampUtc = DateTime.UtcNow.ToString("o"),
-                Data = data
-            };
-
-            string payloadJson = JsonUtility.ToJson(data, false);
-            string hash = ComputeHash(payloadJson);
-            container.Hash = hash;
-
-            string json = JsonUtility.ToJson(container, true);
-            string encrypted = DataEncryptor.Encrypt(json, DataEncryptor.EncryptionMode);
-
-            string filePath = Path.Combine(CurrentProfileDirectory, fileName + FILE_EXTENSION);
-            string backupPath = filePath + BACKUP_EXTENSION;
+            savingCount++;
 
             try
             {
-                File.WriteAllText(filePath, encrypted);
-                File.WriteAllText(backupPath, encrypted);
-                
-                OnAfterSave?.Invoke(fileName);
+                onBeforeSave?.Invoke(fileName);
+
+                SaveContainer<T> container = new SaveContainer<T>
+                {
+                    Version = CURRENT_VERSION,
+                    Profile = string.IsNullOrEmpty(CurrentProfile) ? DEFAULT_PROFILE_NAME : CurrentProfile,
+                    DataType = typeof(T).AssemblyQualifiedName,
+                    TimestampUtc = DateTime.UtcNow.ToString("o"),
+                    Data = data
+                };
+
+                string payloadJson = JsonUtility.ToJson(data, false);
+                string hash = ComputeHash(payloadJson);
+                container.Hash = hash;
+
+                string json = JsonUtility.ToJson(container, true);
+                string encrypted = DataEncryptor.Encrypt(json, DataEncryptor.EncryptionMode);
+
+                string filePath = Path.Combine(CurrentProfileDirectory, fileName + FILE_EXTENSION);
+                string backupPath = filePath + BACKUP_EXTENSION;
+
+                try
+                {
+                    File.WriteAllText(filePath, encrypted);
+                    File.WriteAllText(backupPath, encrypted);
+
+                    onAfterSave?.Invoke(fileName);
+                }
+                catch (Exception ex)
+                {
+                    ServiceDebug.LogError($"Ошибка сохранения файла «{fileName}»: {ex}");
+
+                    onSaveError?.Invoke(fileName, ex);
+                    return false;
+                }
+
                 return true;
             }
-            catch (Exception ex)
+            finally
             {
-                ServiceDebug.LogError($"Ошибка сохранения файла «{fileName}»: {ex}");
-                
-                OnSaveError?.Invoke(fileName, ex);
-                return false;
+                savingCount--;
+                if (savingCount < 0)
+                {
+                    savingCount = 0;
+                }
             }
         }
 
@@ -159,14 +180,14 @@ namespace Extensions.Data
         /// <returns></returns>
         public static T Load<T>(string fileName, T defaultValue = default)
         {
-            OnBeforeLoad?.Invoke(fileName);
+            onBeforeLoad?.Invoke(fileName);
 
             string filePath = Path.Combine(CurrentProfileDirectory, fileName + FILE_EXTENSION);
 
             if (!File.Exists(filePath))
             {
                 ServiceDebug.LogWarning($"Файл «{fileName}» не найден, загружены значения по-умолчанию");
-                OnAfterLoad?.Invoke(fileName);
+                onAfterLoad?.Invoke(fileName);
                 return defaultValue;
             }
 
@@ -178,7 +199,7 @@ namespace Extensions.Data
                 if (string.IsNullOrEmpty(json))
                 {
                     T backupResult = TryLoadBackup(fileName, defaultValue);
-                    OnAfterLoad?.Invoke(fileName);
+                    onAfterLoad?.Invoke(fileName);
                     return backupResult;
                 }
 
@@ -186,7 +207,7 @@ namespace Extensions.Data
                 if (container == null)
                 {
                     T backupResult = TryLoadBackup(fileName, defaultValue);
-                    OnAfterLoad?.Invoke(fileName);
+                    onAfterLoad?.Invoke(fileName);
                     return backupResult;
                 }
 
@@ -196,19 +217,19 @@ namespace Extensions.Data
                 {
                     ServiceDebug.LogError($"Хэш-подпись файла «{fileName}» не совпадает, попытка восстановления из бэкапа");
                     T backupResult = TryLoadBackup(fileName, defaultValue);
-                    OnAfterLoad?.Invoke(fileName);
+                    onAfterLoad?.Invoke(fileName);
                     return backupResult;
                 }
 
-                OnAfterLoad?.Invoke(fileName);
+                onAfterLoad?.Invoke(fileName);
                 return container.Data;
             }
             catch (Exception ex)
             {
                 ServiceDebug.LogError($"Ошибка загрузки файла «{fileName}», попытка восстановления из бэкапа: {ex}");
-                OnLoadError?.Invoke(fileName, ex);
+                onLoadError?.Invoke(fileName, ex);
                 T backupResult = TryLoadBackup(fileName, defaultValue);
-                OnAfterLoad?.Invoke(fileName);
+                onAfterLoad?.Invoke(fileName);
                 return backupResult;
             }
         }
@@ -274,7 +295,7 @@ namespace Extensions.Data
             catch (Exception ex)
             {
                 ServiceDebug.LogError($"Файл «{fileName}» поврежден, восстановление из бэкапа не удалось: {ex}");
-                OnLoadError?.Invoke(fileName, ex);
+                onLoadError?.Invoke(fileName, ex);
                 return defaultValue;
             }
         }

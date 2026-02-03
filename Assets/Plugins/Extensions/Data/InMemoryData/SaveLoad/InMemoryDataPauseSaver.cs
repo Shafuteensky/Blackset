@@ -4,12 +4,12 @@ using UnityEngine;
 namespace Extensions.Data.InMemoryData
 {
     /// <summary>
-    /// Загрузка InMemory БД при остановке приложения на паузу
+    /// Р—Р°РіСЂСѓР·РєР° InMemory Р‘Р” РїСЂРё РѕСЃС‚Р°РЅРѕРІРєРµ РїСЂРёР»РѕР¶РµРЅРёСЏ РЅР° РїР°СѓР·Сѓ
     /// <remarks>
-    /// Используется для прогрева БД до использования
+    /// РСЃРїРѕР»СЊР·СѓРµС‚СЃСЏ РґР»СЏ РїСЂРѕРіСЂРµРІР° Р‘Р” РґРѕ РёСЃРїРѕР»СЊР·РѕРІР°РЅРёСЏ
     /// </remarks>
     /// </summary>
-    public class InMemoryDataBasePauseSaver : MonoBehaviour
+    public class InMemoryDataPauseSaver : MonoBehaviour
     {
         [SerializeField]
         protected List<InMemoryDataBaseObject> dataBases = new List<InMemoryDataBaseObject>();
@@ -20,7 +20,7 @@ namespace Extensions.Data.InMemoryData
 
             foreach (InMemoryDataBaseObject dataBase in dataBases)
             {
-                if (dataBase is InMemoryDataBase<InMemoryDataEntry> inMemoryDataBase)
+                if (dataBase is InMemoryDataContainer<InMemoryDataItem> inMemoryDataBase)
                 {
                     inMemoryDataBase.RequestSave();
                 }

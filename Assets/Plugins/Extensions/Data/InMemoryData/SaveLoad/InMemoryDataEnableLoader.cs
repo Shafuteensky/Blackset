@@ -1,27 +1,26 @@
 using System.Collections.Generic;
 using UnityEngine;
-using VHierarchy.Libs;
 
 namespace Extensions.Data.InMemoryData
 {
     /// <summary>
-    /// Срхранение InMemory БД на OnDisable
+    /// Р—Р°РіСЂСѓР·РєР° InMemory Р‘Р” РЅР° OnEnable
     /// <remarks>
-    /// Используется для сохранения данных БД с отключенным автосейвом
+    /// РСЃРїРѕР»СЊР·СѓРµС‚СЃСЏ РґР»СЏ РїСЂРѕРіСЂРµРІР° Р‘Р” РґРѕ РёСЃРїРѕР»СЊР·РѕРІР°РЅРёСЏ
     /// </remarks>
     /// </summary>
-    public class InMemoryDataBaseDisableSaver : MonoBehaviour
+    public class InMemoryDataEnableLoader : MonoBehaviour
     {
         [SerializeField]
         protected List<InMemoryDataBaseObject> dataBases = new List<InMemoryDataBaseObject>();
 
-        protected virtual void OnDisable()
+        protected virtual void OnEnable()
         {
             foreach (InMemoryDataBaseObject dataBase in dataBases)
             {
-                if (dataBase is InMemoryDataBase<InMemoryDataEntry> inMemoryDataBase)
+                if (dataBase is InMemoryDataContainer<InMemoryDataItem> inMemoryDataBase)
                 {
-                    dataBase.Save();
+                    var _ = inMemoryDataBase.Data;
                 }
             }
         }
