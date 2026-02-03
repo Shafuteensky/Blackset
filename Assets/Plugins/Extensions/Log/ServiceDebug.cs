@@ -2,7 +2,7 @@ using System.IO;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 
-namespace Extensions.Logs
+namespace Extensions.Log
 {
     /// <summary>
     /// Служебные дебаги
@@ -24,6 +24,7 @@ namespace Extensions.Logs
         /// </summary>
         /// <param name="message">Сообщение</param>
         /// <typeparam name="T">Тип</typeparam>
+        [HideInCallstack]
         public static void Log<T>(string message)
         {
             if (!EnableInfo) return;
@@ -35,6 +36,7 @@ namespace Extensions.Logs
         /// </summary>
         /// <param name="message">Сообщение</param>
         /// <typeparam name="T">Тип</typeparam>
+        [HideInCallstack]
         public static void LogWarning<T>(string message)
         {
             if (!EnableWarnings) return;
@@ -46,6 +48,7 @@ namespace Extensions.Logs
         /// </summary>
         /// <param name="message">Сообщение</param>
         /// <typeparam name="T">Тип</typeparam>
+        [HideInCallstack]
         public static void LogError<T>(string message)
         {
             if (!EnableErrors) return;
@@ -61,6 +64,7 @@ namespace Extensions.Logs
         /// </summary>
         /// <param name="obj">Объект</param>
         /// <param name="message">Сообщение</param>
+        [HideInCallstack]
         public static void Log(Object obj, string message)
         {
             if (!EnableInfo) return;
@@ -72,6 +76,7 @@ namespace Extensions.Logs
         /// </summary>
         /// <param name="obj">Объект</param>
         /// <param name="message">Сообщение</param>
+        [HideInCallstack]
         public static void LogWarning(Object obj, string message)
         {
             if (!EnableWarnings) return;
@@ -83,6 +88,7 @@ namespace Extensions.Logs
         /// </summary>
         /// <param name="obj">Объект</param>
         /// <param name="message">Сообщение</param>
+        [HideInCallstack]
         public static void LogError(Object obj, string message)
         {
             if (!EnableErrors) return;
@@ -98,6 +104,7 @@ namespace Extensions.Logs
         /// </summary>
         /// <param name="message">Сообщение</param>
         /// <param name="filePath">Автоматический путь до скрипта</param>
+        [HideInCallstack]
         public static void Log(string message, [CallerFilePath] string filePath = "")
         {
             if (!EnableInfo) return;
@@ -109,6 +116,7 @@ namespace Extensions.Logs
         /// </summary>
         /// <param name="message">Сообщение</param>
         /// <param name="filePath">Автоматический путь до скрипта</param>
+        [HideInCallstack]
         public static void LogWarning(string message, [CallerFilePath] string filePath = "")
         {
             if (!EnableWarnings) return;
@@ -120,6 +128,7 @@ namespace Extensions.Logs
         /// </summary>
         /// <param name="message">Сообщение</param>
         /// <param name="filePath">Автоматический путь до скрипта</param>
+        [HideInCallstack]
         public static void LogError(string message, [CallerFilePath] string filePath = "")
         {
             if (!EnableErrors) return;
