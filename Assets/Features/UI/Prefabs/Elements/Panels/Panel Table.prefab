@@ -108,7 +108,7 @@ PrefabInstance:
       objectReference: {fileID: 21300000, guid: 5b45454b4d368ab4eb22216925b0d708, type: 3}
     - target: {fileID: 6359992495597234309, guid: 418e09fc52a69df44914a3b4cf9a2071, type: 3}
       propertyPath: m_PixelsPerUnitMultiplier
-      value: 20
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 7488600390401662574, guid: 418e09fc52a69df44914a3b4cf9a2071, type: 3}
       propertyPath: m_Pivot.x
@@ -176,7 +176,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8154258882392169363, guid: 418e09fc52a69df44914a3b4cf9a2071, type: 3}
       propertyPath: m_Name
-      value: Panel Base Variant
+      value: Panel Table
       objectReference: {fileID: 0}
     - target: {fileID: 8553648918095206175, guid: 418e09fc52a69df44914a3b4cf9a2071, type: 3}
       propertyPath: m_Name

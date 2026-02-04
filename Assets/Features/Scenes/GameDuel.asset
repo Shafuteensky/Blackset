@@ -10,6 +10,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d5528fb5bdbd418da1e90f652d1d72ed, type: 3}
-  m_Name: Menu
+  m_Name: GameDuel
   m_EditorClassIdentifier: Assembly-CSharp-firstpass::Extensions.SceneFlow.SceneID
-  id: Menu
+  id: GameDuel

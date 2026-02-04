@@ -158,7 +158,9 @@ MonoBehaviour:
   - <Id>k__BackingField: {fileID: 11400000, guid: b512cbc5b8b44784e84fe8ca06c10592, type: 2}
     <SceneName>k__BackingField: MainMenu
   - <Id>k__BackingField: {fileID: 11400000, guid: f729dc3cc20cd0f4d9014ce6b0993e28, type: 2}
-    <SceneName>k__BackingField: Game
+    <SceneName>k__BackingField: GameMenu
+  - <Id>k__BackingField: {fileID: 11400000, guid: f1784bfacea57364aad8e9ef656e2f24, type: 2}
+    <SceneName>k__BackingField: GameDuel
   loadingTimeout: 10
   targetTimeout: 30
 --- !u!4 &1089915601

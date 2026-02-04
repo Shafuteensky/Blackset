@@ -18,8 +18,11 @@ EditorBuildSettings:
     path: Assets/Scenes/MainMenu.unity
     guid: d0aa4b4bc44aa36429279b512de43a35
   - enabled: 1
-    path: Assets/Scenes/Game.unity
+    path: Assets/Scenes/GameMenu.unity
     guid: 568a2a48eba674047ae86d637bdc43fb
+  - enabled: 1
+    path: Assets/Scenes/GameDuel.unity
+    guid: 390fefee3cc4eec42a522b61edd78188
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   m_UseUCBPForAssetBundles: 0

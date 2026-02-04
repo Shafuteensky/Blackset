@@ -404,13 +404,35 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4100400362722513085, guid: 5756bfce9e19bfe458725eda32eaa84a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8904520396696500986}
   m_SourcePrefab: {fileID: 100100000, guid: 5756bfce9e19bfe458725eda32eaa84a, type: 3}
 --- !u!224 &345430130089402104 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 1038472773829113654, guid: 5756bfce9e19bfe458725eda32eaa84a, type: 3}
   m_PrefabInstance: {fileID: 766266849880811982}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &3622547510053632371 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4100400362722513085, guid: 5756bfce9e19bfe458725eda32eaa84a, type: 3}
+  m_PrefabInstance: {fileID: 766266849880811982}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &8904520396696500986
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3622547510053632371}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e5ca4435f03446b38041d5dafd98588d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp-firstpass::Extensions.SceneFlow.LoadSceneButton
+  targetScene: {fileID: 11400000, guid: f1784bfacea57364aad8e9ef656e2f24, type: 2}
+  additive: 0
 --- !u!1001 &2290413960014664274
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -514,13 +536,35 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4100400362722513085, guid: 5756bfce9e19bfe458725eda32eaa84a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8108083219375360834}
   m_SourcePrefab: {fileID: 100100000, guid: 5756bfce9e19bfe458725eda32eaa84a, type: 3}
 --- !u!224 &1270096599770113380 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 1038472773829113654, guid: 5756bfce9e19bfe458725eda32eaa84a, type: 3}
   m_PrefabInstance: {fileID: 2290413960014664274}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &2823373491207684847 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4100400362722513085, guid: 5756bfce9e19bfe458725eda32eaa84a, type: 3}
+  m_PrefabInstance: {fileID: 2290413960014664274}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &8108083219375360834
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2823373491207684847}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e5ca4435f03446b38041d5dafd98588d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp-firstpass::Extensions.SceneFlow.LoadSceneButton
+  targetScene: {fileID: 11400000, guid: f1784bfacea57364aad8e9ef656e2f24, type: 2}
+  additive: 0
 --- !u!1001 &3049103252563604134
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1730,8 +1774,30 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4100400362722513085, guid: 5756bfce9e19bfe458725eda32eaa84a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6424874219532401346}
   m_SourcePrefab: {fileID: 100100000, guid: 5756bfce9e19bfe458725eda32eaa84a, type: 3}
+--- !u!1 &6548703152786268047 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4100400362722513085, guid: 5756bfce9e19bfe458725eda32eaa84a, type: 3}
+  m_PrefabInstance: {fileID: 7063375626987310898}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &6424874219532401346
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6548703152786268047}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e5ca4435f03446b38041d5dafd98588d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp-firstpass::Extensions.SceneFlow.LoadSceneButton
+  targetScene: {fileID: 11400000, guid: f1784bfacea57364aad8e9ef656e2f24, type: 2}
+  additive: 0
 --- !u!224 &7813538412321093636 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 1038472773829113654, guid: 5756bfce9e19bfe458725eda32eaa84a, type: 3}
