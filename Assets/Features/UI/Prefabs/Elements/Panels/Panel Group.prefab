@@ -16,6 +16,22 @@ PrefabInstance:
       propertyPath: m_PixelsPerUnitMultiplier
       value: 2.87
       objectReference: {fileID: 0}
+    - target: {fileID: 5953223614475562627, guid: 418e09fc52a69df44914a3b4cf9a2071, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: -20
+      objectReference: {fileID: 0}
+    - target: {fileID: 5953223614475562627, guid: 418e09fc52a69df44914a3b4cf9a2071, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: -20
+      objectReference: {fileID: 0}
+    - target: {fileID: 5953223614475562627, guid: 418e09fc52a69df44914a3b4cf9a2071, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5953223614475562627, guid: 418e09fc52a69df44914a3b4cf9a2071, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6359992495597234309, guid: 418e09fc52a69df44914a3b4cf9a2071, type: 3}
       propertyPath: m_Sprite
       value: 

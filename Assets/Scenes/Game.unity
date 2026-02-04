@@ -155,6 +155,9 @@ MonoBehaviour:
   startWindow: {fileID: 7304694210355963892, guid: 31480580614b1b14cb9305acfa7744be, type: 3}
   preparedUIWindows:
   - {fileID: 7304694210355963892, guid: 31480580614b1b14cb9305acfa7744be, type: 3}
+  - {fileID: 7304694210355963892, guid: a25983c86a7143442905ee760d526aca, type: 3}
+  - {fileID: 7304694210355963892, guid: d456fbad8a5198d43a1faa26eccd105c, type: 3}
+  - {fileID: 7304694210355963892, guid: 85af30fc106da6e44b96c15860fa8630, type: 3}
   openedUIWindows: []
   focusedWindow: {fileID: 0}
 --- !u!114 &37828538

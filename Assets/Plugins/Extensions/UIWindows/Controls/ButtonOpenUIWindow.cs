@@ -1,6 +1,5 @@
 using Extensions.Generics;
 using Extensions.Log;
-using Extensions.Identification;
 using UnityEngine;
 
 namespace Extensions.UIWindows
@@ -14,7 +13,7 @@ namespace Extensions.UIWindows
         protected bool needToCloseFocused = true;
         
         [SerializeField] 
-        protected ID UIWindowToOpen = default;
+        protected UIWindowID UIWindowToOpen = default;
         
         /// <summary>
         /// Открытие нового окна по нажатию на кнопку
