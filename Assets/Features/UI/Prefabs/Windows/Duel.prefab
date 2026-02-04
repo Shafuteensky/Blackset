@@ -568,7 +568,7 @@ GameObject:
   - component: {fileID: 2316629197309172315}
   - component: {fileID: 7304694210355963892}
   m_Layer: 0
-  m_Name: Inventory
+  m_Name: Duel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -883,7 +883,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6374350891849992487, guid: a1aeaeaa16f259a46a64d9a6ea8b6c4e, type: 3}
       propertyPath: m_Size
-      value: 0.6166667
+      value: 0.6175926
       objectReference: {fileID: 0}
     - target: {fileID: 6374350891849992487, guid: a1aeaeaa16f259a46a64d9a6ea8b6c4e, type: 3}
       propertyPath: m_Value
@@ -1359,7 +1359,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6374350891849992487, guid: a1aeaeaa16f259a46a64d9a6ea8b6c4e, type: 3}
       propertyPath: m_Size
-      value: 0.8130952
+      value: 0.8142857
       objectReference: {fileID: 0}
     - target: {fileID: 6374350891849992487, guid: a1aeaeaa16f259a46a64d9a6ea8b6c4e, type: 3}
       propertyPath: m_Value
@@ -2673,7 +2673,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6374350891849992487, guid: a1aeaeaa16f259a46a64d9a6ea8b6c4e, type: 3}
       propertyPath: m_Size
-      value: 0.6166667
+      value: 0.6175926
       objectReference: {fileID: 0}
     - target: {fileID: 6374350891849992487, guid: a1aeaeaa16f259a46a64d9a6ea8b6c4e, type: 3}
       propertyPath: m_Value
@@ -3164,7 +3164,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1192666857568915192, guid: 5756bfce9e19bfe458725eda32eaa84a, type: 3}
       propertyPath: m_text
-      value: Menu
+      value: Back
       objectReference: {fileID: 0}
     - target: {fileID: 4100400362722513085, guid: 5756bfce9e19bfe458725eda32eaa84a, type: 3}
       propertyPath: m_Name
@@ -5358,7 +5358,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8614617401285223368, guid: 7ac43a347648b0d4faedfaec8880cb82, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -545.4861
+      value: -546.375
       objectReference: {fileID: 0}
     - target: {fileID: 8937154565583294591, guid: 7ac43a347648b0d4faedfaec8880cb82, type: 3}
       propertyPath: m_AnchorMax.x
@@ -6900,7 +6900,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6374350891849992487, guid: a1aeaeaa16f259a46a64d9a6ea8b6c4e, type: 3}
       propertyPath: m_Size
-      value: 0.6166667
+      value: 0.6175926
       objectReference: {fileID: 0}
     - target: {fileID: 6374350891849992487, guid: a1aeaeaa16f259a46a64d9a6ea8b6c4e, type: 3}
       propertyPath: m_Value
@@ -9889,7 +9889,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6374350891849992487, guid: a1aeaeaa16f259a46a64d9a6ea8b6c4e, type: 3}
       propertyPath: m_Size
-      value: 0.6166667
+      value: 0.6175926
       objectReference: {fileID: 0}
     - target: {fileID: 6374350891849992487, guid: a1aeaeaa16f259a46a64d9a6ea8b6c4e, type: 3}
       propertyPath: m_Value
@@ -11469,7 +11469,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4325706336039118895, guid: 7ac43a347648b0d4faedfaec8880cb82, type: 3}
       propertyPath: m_Size
-      value: 0.97840667
+      value: 0.98257333
       objectReference: {fileID: 0}
     - target: {fileID: 4325706336039118895, guid: 7ac43a347648b0d4faedfaec8880cb82, type: 3}
       propertyPath: m_Value
@@ -12196,7 +12196,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6374350891849992487, guid: a1aeaeaa16f259a46a64d9a6ea8b6c4e, type: 3}
       propertyPath: m_Size
-      value: 0.6166667
+      value: 0.6175926
       objectReference: {fileID: 0}
     - target: {fileID: 6374350891849992487, guid: a1aeaeaa16f259a46a64d9a6ea8b6c4e, type: 3}
       propertyPath: m_Value
@@ -13881,7 +13881,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6374350891849992487, guid: a1aeaeaa16f259a46a64d9a6ea8b6c4e, type: 3}
       propertyPath: m_Size
-      value: 0.6166667
+      value: 0.6175926
       objectReference: {fileID: 0}
     - target: {fileID: 6374350891849992487, guid: a1aeaeaa16f259a46a64d9a6ea8b6c4e, type: 3}
       propertyPath: m_Value
