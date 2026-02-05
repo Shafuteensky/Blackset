@@ -15,7 +15,7 @@ namespace Extensions.Data.InMemoryData
     public class InMemoryDataDisableSaver : MonoBehaviour
     {
         [SerializeField]
-        protected List<InMemoryDataBaseObject> dataBases = new List<InMemoryDataBaseObject>();
+        protected List<InMemoryDataContainer<InMemoryDataItem>> dataBases = new();
 
         [SerializeField]
         [Tooltip("Ждать завершения сохранения перед отключением (рекомендуется)")]
@@ -48,21 +48,18 @@ namespace Extensions.Data.InMemoryData
             }
 
             int savedCount = 0;
-            foreach (InMemoryDataBaseObject dataBase in dataBases)
+            foreach (InMemoryDataContainer<InMemoryDataItem> dataBase in dataBases)
             {
                 if (dataBase == null) continue;
 
-                if (dataBase is InMemoryDataContainer<InMemoryDataItem> inMemoryDataBase)
+                bool success = await dataBase.RequestSaveAsync();
+                
+                if (success)
                 {
-                    bool success = await inMemoryDataBase.RequestSaveAsync();
-                    
-                    if (success)
+                    savedCount++;
+                    if (showSaveLog)
                     {
-                        savedCount++;
-                        if (showSaveLog)
-                        {
-                            ServiceDebug.Log($"[{name}] Сохранена БД: {dataBase.name}");
-                        }
+                        ServiceDebug.Log($"[{name}] Сохранена БД: {dataBase.name}");
                     }
                 }
             }
@@ -83,14 +80,11 @@ namespace Extensions.Data.InMemoryData
                 ServiceDebug.Log($"[{name}] Быстрое сохранение {dataBases.Count} БД (fire-and-forget)...");
             }
 
-            foreach (InMemoryDataBaseObject dataBase in dataBases)
+            foreach (InMemoryDataContainer<InMemoryDataItem> dataBase in dataBases)
             {
                 if (dataBase == null) continue;
 
-                if (dataBase is InMemoryDataContainer<InMemoryDataItem> inMemoryDataBase)
-                {
-                    inMemoryDataBase.RequestSave();
-                }
+                dataBase.RequestSave();
             }
         }
 
@@ -100,16 +94,13 @@ namespace Extensions.Data.InMemoryData
         public async UniTask<int> SaveAllManualAsync()
         {
             int savedCount = 0;
-            foreach (InMemoryDataBaseObject dataBase in dataBases)
+            foreach (InMemoryDataContainer<InMemoryDataItem> dataBase in dataBases)
             {
                 if (dataBase == null) continue;
 
-                if (dataBase is InMemoryDataContainer<InMemoryDataItem> inMemoryDataBase)
+                if (await dataBase.RequestSaveAsync())
                 {
-                    if (await inMemoryDataBase.RequestSaveAsync())
-                    {
-                        savedCount++;
-                    }
+                    savedCount++;
                 }
             }
             return savedCount;

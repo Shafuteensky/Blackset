@@ -15,7 +15,7 @@ namespace Extensions.Data.InMemoryData
     public class InMemoryDataEnableLoader : MonoBehaviour
     {
         [SerializeField]
-        protected List<InMemoryDataBaseObject> dataBases = new List<InMemoryDataBaseObject>();
+        protected List<InMemoryDataContainer<InMemoryDataItem>> dataBases = new();
 
         [SerializeField]
         [Tooltip("Использовать асинхронную предзагрузку (рекомендуется для больших данных)")]
@@ -47,18 +47,15 @@ namespace Extensions.Data.InMemoryData
                 ServiceDebug.Log($"[{name}] Начало асинхронной загрузки {dataBases.Count} БД...");
             }
 
-            foreach (InMemoryDataBaseObject dataBase in dataBases)
+            foreach (InMemoryDataContainer<InMemoryDataItem> dataBase in dataBases)
             {
                 if (dataBase == null) continue;
 
-                if (dataBase is InMemoryDataContainer<InMemoryDataItem> inMemoryDataBase)
+                await dataBase.PreloadAsync();
+                
+                if (showLoadingLog)
                 {
-                    await inMemoryDataBase.PreloadAsync();
-                    
-                    if (showLoadingLog)
-                    {
-                        ServiceDebug.Log($"[{name}] Загружена БД: {dataBase.name}");
-                    }
+                    ServiceDebug.Log($"[{name}] Загружена БД: {dataBase.name}");
                 }
             }
 
@@ -78,19 +75,16 @@ namespace Extensions.Data.InMemoryData
                 ServiceDebug.Log($"[{name}] Начало синхронной загрузки {dataBases.Count} БД...");
             }
 
-            foreach (InMemoryDataBaseObject dataBase in dataBases)
+            foreach (InMemoryDataContainer<InMemoryDataItem> dataBase in dataBases)
             {
                 if (dataBase == null) continue;
 
-                if (dataBase is InMemoryDataContainer<InMemoryDataItem> inMemoryDataBase)
+                // Доступ к Data триггерит EnsureLoaded()
+                var _ = dataBase.Data;
+                
+                if (showLoadingLog)
                 {
-                    // Доступ к Data триггерит EnsureLoaded()
-                    var _ = inMemoryDataBase.Data;
-                    
-                    if (showLoadingLog)
-                    {
-                        ServiceDebug.Log($"[{name}] Загружена БД: {dataBase.name}");
-                    }
+                    ServiceDebug.Log($"[{name}] Загружена БД: {dataBase.name}");
                 }
             }
 

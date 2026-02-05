@@ -14,12 +14,12 @@ namespace Extensions.Data.InMemoryData
     /// </remarks>
     /// </summary>
     /// <typeparam name="TData">Единица данных</typeparam>
-    public abstract class InMemoryDataContainer<TData> : InMemoryDataBaseObject where TData : InMemoryDataItem
+    public abstract class InMemoryDataContainer<TData> : InMemoryDataBaseObject<TData> where TData : InMemoryDataItem
     {
         protected const string FORMAT = "N";
         
         [SerializeField]
-        protected string saveFileName = string.Empty;
+        protected string saveKey = string.Empty;
         
         [SerializeField]
         protected ID id = default;
@@ -30,7 +30,7 @@ namespace Extensions.Data.InMemoryData
         /// <summary>
         /// Название файла сохранения
         /// </summary>
-        public string SaveFileName => saveFileName;
+        public string SaveKey => saveKey;
         
         /// <summary>
         /// Процесс выполнения сохранения
@@ -75,7 +75,7 @@ namespace Extensions.Data.InMemoryData
         #endregion
 
         /// <summary>
-        /// Данные
+        /// Данные (список)
         /// </summary>
         public IReadOnlyList<TData> Data
         {
@@ -124,9 +124,9 @@ namespace Extensions.Data.InMemoryData
         // Назначает имя файла сохранения при создании нового скриптового файла таблицы
         protected virtual void OnEnable()
         {
-            if (string.IsNullOrEmpty(saveFileName))
+            if (string.IsNullOrEmpty(saveKey))
             {
-                saveFileName = GetType().Name;
+                saveKey = GetType().Name;
             }
         }
 
@@ -162,6 +162,7 @@ namespace Extensions.Data.InMemoryData
                 return entry;
             }
 
+            ServiceDebug.LogWarning($"Данные с id «{entryId}» не найдены в контейнере {name} ({nameof(TData)})");
             return null;
         }
 
@@ -276,7 +277,7 @@ namespace Extensions.Data.InMemoryData
 
             if (string.IsNullOrEmpty(entryId))
             {
-                ServiceDebug.LogWarning($"Идентификатор {nameof(entryId)} пуст, запись не обновлена");
+                ServiceDebug.LogWarning($"Идентификатор «{nameof(entryId)}» пуст, запись не обновлена");
                 return false;
             }
 
@@ -301,7 +302,7 @@ namespace Extensions.Data.InMemoryData
                 }
             }
 
-            ServiceDebug.LogWarning($"Запись с id {entryId} не найдена, запись не обновлена");
+            ServiceDebug.LogWarning($"Запись с id «{entryId}» не найдена, запись не обновлена");
             return false;
         }
     
@@ -339,7 +340,7 @@ namespace Extensions.Data.InMemoryData
             }
 
             // Синхронное сохранение через кэш
-            if (JsonSaveLoad.Save(data, saveFileName))
+            if (JsonSaveLoad.Save(data, saveKey))
             {
                 dirty = false;
                 onDataSaved?.Invoke();
@@ -365,7 +366,7 @@ namespace Extensions.Data.InMemoryData
                 return false;
             }
 
-            if (await JsonSaveLoad.SaveAsync(data, saveFileName))
+            if (await JsonSaveLoad.SaveAsync(data, saveKey))
             {
                 dirty = false;
                 onDataSaved?.Invoke();
@@ -389,14 +390,14 @@ namespace Extensions.Data.InMemoryData
             }
 
             // Синхронная загрузка через кэш JsonSaveLoad
-            data = JsonSaveLoad.Load(saveFileName, new List<TData>()) ?? new List<TData>();
+            data = JsonSaveLoad.Load(saveKey, new List<TData>()) ?? new List<TData>();
 
             loaded = true;
             onDataLoaded?.Invoke();
         }
 
         /// <summary>
-        /// Предзагрузка данных асинхронно (для оптимизации)
+        /// Предзагрузка данных асинхронно
         /// </summary>
         public async UniTask PreloadAsync()
         {
@@ -405,7 +406,7 @@ namespace Extensions.Data.InMemoryData
                 return;
             }
 
-            await JsonSaveLoad.PreloadAsync(saveFileName, new List<TData>());
+            await JsonSaveLoad.PreloadAsync(saveKey, new List<TData>());
             
             // После preload данные уже в кэше, можем загрузить синхронно
             EnsureLoaded();

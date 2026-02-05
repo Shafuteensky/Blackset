@@ -3,10 +3,7 @@ using UnityEngine;
 namespace Extensions.Data.InMemoryData
 {
     /// <summary>
-    /// Вспомогательный базовый класс InMemory базы данных
-    /// <remarks>
-    /// Используется для удобства доступа и поиска наследников
-    /// </remarks>
+    /// Базовый класс InMemory хранилища данных
     /// </summary>
-    public abstract class InMemoryDataBaseObject : ScriptableObject { }
+    public abstract class InMemoryDataBaseObject<TData> : ScriptableObject where TData : InMemoryDataItem { }
 }

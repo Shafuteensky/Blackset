@@ -61,7 +61,7 @@ namespace Extensions.Data
         
         #endregion
         
-        private static int savingCount = 0;
+        private static int savingCount;
         
         // Кэш загруженных данных для синхронного API
         private static readonly Dictionary<string, object> dataCache = new Dictionary<string, object>();
@@ -94,18 +94,7 @@ namespace Extensions.Data
                 return path;
             }
         }
-
-        [Serializable]
-        private class SaveContainer<T>
-        {
-            public int Version;
-            public string Profile;
-            public string DataType;
-            public string Hash;
-            public string TimestampUtc;
-            public T Data;
-        }
-
+        
         [Serializable]
         private class MultiSaveContainer
         {
@@ -136,37 +125,37 @@ namespace Extensions.Data
         #region Sync API (с кэшированием)
 
         /// <summary>
-        /// Сохранить данные в файл сохранения (синхронно, через кэш)
+        /// Сохранить данные в запись по ключу сохранения (синхронно, через кэш)
         /// </summary>
         /// <param name="data">Сохраняемые данные</param>
-        /// <param name="fileName">Название файла сохранения</param>
+        /// <param name="key">Название ключа сохранения</param>
         /// <returns></returns>
-        public static bool Save<T>(T data, string fileName)
+        public static bool Save<T>(T data, string key)
         {
-            if (string.IsNullOrEmpty(fileName))
+            if (string.IsNullOrEmpty(key))
             {
                 ServiceDebug.LogError("Пустое имя файла, сохранение не выполнено");
                 return false;
             }
 
-            string cacheKey = GetCacheKey(fileName);
+            string cacheKey = GetCacheKey(key);
             dataCache[cacheKey] = data;
 
-            SaveAsync(data, fileName).Forget();
+            SaveAsync(data, key).Forget();
             
             return true;
         }
 
         /// <summary>
-        /// Загрузить данные из файла сохранения (синхронно, из кэша или с диска)
+        /// Загрузить данные из записи по ключу сохранения (синхронно, из кэша или с диска)
         /// </summary>
-        /// <param name="fileName">Название файла сохранения</param>
+        /// <param name="key">Название ключа сохранения</param>
         /// <param name="defaultValue">Значение по-умолчанию</param>
         /// <typeparam name="T">Загружаемые данные</typeparam>
         /// <returns></returns>
-        public static T Load<T>(string fileName, T defaultValue = default)
+        public static T Load<T>(string key, T defaultValue = default)
         {
-            string cacheKey = GetCacheKey(fileName);
+            string cacheKey = GetCacheKey(key);
 
             // Если данные в кэше - возвращаем их, а не грузим файл
             if (dataCache.TryGetValue(cacheKey, out object cachedData))
@@ -176,50 +165,50 @@ namespace Extensions.Data
 
             if (loadingTasks.ContainsKey(cacheKey))
             {
-                ServiceDebug.LogWarning($"Синхронный Load вызван во время async загрузки файла «{fileName}». Используйте LoadAsync или EnsureLoadedAsync.");
+                ServiceDebug.LogWarning($"Синхронный Load вызван во время async загрузки файла «{key}». Используйте LoadAsync или EnsureLoadedAsync.");
                 return defaultValue;
             }
 
             try
             {
-                T result = LoadAsync(fileName, defaultValue).GetAwaiter().GetResult();
+                T result = LoadAsync(key, defaultValue).GetAwaiter().GetResult();
                 return result;
             }
             catch (Exception ex)
             {
-                ServiceDebug.LogError($"Ошибка синхронной загрузки файла «{fileName}»: {ex}");
+                ServiceDebug.LogError($"Ошибка синхронной загрузки файла «{key}»: {ex}");
                 return defaultValue;
             }
         }
 
         /// <summary>
-        /// Проверить существование файла сохранения (синхронно)
+        /// Проверить существование записи по ключу сохранения (синхронно)
         /// </summary>
-        public static bool Exists(string fileName)
+        public static bool Exists(string key)
         {
-            string cacheKey = GetCacheKey(fileName);
+            string cacheKey = GetCacheKey(key);
             
             if (dataCache.ContainsKey(cacheKey))
             {
                 return true;
             }
 
-            return ExistsAsync(fileName).GetAwaiter().GetResult();
+            return ExistsAsync(key).GetAwaiter().GetResult();
         }
 
         /// <summary>
         /// Предзагрузить данные асинхронно (для избежания блокировки в Load)
         /// </summary>
-        public static async UniTask PreloadAsync<T>(string fileName, T defaultValue = default)
+        public static async UniTask PreloadAsync<T>(string key, T defaultValue = default)
         {
-            string cacheKey = GetCacheKey(fileName);
+            string cacheKey = GetCacheKey(key);
 
             if (dataCache.ContainsKey(cacheKey))
             {
                 return;
             }
 
-            T data = await LoadAsync(fileName, defaultValue);
+            var _ = await LoadAsync(key, defaultValue);
             // Данные уже будут в кэше после LoadAsync
         }
 
@@ -233,18 +222,18 @@ namespace Extensions.Data
         }
 
         /// <summary>
-        /// Удалить из кэша конкретный файл
+        /// Удалить из кэша конкретную запись по ключу
         /// </summary>
-        public static void InvalidateCache(string fileName)
+        public static void InvalidateCache(string key)
         {
-            string cacheKey = GetCacheKey(fileName);
+            string cacheKey = GetCacheKey(key);
             dataCache.Remove(cacheKey);
         }
 
-        private static string GetCacheKey(string fileName)
+        private static string GetCacheKey(string key)
         {
             string profile = string.IsNullOrEmpty(CurrentProfile) ? DEFAULT_PROFILE_NAME : CurrentProfile;
-            return $"{profile}:{fileName}";
+            return $"{profile}:{key}";
         }
 
         #endregion
@@ -255,11 +244,11 @@ namespace Extensions.Data
         /// Сохранить данные в файл сохранения (асинхронно)
         /// </summary>
         /// <param name="data">Сохраняемые данные</param>
-        /// <param name="fileName">Название файла сохранения</param>
+        /// <param name="key">Название файла сохранения</param>
         /// <returns></returns>
-        public static async UniTask<bool> SaveAsync<T>(T data, string fileName)
+        public static async UniTask<bool> SaveAsync<T>(T data, string key)
         {
-            if (string.IsNullOrEmpty(fileName))
+            if (string.IsNullOrEmpty(key))
             {
                 ServiceDebug.LogError("Пустое имя файла, сохранение не выполнено");
                 return false;
@@ -269,26 +258,22 @@ namespace Extensions.Data
 
             try
             {
-                onBeforeSave?.Invoke(fileName);
+                onBeforeSave?.Invoke(key);
 
-                string cacheKey = GetCacheKey(fileName);
+                string cacheKey = GetCacheKey(key);
                 dataCache[cacheKey] = data;
 
-                MultiSaveContainer container = await TryLoadMultiContainerAsync();
-                if (container == null)
+                MultiSaveContainer container = await TryLoadMultiContainerAsync() ?? new MultiSaveContainer
                 {
-                    container = new MultiSaveContainer
-                    {
-                        Version = CURRENT_VERSION,
-                        Profile = string.IsNullOrEmpty(CurrentProfile) ? DEFAULT_PROFILE_NAME : CurrentProfile,
-                        TimestampUtc = DateTime.UtcNow.ToString("o"),
-                        Entries = Array.Empty<MultiSaveEntry>()
-                    };
-                }
+                    Version = CURRENT_VERSION,
+                    Profile = string.IsNullOrEmpty(CurrentProfile) ? DEFAULT_PROFILE_NAME : CurrentProfile,
+                    TimestampUtc = DateTime.UtcNow.ToString("o"),
+                    Entries = Array.Empty<MultiSaveEntry>()
+                };
 
                 MultiSaveEntry entry = new MultiSaveEntry
                 {
-                    Key = fileName,
+                    Key = key,
                     DataType = typeof(T).AssemblyQualifiedName,
                     DataJson = JsonConvert.SerializeObject(data, Formatting.None)
                 };
@@ -319,7 +304,7 @@ namespace Extensions.Data
                     
                     File.Move(tempPath, filePath);
 
-                    onAfterSave?.Invoke(fileName);
+                    onAfterSave?.Invoke(key);
                 }
                 catch (Exception ex)
                 {
@@ -327,10 +312,14 @@ namespace Extensions.Data
 
                     if (File.Exists(tempPath))
                     {
-                        try { File.Delete(tempPath); } catch { }
+                        try { File.Delete(tempPath); }
+                        catch
+                        {
+                            // ignored
+                        }
                     }
 
-                    onSaveError?.Invoke(fileName, ex);
+                    onSaveError?.Invoke(key, ex);
                     return false;
                 }
 
@@ -347,15 +336,15 @@ namespace Extensions.Data
         }
 
         /// <summary>
-        /// Загрузить данные из файла сохранения (асинхронно)
+        /// Загрузить данные из записи по ключу сохранения (асинхронно)
         /// </summary>
-        /// <param name="fileName">Название файла сохранения</param>
+        /// <param name="key">Название ключа сохранения</param>
         /// <param name="defaultValue">Значение по-умолчанию</param>
         /// <typeparam name="T">Загружаемые данные</typeparam>
         /// <returns></returns>
-        public static async UniTask<T> LoadAsync<T>(string fileName, T defaultValue = default)
+        public static async UniTask<T> LoadAsync<T>(string key, T defaultValue = default)
         {
-            string cacheKey = GetCacheKey(fileName);
+            string cacheKey = GetCacheKey(key);
 
             if (dataCache.TryGetValue(cacheKey, out object cachedData))
             {
@@ -371,7 +360,7 @@ namespace Extensions.Data
                 }
             }
 
-            UniTask loadTask = LoadInternalAsync(fileName, defaultValue, cacheKey);
+            UniTask loadTask = LoadInternalAsync(key, defaultValue, cacheKey);
             loadingTasks[cacheKey] = loadTask;
 
             try
@@ -391,16 +380,16 @@ namespace Extensions.Data
             return defaultValue;
         }
 
-        private static async UniTask LoadInternalAsync<T>(string fileName, T defaultValue, string cacheKey)
+        private static async UniTask LoadInternalAsync<T>(string key, T defaultValue, string cacheKey)
         {
-            onBeforeLoad?.Invoke(fileName);
+            onBeforeLoad?.Invoke(key);
 
             MultiSaveContainer container = await TryLoadMultiContainerAsync();
             if (container == null)
             {
                 ServiceDebug.LogWarning($"Файл «{SINGLE_SAVE_FILE_NAME}» не найден, загружены значения по-умолчанию");
                 dataCache[cacheKey] = defaultValue;
-                onAfterLoad?.Invoke(fileName);
+                onAfterLoad?.Invoke(key);
                 return;
             }
 
@@ -411,7 +400,7 @@ namespace Extensions.Data
                 if (container == null)
                 {
                     dataCache[cacheKey] = defaultValue;
-                    onAfterLoad?.Invoke(fileName);
+                    onAfterLoad?.Invoke(key);
                     return;
                 }
 
@@ -419,19 +408,19 @@ namespace Extensions.Data
                 {
                     ServiceDebug.LogError($"Файл «{SINGLE_SAVE_FILE_NAME}» поврежден, восстановление из бэкапа не удалось (хэш не совпадает)");
                     dataCache[cacheKey] = defaultValue;
-                    onAfterLoad?.Invoke(fileName);
+                    onAfterLoad?.Invoke(key);
                     return;
                 }
             }
 
             ValidateVersion(container, SINGLE_SAVE_FILE_NAME);
 
-            MultiSaveEntry entry = GetEntry(container, fileName);
+            MultiSaveEntry entry = GetEntry(container, key);
             if (entry == null)
             {
-                ServiceDebug.LogWarning($"Файл «{fileName}» не найден в контейнере, загружены значения по-умолчанию");
+                ServiceDebug.LogWarning($"Файл «{key}» не найден в контейнере, загружены значения по-умолчанию");
                 dataCache[cacheKey] = defaultValue;
-                onAfterLoad?.Invoke(fileName);
+                onAfterLoad?.Invoke(key);
                 return;
             }
 
@@ -439,22 +428,22 @@ namespace Extensions.Data
             {
                 T result = JsonConvert.DeserializeObject<T>(entry.DataJson);
                 dataCache[cacheKey] = result;
-                onAfterLoad?.Invoke(fileName);
+                onAfterLoad?.Invoke(key);
             }
             catch (Exception ex)
             {
-                ServiceDebug.LogError($"Ошибка десериализации файла «{fileName}»: {ex}");
+                ServiceDebug.LogError($"Ошибка десериализации файла «{key}»: {ex}");
                 dataCache[cacheKey] = defaultValue;
-                onLoadError?.Invoke(fileName, ex);
+                onLoadError?.Invoke(key, ex);
             }
         }
 
         /// <summary>
-        /// Проверить существование файла сохранения (асинхронно)
+        /// Проверить существование записи по ключу сохранения (асинхронно)
         /// </summary>
-        /// <param name="fileName">Название файла сохранения</param>
+        /// <param name="key">Название ключа сохранения</param>
         /// <returns></returns>
-        public static async UniTask<bool> ExistsAsync(string fileName)
+        public static async UniTask<bool> ExistsAsync(string key)
         {
             MultiSaveContainer container = await TryLoadMultiContainerAsync();
             if (container == null)
@@ -462,24 +451,24 @@ namespace Extensions.Data
                 return false;
             }
 
-            MultiSaveEntry entry = GetEntry(container, fileName);
+            MultiSaveEntry entry = GetEntry(container, key);
             return entry != null;
         }
 
         /// <summary>
-        /// Удалить файл сохранения (асинхронно)
+        /// Удалить запись по ключу сохранения (асинхронно)
         /// </summary>
-        /// <param name="fileName">Название файла сохранения</param>
+        /// <param name="key">Название ключ сохранения</param>
         /// <returns></returns>
-        public static async UniTask<bool> DeleteAsync(string fileName)
+        public static async UniTask<bool> DeleteAsync(string key)
         {
-            if (string.IsNullOrEmpty(fileName))
+            if (string.IsNullOrEmpty(key))
             {
                 ServiceDebug.LogError("Пустое имя файла, удаление не выполнено");
                 return false;
             }
 
-            string cacheKey = GetCacheKey(fileName);
+            string cacheKey = GetCacheKey(key);
             dataCache.Remove(cacheKey);
 
             MultiSaveContainer container = await TryLoadMultiContainerAsync();
@@ -489,9 +478,9 @@ namespace Extensions.Data
                 return false;
             }
 
-            if (!RemoveEntry(container, fileName))
+            if (!RemoveEntry(container, key))
             {
-                ServiceDebug.LogWarning($"Файл «{fileName}» не найден в контейнере, удаление не выполнено");
+                ServiceDebug.LogWarning($"Файл «{key}» не найден в контейнере, удаление не выполнено");
                 return false;
             }
 
@@ -524,11 +513,15 @@ namespace Extensions.Data
             }
             catch (Exception ex)
             {
-                ServiceDebug.LogError($"Ошибка удаления файла «{fileName}»: {ex}");
+                ServiceDebug.LogError($"Ошибка удаления файла «{key}»: {ex}");
 
                 if (File.Exists(tempPath))
                 {
-                    try { File.Delete(tempPath); } catch { }
+                    try { File.Delete(tempPath); }
+                    catch
+                    {
+                        // ignored
+                    }
                 }
 
                 return false;
@@ -670,7 +663,7 @@ namespace Extensions.Data
 
             if (container.Entries == null)
             {
-                container.Entries = new MultiSaveEntry[] { newEntry };
+                container.Entries = new[] { newEntry };
                 return;
             }
 
