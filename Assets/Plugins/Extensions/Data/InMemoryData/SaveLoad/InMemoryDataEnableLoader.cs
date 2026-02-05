@@ -15,7 +15,7 @@ namespace Extensions.Data.InMemoryData
     public class InMemoryDataEnableLoader : MonoBehaviour
     {
         [SerializeField]
-        protected List<InMemoryDataContainer<InMemoryDataItem>> dataBases = new();
+        protected List<InMemoryDataBaseObject> dataBases = new();
 
         [SerializeField]
         [Tooltip("Использовать асинхронную предзагрузку (рекомендуется для больших данных)")]
@@ -47,7 +47,7 @@ namespace Extensions.Data.InMemoryData
                 ServiceDebug.Log($"[{name}] Начало асинхронной загрузки {dataBases.Count} БД...");
             }
 
-            foreach (InMemoryDataContainer<InMemoryDataItem> dataBase in dataBases)
+            foreach (InMemoryDataBaseObject dataBase in dataBases)
             {
                 if (dataBase == null) continue;
 
@@ -75,12 +75,11 @@ namespace Extensions.Data.InMemoryData
                 ServiceDebug.Log($"[{name}] Начало синхронной загрузки {dataBases.Count} БД...");
             }
 
-            foreach (InMemoryDataContainer<InMemoryDataItem> dataBase in dataBases)
+            foreach (InMemoryDataBaseObject dataBase in dataBases)
             {
                 if (dataBase == null) continue;
 
-                // Доступ к Data триггерит EnsureLoaded()
-                var _ = dataBase.Data;
+                dataBase.EnsureLoaded();
                 
                 if (showLoadingLog)
                 {

@@ -14,7 +14,7 @@ namespace Extensions.Data.InMemoryData
     public class InMemoryDataPauseSaver : MonoBehaviour
     {
         [SerializeField]
-        protected List<InMemoryDataContainer<InMemoryDataItem>> dataBases = new();
+        protected List<InMemoryDataBaseObject> dataBases = new();
 
         [SerializeField]
         [Tooltip("Ждать завершения сохранения при паузе (рекомендуется)")]
@@ -95,7 +95,7 @@ namespace Extensions.Data.InMemoryData
             int savedCount = 0;
             int totalCount = 0;
 
-            foreach (InMemoryDataContainer<InMemoryDataItem> dataBase in dataBases)
+            foreach (InMemoryDataBaseObject dataBase in dataBases)
             {
                 if (dataBase == null) continue;
 
@@ -142,7 +142,7 @@ namespace Extensions.Data.InMemoryData
         /// </summary>
         private void SaveAllSync()
         {
-            foreach (InMemoryDataContainer<InMemoryDataItem> dataBase in dataBases)
+            foreach (InMemoryDataBaseObject dataBase in dataBases)
             {
                 if (dataBase == null) continue;
 
@@ -161,7 +161,7 @@ namespace Extensions.Data.InMemoryData
         public async UniTask<int> SaveAllManualAsync()
         {
             int savedCount = 0;
-            foreach (InMemoryDataContainer<InMemoryDataItem> dataBase in dataBases)
+            foreach (InMemoryDataBaseObject dataBase in dataBases)
             {
                 if (dataBase == null) continue;
 

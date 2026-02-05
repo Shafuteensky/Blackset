@@ -15,7 +15,7 @@ namespace Extensions.Data.InMemoryData
     public class InMemoryDataDisableSaver : MonoBehaviour
     {
         [SerializeField]
-        protected List<InMemoryDataContainer<InMemoryDataItem>> dataBases = new();
+        protected List<InMemoryDataBaseObject> dataBases = new();
 
         [SerializeField]
         [Tooltip("Ждать завершения сохранения перед отключением (рекомендуется)")]
@@ -48,7 +48,7 @@ namespace Extensions.Data.InMemoryData
             }
 
             int savedCount = 0;
-            foreach (InMemoryDataContainer<InMemoryDataItem> dataBase in dataBases)
+            foreach (InMemoryDataBaseObject dataBase in dataBases)
             {
                 if (dataBase == null) continue;
 
@@ -80,7 +80,7 @@ namespace Extensions.Data.InMemoryData
                 ServiceDebug.Log($"[{name}] Быстрое сохранение {dataBases.Count} БД (fire-and-forget)...");
             }
 
-            foreach (InMemoryDataContainer<InMemoryDataItem> dataBase in dataBases)
+            foreach (InMemoryDataBaseObject dataBase in dataBases)
             {
                 if (dataBase == null) continue;
 
@@ -94,7 +94,7 @@ namespace Extensions.Data.InMemoryData
         public async UniTask<int> SaveAllManualAsync()
         {
             int savedCount = 0;
-            foreach (InMemoryDataContainer<InMemoryDataItem> dataBase in dataBases)
+            foreach (InMemoryDataBaseObject dataBase in dataBases)
             {
                 if (dataBase == null) continue;
 
