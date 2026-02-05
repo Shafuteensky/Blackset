@@ -68,7 +68,7 @@ namespace Extensions.Data
             ReferenceLoopHandling = ReferenceLoopHandling.Error,
             PreserveReferencesHandling = PreserveReferencesHandling.None,
             TypeNameHandling = TypeNameHandling.None,
-            ContractResolver = new DefaultContractResolver()
+            ContractResolver = new PrivateSetterContractResolver()
         };
         
         private static int savingCount;
@@ -138,7 +138,7 @@ namespace Extensions.Data
             }
         }
 
-        #region Sync API (с кэшированием)
+        #region Sync API
 
         /// <summary>
         /// Сохранить данные в запись по ключу сохранения (синхронно, через кэш)
@@ -173,7 +173,6 @@ namespace Extensions.Data
         {
             string cacheKey = GetCacheKey(key);
 
-            // Если данные в кэше - возвращаем их, а не грузим файл
             if (dataCache.TryGetValue(cacheKey, out object cachedData))
             {
                 return (T)cachedData;
@@ -181,14 +180,21 @@ namespace Extensions.Data
 
             if (loadingTasks.ContainsKey(cacheKey))
             {
-                ServiceDebug.LogWarning($"Синхронный Load вызван во время async загрузки файла «{key}». Используйте LoadAsync или EnsureLoadedAsync.");
+                ServiceDebug.LogWarning(
+                    $"Синхронный Load вызван во время async загрузки файла «{key}». Используйте LoadAsync или EnsureLoadedAsync.");
                 return defaultValue;
             }
 
             try
             {
-                T result = LoadAsync(key, defaultValue).GetAwaiter().GetResult();
-                return result;
+                LoadInternalSync(key, defaultValue, cacheKey);
+
+                if (dataCache.TryGetValue(cacheKey, out object loadedData))
+                {
+                    return (T)loadedData;
+                }
+
+                return defaultValue;
             }
             catch (Exception ex)
             {
@@ -202,14 +208,48 @@ namespace Extensions.Data
         /// </summary>
         public static bool Exists(string key)
         {
+            if (string.IsNullOrEmpty(key))
+            {
+                return false;
+            }
+
             string cacheKey = GetCacheKey(key);
-            
+
             if (dataCache.ContainsKey(cacheKey))
             {
                 return true;
             }
 
-            return ExistsAsync(key).GetAwaiter().GetResult();
+            try
+            {
+                MultiSaveContainer container = TryLoadMultiContainerSync();
+                if (container == null)
+                {
+                    return false;
+                }
+
+                if (!ValidateMultiHash(container))
+                {
+                    container = TryLoadMultiBackupContainerSync();
+                    if (container == null)
+                    {
+                        return false;
+                    }
+
+                    if (!ValidateMultiHash(container))
+                    {
+                        return false;
+                    }
+                }
+
+                MultiSaveEntry entry = GetEntry(container, key);
+                return entry != null;
+            }
+            catch (Exception ex)
+            {
+                ServiceDebug.LogError($"Ошибка синхронной проверки Exists для ключа «{key}»: {ex}");
+                return false;
+            }
         }
 
         /// <summary>
@@ -399,63 +439,20 @@ namespace Extensions.Data
 
             return defaultValue;
         }
-
+        
         private static async UniTask LoadInternalAsync<T>(string key, T defaultValue, string cacheKey)
         {
             onBeforeLoad?.Invoke(key);
 
-            MultiSaveContainer container = await TryLoadMultiContainerAsync();
+            MultiSaveContainer container = await ResolveValidContainerAsync();
             if (container == null)
             {
-                ServiceDebug.LogWarning($"Файл «{SAVE_FILE_NAME}» не найден, загружены значения по-умолчанию");
                 dataCache[cacheKey] = defaultValue;
                 onAfterLoad?.Invoke(key);
                 return;
             }
 
-            if (!ValidateMultiHash(container))
-            {
-                ServiceDebug.LogError($"Хэш-подпись файла «{SAVE_FILE_NAME}» не совпадает, попытка восстановления из бэкапа");
-                container = await TryLoadMultiBackupContainerAsync();
-                if (container == null)
-                {
-                    dataCache[cacheKey] = defaultValue;
-                    onAfterLoad?.Invoke(key);
-                    return;
-                }
-
-                if (!ValidateMultiHash(container))
-                {
-                    ServiceDebug.LogError($"Файл «{SAVE_FILE_NAME}» поврежден, восстановление из бэкапа не удалось (хэш не совпадает)");
-                    dataCache[cacheKey] = defaultValue;
-                    onAfterLoad?.Invoke(key);
-                    return;
-                }
-            }
-
-            ValidateVersion(container, SAVE_FILE_NAME);
-
-            MultiSaveEntry entry = GetEntry(container, key);
-            if (entry == null)
-            {
-                ServiceDebug.LogWarning($"Файл «{key}» не найден в контейнере, загружены значения по-умолчанию");
-                dataCache[cacheKey] = defaultValue;
-                onAfterLoad?.Invoke(key);
-                return;
-            }
-
-            try
-            {
-                T result = JsonConvert.DeserializeObject<T>(entry.DataJson, serializerSettings);
-                dataCache[cacheKey] = result;
-                onAfterLoad?.Invoke(key);
-            }
-            catch (Exception ex)
-            {
-                ServiceDebug.LogError($"Ошибка десериализации файла «{key}»: {ex}");
-                dataCache[cacheKey] = defaultValue;
-                onLoadError?.Invoke(key, ex);
-            }
+            LoadFromContainer(key, defaultValue, cacheKey, container);
         }
 
         /// <summary>
@@ -627,36 +624,131 @@ namespace Extensions.Data
 
         #endregion
 
-        #region Internal Methods
+        #region Internal Methods (Save/Load/Parse)
 
-        private static async UniTask<MultiSaveContainer> TryLoadMultiContainerAsync()
+        private static MultiSaveContainer ParseContainerFromEncrypted(string encrypted, string context)
         {
-            string filePath = Path.Combine(CurrentProfileDirectory, SAVE_FILE_NAME + FILE_EXTENSION);
-
-            if (!File.Exists(filePath))
-            {
-                return null;
-            }
-
             try
             {
-                string encrypted = await File.ReadAllTextAsync(filePath);
                 string json = DataEncryptor.Decrypt(encrypted, DataEncryptor.EncryptionMode);
 
                 if (string.IsNullOrEmpty(json))
                 {
+                    ServiceDebug.LogError($"{context} (пустой JSON)");
                     return null;
                 }
-                
-                MultiSaveContainer container = JsonConvert.DeserializeObject<MultiSaveContainer>(json, serializerSettings);
 
-                return container;
+                return JsonConvert.DeserializeObject<MultiSaveContainer>(json, serializerSettings);
             }
             catch (Exception ex)
             {
-                ServiceDebug.LogError($"Ошибка загрузки файла «{SAVE_FILE_NAME}»: {ex}");
+                ServiceDebug.LogError($"{context}: {ex}");
                 return null;
             }
+        }
+        
+        private static void LoadFromContainer<T>(
+            string key,
+            T defaultValue,
+            string cacheKey,
+            MultiSaveContainer container)
+        {
+            if (container == null)
+            {
+                ServiceDebug.LogWarning($"Файл «{SAVE_FILE_NAME}» не найден, загружены значения по-умолчанию");
+                dataCache[cacheKey] = defaultValue;
+                onAfterLoad?.Invoke(key);
+                return;
+            }
+
+            ValidateVersion(container, SAVE_FILE_NAME);
+
+            MultiSaveEntry entry = GetEntry(container, key);
+            if (entry == null)
+            {
+                ServiceDebug.LogWarning($"Ключ «{key}» не найден в файле, загружены значения по-умолчанию");
+                dataCache[cacheKey] = defaultValue;
+                onAfterLoad?.Invoke(key);
+                return;
+            }
+
+            try
+            {
+                T result = JsonConvert.DeserializeObject<T>(entry.DataJson, serializerSettings);
+                dataCache[cacheKey] = result;
+                onAfterLoad?.Invoke(key);
+            }
+            catch (Exception ex)
+            {
+                ServiceDebug.LogError($"Ошибка десериализации файла (ключ «{key}»): {ex}");
+                dataCache[cacheKey] = defaultValue;
+                onLoadError?.Invoke(key, ex);
+            }
+        }
+        
+        private static MultiSaveContainer ResolveValidContainerSync()
+        {
+            MultiSaveContainer container = TryLoadMultiContainerSync();
+            if (container == null)
+            {
+                return null;
+            }
+
+            if (!ValidateMultiHash(container))
+            {
+                ServiceDebug.LogError($"Хэш-подпись файла «{SAVE_FILE_NAME}» не совпадает, попытка восстановления из бэкапа");
+
+                container = TryLoadMultiBackupContainerSync();
+                if (container == null)
+                {
+                    return null;
+                }
+
+                if (!ValidateMultiHash(container))
+                {
+                    ServiceDebug.LogError($"Файл «{SAVE_FILE_NAME}» поврежден, восстановление из бэкапа не удалось (хэш не совпадает)");
+                    return null;
+                }
+            }
+
+            return container;
+        }
+
+        private static async UniTask<MultiSaveContainer> ResolveValidContainerAsync()
+        {
+            MultiSaveContainer container = await TryLoadMultiContainerAsync();
+            if (container == null)
+            {
+                return null;
+            }
+
+            if (!ValidateMultiHash(container))
+            {
+                ServiceDebug.LogError($"Хэш-подпись файла «{SAVE_FILE_NAME}» не совпадает, попытка восстановления из бэкапа");
+
+                container = await TryLoadMultiBackupContainerAsync();
+                if (container == null)
+                {
+                    return null;
+                }
+
+                if (!ValidateMultiHash(container))
+                {
+                    ServiceDebug.LogError($"Файл «{SAVE_FILE_NAME}» поврежден, восстановление из бэкапа не удалось (хэш не совпадает)");
+                    return null;
+                }
+            }
+
+            return container;
+        }
+        
+        private static async UniTask<MultiSaveContainer> TryLoadMultiContainerAsync()
+        {
+            string filePath = Path.Combine(CurrentProfileDirectory, SAVE_FILE_NAME + FILE_EXTENSION);
+            if (!File.Exists(filePath)) return null;
+
+            string encrypted = await File.ReadAllTextAsync(filePath);
+            return ParseContainerFromEncrypted(encrypted, $"Ошибка загрузки файла «{SAVE_FILE_NAME}»");
         }
 
         private static async UniTask<MultiSaveContainer> TryLoadMultiBackupContainerAsync()
@@ -695,6 +787,73 @@ namespace Extensions.Data
                 return null;
             }
         }
+        
+        
+        private static void LoadInternalSync<T>(string key, T defaultValue, string cacheKey)
+        {
+            onBeforeLoad?.Invoke(key);
+
+            MultiSaveContainer container = ResolveValidContainerSync();
+            if (container == null)
+            {
+                dataCache[cacheKey] = defaultValue;
+                onAfterLoad?.Invoke(key);
+                return;
+            }
+
+            LoadFromContainer(key, defaultValue, cacheKey, container);
+        }
+
+        private static MultiSaveContainer TryLoadMultiContainerSync()
+        {
+            string filePath = Path.Combine(CurrentProfileDirectory, SAVE_FILE_NAME + FILE_EXTENSION);
+            if (!File.Exists(filePath)) return null;
+
+            string encrypted = File.ReadAllText(filePath);
+            return ParseContainerFromEncrypted(encrypted, $"Ошибка загрузки файла «{SAVE_FILE_NAME}»");
+        }
+
+
+        private static MultiSaveContainer TryLoadMultiBackupContainerSync()
+        {
+            string backupPath = Path.Combine(CurrentProfileDirectory, SAVE_FILE_NAME + FILE_EXTENSION + BACKUP_EXTENSION);
+
+            if (!File.Exists(backupPath))
+            {
+                ServiceDebug.LogError($"Файл «{SAVE_FILE_NAME}» поврежден, бэкап не найден");
+                return null;
+            }
+
+            try
+            {
+                string encrypted = File.ReadAllText(backupPath);
+                string json = DataEncryptor.Decrypt(encrypted, DataEncryptor.EncryptionMode);
+
+                if (string.IsNullOrEmpty(json))
+                {
+                    ServiceDebug.LogError($"Файл «{SAVE_FILE_NAME}» поврежден, восстановление из бэкапа не удалось (пустой JSON)");
+                    return null;
+                }
+
+                MultiSaveContainer container = JsonConvert.DeserializeObject<MultiSaveContainer>(json);
+                if (container == null)
+                {
+                    ServiceDebug.LogError($"Файл «{SAVE_FILE_NAME}» поврежден, восстановление из бэкапа не удалось (ошибка парсинга)");
+                    return null;
+                }
+
+                return container;
+            }
+            catch (Exception ex)
+            {
+                ServiceDebug.LogError($"Файл «{SAVE_FILE_NAME}» поврежден, восстановление из бэкапа не удалось: {ex}");
+                return null;
+            }
+        }
+        
+        #endregion
+
+        #region Internal Methods (Data)
 
         private static void UpsertEntry(MultiSaveContainer container, MultiSaveEntry newEntry)
         {

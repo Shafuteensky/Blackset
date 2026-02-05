@@ -3,16 +3,14 @@ using Cysharp.Threading.Tasks;
 using Extensions.Identification;
 using Extensions.Log;
 using UnityEngine;
-using Object = System.Object;
 
 namespace Extensions.Data.InMemoryData
 {
     /// <summary>
     /// Базовый класс InMemory хранилища данных
     /// </summary>
-    public abstract class InMemoryDataBaseObject<TData> : ScriptableObject where TData : new()
+    public abstract class InMemoryDataBaseObject<TData> : InMemoryDataBaseObject where TData : new()
     {
-        
         #region Events
         
         /// <summary>
@@ -65,9 +63,12 @@ namespace Extensions.Data.InMemoryData
             }
         }
 
+        [NonSerialized]
         protected TData data;
         
-        protected bool loaded;
+        [NonSerialized]
+        protected bool loaded = false;
+        [NonSerialized]
         protected bool dirty;
         
         protected virtual void OnEnable()
@@ -82,7 +83,7 @@ namespace Extensions.Data.InMemoryData
         /// <summary>
         /// Гарантированная загрузка данных (синхронно через кэш)
         /// </summary>
-        protected void EnsureLoaded()
+        public override void EnsureLoaded()
         {
             if (loaded)
             {
@@ -107,7 +108,7 @@ namespace Extensions.Data.InMemoryData
         /// Запрос сохранения таблицы (синхронный)
         /// </summary>
         /// <returns>Сохранена ли таблица</returns>
-        public bool RequestSave()
+        public override bool RequestSave()
         {
             EnsureLoaded();
             return Save();
@@ -117,7 +118,7 @@ namespace Extensions.Data.InMemoryData
         /// Запрос сохранения данных (асинхронный)
         /// </summary>
         /// <returns>Сохранены ли данные</returns>
-        public async UniTask<bool> RequestSaveAsync()
+        public override async UniTask<bool> RequestSaveAsync()
         {
             EnsureLoaded();
             return await SaveAsync();
@@ -179,7 +180,7 @@ namespace Extensions.Data.InMemoryData
         /// <summary>
         /// Предзагрузка данных асинхронно
         /// </summary>
-        public async UniTask PreloadAsync()
+        public override async UniTask PreloadAsync()
         {
             if (loaded)
             {
@@ -207,5 +208,16 @@ namespace Extensions.Data.InMemoryData
         #endregion
         
         protected void OnDataUpdate() => onDataUpdate?.Invoke();
+    }
+
+    /// <summary>
+    /// Абстракция
+    /// </summary>
+    public abstract class InMemoryDataBaseObject : ScriptableObject
+    {
+        public abstract bool RequestSave();
+        public abstract UniTask  PreloadAsync();
+        public abstract UniTask<bool> RequestSaveAsync();
+        public abstract void EnsureLoaded();
     }
 }

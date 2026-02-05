@@ -148,9 +148,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d24682ceb040487c99edfac0c6e29f35, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp-firstpass::Extensions.Data.InMemoryData.InMemoryDataEnableLoader
-  dataBases: []
-  useAsyncPreload: 1
-  showLoadingLog: 0
+  dataBases:
+  - {fileID: 11400000, guid: 4016e62c20ae05e4db79f0162046c6cd, type: 2}
+  useAsyncPreload: 0
+  showLoadingLog: 1
 --- !u!4 &91436748
 Transform:
   m_ObjectHideFlags: 0

@@ -41,8 +41,8 @@ namespace Extensions.Data.InMemoryData
         {
             EnsureLoaded();
             
-            OnDataUpdate();
             MarkDirty(); 
+            OnDataUpdate();
         }
     }
 }
