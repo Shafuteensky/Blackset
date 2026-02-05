@@ -7,6 +7,8 @@ using Cysharp.Threading.Tasks; // UniTask
 using Extensions.Log;
 using Newtonsoft.Json; // Newtonsoft.Json
 using UnityEngine;
+using System.Threading;
+using Newtonsoft.Json.Serialization;
 
 namespace Extensions.Data
 {
@@ -27,7 +29,7 @@ namespace Extensions.Data
         private const string TEMP_EXTENSION = ".tmp";
         private const int CURRENT_VERSION = 1;
         private const string DEFAULT_PROFILE_NAME = "default";
-        private const string SINGLE_SAVE_FILE_NAME = "save";
+        private const string SAVE_FILE_NAME = "save";
         
         #endregion
 
@@ -61,7 +63,16 @@ namespace Extensions.Data
         
         #endregion
         
+        private static readonly JsonSerializerSettings serializerSettings = new JsonSerializerSettings
+        {
+            ReferenceLoopHandling = ReferenceLoopHandling.Error,
+            PreserveReferencesHandling = PreserveReferencesHandling.None,
+            TypeNameHandling = TypeNameHandling.None,
+            ContractResolver = new DefaultContractResolver()
+        };
+        
         private static int savingCount;
+        private static readonly Dictionary<string, SemaphoreSlim> fileLocks = new Dictionary<string, SemaphoreSlim>();
         
         // Кэш загруженных данных для синхронного API
         private static readonly Dictionary<string, object> dataCache = new Dictionary<string, object>();
@@ -115,6 +126,11 @@ namespace Extensions.Data
 
         static JsonSaveLoad()
         {
+            serializerSettings.Converters.Add(new Vector2Converter());
+            serializerSettings.Converters.Add(new Vector3Converter());
+            serializerSettings.Converters.Add(new QuaternionConverter());
+            serializerSettings.Converters.Add(new ColorConverter());
+            
             if (!Directory.Exists(SaveDirectory))
             {
                 Directory.CreateDirectory(SaveDirectory);
@@ -255,7 +271,9 @@ namespace Extensions.Data
             }
 
             savingCount++;
-
+            SemaphoreSlim fileLock = GetFileLock();
+            await fileLock.WaitAsync();
+            
             try
             {
                 onBeforeSave?.Invoke(key);
@@ -275,7 +293,7 @@ namespace Extensions.Data
                 {
                     Key = key,
                     DataType = typeof(T).AssemblyQualifiedName,
-                    DataJson = JsonConvert.SerializeObject(data, Formatting.None)
+                    DataJson = JsonConvert.SerializeObject(data, Formatting.None, serializerSettings)
                 };
 
                 UpsertEntry(container, entry);
@@ -286,29 +304,30 @@ namespace Extensions.Data
                 string hashPayload = ComputeMultiPayloadHash(container);
                 container.Hash = hashPayload;
 
-                string json = JsonConvert.SerializeObject(container, Formatting.Indented);
+                string json = JsonConvert.SerializeObject(container, Formatting.Indented, serializerSettings);
                 string encrypted = DataEncryptor.Encrypt(json, DataEncryptor.EncryptionMode);
 
-                string filePath = Path.Combine(CurrentProfileDirectory, SINGLE_SAVE_FILE_NAME + FILE_EXTENSION);
+                string filePath = Path.Combine(CurrentProfileDirectory, SAVE_FILE_NAME + FILE_EXTENSION);
                 string backupPath = filePath + BACKUP_EXTENSION;
                 string tempPath = filePath + TEMP_EXTENSION;
 
                 try
                 {
                     await File.WriteAllTextAsync(tempPath, encrypted);
-                    
+
                     if (File.Exists(filePath))
                     {
                         File.Copy(filePath, backupPath, true);
+                        File.Delete(filePath);
                     }
-                    
+
                     File.Move(tempPath, filePath);
 
                     onAfterSave?.Invoke(key);
                 }
                 catch (Exception ex)
                 {
-                    ServiceDebug.LogError($"Ошибка сохранения файла «{SINGLE_SAVE_FILE_NAME}»: {ex}");
+                    ServiceDebug.LogError($"Ошибка сохранения файла «{SAVE_FILE_NAME}»: {ex}");
 
                     if (File.Exists(tempPath))
                     {
@@ -327,6 +346,7 @@ namespace Extensions.Data
             }
             finally
             {
+                fileLock.Release();
                 savingCount--;
                 if (savingCount < 0)
                 {
@@ -387,7 +407,7 @@ namespace Extensions.Data
             MultiSaveContainer container = await TryLoadMultiContainerAsync();
             if (container == null)
             {
-                ServiceDebug.LogWarning($"Файл «{SINGLE_SAVE_FILE_NAME}» не найден, загружены значения по-умолчанию");
+                ServiceDebug.LogWarning($"Файл «{SAVE_FILE_NAME}» не найден, загружены значения по-умолчанию");
                 dataCache[cacheKey] = defaultValue;
                 onAfterLoad?.Invoke(key);
                 return;
@@ -395,7 +415,7 @@ namespace Extensions.Data
 
             if (!ValidateMultiHash(container))
             {
-                ServiceDebug.LogError($"Хэш-подпись файла «{SINGLE_SAVE_FILE_NAME}» не совпадает, попытка восстановления из бэкапа");
+                ServiceDebug.LogError($"Хэш-подпись файла «{SAVE_FILE_NAME}» не совпадает, попытка восстановления из бэкапа");
                 container = await TryLoadMultiBackupContainerAsync();
                 if (container == null)
                 {
@@ -406,14 +426,14 @@ namespace Extensions.Data
 
                 if (!ValidateMultiHash(container))
                 {
-                    ServiceDebug.LogError($"Файл «{SINGLE_SAVE_FILE_NAME}» поврежден, восстановление из бэкапа не удалось (хэш не совпадает)");
+                    ServiceDebug.LogError($"Файл «{SAVE_FILE_NAME}» поврежден, восстановление из бэкапа не удалось (хэш не совпадает)");
                     dataCache[cacheKey] = defaultValue;
                     onAfterLoad?.Invoke(key);
                     return;
                 }
             }
 
-            ValidateVersion(container, SINGLE_SAVE_FILE_NAME);
+            ValidateVersion(container, SAVE_FILE_NAME);
 
             MultiSaveEntry entry = GetEntry(container, key);
             if (entry == null)
@@ -426,7 +446,7 @@ namespace Extensions.Data
 
             try
             {
-                T result = JsonConvert.DeserializeObject<T>(entry.DataJson);
+                T result = JsonConvert.DeserializeObject<T>(entry.DataJson, serializerSettings);
                 dataCache[cacheKey] = result;
                 onAfterLoad?.Invoke(key);
             }
@@ -467,64 +487,78 @@ namespace Extensions.Data
                 ServiceDebug.LogError("Пустое имя файла, удаление не выполнено");
                 return false;
             }
-
-            string cacheKey = GetCacheKey(key);
-            dataCache.Remove(cacheKey);
-
-            MultiSaveContainer container = await TryLoadMultiContainerAsync();
-            if (container == null)
-            {
-                ServiceDebug.LogWarning($"Файл «{SINGLE_SAVE_FILE_NAME}» не найден, удаление не выполнено");
-                return false;
-            }
-
-            if (!RemoveEntry(container, key))
-            {
-                ServiceDebug.LogWarning($"Файл «{key}» не найден в контейнере, удаление не выполнено");
-                return false;
-            }
-
-            container.Version = CURRENT_VERSION;
-            container.Profile = string.IsNullOrEmpty(CurrentProfile) ? DEFAULT_PROFILE_NAME : CurrentProfile;
-            container.TimestampUtc = DateTime.UtcNow.ToString("o");
-
-            string hashPayload = ComputeMultiPayloadHash(container);
-            container.Hash = hashPayload;
-
-            string json = JsonConvert.SerializeObject(container, Formatting.Indented);
-            string encrypted = DataEncryptor.Encrypt(json, DataEncryptor.EncryptionMode);
-
-            string filePath = Path.Combine(CurrentProfileDirectory, SINGLE_SAVE_FILE_NAME + FILE_EXTENSION);
-            string backupPath = filePath + BACKUP_EXTENSION;
-            string tempPath = filePath + TEMP_EXTENSION;
+            
+            SemaphoreSlim fileLock = GetFileLock();
+            await fileLock.WaitAsync();
 
             try
             {
-                await File.WriteAllTextAsync(tempPath, encrypted);
-                
-                if (File.Exists(filePath))
+                string cacheKey = GetCacheKey(key);
+                dataCache.Remove(cacheKey);
+
+                MultiSaveContainer container = await TryLoadMultiContainerAsync();
+                if (container == null)
                 {
-                    File.Copy(filePath, backupPath, true);
+                    ServiceDebug.LogWarning($"Файл «{SAVE_FILE_NAME}» не найден, удаление не выполнено");
+                    return false;
                 }
-                
-                File.Move(tempPath, filePath);
 
-                return true;
-            }
-            catch (Exception ex)
-            {
-                ServiceDebug.LogError($"Ошибка удаления файла «{key}»: {ex}");
-
-                if (File.Exists(tempPath))
+                if (!RemoveEntry(container, key))
                 {
-                    try { File.Delete(tempPath); }
-                    catch
+                    ServiceDebug.LogWarning($"Файл «{key}» не найден в контейнере, удаление не выполнено");
+                    return false;
+                }
+
+                container.Version = CURRENT_VERSION;
+                container.Profile = string.IsNullOrEmpty(CurrentProfile) ? DEFAULT_PROFILE_NAME : CurrentProfile;
+                container.TimestampUtc = DateTime.UtcNow.ToString("o");
+
+                string hashPayload = ComputeMultiPayloadHash(container);
+                container.Hash = hashPayload;
+
+                string json = JsonConvert.SerializeObject(container, Formatting.Indented, serializerSettings);
+                string encrypted = DataEncryptor.Encrypt(json, DataEncryptor.EncryptionMode);
+
+                string filePath = Path.Combine(CurrentProfileDirectory, SAVE_FILE_NAME + FILE_EXTENSION);
+                string backupPath = filePath + BACKUP_EXTENSION;
+                string tempPath = filePath + TEMP_EXTENSION;
+
+                try
+                {
+                    await File.WriteAllTextAsync(tempPath, encrypted);
+
+                    if (File.Exists(filePath))
                     {
-                        // ignored
+                        File.Copy(filePath, backupPath, true);
+                        File.Delete(filePath);
                     }
-                }
 
-                return false;
+                    File.Move(tempPath, filePath);
+
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    ServiceDebug.LogError($"Ошибка удаления файла «{key}»: {ex}");
+
+                    if (File.Exists(tempPath))
+                    {
+                        try
+                        {
+                            File.Delete(tempPath);
+                        }
+                        catch
+                        {
+                            // ignored
+                        }
+                    }
+
+                    return false;
+                }
+            }
+            finally
+            {
+                fileLock.Release();
             }
         }
 
@@ -533,11 +567,14 @@ namespace Extensions.Data
         /// </summary>
         public static async UniTask DeleteAllAsync()
         {
+            SemaphoreSlim fileLock = GetFileLock();
+            await fileLock.WaitAsync();
+
             try
             {
                 string profilePrefix = $"{CurrentProfile}:";
                 List<string> keysToRemove = new List<string>();
-                
+
                 foreach (string key in dataCache.Keys)
                 {
                     if (key.StartsWith(profilePrefix))
@@ -545,7 +582,7 @@ namespace Extensions.Data
                         keysToRemove.Add(key);
                     }
                 }
-                
+
                 foreach (string key in keysToRemove)
                 {
                     dataCache.Remove(key);
@@ -561,6 +598,10 @@ namespace Extensions.Data
             catch (Exception ex)
             {
                 ServiceDebug.LogError($"Ошибка удаления всех сохранений: {ex}");
+            }
+            finally
+            {
+                fileLock.Release();
             }
         }
 
@@ -590,7 +631,7 @@ namespace Extensions.Data
 
         private static async UniTask<MultiSaveContainer> TryLoadMultiContainerAsync()
         {
-            string filePath = Path.Combine(CurrentProfileDirectory, SINGLE_SAVE_FILE_NAME + FILE_EXTENSION);
+            string filePath = Path.Combine(CurrentProfileDirectory, SAVE_FILE_NAME + FILE_EXTENSION);
 
             if (!File.Exists(filePath))
             {
@@ -606,24 +647,25 @@ namespace Extensions.Data
                 {
                     return null;
                 }
+                
+                MultiSaveContainer container = JsonConvert.DeserializeObject<MultiSaveContainer>(json, serializerSettings);
 
-                MultiSaveContainer container = JsonConvert.DeserializeObject<MultiSaveContainer>(json);
                 return container;
             }
             catch (Exception ex)
             {
-                ServiceDebug.LogError($"Ошибка загрузки файла «{SINGLE_SAVE_FILE_NAME}»: {ex}");
+                ServiceDebug.LogError($"Ошибка загрузки файла «{SAVE_FILE_NAME}»: {ex}");
                 return null;
             }
         }
 
         private static async UniTask<MultiSaveContainer> TryLoadMultiBackupContainerAsync()
         {
-            string backupPath = Path.Combine(CurrentProfileDirectory, SINGLE_SAVE_FILE_NAME + FILE_EXTENSION + BACKUP_EXTENSION);
+            string backupPath = Path.Combine(CurrentProfileDirectory, SAVE_FILE_NAME + FILE_EXTENSION + BACKUP_EXTENSION);
 
             if (!File.Exists(backupPath))
             {
-                ServiceDebug.LogError($"Файл «{SINGLE_SAVE_FILE_NAME}» поврежден, бэкап не найден");
+                ServiceDebug.LogError($"Файл «{SAVE_FILE_NAME}» поврежден, бэкап не найден");
                 return null;
             }
 
@@ -634,14 +676,14 @@ namespace Extensions.Data
 
                 if (string.IsNullOrEmpty(json))
                 {
-                    ServiceDebug.LogError($"Файл «{SINGLE_SAVE_FILE_NAME}» поврежден, восстановление из бэкапа не удалось (пустой JSON)");
+                    ServiceDebug.LogError($"Файл «{SAVE_FILE_NAME}» поврежден, восстановление из бэкапа не удалось (пустой JSON)");
                     return null;
                 }
 
                 MultiSaveContainer container = JsonConvert.DeserializeObject<MultiSaveContainer>(json);
                 if (container == null)
                 {
-                    ServiceDebug.LogError($"Файл «{SINGLE_SAVE_FILE_NAME}» поврежден, восстановление из бэкапа не удалось (ошибка парсинга)");
+                    ServiceDebug.LogError($"Файл «{SAVE_FILE_NAME}» поврежден, восстановление из бэкапа не удалось (ошибка парсинга)");
                     return null;
                 }
 
@@ -649,7 +691,7 @@ namespace Extensions.Data
             }
             catch (Exception ex)
             {
-                ServiceDebug.LogError($"Файл «{SINGLE_SAVE_FILE_NAME}» поврежден, восстановление из бэкапа не удалось: {ex}");
+                ServiceDebug.LogError($"Файл «{SAVE_FILE_NAME}» поврежден, восстановление из бэкапа не удалось: {ex}");
                 return null;
             }
         }
@@ -862,7 +904,24 @@ namespace Extensions.Data
                 ServiceDebug.LogWarning($"Версия сохранения «{fileName}» ({container.Version}) не совпадает с текущей ({CURRENT_VERSION})");
             }
         }
+        
+        private static SemaphoreSlim GetFileLock()
+        {
+            string profile = string.IsNullOrEmpty(CurrentProfile) ? DEFAULT_PROFILE_NAME : CurrentProfile;
+            string lockKey = profile;
 
+            lock (fileLocks)
+            {
+                if (!fileLocks.TryGetValue(lockKey, out SemaphoreSlim sem))
+                {
+                    sem = new SemaphoreSlim(1, 1);
+                    fileLocks[lockKey] = sem;
+                }
+
+                return sem;
+            }
+        }
+        
         #endregion
     }
 }
