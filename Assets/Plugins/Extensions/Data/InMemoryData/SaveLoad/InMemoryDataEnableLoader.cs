@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
+using Extensions.Log;
 using UnityEngine;
 
 namespace Extensions.Data.InMemoryData
@@ -7,6 +9,7 @@ namespace Extensions.Data.InMemoryData
     /// Загрузка InMemory БД на OnEnable
     /// <remarks>
     /// Используется для прогрева БД до использования
+    /// Поддерживает как синхронную, так и асинхронную загрузку
     /// </remarks>
     /// </summary>
     public class InMemoryDataEnableLoader : MonoBehaviour
@@ -14,16 +17,92 @@ namespace Extensions.Data.InMemoryData
         [SerializeField]
         protected List<InMemoryDataBaseObject> dataBases = new List<InMemoryDataBaseObject>();
 
-        protected virtual void OnEnable()
+        [SerializeField]
+        [Tooltip("Использовать асинхронную предзагрузку (рекомендуется для больших данных)")]
+        protected bool useAsyncPreload = true;
+
+        [SerializeField]
+        [Tooltip("Показывать лог загрузки")]
+        protected bool showLoadingLog = false;
+
+        protected virtual async void OnEnable()
         {
-            foreach (InMemoryDataBaseObject dataBase in dataBases)
+            if (useAsyncPreload)
             {
-                if (dataBase is InMemoryDataContainer<InMemoryDataItem> inMemoryDataBase)
-                {
-                    var _ = inMemoryDataBase.Data;
-                }
+                await PreloadAsync();
+            }
+            else
+            {
+                PreloadSync();
             }
         }
-    }
 
+        /// <summary>
+        /// Асинхронная предзагрузка (не блокирует UI)
+        /// </summary>
+        private async UniTask PreloadAsync()
+        {
+            if (showLoadingLog)
+            {
+                ServiceDebug.Log($"[{name}] Начало асинхронной загрузки {dataBases.Count} БД...");
+            }
+
+            foreach (InMemoryDataBaseObject dataBase in dataBases)
+            {
+                if (dataBase == null) continue;
+
+                if (dataBase is InMemoryDataContainer<InMemoryDataItem> inMemoryDataBase)
+                {
+                    await inMemoryDataBase.PreloadAsync();
+                    
+                    if (showLoadingLog)
+                    {
+                        ServiceDebug.Log($"[{name}] Загружена БД: {dataBase.name}");
+                    }
+                }
+            }
+
+            if (showLoadingLog)
+            {
+                ServiceDebug.Log($"[{name}] Все БД загружены");
+            }
+        }
+
+        /// <summary>
+        /// Синхронная загрузка (может блокировать кадр при первом обращении)
+        /// </summary>
+        private void PreloadSync()
+        {
+            if (showLoadingLog)
+            {
+                ServiceDebug.Log($"[{name}] Начало синхронной загрузки {dataBases.Count} БД...");
+            }
+
+            foreach (InMemoryDataBaseObject dataBase in dataBases)
+            {
+                if (dataBase == null) continue;
+
+                if (dataBase is InMemoryDataContainer<InMemoryDataItem> inMemoryDataBase)
+                {
+                    // Доступ к Data триггерит EnsureLoaded()
+                    var _ = inMemoryDataBase.Data;
+                    
+                    if (showLoadingLog)
+                    {
+                        ServiceDebug.Log($"[{name}] Загружена БД: {dataBase.name}");
+                    }
+                }
+            }
+
+            if (showLoadingLog)
+            {
+                ServiceDebug.Log($"[{name}] Все БД загружены");
+            }
+        }
+
+        /// <summary>
+        /// Ручная предзагрузка извне (для контроля последовательности)
+        /// </summary>
+        public async UniTask LoadAllAsync() => await PreloadAsync();
+    }
 }

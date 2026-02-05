@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 using Extensions.Log;
 using Extensions.Identification;
 using UnityEngine;
@@ -55,7 +56,7 @@ namespace Extensions.Data.InMemoryData
         /// </summary>
         public event Action onDataUpdate;
         /// <summary>
-        /// Событие измнения данных таблицы
+        /// Событие изменения данных таблицы
         /// </summary>
         public event Action onDataChange;
         /// <summary>
@@ -120,7 +121,7 @@ namespace Extensions.Data.InMemoryData
         protected bool dirty;
         protected bool indexDirty;
 
-        // Назнаает имя файла сохранения при создании нового скриптового файла таблицы
+        // Назначает имя файла сохранения при создании нового скриптового файла таблицы
         protected virtual void OnEnable()
         {
             if (string.IsNullOrEmpty(saveFileName))
@@ -305,13 +306,23 @@ namespace Extensions.Data.InMemoryData
         }
     
         /// <summary>
-        /// Запрос сохранения таблицы
+        /// Запрос сохранения таблицы (синхронный)
         /// </summary>
         /// <returns>Сохранена ли таблица</returns>
         public bool RequestSave()
         {
             EnsureLoaded();
             return Save();
+        }
+
+        /// <summary>
+        /// Запрос сохранения таблицы (асинхронный)
+        /// </summary>
+        /// <returns>Сохранена ли таблица</returns>
+        public async UniTask<bool> RequestSaveAsync()
+        {
+            EnsureLoaded();
+            return await SaveAsync();
         }
 
         protected bool Save()
@@ -327,20 +338,49 @@ namespace Extensions.Data.InMemoryData
                 return false;
             }
 
+            // Синхронное сохранение через кэш
             if (JsonSaveLoad.Save(data, saveFileName))
             {
                 dirty = false;
                 onDataSaved?.Invoke();
+                return true;
             }
             else
             {
                 onDataSaveError?.Invoke();
                 return false;
             }
+        }
+
+        protected async UniTask<bool> SaveAsync()
+        {
+            if (!loaded)
+            {
+                ServiceDebug.LogWarning($"Попытка сохранения еще не загруженной таблицы {name}");
+                return false;
+            }
             
-            return true;
+            if (!dirty)
+            {
+                return false;
+            }
+
+            if (await JsonSaveLoad.SaveAsync(data, saveFileName))
+            {
+                dirty = false;
+                onDataSaved?.Invoke();
+                return true;
+            }
+            else
+            {
+                onDataSaveError?.Invoke();
+                return false;
+            }
         }
         
+        /// <summary>
+        /// Гарантированная загрузка данных (синхронно через кэш)
+        /// </summary>
         protected void EnsureLoaded()
         {
             if (loaded)
@@ -348,10 +388,27 @@ namespace Extensions.Data.InMemoryData
                 return;
             }
 
+            // Синхронная загрузка через кэш JsonSaveLoad
             data = JsonSaveLoad.Load(saveFileName, new List<TData>()) ?? new List<TData>();
 
             loaded = true;
             onDataLoaded?.Invoke();
+        }
+
+        /// <summary>
+        /// Предзагрузка данных асинхронно (для оптимизации)
+        /// </summary>
+        public async UniTask PreloadAsync()
+        {
+            if (loaded)
+            {
+                return;
+            }
+
+            await JsonSaveLoad.PreloadAsync(saveFileName, new List<TData>());
+            
+            // После preload данные уже в кэше, можем загрузить синхронно
+            EnsureLoaded();
         }
 
         protected void MarkDirty()

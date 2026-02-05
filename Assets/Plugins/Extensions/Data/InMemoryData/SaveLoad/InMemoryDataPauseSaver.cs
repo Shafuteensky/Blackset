@@ -1,31 +1,191 @@
 using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
+using Extensions.Log;
 using UnityEngine;
 
 namespace Extensions.Data.InMemoryData
 {
     /// <summary>
-    /// Загрузка InMemory БД при остановке приложения на паузу
+    /// Сохранение InMemory БД при остановке приложения на паузу или выходе
     /// <remarks>
-    /// Используется для прогрева БД до использования
+    /// Используется для своевременного сохранения данных
     /// </remarks>
     /// </summary>
     public class InMemoryDataPauseSaver : MonoBehaviour
     {
         [SerializeField]
         protected List<InMemoryDataBaseObject> dataBases = new List<InMemoryDataBaseObject>();
-        
-        protected virtual void OnApplicationPause(bool pause)
+
+        [SerializeField]
+        [Tooltip("Ждать завершения сохранения при паузе (рекомендуется)")]
+        protected bool waitForSaveCompletion = true;
+
+        [SerializeField]
+        [Tooltip("Также сохранять при OnApplicationQuit")]
+        protected bool saveOnQuit = true;
+
+        [SerializeField]
+        [Tooltip("Также сохранять при OnApplicationFocus (потеря фокуса)")]
+        protected bool saveOnFocusLost = false;
+
+        [SerializeField]
+        [Tooltip("Показывать лог сохранения")]
+        protected bool showSaveLog = false;
+
+        [SerializeField]
+        [Tooltip("Таймаут ожидания сохранения в секундах (для OnQuit)")]
+        protected float saveTimeoutSeconds = 5f;
+
+        protected virtual async void OnApplicationPause(bool pause)
         {
             if (!pause) return;
 
+            if (showSaveLog)
+            {
+                ServiceDebug.Log($"[{name}] Приложение на паузе, сохранение данных...");
+            }
+
+            if (waitForSaveCompletion)
+            {
+                await SaveAllAsync();
+            }
+            else
+            {
+                SaveAllSync();
+            }
+        }
+
+        protected virtual async void OnApplicationQuit()
+        {
+            if (!saveOnQuit) return;
+
+            if (showSaveLog)
+            {
+                ServiceDebug.Log($"[{name}] Выход из приложения, сохранение данных...");
+            }
+
+            // При OnQuit всегда ждем завершения с таймаутом
+            await SaveAllWithTimeoutAsync();
+        }
+
+        protected virtual async void OnApplicationFocus(bool hasFocus)
+        {
+            if (!saveOnFocusLost || hasFocus) return;
+
+            if (showSaveLog)
+            {
+                ServiceDebug.Log($"[{name}] Приложение потеряло фокус, сохранение данных...");
+            }
+
+            if (waitForSaveCompletion)
+            {
+                await SaveAllAsync();
+            }
+            else
+            {
+                SaveAllSync();
+            }
+        }
+
+        /// <summary>
+        /// Асинхронное сохранение всех БД
+        /// </summary>
+        private async UniTask SaveAllAsync()
+        {
+            int savedCount = 0;
+            int totalCount = 0;
+
             foreach (InMemoryDataBaseObject dataBase in dataBases)
             {
+                if (dataBase == null) continue;
+
+                if (dataBase is InMemoryDataContainer<InMemoryDataItem> inMemoryDataBase)
+                {
+                    totalCount++;
+                    bool success = await inMemoryDataBase.RequestSaveAsync();
+                    
+                    if (success)
+                    {
+                        savedCount++;
+                    }
+                }
+            }
+
+            if (showSaveLog)
+            {
+                ServiceDebug.Log($"[{name}] Сохранено {savedCount}/{totalCount} БД");
+            }
+        }
+
+        /// <summary>
+        /// Асинхронное сохранение с таймаутом (для OnQuit)
+        /// </summary>
+        private async UniTask SaveAllWithTimeoutAsync()
+        {
+            var saveTask = SaveAllAsync();
+            var timeoutTask = UniTask.Delay(System.TimeSpan.FromSeconds(saveTimeoutSeconds));
+
+            // Ждем либо завершения сохранения, либо таймаута
+            var completedTask = await UniTask.WhenAny(saveTask, timeoutTask);
+
+            if (completedTask == 0)
+            {
+                if (showSaveLog)
+                {
+                    ServiceDebug.Log($"[{name}] Сохранение успешно завершено");
+                }
+            }
+            else
+            {
+                ServiceDebug.LogWarning($"[{name}] Таймаут сохранения ({saveTimeoutSeconds}s)! Некоторые данные могут быть не сохранены");
+            }
+        }
+
+        /// <summary>
+        /// Синхронное сохранение (fire-and-forget)
+        /// </summary>
+        private void SaveAllSync()
+        {
+            foreach (InMemoryDataBaseObject dataBase in dataBases)
+            {
+                if (dataBase == null) continue;
+
                 if (dataBase is InMemoryDataContainer<InMemoryDataItem> inMemoryDataBase)
                 {
                     inMemoryDataBase.RequestSave();
                 }
             }
-        }
-    }
 
+            if (showSaveLog)
+            {
+                ServiceDebug.Log($"[{name}] Запущено сохранение {dataBases.Count} БД (fire-and-forget)");
+            }
+        }
+
+        /// <summary>
+        /// Ручное сохранение всех БД извне
+        /// </summary>
+        public async UniTask<int> SaveAllManualAsync()
+        {
+            int savedCount = 0;
+            foreach (InMemoryDataBaseObject dataBase in dataBases)
+            {
+                if (dataBase == null) continue;
+
+                if (dataBase is InMemoryDataContainer<InMemoryDataItem> inMemoryDataBase)
+                {
+                    if (await inMemoryDataBase.RequestSaveAsync())
+                    {
+                        savedCount++;
+                    }
+                }
+            }
+            return savedCount;
+        }
+
+        /// <summary>
+        /// Ручное сохранение всех БД извне (fire-and-forget)
+        /// </summary>
+        public void SaveAllManual() => SaveAllSync();
+    }
 }
