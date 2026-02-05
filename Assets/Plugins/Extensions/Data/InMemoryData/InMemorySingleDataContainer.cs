@@ -9,7 +9,7 @@ namespace Extensions.Data.InMemoryData
     /// </remarks>
     /// </summary>
     /// <typeparam name="TData">Тип единицы данных</typeparam>
-    public abstract class InMemorySingleDataContainer<TData> : InMemoryDataBaseObject<TData> where TData : InMemoryDataItem, new()
+    public abstract class InMemorySingleDataContainer<TData> : InMemoryDataBaseObject<TData> where TData : new()
     {
         /// <summary>
         /// Обновить данные
