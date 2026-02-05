@@ -2600,7 +2600,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp-firstpass::Extensions.UIWindows.ButtonOpenUIWindow
   needToCloseFocused: 0
-  UIWindowToOpen: {fileID: 11400000, guid: ebd6da16658b9954585082a52a685bae, type: 2}
+  UIWindowToOpen: {fileID: 11400000, guid: d9d988808ffc70341b7c4edfcb49a72c, type: 2}
 --- !u!1001 &2117855381661917507
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7558,7 +7558,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4325706336039118895, guid: 7ac43a347648b0d4faedfaec8880cb82, type: 3}
       propertyPath: m_Size
-      value: 0.564975
+      value: 0.6287212
       objectReference: {fileID: 0}
     - target: {fileID: 4325706336039118895, guid: 7ac43a347648b0d4faedfaec8880cb82, type: 3}
       propertyPath: m_Value

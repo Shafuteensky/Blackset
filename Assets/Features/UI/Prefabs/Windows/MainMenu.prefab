@@ -638,14 +638,14 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 4100400362722513085, guid: 5756bfce9e19bfe458725eda32eaa84a, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 9151837329728077928}
+      addedObject: {fileID: 5592093288742896566}
   m_SourcePrefab: {fileID: 100100000, guid: 5756bfce9e19bfe458725eda32eaa84a, type: 3}
 --- !u!1 &1923291577031425211 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4100400362722513085, guid: 5756bfce9e19bfe458725eda32eaa84a, type: 3}
   m_PrefabInstance: {fileID: 2474564272705776646}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &9151837329728077928
+--- !u!114 &5592093288742896566
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -654,9 +654,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1923291577031425211}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 622c871d8c853134ab7dfffd0a3ec180, type: 3}
+  m_Script: {fileID: 11500000, guid: 36bf6a4d50dc44a2a06ad2bc36aa773d, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Blackset.UI.QuitButton
+  m_EditorClassIdentifier: Assembly-CSharp-firstpass::Extensions.UIWindows.ButtonOpenUIWindow
+  needToCloseFocused: 0
+  UIWindowToOpen: {fileID: 11400000, guid: 0ea985bc8bb94344eb81422a84c90843, type: 2}
 --- !u!224 &3188001409832295216 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 1038472773829113654, guid: 5756bfce9e19bfe458725eda32eaa84a, type: 3}
