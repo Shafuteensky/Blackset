@@ -14,28 +14,9 @@ namespace Extensions.Data.InMemoryData
     /// </remarks>
     /// </summary>
     /// <typeparam name="TData">Единица данных</typeparam>
-    public abstract class InMemoryDataContainer<TData> : InMemoryDataBaseObject<TData> where TData : InMemoryDataItem
+    public abstract class InMemoryDataContainer<TData> : InMemoryDataBaseObject<List<TData>> where TData : InMemoryDataItem
     {
         protected const string FORMAT = "N";
-        
-        [SerializeField]
-        protected string saveKey = string.Empty;
-        
-        [SerializeField]
-        protected ID id = default;
-
-        [SerializeField]
-        protected bool autoSave = true;
-        
-        /// <summary>
-        /// Название файла сохранения
-        /// </summary>
-        public string SaveKey => saveKey;
-        
-        /// <summary>
-        /// Процесс выполнения сохранения
-        /// </summary>
-        public bool IsSavingInProgress { get; private set; }
 
         #region Events
 
@@ -51,41 +32,10 @@ namespace Extensions.Data.InMemoryData
         /// Событие удаления всех записей таблицы 
         /// </summary>
         public event Action onDataClear;
-        /// <summary>
-        /// Событие обновления данных таблицы
-        /// </summary>
-        public event Action onDataUpdate;
-        /// <summary>
-        /// Событие изменения данных таблицы
-        /// </summary>
-        public event Action onDataChange;
-        /// <summary>
-        /// Событие загрузки таблицы 
-        /// </summary>
-        public event Action onDataLoaded;
-        /// <summary>
-        /// Событие сохранения таблицы
-        /// </summary>
-        public event Action onDataSaved;
-        /// <summary>
-        /// Событие ошибки сохранения таблицы 
-        /// </summary>
-        public event Action onDataSaveError;
 
         #endregion
-
-        /// <summary>
-        /// Данные (список)
-        /// </summary>
-        public IReadOnlyList<TData> Data
-        {
-            get
-            {
-                EnsureLoaded();
-                return data;
-            }
-        }
         
+        // Кэш-индекс данных для моментального доступа по идентификатору 
         protected Dictionary<string, TData> IndexById
         {
             get
@@ -113,22 +63,9 @@ namespace Extensions.Data.InMemoryData
                 return indexById;
             }
         }
-
-        protected List<TData> data;
         protected Dictionary<string, TData> indexById;
         
-        protected bool loaded;
-        protected bool dirty;
         protected bool indexDirty;
-
-        // Назначает имя файла сохранения при создании нового скриптового файла таблицы
-        protected virtual void OnEnable()
-        {
-            if (string.IsNullOrEmpty(saveKey))
-            {
-                saveKey = GetType().Name;
-            }
-        }
 
         #region Get
 
@@ -266,15 +203,13 @@ namespace Extensions.Data.InMemoryData
         #region SaveLoad
 
         /// <summary>
-        /// Запрос обновления таблицы 
+        /// Запрос обновления записи списка 
         /// </summary>
         /// <param name="entryId">Идентификатор записи для обновления</param>
         /// <param name="newData">Новые данные записи</param>
         /// <returns></returns>
-        public bool RequestUpdate(string entryId, TData newData)
+        public bool TryUpdate(string entryId, TData newData)
         {
-            EnsureLoaded();
-
             if (string.IsNullOrEmpty(entryId))
             {
                 ServiceDebug.LogWarning($"Идентификатор «{nameof(entryId)}» пуст, запись не обновлена");
@@ -283,9 +218,11 @@ namespace Extensions.Data.InMemoryData
 
             if (newData == null)
             {
-                ServiceDebug.LogWarning($"Данные {nameof(newData)} пусты, запись не обновлена");
+                ServiceDebug.LogWarning($"Назначаемые данные отсутствуют, запись не обновлена");
                 return false;
             }
+
+            EnsureLoaded();
 
             newData.Id = entryId;
 
@@ -296,7 +233,7 @@ namespace Extensions.Data.InMemoryData
                 {
                     data[i] = newData;
 
-                    onDataUpdate?.Invoke();
+                    OnDataUpdate();
                     MarkDirty();
                     return true;
                 }
@@ -305,126 +242,14 @@ namespace Extensions.Data.InMemoryData
             ServiceDebug.LogWarning($"Запись с id «{entryId}» не найдена, запись не обновлена");
             return false;
         }
-    
-        /// <summary>
-        /// Запрос сохранения таблицы (синхронный)
-        /// </summary>
-        /// <returns>Сохранена ли таблица</returns>
-        public bool RequestSave()
-        {
-            EnsureLoaded();
-            return Save();
-        }
-
-        /// <summary>
-        /// Запрос сохранения таблицы (асинхронный)
-        /// </summary>
-        /// <returns>Сохранена ли таблица</returns>
-        public async UniTask<bool> RequestSaveAsync()
-        {
-            EnsureLoaded();
-            return await SaveAsync();
-        }
-
-        protected bool Save()
-        {
-            if (!loaded)
-            {
-                ServiceDebug.LogWarning($"Попытка сохранения еще не загруженной таблицы {name}");
-                return false;
-            }
-            
-            if (!dirty)
-            {
-                return false;
-            }
-
-            // Синхронное сохранение через кэш
-            if (JsonSaveLoad.Save(data, saveKey))
-            {
-                dirty = false;
-                onDataSaved?.Invoke();
-                return true;
-            }
-            else
-            {
-                onDataSaveError?.Invoke();
-                return false;
-            }
-        }
-
-        protected async UniTask<bool> SaveAsync()
-        {
-            if (!loaded)
-            {
-                ServiceDebug.LogWarning($"Попытка сохранения еще не загруженной таблицы {name}");
-                return false;
-            }
-            
-            if (!dirty)
-            {
-                return false;
-            }
-
-            if (await JsonSaveLoad.SaveAsync(data, saveKey))
-            {
-                dirty = false;
-                onDataSaved?.Invoke();
-                return true;
-            }
-            else
-            {
-                onDataSaveError?.Invoke();
-                return false;
-            }
-        }
         
-        /// <summary>
-        /// Гарантированная загрузка данных (синхронно через кэш)
-        /// </summary>
-        protected void EnsureLoaded()
+        protected override void MarkDirty()
         {
-            if (loaded)
-            {
-                return;
-            }
-
-            // Синхронная загрузка через кэш JsonSaveLoad
-            data = JsonSaveLoad.Load(saveKey, new List<TData>()) ?? new List<TData>();
-
-            loaded = true;
-            onDataLoaded?.Invoke();
-        }
-
-        /// <summary>
-        /// Предзагрузка данных асинхронно
-        /// </summary>
-        public async UniTask PreloadAsync()
-        {
-            if (loaded)
-            {
-                return;
-            }
-
-            await JsonSaveLoad.PreloadAsync(saveKey, new List<TData>());
-            
-            // После preload данные уже в кэше, можем загрузить синхронно
-            EnsureLoaded();
-        }
-
-        protected void MarkDirty()
-        {
-            dirty = true;
             indexDirty = true;
             
-            onDataChange?.Invoke();
-
-            if (autoSave)
-            {
-                Save();
-            }
+            base.MarkDirty();
         }
-
+        
         #endregion
     }
 }

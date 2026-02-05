@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+using Extensions.Log;
 
 namespace Extensions.Data.InMemoryData
 {
@@ -9,20 +9,40 @@ namespace Extensions.Data.InMemoryData
     /// </remarks>
     /// </summary>
     /// <typeparam name="TData">Тип единицы данных</typeparam>
-    public abstract class InMemorySingleDataContainer<TData> : InMemoryDataBaseObject<TData>
-        where TData : InMemoryDataItem
+    public abstract class InMemorySingleDataContainer<TData> : InMemoryDataBaseObject<TData> where TData : InMemoryDataItem, new()
     {
-        protected const string SINGLE_ID = "single";
+        /// <summary>
+        /// Обновить данные
+        /// </summary>
+        /// <param name="newData"></param>
+        /// <returns></returns>
+        public void Set(TData newData)
+        {
+            if (newData == null)
+            {
+                ServiceDebug.LogWarning($"Назначаемые данные отсутствуют, данные не обновлены");
+                return;
+            }
+            
+            EnsureLoaded();
+            
+            data = newData;
+
+            NotifyUpdated();
+        }
 
         /// <summary>
-        /// Данные (одиночная запись)
+        /// Ручное оповещение о измененности данных
         /// </summary>
-        // public TData Value
-        // {
-        //     get
-        //     {
-        //         //
-        //     }
-        // }
+        /// <remarks>
+        /// Например для подхвата обновленных данных при изменении значений полей экземпляра хранимого класса
+        /// </remarks>
+        public void NotifyUpdated()
+        {
+            EnsureLoaded();
+            
+            OnDataUpdate();
+            MarkDirty(); 
+        }
     }
 }
