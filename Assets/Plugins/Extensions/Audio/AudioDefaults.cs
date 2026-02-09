@@ -44,24 +44,10 @@ namespace Extensions.Audio
         public float pitchMax;
 
         /// <summary>
-        /// Пространственность звука
+        /// Пресет настроек объемного аудио
         /// </summary>
-        [Tooltip("Пространственность звука, 0 — 2D, 1 — 3D")]
-        [Range(0f, 1f)]
-        public float spatialBlend;
-
-        /// <summary>
-        /// Расстояние, ближе которого громкость не растёт (радиус максимальной громкости)
-        /// </summary>
-        [Tooltip("Расстояние, ближе которого громкость не растёт (радиус максимальной громкости)")]
-        [Min(0f)]
-        public float minDistance;
-        /// <summary>
-        /// Расстояние, дальше которого звук почти не слышен (максимальный радиус слышимости)
-        /// </summary>
-        [Tooltip("Расстояние, дальше которого звук почти не слышен (максимальный радиус слышимости)")]
-        [Min(0f)]
-        public float maxDistance;
+        [Tooltip("Пресет настроек объемного аудио")]
+        public AudioSpatialPreset spatialPreset;
 
         /// <summary>
         /// Приоритет

@@ -1,6 +1,7 @@
 using UnityEngine;
 using Extensions.Coroutines;
 using Extensions.Helpers;
+using Extensions.Log;
 using UnityEngine.Audio;
 
 namespace Extensions.Audio
@@ -15,6 +16,8 @@ namespace Extensions.Audio
         /// </summary>
         public AudioSource Source => source;
 
+        [Header("Звуки")]
+        
         [SerializeField]
         protected AudioResource audioResource;
         [SerializeField]
@@ -54,14 +57,14 @@ namespace Extensions.Audio
         }
 
         /// <summary>
-        /// НАчать воспроизведение зацикленного аудио
+        /// Начать воспроизведение зацикленного аудио
         /// </summary>
         /// <param name="resource">Аудио трек</param>
         /// <param name="fadeSeconds">Время затухания</param>
         public void SetLoop(AudioResource resource, float fadeSeconds = 0f)
         {
             if (!isActiveAndEnabled) return;
-            if (Logic.IsNull(audioResource, "Ошибка аудио ресурса, цикл не воспроизведен")) return;
+            if (Logic.IsNull(resource, "Ошибка аудио ресурса, цикл не воспроизведен")) return;
 
             token++;
             if (token == 0) token = 1;
@@ -121,15 +124,14 @@ namespace Extensions.Audio
 
             if (localToken != token) yield break;
 
+            if (audioController == null)
+            {
+                ServiceDebug.LogError("Контроллер аудио не найден");
+                yield break;
+            }
+                
             AudioDefaults defaults = audioController.GetDefaults(model);
             AppliedAudioSettings settings = audioController.BuildSettings(defaults, true);
-
-            settings.spatialBlend = is3D ? 1f : 0f;
-            if (is3D)
-            {
-                settings.minDistance = minDistance;
-                settings.maxDistance = maxDistance;
-            }
 
             audioController.ApplySettings(source, settings);
 

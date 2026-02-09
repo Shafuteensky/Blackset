@@ -203,9 +203,7 @@ MonoBehaviour:
     fadeSeconds: 0
     pitchMin: 1
     pitchMax: 1
-    spatialBlend: 0
-    minDistance: 0
-    maxDistance: 0
+    spatialPreset: {fileID: 11400000, guid: b10f41c08c193e348a4d9399e7a45926, type: 2}
     priority: 0
   ambienceDefaults:
     mixerGroup: {fileID: -8402992433433051038, guid: f82efc8c9af0bc14a9d02554e752ec64, type: 2}
@@ -213,29 +211,23 @@ MonoBehaviour:
     fadeSeconds: 0
     pitchMin: 1
     pitchMax: 1
-    spatialBlend: 0
-    minDistance: 0
-    maxDistance: 0
+    spatialPreset: {fileID: 11400000, guid: b10f41c08c193e348a4d9399e7a45926, type: 2}
     priority: 0
   uiDefaults:
     mixerGroup: {fileID: 2423196961612810497, guid: f82efc8c9af0bc14a9d02554e752ec64, type: 2}
     volume: 1
     fadeSeconds: 0
-    pitchMin: 0.95
-    pitchMax: 1.05
-    spatialBlend: 0
-    minDistance: 0
-    maxDistance: 0
+    pitchMin: 0.9
+    pitchMax: 1.1
+    spatialPreset: {fileID: 11400000, guid: b10f41c08c193e348a4d9399e7a45926, type: 2}
     priority: 0
   sfxDefaults:
     mixerGroup: {fileID: -3782064098807318639, guid: f82efc8c9af0bc14a9d02554e752ec64, type: 2}
     volume: 1
     fadeSeconds: 0
-    pitchMin: 0.95
-    pitchMax: 1.05
-    spatialBlend: 1
-    minDistance: 15
-    maxDistance: 30
+    pitchMin: 0.9
+    pitchMax: 1.1
+    spatialPreset: {fileID: 11400000, guid: 7b12d6a6129001a4c972c937b8f38862, type: 2}
     priority: 0
   oneShotPrefab: {fileID: 8007241443552093141, guid: adf7dcf0bb9b6e9439818faa0789bccb, type: 3}
   oneShotRoot: {fileID: 749275885}

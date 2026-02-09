@@ -500,10 +500,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7011a51033254833ab61f25b49b20a35, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp-firstpass::Extensions.Audio.PointerSoundsPlayer
-  is3D: 1
-  minDistance: 15
-  maxDistance: 30
   model: 3
+  spatialPreset: {fileID: 11400000, guid: 845387f52fd55364f851724a805d1e90, type: 2}
   enterSound: {fileID: 0}
   downSound: {fileID: 8300000, guid: 78cb28f304bfdfe40ab5eab130057121, type: 3}
 --- !u!1 &423590888
@@ -881,6 +879,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 84182a4a1d994c84e8e35f02bf118199, type: 3}
       insertIndex: -1
       addedObject: {fileID: 909424539}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 84182a4a1d994c84e8e35f02bf118199, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 909424542}
   m_SourcePrefab: {fileID: 100100000, guid: 84182a4a1d994c84e8e35f02bf118199, type: 3}
 --- !u!4 &909424537 stripped
 Transform:
@@ -916,18 +917,6 @@ MonoBehaviour:
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
             m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
-        - m_Target: {fileID: 1777049995}
-          m_TargetAssemblyTypeName: UnityEngine.AudioSource, UnityEngine
-          m_MethodName: PlayOneShot
-          m_Mode: 2
-          m_Arguments:
-            m_ObjectArgument: {fileID: 8300000, guid: 7b61d57c827c8f1458517c7c37da2c5f, type: 3}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.AudioClip, UnityEngine
             m_IntArgument: 0
             m_FloatArgument: 0
             m_StringArgument: 
@@ -1075,6 +1064,22 @@ MonoBehaviour:
   optionalScrambleMode: 0
   optionalShakeRandomnessMode: 0
   optionalString: 
+--- !u!114 &909424542
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 909424538}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7011a51033254833ab61f25b49b20a35, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp-firstpass::Extensions.Audio.PointerSoundsPlayer
+  model: 3
+  spatialPreset: {fileID: 11400000, guid: 845387f52fd55364f851724a805d1e90, type: 2}
+  enterSound: {fileID: 0}
+  downSound: {fileID: 8300000, guid: 7b61d57c827c8f1458517c7c37da2c5f, type: 3}
 --- !u!1001 &996799877
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1144,6 +1149,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 9399d2f86cd8039499207eda1ba9fda0, type: 3}
       insertIndex: -1
       addedObject: {fileID: 996799880}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 9399d2f86cd8039499207eda1ba9fda0, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 996799883}
   m_SourcePrefab: {fileID: 100100000, guid: 9399d2f86cd8039499207eda1ba9fda0, type: 3}
 --- !u!4 &996799878 stripped
 Transform:
@@ -1179,18 +1187,6 @@ MonoBehaviour:
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
             m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
-        - m_Target: {fileID: 1777049995}
-          m_TargetAssemblyTypeName: UnityEngine.AudioSource, UnityEngine
-          m_MethodName: PlayOneShot
-          m_Mode: 2
-          m_Arguments:
-            m_ObjectArgument: {fileID: 8300000, guid: a2be68f1550330d44b83185e27edffff, type: 3}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.AudioClip, UnityEngine
             m_IntArgument: 0
             m_FloatArgument: 0
             m_StringArgument: 
@@ -1326,6 +1322,22 @@ MonoBehaviour:
   optionalScrambleMode: 0
   optionalShakeRandomnessMode: 0
   optionalString: 
+--- !u!114 &996799883
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 996799879}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7011a51033254833ab61f25b49b20a35, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp-firstpass::Extensions.Audio.PointerSoundsPlayer
+  model: 3
+  spatialPreset: {fileID: 11400000, guid: 845387f52fd55364f851724a805d1e90, type: 2}
+  enterSound: {fileID: 0}
+  downSound: {fileID: 8300000, guid: a2be68f1550330d44b83185e27edffff, type: 3}
 --- !u!1001 &998839956
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1411,6 +1423,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: c7e97f5a5f2f6b9459f807d619f1c299, type: 3}
       insertIndex: -1
       addedObject: {fileID: 998839959}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: c7e97f5a5f2f6b9459f807d619f1c299, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 998839962}
   m_SourcePrefab: {fileID: 100100000, guid: c7e97f5a5f2f6b9459f807d619f1c299, type: 3}
 --- !u!4 &998839957 stripped
 Transform:
@@ -1446,18 +1461,6 @@ MonoBehaviour:
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
             m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
-        - m_Target: {fileID: 1777049995}
-          m_TargetAssemblyTypeName: UnityEngine.AudioSource, UnityEngine
-          m_MethodName: PlayOneShot
-          m_Mode: 2
-          m_Arguments:
-            m_ObjectArgument: {fileID: 8300000, guid: 53c1e02c8374ecd459f87408ef00cc0d, type: 3}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.AudioClip, UnityEngine
             m_IntArgument: 0
             m_FloatArgument: 0
             m_StringArgument: 
@@ -1593,6 +1596,22 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 1835090649810423853, guid: c7e97f5a5f2f6b9459f807d619f1c299, type: 3}
+--- !u!114 &998839962
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 998839958}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7011a51033254833ab61f25b49b20a35, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp-firstpass::Extensions.Audio.PointerSoundsPlayer
+  model: 3
+  spatialPreset: {fileID: 11400000, guid: 845387f52fd55364f851724a805d1e90, type: 2}
+  enterSound: {fileID: 0}
+  downSound: {fileID: 8300000, guid: 53c1e02c8374ecd459f87408ef00cc0d, type: 3}
 --- !u!1 &1099822364
 GameObject:
   m_ObjectHideFlags: 0
@@ -1759,10 +1778,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d310e07e3bf14fee86be7a23fe80e983, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp-firstpass::Extensions.Audio.AudioLoopPlayer
-  is3D: 0
-  minDistance: 1
-  maxDistance: 15
   model: 0
+  spatialPreset: {fileID: 0}
   audioResource: {fileID: 8300000, guid: 7915034f08b4af94fa99c04a6520a9cc, type: 3}
   playOnEnable: 1
   playFadeSeconds: 1

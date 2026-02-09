@@ -227,10 +227,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7011a51033254833ab61f25b49b20a35, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp-firstpass::Extensions.Audio.PointerSoundsPlayer
-  is3D: 0
-  minDistance: 1
-  maxDistance: 15
   model: 2
+  spatialPreset: {fileID: 11400000, guid: b10f41c08c193e348a4d9399e7a45926, type: 2}
   enterSound: {fileID: 8300000, guid: 7b61d57c827c8f1458517c7c37da2c5f, type: 3}
   downSound: {fileID: 8300000, guid: a2be68f1550330d44b83185e27edffff, type: 3}
 --- !u!1 &4566597724362203257

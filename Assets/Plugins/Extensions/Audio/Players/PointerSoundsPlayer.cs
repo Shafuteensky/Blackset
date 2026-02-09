@@ -9,6 +9,8 @@ namespace Extensions.Audio
     /// </summary>
     public class PointerSoundsPlayer : BaseAudioPlayer, IPointerEnterHandler, IPointerDownHandler
     {
+        [Header("Звуки")]
+        
         [SerializeField]
         protected AudioResource enterSound;
         [SerializeField]

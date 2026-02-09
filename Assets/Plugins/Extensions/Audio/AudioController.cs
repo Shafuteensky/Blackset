@@ -21,19 +21,27 @@ namespace Extensions.Audio
         private const int PREWARM_SOURCES_NUMBER = 4;
         
         [Header("Значения по-умолчанию")]
-
+        [Space]
+        
         [SerializeField]
         private AudioDefaults musicDefaults;
-        [SerializeField] private AudioDefaults ambienceDefaults;
-        [SerializeField] private AudioDefaults uiDefaults;
-        [SerializeField] private AudioDefaults sfxDefaults;
+        [SerializeField] 
+        private AudioDefaults ambienceDefaults;
+        [SerializeField] 
+        private AudioDefaults uiDefaults;
+        [SerializeField] 
+        private AudioDefaults sfxDefaults;
 
         [Header("Фабрика источников аудио")]
+        [Space]
 
         [SerializeField]
         private AudioSource oneShotPrefab;
-        [SerializeField] private Transform oneShotRoot;
-        [SerializeField, Min(1)] private int oneShotMaxInstances = 32;
+        [SerializeField] 
+        private Transform oneShotRoot;
+        [SerializeField]
+        [Min(1)] 
+        private int oneShotMaxInstances = 32;
 
         private ObjectPool<AudioSource> oneShotPool;
         private readonly Dictionary<AudioSource, CoroutineTask> releaseTasks = new();
@@ -79,27 +87,30 @@ namespace Extensions.Audio
         /// Воспроизвести аудио (2D по-умолчанию)
         /// </summary>
         /// <param name="resource">Аудио-ресурс</param>
-        public void Play(AudioResource resource, AudioModel model = AudioModel.UI)
+        public void Play(AudioResource resource, AudioModel model = AudioModel.UI, AudioSpatialPreset spatialPreset = null)
         {
-            Play(resource, null, null, model);
+            if (spatialPreset == null) spatialPreset = GetSpatialDefaults(model);
+            Play(resource, null, null, model, spatialPreset);
         }
         
         /// <summary>
         /// Воспроизвести аудио (в определенной точке, 3D по-умолчанию)
         /// </summary>
         /// <param name="resource">Аудио-ресурс</param>
-        public void Play(AudioResource resource, Vector3 position, AudioModel model = AudioModel.Sfx)
+        public void Play(AudioResource resource, Vector3 position, AudioModel model = AudioModel.Sfx, AudioSpatialPreset spatialPreset = null)
         {
-            Play(resource, position, null, model);
+            if (spatialPreset == null) spatialPreset = GetSpatialDefaults(model);
+            Play(resource, position, null, model, spatialPreset);
         }
 
         /// <summary>
         /// Воспроизвести аудио (с закреплением за объектом, 3D по-умолчанию)
         /// </summary>
         /// <param name="resource">Аудио-ресурс</param>
-        public void Play(AudioResource resource, Transform followTarget, AudioModel model = AudioModel.Sfx)
+        public void Play(AudioResource resource, Transform followTarget, AudioModel model = AudioModel.Sfx, AudioSpatialPreset spatialPreset = null)
         {
-            Play(resource, null, followTarget, model);
+            if (spatialPreset == null) spatialPreset = GetSpatialDefaults(model);
+            Play(resource, null, followTarget, model, spatialPreset);
         }
         
         #region Settings
@@ -123,7 +134,7 @@ namespace Extensions.Audio
         /// <param name="defaults">Дефолтные параметры аудио трека</param>
         /// <param name="loop">Зацикленность</param>
         /// <returns></returns>
-        public AppliedAudioSettings BuildSettings(AudioDefaults defaults, bool loop = false, AudioDefaults defaultsOverrides = new())
+        public AppliedAudioSettings BuildSettings(AudioDefaults defaults, bool loop = false)
         {
             AppliedAudioSettings settings = new()
             {
@@ -140,9 +151,9 @@ namespace Extensions.Audio
 
             settings.pitch = Random.Range(minPitch, maxPitch);
 
-            settings.spatialBlend = defaults.spatialBlend;
-            settings.minDistance = defaults.minDistance;
-            settings.maxDistance = defaults.maxDistance;
+            settings.spatialBlend = 0;
+            settings.minDistance = 0;
+            settings.maxDistance = 0;
             settings.priority = defaults.priority;
             settings.loop = loop;
 
@@ -181,7 +192,7 @@ namespace Extensions.Audio
         
         #region Internal
 
-        private void Play(AudioResource resource, Vector3? position, Transform followTarget, AudioModel model)
+        private void Play(AudioResource resource, Vector3? position, Transform followTarget, AudioModel model, AudioSpatialPreset spatialPreset = null)
         {
             if (Logic.IsNull(resource, "Аудио-ресурс не назначен, аудио не воспроизведено")) return;
             if (!isPoolValid()) return;
@@ -204,6 +215,12 @@ namespace Extensions.Audio
 
             AudioDefaults defaults = GetDefaults(model);
             AppliedAudioSettings settings = BuildSettings(defaults);
+            if (spatialPreset != null)
+            {
+                settings.spatialBlend = spatialPreset.SpatialBlend;
+                settings.minDistance = spatialPreset.MinDistance;
+                settings.maxDistance = spatialPreset.MaxDistance;
+            }
             ApplySettings(source, settings);
 
             source.resource = resource;
@@ -279,6 +296,27 @@ namespace Extensions.Audio
             }
 
             return true;
+        }
+
+        private AudioSpatialPreset GetSpatialDefaults(AudioModel model)
+        {
+            AudioSpatialPreset preset = uiDefaults.spatialPreset;
+            switch (model)
+            {
+                case AudioModel.Ambience:
+                    preset = ambienceDefaults.spatialPreset;
+                    break;
+                case AudioModel.Music:
+                    preset = musicDefaults.spatialPreset;
+                    break;
+                case AudioModel.Sfx:
+                    preset = sfxDefaults.spatialPreset;
+                    break;
+                case AudioModel.UI:
+                    preset = uiDefaults.spatialPreset;
+                    break;
+            }
+            return preset;
         }
         
         #endregion

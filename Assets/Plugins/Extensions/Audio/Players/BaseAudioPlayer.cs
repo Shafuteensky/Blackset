@@ -9,21 +9,14 @@ namespace Extensions.Audio
     /// </summary>
     public abstract class BaseAudioPlayer : MonoBehaviour
     {
-        [Header("Объемное аудио")]
-
-        [SerializeField]
-        protected bool is3D;
-        [SerializeField]
-        [Min(0f)]
-        protected float minDistance = 1f;
-        [SerializeField]
-        [Min(0f)]
-        protected float maxDistance = 15f;
-        
         [Header("Воспроизведение")]
 
         [SerializeField]
-        protected AudioModel model = AudioModel.Music;
+        [Tooltip("Тип аудио трека")]
+        protected AudioModel model = AudioModel.Sfx;
+        [SerializeField]
+        [Tooltip("Оставить пустым, если нужны дефолтные значения от типа аудио")]
+        protected AudioSpatialPreset spatialPreset;
         
         protected AudioController audioController;
 
@@ -37,12 +30,13 @@ namespace Extensions.Audio
             }
         }
 
-        protected virtual void Play(AudioResource audioResource, Vector3 position = new())
+        protected virtual void Play(AudioResource audioResource)
         {
             if (audioController == null) return;
             
-            if (position == Vector3.zero) audioController.Play(audioResource, model);
-            else audioController.Play(audioResource, position, model);
+            Vector3 position = Vector3.zero;
+            if (spatialPreset.SpatialBlend != 0) position = this.transform.position;
+            audioController.Play(audioResource, position, model, spatialPreset);
         }
     }
 }
