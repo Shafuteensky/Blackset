@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Blackset.Data.ConsumableData
   id: 90947dc44a974435b1582fe4e0c266d1
   dataName: Disadvantage
-  type: {fileID: 0}
+  effect: {fileID: 11400000, guid: 1c799dc0bd0d22c48b0aabdf28898c0d, type: 2}
+  type: {fileID: 11400000, guid: 0e1a15f03f84f8d46ba873a79cfd79ab, type: 2}
   set: {fileID: 11400000, guid: 27cada2d73a18a543a23e1a7fea1f12b, type: 2}
   visualConsumable: {fileID: 0}

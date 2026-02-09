@@ -1,6 +1,7 @@
 using Blackset.Data.Base;
 using Blackset.Data.Items.Types;
 using Blackset.Data.Items.Visual;
+using Blackset.Effects;
 using UnityEngine;
 
 namespace Blackset.Data
@@ -11,7 +12,7 @@ namespace Blackset.Data
     [CreateAssetMenu(
         menuName = "Blackset/Items/Consumable",
         fileName = nameof(ConsumableData))]
-    public sealed class ConsumableData : BaseData 
+    public sealed class ConsumableData : EffectingItemData 
     {
         /// <summary>
         /// Тип расходника

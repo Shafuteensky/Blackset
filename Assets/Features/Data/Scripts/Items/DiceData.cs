@@ -3,6 +3,7 @@ using Blackset.Data.Base;
 using Blackset.Data.Configurations;
 using Blackset.Data.Items.Types;
 using Blackset.Data.Items.Visual;
+using Blackset.Effects;
 using UnityEngine;
 
 namespace Blackset.Data
@@ -13,7 +14,7 @@ namespace Blackset.Data
     [CreateAssetMenu(
         menuName = "Blackset/Items/Dice",
         fileName = nameof(DiceData))]
-    public sealed class DiceData : BaseData
+    public sealed class DiceData : EffectingItemData
     {
         /// <summary>
         /// Набор, к которому относится дайс

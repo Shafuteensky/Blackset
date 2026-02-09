@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Blackset.Data.DiceData
   id: BasicDice
   dataName: Basic Dice
+  effect: {fileID: 0}
   availableTypes:
   - {fileID: 11400000, guid: fbd3a5ad0b3ef2940a4f73d042a419d7, type: 2}
   - {fileID: 11400000, guid: 471cbfaa75a8b904fb3c95d36db6426f, type: 2}
