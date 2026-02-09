@@ -1,7 +1,9 @@
+using System;
 using Extensions.Log;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
-namespace Extensions.Logic
+namespace Extensions.Helpers
 {
     /// <summary>
     /// Базовая быстрая логика
@@ -16,13 +18,11 @@ namespace Extensions.Logic
         /// <param name="obj">Проверяемый объект</param>
         /// <returns></returns>
         [HideInCallstack]
-        public static bool IsNull(Object obj)
+        public static bool IsNull(Object obj, string message = "")
         {
             if (obj == null)
             {
-#if UNITY_EDITOR
-                ServiceDebug.LogError("Объект = NULL");
-#endif
+                ServiceDebug.LogError(message != "" ? message : "Объект = NULL");
                 return true;
             }
 

@@ -689,6 +689,57 @@ Transform:
   - {fileID: 1603461736}
   m_Father: {fileID: 156713722}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &412961579
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 412961580}
+  - component: {fileID: 412961581}
+  m_Layer: 0
+  m_Name: MusicPlayer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &412961580
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 412961579}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1936877674}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &412961581
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 412961579}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d310e07e3bf14fee86be7a23fe80e983, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp-firstpass::Extensions.Audio.AudioLoopPlayer
+  is3D: 0
+  minDistance: 1
+  maxDistance: 15
+  model: 0
+  audioResource: {fileID: 8300000, guid: 7915034f08b4af94fa99c04a6520a9cc, type: 3}
+  playOnEnable: 1
+  playFadeSeconds: 1
 --- !u!1 &494120019
 GameObject:
   m_ObjectHideFlags: 0
@@ -2187,7 +2238,8 @@ Transform:
   m_LocalPosition: {x: -0.68276, y: 0.64738, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 412961580}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1967304738
@@ -2354,6 +2406,18 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 9a44c479b487d594b9e34275ccbb1ef7, type: 3}
       propertyPath: m_Name
       value: Human (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4811148760358229486, guid: 9a44c479b487d594b9e34275ccbb1ef7, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4811148760358229486, guid: 9a44c479b487d594b9e34275ccbb1ef7, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.247
+      objectReference: {fileID: 0}
+    - target: {fileID: 4811148760358229486, guid: 9a44c479b487d594b9e34275ccbb1ef7, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -3.099
       objectReference: {fileID: 0}
     - target: {fileID: 7339631935957410373, guid: 9a44c479b487d594b9e34275ccbb1ef7, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'

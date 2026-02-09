@@ -1,0 +1,200 @@
+using UnityEngine;
+using Extensions.Coroutines;
+using Extensions.Helpers;
+using UnityEngine.Audio;
+
+namespace Extensions.Audio
+{
+    /// <summary>
+    /// Плеер зацикленного аудио
+    /// </summary>
+    public class AudioLoopPlayer : BaseAudioPlayer
+    {
+        /// <summary>
+        /// Источник зацикленного аудио
+        /// </summary>
+        public AudioSource Source => source;
+
+        [SerializeField]
+        protected AudioResource audioResource;
+        [SerializeField]
+        protected bool playOnEnable;
+        [SerializeField]
+        protected float playFadeSeconds;
+
+        protected AudioSource source;
+        protected CoroutineTask task;
+
+        protected int token;
+
+        protected virtual void Awake() => task = new CoroutineTask(this);
+
+        protected override void OnEnable()
+        {
+            base.OnEnable();
+            
+            if (!playOnEnable) return;
+            if (Logic.IsNull(audioResource, "Ошибка аудио ресурса, цикл не воспроизведен")) return;
+            SetLoop(audioResource, playFadeSeconds);
+        }
+
+        protected virtual void OnDisable() => Stop();
+
+        protected virtual void OnDestroy()
+        {
+            if (task != null)
+            {
+                task.Stop();
+            }
+
+            if (source != null)
+            {
+                Destroy(source.gameObject);
+            }
+        }
+
+        /// <summary>
+        /// НАчать воспроизведение зацикленного аудио
+        /// </summary>
+        /// <param name="resource">Аудио трек</param>
+        /// <param name="fadeSeconds">Время затухания</param>
+        public void SetLoop(AudioResource resource, float fadeSeconds = 0f)
+        {
+            if (!isActiveAndEnabled) return;
+            if (Logic.IsNull(audioResource, "Ошибка аудио ресурса, цикл не воспроизведен")) return;
+
+            token++;
+            if (token == 0) token = 1;
+
+            EnsureSource();
+
+            task.Start(SetLoopRoutine(resource, fadeSeconds, token));
+        }
+
+        /// <summary>
+        /// Остановить зацикленное аудио
+        /// </summary>
+        /// <param name="fadeSeconds">Время затухания</param>
+        public void Stop(float fadeSeconds = 0f)
+        {
+            if (Logic.IsNull(source, "Ошибка источника айдио, цикл не остановлен")) return;
+
+            token++;
+            if (token == 0) token = 1;
+
+            task.Start(StopRoutine(fadeSeconds, token));
+        }
+
+        protected void EnsureSource()
+        {
+            if (source != null) return;
+
+            GameObject go = new GameObject("AudioLoopSource");
+            go.transform.SetParent(transform, false);
+
+            source = go.AddComponent<AudioSource>();
+        }
+
+        protected System.Collections.IEnumerator SetLoopRoutine(
+            AudioResource resource,
+            float fadeSeconds,
+            int localToken)
+        {
+            if (resource == null) yield break;
+            if (source == null) yield break;
+
+            if (fadeSeconds > 0f && source.isPlaying)
+            {
+                float start = source.volume;
+                float time = 0f;
+
+                while (time < fadeSeconds)
+                {
+                    if (localToken != token) yield break;
+
+                    time += Time.unscaledDeltaTime;
+                    float t = Mathf.Clamp01(time / fadeSeconds);
+                    source.volume = Mathf.Lerp(start, 0f, t);
+                    yield return null;
+                }
+            }
+
+            if (localToken != token) yield break;
+
+            AudioDefaults defaults = audioController.GetDefaults(model);
+            AppliedAudioSettings settings = audioController.BuildSettings(defaults, true);
+
+            settings.spatialBlend = is3D ? 1f : 0f;
+            if (is3D)
+            {
+                settings.minDistance = minDistance;
+                settings.maxDistance = maxDistance;
+            }
+
+            audioController.ApplySettings(source, settings);
+
+            source.resource = resource;
+            source.loop = true;
+
+            float targetVolume = settings.volume;
+
+            source.volume = 0f;
+            source.Play();
+
+            if (fadeSeconds <= 0f)
+            {
+                source.volume = targetVolume;
+                yield break;
+            }
+
+            float fadeTime = 0f;
+            while (fadeTime < fadeSeconds)
+            {
+                if (localToken != token) yield break;
+
+                fadeTime += Time.unscaledDeltaTime;
+                float t = Mathf.Clamp01(fadeTime / fadeSeconds);
+                source.volume = Mathf.Lerp(0f, targetVolume, t);
+                yield return null;
+            }
+
+            source.volume = targetVolume;
+        }
+
+        protected System.Collections.IEnumerator StopRoutine(
+            float fadeSeconds,
+            int localToken)
+        {
+            if (source == null) yield break;
+            if (!source.isPlaying) yield break;
+
+            if (fadeSeconds <= 0f)
+            {
+                source.Stop();
+                source.resource = null;
+                source.loop = false;
+                yield break;
+            }
+
+            float start = source.volume;
+            float time = 0f;
+
+            while (time < fadeSeconds)
+            {
+                if (localToken != token) yield break;
+
+                time += Time.unscaledDeltaTime;
+                float t = Mathf.Clamp01(time / fadeSeconds);
+                source.volume = Mathf.Lerp(start, 0f, t);
+                yield return null;
+            }
+
+            if (localToken != token) yield break;
+
+            source.Stop();
+            source.volume = start;
+            source.resource = null;
+            source.loop = false;
+        }
+    }
+}

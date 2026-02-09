@@ -167,6 +167,94 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &749275883
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 749275885}
+  - component: {fileID: 749275884}
+  m_Layer: 0
+  m_Name: AudioController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &749275884
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 749275883}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 719537188534477e83994a81b59c1173, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp-firstpass::Extensions.Audio.AudioController
+  dontDestroyOnLoad: 1
+  musicDefaults:
+    mixerGroup: {fileID: 7144483531774929622, guid: f82efc8c9af0bc14a9d02554e752ec64, type: 2}
+    volume: 1
+    fadeSeconds: 0
+    pitchMin: 1
+    pitchMax: 1
+    spatialBlend: 0
+    minDistance: 0
+    maxDistance: 0
+    priority: 0
+  ambienceDefaults:
+    mixerGroup: {fileID: -8402992433433051038, guid: f82efc8c9af0bc14a9d02554e752ec64, type: 2}
+    volume: 1
+    fadeSeconds: 0
+    pitchMin: 1
+    pitchMax: 1
+    spatialBlend: 0
+    minDistance: 0
+    maxDistance: 0
+    priority: 0
+  uiDefaults:
+    mixerGroup: {fileID: 2423196961612810497, guid: f82efc8c9af0bc14a9d02554e752ec64, type: 2}
+    volume: 1
+    fadeSeconds: 0
+    pitchMin: 0.95
+    pitchMax: 1.05
+    spatialBlend: 0
+    minDistance: 0
+    maxDistance: 0
+    priority: 0
+  sfxDefaults:
+    mixerGroup: {fileID: -3782064098807318639, guid: f82efc8c9af0bc14a9d02554e752ec64, type: 2}
+    volume: 1
+    fadeSeconds: 0
+    pitchMin: 0.95
+    pitchMax: 1.05
+    spatialBlend: 1
+    minDistance: 15
+    maxDistance: 30
+    priority: 0
+  oneShotPrefab: {fileID: 8007241443552093141, guid: adf7dcf0bb9b6e9439818faa0789bccb, type: 3}
+  oneShotRoot: {fileID: 749275885}
+  oneShotMaxInstances: 32
+--- !u!4 &749275885
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 749275883}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.79505, y: 0.48628, z: 4.43136}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1089915599
 GameObject:
   m_ObjectHideFlags: 0
@@ -232,3 +320,4 @@ SceneRoots:
   m_Roots:
   - {fileID: 1089915601}
   - {fileID: 91436748}
+  - {fileID: 749275885}

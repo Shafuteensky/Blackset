@@ -1,0 +1,73 @@
+using System;
+using UnityEngine;
+using UnityEngine.Audio;
+
+namespace Extensions.Audio
+{
+    /// <summary>
+    /// Дефолтные параметры аудио трека
+    /// </summary>
+    [Serializable]
+    public struct AudioDefaults
+    {
+        /// <summary>
+        /// Миксер-группа
+        /// </summary>
+        [Tooltip("Миксер-группа")]
+        public AudioMixerGroup mixerGroup;
+
+        /// <summary>
+        /// Громкость
+        /// </summary>
+        [Tooltip("Громкость")]
+        [Range(0f, 1f)]
+        public float volume;
+
+        /// <summary>
+        /// Длительность затухания
+        /// </summary>
+        [Tooltip("Длительность затухания")]
+        [Min(0f)]
+        public float fadeSeconds;
+
+        /// <summary>
+        /// Максимальная высота (скорость)
+        /// </summary>
+        [Tooltip("Максимальная высота (скорость)")]
+        [Range(-3f, 3f)]
+        public float pitchMin;
+        /// <summary>
+        /// Минимальная высота (скорость)
+        /// </summary>
+        [Tooltip("Минимальная высота (скорость)")]
+        [Range(-3f, 3f)]
+        public float pitchMax;
+
+        /// <summary>
+        /// Пространственность звука
+        /// </summary>
+        [Tooltip("Пространственность звука, 0 — 2D, 1 — 3D")]
+        [Range(0f, 1f)]
+        public float spatialBlend;
+
+        /// <summary>
+        /// Расстояние, ближе которого громкость не растёт (радиус максимальной громкости)
+        /// </summary>
+        [Tooltip("Расстояние, ближе которого громкость не растёт (радиус максимальной громкости)")]
+        [Min(0f)]
+        public float minDistance;
+        /// <summary>
+        /// Расстояние, дальше которого звук почти не слышен (максимальный радиус слышимости)
+        /// </summary>
+        [Tooltip("Расстояние, дальше которого звук почти не слышен (максимальный радиус слышимости)")]
+        [Min(0f)]
+        public float maxDistance;
+
+        /// <summary>
+        /// Приоритет
+        /// </summary>
+        [Tooltip("Приоритет")]
+        [Range(0, 256)]
+        public int priority;
+    }
+}
