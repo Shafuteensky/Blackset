@@ -6,6 +6,6 @@ namespace Blackset.Player
     /// <summary>
     /// Контейнер данных игрока
     /// </summary>
-    [CreateAssetMenu(fileName = nameof(PlayerDataContainer), menuName = "BlackSet/Player/" + nameof(PlayerDataContainer))]
+    [CreateAssetMenu(fileName = nameof(PlayerDataContainer), menuName = "Blackset/Player/" + nameof(PlayerDataContainer))]
     public class PlayerDataContainer : InMemorySingleDataContainer<PlayerData> { }
 }
