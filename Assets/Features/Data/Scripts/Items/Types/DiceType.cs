@@ -8,7 +8,7 @@ namespace Blackset.Data.Items.Types
     /// Тип дайса
     /// </summary>
     [CreateAssetMenu(
-        menuName = "Blackset/Item types/" + nameof(DiceType),
+        menuName = "Blackset/Items/Types/" + nameof(DiceType),
         fileName = nameof(DiceType))]
     public sealed class DiceType : BaseData
     {
@@ -24,6 +24,7 @@ namespace Blackset.Data.Items.Types
 
         [Header("Количество граней")]
         [SerializeField]
+        [Range(2, 100)]
         private int sidesNumber;
 
         [Header("Визуальное представление (префаб базовой модели)")]

@@ -11,7 +11,7 @@ namespace Blackset.Data
     [CreateAssetMenu(
         menuName = "Blackset/Items/Consumable",
         fileName = nameof(ConsumableData))]
-    public sealed class ConsumableData : BaseData
+    public sealed class ConsumableData : BaseData 
     {
         /// <summary>
         /// Тип расходника

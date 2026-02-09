@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 67c27ded4e3746c38684c143f276ddee, type: 3}
-  m_Name: SideNumbersConfig_Default
+  m_Name: AllMax
   m_EditorClassIdentifier: Assembly-CSharp::Blackset.Data.Configurations.SideNumbersConfig
-  id: a924911d3f02496687544f13b837cf09
-  dataName: Default sides
+  id: e9fa8dbeecdf451bace9923906954c8b
+  dataName: All sides max
   sideNumbersRules:
-  - rule: 0
+  - rule: 1

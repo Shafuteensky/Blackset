@@ -7,9 +7,10 @@ namespace Blackset.Data.Items.Types
     /// Тип расходника
     /// </summary>
     [CreateAssetMenu(
-        menuName = "Blackset/Item types/" + nameof(ConsumableType),
+        menuName = "Blackset/Items/Types/" + nameof(ConsumableType),
         fileName = nameof(ConsumableType))]
-    public sealed class ConsumableType : BaseData
+    public sealed class ConsumableType : BaseData // TODO Сделать runtime-генерируемым полем внутри ConsumableData (либо поле в ConsumableItem)?
+                                                  // Иначе дубликаты данных
     {
         /// <summary>
         /// Одноразовый ли расходник

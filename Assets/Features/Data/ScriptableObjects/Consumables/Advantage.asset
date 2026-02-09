@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 371d2bb3ca10457ea70ed4b7d76dba72, type: 3}
+  m_Name: Advantage
+  m_EditorClassIdentifier: Assembly-CSharp::Blackset.Data.ConsumableData
+  id: 01fc5117fdeb4464ab961bdaac1d2232
+  dataName: Advantage
+  type: {fileID: 0}
+  set: {fileID: 11400000, guid: 27cada2d73a18a543a23e1a7fea1f12b, type: 2}
+  visualConsumable: {fileID: 0}

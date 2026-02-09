@@ -8,9 +8,9 @@ namespace Blackset.Data.Items.Visual
     /// Стиль дайсов (внешний вид)
     /// </summary>
     [CreateAssetMenu(
-        menuName = "Blackset/Items/Dice/" + nameof(DiceStyle),
+        menuName = "Blackset/Items/Visual/" + nameof(DiceStyle),
         fileName = nameof(DiceStyle))]
-    public sealed class DiceStyle : BaseData
+    public sealed class DiceStyle : BaseData // TODO Может сделать структурой в составе DiceData?
     {
         /// <summary>
         /// Набор материалов по типам дайсов

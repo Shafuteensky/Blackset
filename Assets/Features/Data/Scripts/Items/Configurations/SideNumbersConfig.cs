@@ -12,7 +12,7 @@ namespace Blackset.Data.Configurations
         fileName = nameof(SideNumbersConfig))]
     public sealed class SideNumbersConfig : BaseData
     {
-        protected const int DEFAULT_DICE_SIDE_VALUE = 1;
+        private const int DEFAULT_DICE_SIDE_VALUE = 1;
         
         [SerializeField]
         private List<SideNumberRule> sideNumbersRules = new();
