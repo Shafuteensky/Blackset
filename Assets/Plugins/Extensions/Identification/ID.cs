@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace Extensions.Identification
@@ -8,6 +9,8 @@ namespace Extensions.Identification
     [CreateAssetMenu(menuName = "Extensions/" + nameof(ID))]
     public class ID : ScriptableObject
     {
+        protected const string GUID_FORMAT = "N";
+        
         /// <summary>
         /// Идентификатор
         /// </summary>
@@ -15,5 +18,13 @@ namespace Extensions.Identification
         
         [SerializeField]
         protected string id = string.Empty;
+        
+        private void OnValidate()
+        {
+            if (string.IsNullOrEmpty(id))
+            {
+                id = Guid.NewGuid().ToString(GUID_FORMAT);
+            }
+        }
     }
 }
