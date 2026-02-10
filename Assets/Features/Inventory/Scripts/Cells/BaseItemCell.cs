@@ -59,31 +59,7 @@ namespace Blackset.Inventory.Cells
         /// <summary>
         /// Количество предметов в ячейке
         /// </summary>
-        public int ItemAmount
-        {
-            get => itemAmount;
-            set
-            {
-                if (value < 0)
-                {
-                    ServiceDebug.LogWarning("Количество не может быть менее 0, изменения не произведены");
-                    return;
-                }
-                
-                itemAmount = value;
-                
-                if (itemAmount > MAX_AMOUNT)
-                {
-                    int excess = itemAmount - MAX_AMOUNT;
-                    itemAmount = MAX_AMOUNT;
-                    
-                    onAmountExceeded?.Invoke(Id, excess);
-                    return;
-                }
-                
-                if (itemAmount <= 0) onAmountDepleted?.Invoke(Id);
-            }
-        }
+        public int ItemAmount => itemAmount;
 
         [SerializeField]
         protected string itemId = string.Empty;
@@ -133,16 +109,18 @@ namespace Blackset.Inventory.Cells
                 return 0;
             }
 
-            int freeSpace = MAX_AMOUNT - itemAmount;
-            int added = Mathf.Min(freeSpace, amount);
+            int before = itemAmount;
+            int target = before + amount;
 
-            if (added > 0)
+            int excess = Mathf.Max(0, target - MAX_AMOUNT);
+
+            SetAmount(target);
+
+            if (excess > 0)
             {
-                itemAmount += added;
-                onAmountChanged?.Invoke(Id, itemAmount);
+                onAmountExceeded?.Invoke(Id, excess);
             }
 
-            int excess = amount - added;
             return excess;
         }
         
@@ -161,19 +139,14 @@ namespace Blackset.Inventory.Cells
 
             if (itemAmount <= 0)
             {
-                onAmountDepleted?.Invoke(Id);
                 return amount;
             }
 
-            int removed = Mathf.Min(itemAmount, amount);
-            itemAmount -= removed;
+            int before = itemAmount;
+            int removed = Mathf.Min(before, amount);
+            int target = before - removed;
 
-            onAmountChanged?.Invoke(Id, itemAmount);
-
-            if (itemAmount == 0)
-            {
-                onAmountDepleted?.Invoke(Id);
-            }
+            SetAmount(target);
 
             int residue = amount - removed;
             return residue;
@@ -190,6 +163,11 @@ namespace Blackset.Inventory.Cells
         /// <returns>Данные предмета</returns>
         public TData GetItemData(BaseDataRegistry<TData> dataRegistry)
         {
+            if (dataRegistry == null)
+            {
+                ServiceDebug.LogError("Реестр данных предметов не задан, данные не найдены");
+                return null;
+            }
             if (String.IsNullOrEmpty(itemId))
             {
                 ServiceDebug.LogError("Невалидный id предмета ячейки инвентаря, данные не найдены");
@@ -207,6 +185,11 @@ namespace Blackset.Inventory.Cells
         /// <returns>Данные типа предмета</returns>
         public TType GetTypeData(BaseDataRegistry<TType> typeRegistry)
         {
+            if (typeRegistry == null)
+            {
+                ServiceDebug.LogError("Реестр данных предметов не задан, данные не найдены");
+                return null;
+            }
             if (String.IsNullOrEmpty(itemTypeId))
             {
                 ServiceDebug.LogError("Невалидный id типа предмета ячейки инвентаря, данные не найдены");
@@ -241,5 +224,33 @@ namespace Blackset.Inventory.Cells
         
         #endregion
         
+        #region Internal
+
+        private void SetAmount(int value)
+        {
+            if (value < 0)
+            {
+                ServiceDebug.LogWarning("Количество не может быть менее 0, изменения не произведены");
+                return;
+            }
+
+            int before = itemAmount;
+
+            int clamped = value;
+            if (clamped > MAX_AMOUNT) clamped = MAX_AMOUNT;
+
+            if (before == clamped) return;
+
+            itemAmount = clamped;
+
+            onAmountChanged?.Invoke(Id, itemAmount);
+
+            if (before > 0 && itemAmount == 0)
+            {
+                onAmountDepleted?.Invoke(Id);
+            }
+        }
+
+        #endregion
     }
 }

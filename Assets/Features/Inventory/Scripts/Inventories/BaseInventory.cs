@@ -39,7 +39,7 @@ namespace Blackset.Inventory.Inventories
         /// <summary>
         /// Получить данные предмета определенной ячейки
         /// </summary>
-        /// <param name="item">Ячейка предмета</param>
+        /// <param name="itemCell">Ячейка предмета</param>
         public TData GetCellItemData(TItemCell itemCell)
         {
             if (!IsReferencesValid(itemCell, dataRegistry)) return null;
@@ -60,19 +60,21 @@ namespace Blackset.Inventory.Inventories
 
         #region Internal
 
-        private bool IsReferencesValid(TItemCell itemCell, BaseData registry)
+        private bool IsReferencesValid<TRegistryData>(TItemCell itemCell, BaseDataRegistry<TRegistryData> registry)
+            where TRegistryData : BaseData
         {
             if (itemCell == null)
             {
-                ServiceDebug.LogError("Получены невалидные данные ячейки, данные не найдены");
+                ServiceDebug.LogError($"{name}: получены невалидные данные ячейки, данные не найдены");
                 return false;
             }
+
             if (registry == null)
             {
-                ServiceDebug.LogError("Реестр данных не назначен, данные не найдены");
+                ServiceDebug.LogError($"{name}: реестр данных не назначен, данные не найдены");
                 return false;
             }
-            
+
             return true;
         }
         
