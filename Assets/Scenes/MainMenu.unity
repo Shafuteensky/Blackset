@@ -653,6 +653,54 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 500868332}
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &856272925
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 856272926}
+  - component: {fileID: 856272927}
+  m_Layer: 0
+  m_Name: PlayerDataTEST
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &856272926
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 856272925}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1480783029}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &856272927
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 856272925}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 149cb5d951d3488492e8acbcb6f21a65, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Blackset.Player.PlayerDataTest
+  diceDataRegistry: {fileID: 11400000, guid: 9e2de7d4160160646b95730d66ba2888, type: 2}
+  diceTypeDataRegistry: {fileID: 11400000, guid: a20b45fa0f8fca54eb745fd54815faf1, type: 2}
+  playerDataFacade: {fileID: 11400000, guid: 2c23989d68545684e9ab72265b43e0bc, type: 2}
+  money: 1
 --- !u!1 &872777716
 GameObject:
   m_ObjectHideFlags: 0
@@ -1684,9 +1732,9 @@ MonoBehaviour:
   m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 1920, y: 1080}
+  m_ReferenceResolution: {x: 2560, y: 1480}
   m_ScreenMatchMode: 0
-  m_MatchWidthOrHeight: 0
+  m_MatchWidthOrHeight: 0.5
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
@@ -1792,7 +1840,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1480783029}
-  - component: {fileID: 1480783030}
   m_Layer: 0
   m_Name: Controllers
   m_TagString: Untagged
@@ -1814,21 +1861,9 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1190244455}
+  - {fileID: 856272926}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1480783030
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1480783028}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 149cb5d951d3488492e8acbcb6f21a65, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Blackset.Player.PlayerDataTest
-  playerDataContainer: {fileID: 11400000, guid: 4016e62c20ae05e4db79f0162046c6cd, type: 2}
 --- !u!1 &1615074321
 GameObject:
   m_ObjectHideFlags: 0

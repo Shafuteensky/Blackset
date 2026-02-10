@@ -150,8 +150,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp-firstpass::Extensions.Data.InMemoryData.InMemoryDataEnableLoader
   dataBases:
   - {fileID: 11400000, guid: 4016e62c20ae05e4db79f0162046c6cd, type: 2}
+  - {fileID: 11400000, guid: 7ef245ecadf41734eb1ebc32e905b695, type: 2}
+  - {fileID: 11400000, guid: 31a90a701be570c4d9f39801dbe83187, type: 2}
+  - {fileID: 11400000, guid: e067d24e7d7288947bf92dca08496108, type: 2}
+  - {fileID: 11400000, guid: e3440cbea87581040b4a8c7a55c70ac6, type: 2}
+  - {fileID: 11400000, guid: 2ee230a204b1b9a4b83842cacb3de3a4, type: 2}
+  - {fileID: 11400000, guid: 7a9813f1d279d4f45bd2ed4324ac51cb, type: 2}
+  - {fileID: 11400000, guid: a0a957aef7db8a341a54142ee2749335, type: 2}
+  - {fileID: 11400000, guid: ee3c96ee49eb2e342ad6513b78fd7fca, type: 2}
+  - {fileID: 11400000, guid: 4abf2057643eb644db65b4c4aa11100a, type: 2}
   useAsyncPreload: 0
-  showLoadingLog: 1
+  showLoadingLog: 0
 --- !u!4 &91436748
 Transform:
   m_ObjectHideFlags: 0
