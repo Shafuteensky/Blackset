@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using Blackset.Data.Base;
 using UnityEngine;
 using Extensions.Log;
+using Random = UnityEngine.Random;
 
-namespace Blackset.Data
+namespace Blackset.Data.Registries
 {
     /// <summary>
     /// Базовый реестр игровых данных
@@ -12,6 +13,11 @@ namespace Blackset.Data
     /// <typeparam name="TData">Тип данных</typeparam>
     public abstract class BaseDataRegistry<TData> : BaseData where TData : BaseData
     {
+        /// <summary>
+        /// Данные реестра
+        /// </summary>
+        public IReadOnlyList<TData> Data => data;
+        
         [SerializeField]
         protected List<TData> data = new List<TData>();
 
@@ -45,7 +51,7 @@ namespace Blackset.Data
             ServiceDebug.LogError($"Данные с Id {id} не найдены в индексе записей");
             return null;
         }
-
+        
         protected override void OnValidate()
         {
             base.OnValidate();
