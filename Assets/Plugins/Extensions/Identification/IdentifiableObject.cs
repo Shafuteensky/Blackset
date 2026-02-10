@@ -17,7 +17,7 @@ namespace Extensions.Identification
         
         [SerializeField]
         protected string id = string.Empty;
-        
+
         protected virtual void OnValidate()
         {
             if (string.IsNullOrEmpty(id))
@@ -25,5 +25,6 @@ namespace Extensions.Identification
                 id = Guid.NewGuid().ToString(GUID_FORMAT);
             }
         }
+        protected void Awake() => id = name;
     }
 }
