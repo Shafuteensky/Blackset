@@ -168,21 +168,37 @@ namespace Extensions.Data
         /// <param name="key">Название ключа сохранения</param>
         /// <param name="defaultValue">Значение по-умолчанию</param>
         /// <typeparam name="T">Загружаемые данные</typeparam>
-        /// <returns></returns>
+        /// <returns>Загруженные данные</returns>
         public static T Load<T>(string key, T defaultValue = default)
+        {
+            Load(key, out T loaded, defaultValue);
+            return loaded;
+        }
+        
+        /// <summary>
+        /// Попытаться загрузить данные из записи по ключу сохранения (синхронно, из кэша или с диска)
+        /// </summary>
+        /// <param name="key">Название ключа сохранения</param>
+        /// <param name="loaded">Загруженные данные</param>
+        /// <param name="defaultValue">Значение по-умолчанию</param>
+        /// <typeparam name="T">Загружаемые данные</typeparam>
+        /// <returns>true если загрузка успешна, иначе (при возврате дефолтного значения) false</returns>
+        public static bool Load<T>(string key, out T loaded, T defaultValue = default)
         {
             string cacheKey = GetCacheKey(key);
 
             if (dataCache.TryGetValue(cacheKey, out object cachedData))
             {
-                return (T)cachedData;
+                loaded = (T)cachedData;
+                return true;
             }
 
             if (loadingTasks.ContainsKey(cacheKey))
             {
                 ServiceDebug.LogWarning(
                     $"Синхронный Load вызван во время async загрузки файла «{key}». Используйте LoadAsync или EnsureLoadedAsync.");
-                return defaultValue;
+                loaded = defaultValue;
+                return false;
             }
 
             try
@@ -191,15 +207,18 @@ namespace Extensions.Data
 
                 if (dataCache.TryGetValue(cacheKey, out object loadedData))
                 {
-                    return (T)loadedData;
+                    loaded = (T)loadedData;
+                    return true;
                 }
 
-                return defaultValue;
+                loaded = defaultValue;
+                return false;
             }
             catch (Exception ex)
             {
                 ServiceDebug.LogError($"Ошибка синхронной загрузки файла «{key}»: {ex}");
-                return defaultValue;
+                loaded = defaultValue;
+                return false;
             }
         }
 
@@ -796,7 +815,10 @@ namespace Extensions.Data
             MultiSaveContainer container = ResolveValidContainerSync();
             if (container == null)
             {
-                dataCache[cacheKey] = defaultValue;
+                if (defaultValue != null)
+                {
+                    dataCache[cacheKey] = defaultValue;
+                }
                 onAfterLoad?.Invoke(key);
                 return;
             }
