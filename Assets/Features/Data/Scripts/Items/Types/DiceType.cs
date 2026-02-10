@@ -10,7 +10,7 @@ namespace Blackset.Data.Items.Types
     [CreateAssetMenu(
         menuName = "Blackset/Items/Types/" + nameof(DiceType),
         fileName = nameof(DiceType))]
-    public sealed class DiceType : BaseData
+    public sealed class DiceType : BaseItemType
     {
         /// <summary>
         /// Количество граней
