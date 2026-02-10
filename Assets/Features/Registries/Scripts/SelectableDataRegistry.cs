@@ -1,7 +1,7 @@
 using Blackset.Data.Base;
 using UnityEngine;
 
-namespace Blackset.Data
+namespace Blackset.Data.Registries
 {
     /// <summary>
     /// Реестр данных с выбранным элементом

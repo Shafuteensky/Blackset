@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Blackset.Data
+namespace Blackset.Data.Registries
 {
     /// <summary>
     /// Реестр данных костей
