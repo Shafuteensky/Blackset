@@ -44,7 +44,7 @@ namespace Extensions.Data.InMemoryData
         {
             if (showSaveLog)
             {
-                ServiceDebug.Log($"[{name}] Начало сохранения {dataBases.Count} БД...");
+                ServiceDebug.Log($"Начало сохранения {dataBases.Count} БД...");
             }
 
             int savedCount = 0;
@@ -59,14 +59,14 @@ namespace Extensions.Data.InMemoryData
                     savedCount++;
                     if (showSaveLog)
                     {
-                        ServiceDebug.Log($"[{name}] Сохранена БД: {dataBase.name}");
+                        ServiceDebug.Log($"Сохранена БД: {dataBase.name}");
                     }
                 }
             }
 
             if (showSaveLog)
             {
-                ServiceDebug.Log($"[{name}] Сохранено {savedCount}/{dataBases.Count} БД");
+                ServiceDebug.Log($"Сохранено {savedCount}/{dataBases.Count} БД");
             }
         }
 
@@ -77,7 +77,7 @@ namespace Extensions.Data.InMemoryData
         {
             if (showSaveLog)
             {
-                ServiceDebug.Log($"[{name}] Быстрое сохранение {dataBases.Count} БД (fire-and-forget)...");
+                ServiceDebug.Log($"Быстрое сохранение {dataBases.Count} БД (fire-and-forget)...");
             }
 
             foreach (InMemoryDataBaseObject dataBase in dataBases)

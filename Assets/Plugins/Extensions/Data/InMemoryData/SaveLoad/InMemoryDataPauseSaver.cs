@@ -42,7 +42,7 @@ namespace Extensions.Data.InMemoryData
 
             if (showSaveLog)
             {
-                ServiceDebug.Log($"[{name}] Приложение на паузе, сохранение данных...");
+                ServiceDebug.Log($"Приложение на паузе, сохранение данных...");
             }
 
             if (waitForSaveCompletion)
@@ -61,7 +61,7 @@ namespace Extensions.Data.InMemoryData
 
             if (showSaveLog)
             {
-                ServiceDebug.Log($"[{name}] Выход из приложения, сохранение данных...");
+                ServiceDebug.Log($"Выход из приложения, сохранение данных...");
             }
 
             // При OnQuit всегда ждем завершения с таймаутом
@@ -74,7 +74,7 @@ namespace Extensions.Data.InMemoryData
 
             if (showSaveLog)
             {
-                ServiceDebug.Log($"[{name}] Приложение потеряло фокус, сохранение данных...");
+                ServiceDebug.Log($"Приложение потеряло фокус, сохранение данных...");
             }
 
             if (waitForSaveCompletion)
@@ -110,7 +110,7 @@ namespace Extensions.Data.InMemoryData
 
             if (showSaveLog)
             {
-                ServiceDebug.Log($"[{name}] Сохранено {savedCount}/{totalCount} БД");
+                ServiceDebug.Log($"Сохранено {savedCount}/{totalCount} БД");
             }
         }
 
@@ -128,12 +128,12 @@ namespace Extensions.Data.InMemoryData
             {
                 if (showSaveLog)
                 {
-                    ServiceDebug.Log($"[{name}] Сохранение успешно завершено");
+                    ServiceDebug.Log($"Сохранение успешно завершено");
                 }
             }
             else
             {
-                ServiceDebug.LogWarning($"[{name}] Таймаут сохранения ({saveTimeoutSeconds}s)! Некоторые данные могут быть не сохранены");
+                ServiceDebug.LogWarning($"Таймаут сохранения ({saveTimeoutSeconds}s)! Некоторые данные могут быть не сохранены");
             }
         }
 
@@ -151,7 +151,7 @@ namespace Extensions.Data.InMemoryData
 
             if (showSaveLog)
             {
-                ServiceDebug.Log($"[{name}] Запущено сохранение {dataBases.Count} БД (fire-and-forget)");
+                ServiceDebug.Log($"Запущено сохранение {dataBases.Count} БД (fire-and-forget)");
             }
         }
 

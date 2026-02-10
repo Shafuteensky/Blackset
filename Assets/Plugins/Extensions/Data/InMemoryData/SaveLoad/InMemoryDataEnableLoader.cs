@@ -44,7 +44,7 @@ namespace Extensions.Data.InMemoryData
         {
             if (showLoadingLog)
             {
-                ServiceDebug.Log($"[{name}] Начало асинхронной загрузки {dataBases.Count} БД...");
+                ServiceDebug.Log($"Начало асинхронной загрузки {dataBases.Count} БД...");
             }
 
             foreach (InMemoryDataBaseObject dataBase in dataBases)
@@ -55,13 +55,13 @@ namespace Extensions.Data.InMemoryData
                 
                 if (showLoadingLog)
                 {
-                    ServiceDebug.Log($"[{name}] Загружена БД: {dataBase.name}");
+                    ServiceDebug.Log($"Загружена БД: {dataBase.name}");
                 }
             }
 
             if (showLoadingLog)
             {
-                ServiceDebug.Log($"[{name}] Все БД загружены");
+                ServiceDebug.Log($"Все БД загружены");
             }
         }
 
@@ -72,7 +72,7 @@ namespace Extensions.Data.InMemoryData
         {
             if (showLoadingLog)
             {
-                ServiceDebug.Log($"[{name}] Начало синхронной загрузки {dataBases.Count} БД...");
+                ServiceDebug.Log($"Начало синхронной загрузки {dataBases.Count} БД...");
             }
 
             foreach (InMemoryDataBaseObject dataBase in dataBases)
@@ -83,13 +83,13 @@ namespace Extensions.Data.InMemoryData
                 
                 if (showLoadingLog)
                 {
-                    ServiceDebug.Log($"[{name}] Загружена БД: {dataBase.name}");
+                    ServiceDebug.Log($"Загружена БД: {dataBase.name}");
                 }
             }
 
             if (showLoadingLog)
             {
-                ServiceDebug.Log($"[{name}] Все БД загружены");
+                ServiceDebug.Log($"Все БД загружены");
             }
         }
 

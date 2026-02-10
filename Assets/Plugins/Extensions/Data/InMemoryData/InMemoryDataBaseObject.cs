@@ -9,6 +9,7 @@ namespace Extensions.Data.InMemoryData
     /// <summary>
     /// Базовый класс InMemory хранилища данных
     /// </summary>
+    // TODO Переименовать в InMemoryBaseContainer?
     public abstract class InMemoryDataBaseObject<TData> : InMemoryDataBaseObject where TData : new()
     {
         #region Events
@@ -73,7 +74,7 @@ namespace Extensions.Data.InMemoryData
         
         protected virtual void OnEnable()
         {
-            // Назначает имя файла сохранения при создании нового скриптового файла таблицы
+            // Назначает имя файла сохранения при создании нового скриптового файла хранилища данных
             if (string.IsNullOrEmpty(saveKey))
             {
                 saveKey = GetType().Name;
@@ -89,13 +90,15 @@ namespace Extensions.Data.InMemoryData
             {
                 return;
             }
-    
+
+            OnInitialize();
             // Синхронная загрузка через кэш JsonSaveLoad
-            data = JsonSaveLoad.Load(saveKey, new TData());
-            if (data == null)
+            data = JsonSaveLoad.Load(saveKey, default(TData));
+            if (data == null || data.Equals(default(TData)))
             {
                 ServiceDebug.LogWarning($"Данные контейнера {name} пусты, загружены данные по-умолчанию");
                 data = new TData();
+                Save(true); // Форсированное сохранение пустых данных при первом запуске
             }
 
             loaded = true;
@@ -124,15 +127,16 @@ namespace Extensions.Data.InMemoryData
             return await SaveAsync();
         }
 
-        protected bool Save()
+        // forced использовать с умом: может затереть сохраненные данные
+        protected bool Save(bool forced = false)
         {
-            if (!loaded)
+            if (!forced && !loaded)
             {
                 ServiceDebug.LogWarning($"Попытка сохранения еще не загруженной таблицы {name}");
                 return false;
             }
             
-            if (!dirty)
+            if (!forced && !dirty)
             {
                 return false;
             }
@@ -208,6 +212,8 @@ namespace Extensions.Data.InMemoryData
         #endregion
         
         protected void OnDataUpdate() => onDataUpdate?.Invoke();
+
+        protected virtual void OnInitialize() { }
     }
 
     /// <summary>

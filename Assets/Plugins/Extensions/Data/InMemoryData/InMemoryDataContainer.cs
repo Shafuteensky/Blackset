@@ -8,7 +8,7 @@ using UnityEngine;
 namespace Extensions.Data.InMemoryData
 {
     /// <summary>
-    /// Базовый класс хранимой и загружаемой модели in-memory таблицы данных
+    /// Базовый класс хранимой и загружаемой модели in-memory хранилища данных
     /// <remarks>
     /// Загружается автоматически при первом доступе
     /// </remarks>
