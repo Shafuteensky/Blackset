@@ -1,16 +1,18 @@
 using System;
-using Blackset.Data;
+using Blackset.Data.Registries;
 using Extensions.Data.InMemoryData;
 using UnityEngine;
 using Blackset.Data.Base;
 using Blackset.Data.Items.Types;
 using Extensions.Log;
 
-namespace Blackset.Inventory
+namespace Blackset.Inventory.Cells
 {
     /// <summary>
     /// Базовый предмет ячейки инвентаря
     /// </summary>
+    /// <typeparam name="TData">Тип данных предмета</typeparam>
+    /// <typeparam name="TType">Тип типа предмета</typeparam>
     [Serializable]
     public abstract class BaseItemCell<TData, TType> : InMemoryDataItem where TData : BaseData where TType : BaseItemType
     {
@@ -186,7 +188,7 @@ namespace Blackset.Inventory
         /// </summary>
         /// <param name="dataRegistry">Реестр данных однотипных предметов</param>
         /// <returns>Данные предмета</returns>
-        public TData GetData(BaseDataRegistry<TData> dataRegistry)
+        public TData GetItemData(BaseDataRegistry<TData> dataRegistry)
         {
             if (String.IsNullOrEmpty(itemId))
             {
@@ -203,7 +205,7 @@ namespace Blackset.Inventory
         /// </summary>
         /// <param name="dataRegistry">Реестр типа данных однотипных предметов</param>
         /// <returns>Данные типа предмета</returns>
-        public TType GetType(BaseDataRegistry<TType> typeRegistry)
+        public TType GetTypeData(BaseDataRegistry<TType> typeRegistry)
         {
             if (String.IsNullOrEmpty(itemTypeId))
             {

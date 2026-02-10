@@ -2,7 +2,7 @@ using System;
 using Blackset.Data;
 using Blackset.Data.Items.Types;
 
-namespace Blackset.Inventory
+namespace Blackset.Inventory.Cells
 {
     /// <summary>
     /// Предмет ячейки инвентаря, содержащей расходник

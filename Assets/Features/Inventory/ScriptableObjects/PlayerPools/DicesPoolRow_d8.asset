@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e945996bae064cf888da28cad1e1a852, type: 3}
+  m_Name: DicesPoolRow_d8
+  m_EditorClassIdentifier: Assembly-CSharp::Blackset.Inventory.ItemPools.DicesPoolRow
+  id: {fileID: 11400000, guid: d3cf544ae31cb6f44843a8b1a390f564, type: 2}
+  saveKey: DicesPoolRow_d8
+  autoSave: 1
+  dataRegistry: {fileID: 11400000, guid: 9e2de7d4160160646b95730d66ba2888, type: 2}
+  typeRegistry: {fileID: 11400000, guid: a20b45fa0f8fca54eb745fd54815faf1, type: 2}
+  slotsCount: 2
+  allowedItemType: {fileID: 11400000, guid: 7b2c54bf4725d1a4db115c84e52f3363, type: 2}
+  defaultItemsData:
+  - {fileID: 11400000, guid: c6be3b2a199fce44487b5c70e985fa69, type: 2}
