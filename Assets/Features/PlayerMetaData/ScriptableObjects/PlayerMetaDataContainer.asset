@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe119e4838344f5493073490f617f2cc, type: 3}
+  m_Name: PlayerMetaDataContainer
+  m_EditorClassIdentifier: Assembly-CSharp::Blackset.Player.PlayerDataContainer
+  id: {fileID: 11400000, guid: 40dbe7db260072e4e96db190832297e8, type: 2}
+  saveKey: PlayerData
+  autoSave: 1
+  dicesInventory: {fileID: 11400000, guid: e067d24e7d7288947bf92dca08496108, type: 2}
+  dicesPool:
+  - {fileID: 11400000, guid: e3440cbea87581040b4a8c7a55c70ac6, type: 2}
+  - {fileID: 11400000, guid: 2ee230a204b1b9a4b83842cacb3de3a4, type: 2}
+  - {fileID: 11400000, guid: 7a9813f1d279d4f45bd2ed4324ac51cb, type: 2}
+  - {fileID: 11400000, guid: a0a957aef7db8a341a54142ee2749335, type: 2}
+  - {fileID: 11400000, guid: ee3c96ee49eb2e342ad6513b78fd7fca, type: 2}
+  - {fileID: 11400000, guid: 4abf2057643eb644db65b4c4aa11100a, type: 2}
+  consumablesInventory: {fileID: 11400000, guid: 7ef245ecadf41734eb1ebc32e905b695, type: 2}
+  consumablesPool: {fileID: 11400000, guid: 31a90a701be570c4d9f39801dbe83187, type: 2}

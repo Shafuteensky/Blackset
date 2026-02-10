@@ -10,6 +10,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6a08081bd1a81634eba256f3bfabcc2a, type: 3}
-  m_Name: PlayerDataContainerID
+  m_Name: PlayerMetaDataContainer_ID
   m_EditorClassIdentifier: Assembly-CSharp-firstpass::Extensions.Identification.ID
   id: PlayerDataContainerID
