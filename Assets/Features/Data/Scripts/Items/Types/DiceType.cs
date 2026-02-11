@@ -1,4 +1,3 @@
-using Blackset.Data.Base;
 using Blackset.Data.Items.Visual;
 using UnityEngine;
 
@@ -16,19 +15,20 @@ namespace Blackset.Data.Items.Types
         /// Количество граней
         /// </summary>
         public int SidesNumber => sidesNumber;
-
         /// <summary>
         /// Визуальный префаб дайса
         /// </summary>
         public VisualDice VisualDice => visualDice;
 
-        [Header("Количество граней")]
+        [Header("Параметры типа дайса"), Space]
+        
         [SerializeField]
         [Range(2, 100)]
+        [Tooltip("Количество граней")]
         private int sidesNumber;
-
-        [Header("Визуальное представление (префаб базовой модели)")]
+        
         [SerializeField]
+        [Tooltip("Визуальное представление (префаб базовой модели)")]
         private VisualDice visualDice = default;
     }
 }

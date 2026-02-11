@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4530bb03079a48aa891b089c93affffd, type: 3}
   m_Name: Infinite
   m_EditorClassIdentifier: Assembly-CSharp::Blackset.Data.Items.Types.ConsumableType
-  id: 8262dda3f47048f790c23a6129a7b38e
+  id: Infinite
   dataName: Infinite
+  icon: {fileID: 21300000, guid: f1ff15773ee84a64b9ca5e21eda49e8e, type: 3}
   singleUse: 0

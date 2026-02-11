@@ -14,5 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Blackset.Data.Items.Types.DiceType
   id: d20
   dataName: d20
+  icon: {fileID: 21300000, guid: 67f0c34bffdd59a4dbdb24bd026fbd81, type: 3}
   sidesNumber: 20
   visualDice: {fileID: 0}

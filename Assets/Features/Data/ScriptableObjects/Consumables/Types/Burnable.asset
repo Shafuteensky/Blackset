@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4530bb03079a48aa891b089c93affffd, type: 3}
   m_Name: Burnable
   m_EditorClassIdentifier: Assembly-CSharp::Blackset.Data.Items.Types.ConsumableType
-  id: 8fdffa4b09ca4902b689c7bee9153d97
+  id: Burnable
   dataName: Burnable
+  icon: {fileID: 21300000, guid: f1ff15773ee84a64b9ca5e21eda49e8e, type: 3}
   singleUse: 1
