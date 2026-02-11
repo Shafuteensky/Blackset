@@ -63,7 +63,7 @@ namespace Extensions.Data.InMemoryData.SelectionContext
                 return false;
             }
 
-            return Container.TryGetById(SelectedId, out dataItem);
+            return Container.GetById(SelectedId, out dataItem);
         }
     }
 }

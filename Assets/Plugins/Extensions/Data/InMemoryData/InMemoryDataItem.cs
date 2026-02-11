@@ -11,9 +11,13 @@ namespace Extensions.Data.InMemoryData
     [Serializable]
     public abstract class InMemoryDataItem
     {
+        protected const string GUID_FORMAT = "N";
+        
         /// <summary>
         /// Идентификатор
         /// </summary>
-        public string Id = String.Empty;
+        public string Id => id;
+        
+        private string id = Guid.NewGuid().ToString(GUID_FORMAT);
     }
 }

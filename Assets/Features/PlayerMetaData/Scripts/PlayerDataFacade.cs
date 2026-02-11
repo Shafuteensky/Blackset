@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using Blackset.Inventory.Inventories;
-using Blackset.Inventory.ItemPools;
 using UnityEngine;
 
 namespace Blackset.Player
@@ -13,43 +12,40 @@ namespace Blackset.Player
         menuName = "Blackset/Player/" + nameof(PlayerDataFacade))]
     public sealed class PlayerDataFacade : ScriptableObject
     {
-        [Header("Данные")]
-        [field: Space]
+        [field: Header("Данные"), Space]
         /// <summary>
         /// Контейнер мета-данных
         /// </summary>
         [field:SerializeField]
-        [Tooltip("Контейнер мета-данных")]
+        [field: Tooltip("Контейнер мета-данных")]
         public PlayerMetaDataContainer MetaData { get; private set; }
         
-        [Header("Инвентари")]
-        [field: Space]
+        [field: Header("Инвентари"), Space]
         /// <summary>
         /// Инвентарь дайсов
         /// </summary>
         [field:SerializeField]
-        [Tooltip("Инвентарь дайсов")]
+        [field: Tooltip("Инвентарь дайсов")]
         public DicesInventory DicesInventory { get; private set; }
         /// <summary>
         /// Инвентарь расходников
         /// </summary>
         [field:SerializeField]
-        [Tooltip("Инвентарь расходников")]
+        [field: Tooltip("Инвентарь расходников")]
         public ConsumablesInventory ConsumablesInventory { get; private set; }
         
-        [Header("Пулы")]
-        [field: Space]
+        [field: Header("Пулы"), Space]
         /// <summary>
         /// Пул дайсов
         /// </summary>
         [field:SerializeField]
-        [Tooltip("Пул дайсов")]
-        public List<DicesPoolRow> DicesPoolRows { get; private set; }
+        [field: Tooltip("Пулы дайсов (по номиналам)")]
+        public List<DicesInventory> DicesPoolRows { get; private set; }
         /// <summary>
         /// Пул расходников
         /// </summary>
         [field:SerializeField]
-        [Tooltip("Пул расходников")]
-        public ConsumablesPool ConsumablesPool { get; private set; }
+        [field: Tooltip("Пул расходников")]
+        public ConsumablesInventory ConsumablesPool { get; private set; }
     }
 }

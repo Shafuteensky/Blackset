@@ -1,7 +1,3 @@
-using System.Collections.Generic;
-using Blackset.Inventory.Inventories;
-using Blackset.Inventory.ItemPools;
-
 namespace Blackset.Player
 {
     /// <summary>

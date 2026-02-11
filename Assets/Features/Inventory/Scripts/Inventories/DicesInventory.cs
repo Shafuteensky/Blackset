@@ -11,5 +11,11 @@ namespace Blackset.Inventory.Inventories
     [CreateAssetMenu(
         menuName = "Blackset/Inventory/" + nameof(DicesInventory),
         fileName = nameof(DicesInventory))]
-    public sealed class DicesInventory : BaseInventory<DiceItemCell, DiceData, DiceType> { }
+    public sealed class DicesInventory : BaseInventory<DiceItemCell, DiceData, DiceType>
+    {
+        protected override DiceItemCell CreateCell(string itemId, string itemTypeId, int amount)
+        {
+            return new DiceItemCell(itemId, itemTypeId, amount);
+        }
+    }
 }

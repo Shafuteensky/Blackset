@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using Blackset.Inventory.Inventories;
-using Blackset.Inventory.ItemPools;
 using Extensions.Data.InMemoryData;
 using Extensions.Log;
 using UnityEngine;
@@ -19,13 +18,13 @@ namespace Blackset.Player
         [SerializeField]
         protected DicesInventory dicesInventory;
         [SerializeField]
-        protected List<DicesPoolRow> dicesPool;
+        protected List<DicesInventory> dicesPool;
         
         [Header("Расходники"), Space]
         [SerializeField]
         protected ConsumablesInventory consumablesInventory;
         [SerializeField]
-        protected ConsumablesPool consumablesPool;
+        protected ConsumablesInventory consumablesPool;
         
         protected override void OnInitialize()
         {

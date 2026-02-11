@@ -11,5 +11,11 @@ namespace Blackset.Inventory.Inventories
     [CreateAssetMenu(
         menuName = "Blackset/Inventory/" + nameof(ConsumablesInventory),
         fileName = nameof(ConsumablesInventory))]
-    public sealed class ConsumablesInventory : BaseInventory<ConsumableItemCell, ConsumableData, ConsumableType> { }
+    public sealed class ConsumablesInventory : BaseInventory<ConsumableItemCell, ConsumableData, ConsumableType>
+    {
+        protected override ConsumableItemCell CreateCell(string itemId, string itemTypeId, int amount)
+        {
+            return new ConsumableItemCell(itemId, itemTypeId, amount);
+        }
+    }
 }

@@ -101,7 +101,7 @@ namespace Blackset.Inventory.Cells
         /// </summary>
         /// <param name="amount">Количество к добавлению</param>
         /// <returns>Излишек (если превысило максимум ячейки)</returns>
-        public int Add(int amount)
+        public int IncreaseAmount(int amount)
         {
             if (amount <= 0)
             {
@@ -129,7 +129,7 @@ namespace Blackset.Inventory.Cells
         /// </summary>
         /// <param name="amount">Количество к убавлению</param>
         /// <returns>Остаток, который удалить не удалось (если в ячейке было меньше, чем удалялось)</returns>
-        public int Remove(int amount)
+        public int DecreaseAmount(int amount)
         {
             if (amount <= 0)
             {

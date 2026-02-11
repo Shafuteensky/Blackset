@@ -9,7 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 19fb1e76a817460fa69e7d65a18eaea2, type: 3}
+  m_Script: {fileID: 11500000, guid: 2525b9534aac45b5b33479f950545bc1, type: 3}
   m_Name: ConsumablesPool
   m_EditorClassIdentifier: Assembly-CSharp::Blackset.Inventory.ItemPools.ConsumablesPool
   id: {fileID: 11400000, guid: ec64855a6f835c04ea1d72bf91e8f74f, type: 2}

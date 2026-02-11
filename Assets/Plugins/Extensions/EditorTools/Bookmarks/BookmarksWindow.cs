@@ -330,9 +330,6 @@ namespace Extensions.EditorTools
 
                 data.Type = BookmarkType.SceneObject;
                 data.ScenePath = go.scene.path;
-
-                GlobalObjectId gid = GlobalObjectId.GetGlobalObjectIdSlow(go);
-                data.Id = gid.ToString();
             }
 
             dataBaseBase.Add(data);

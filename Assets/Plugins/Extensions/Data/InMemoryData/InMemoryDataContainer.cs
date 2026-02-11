@@ -21,20 +21,29 @@ namespace Extensions.Data.InMemoryData
         #region Events
 
         /// <summary>
-        /// Событие добавления новой записи в таблицу
+        /// Событие добавления новой записи в хранилище
         /// </summary>
-        public event Action onDataAdd;
+        /// <param name="int">Индекс добавленной записи</param>
+        /// <param name="TData">Данные добавленной записи</param>
+        public event Action<int, TData> onEntryAdded;
         /// <summary>
-        /// Событие удаления новой записи в таблице
+        /// Событие удаления новой записи в хранилище
         /// </summary>
-        public event Action onDataRemove;
+        /// <param name="int">Индекс добавленной записи</param>
+        /// <param name="TData">Данные добавленной записи</param>
+        public event Action onEntryRemoved;
+        
         /// <summary>
-        /// Событие удаления всех записей таблицы 
+        /// Событие удаления всех записей хранилища 
         /// </summary>
-        public event Action onDataClear;
+        public event Action onDataCleared;
+        /// <summary>
+        /// Событие любого обновления содержимого хранилища 
+        /// </summary>
+        public event Action onDataUpdated;
 
         #endregion
-        
+
         // Кэш-индекс данных для моментального доступа по идентификатору 
         protected Dictionary<string, TData> IndexById
         {
@@ -46,9 +55,8 @@ namespace Extensions.Data.InMemoryData
                 {
                     indexById = new Dictionary<string, TData>(data.Count);
 
-                    for (int i = 0; i < data.Count; i++)
+                    foreach (var item in data)
                     {
-                        TData item = data[i];
                         if (item == null || string.IsNullOrEmpty(item.Id))
                         {
                             continue;
@@ -74,13 +82,14 @@ namespace Extensions.Data.InMemoryData
         /// </summary>
         /// <param name="entryId">Идентификатор записи</param>
         /// <param name="entry">Найденная запись</param>
-        /// <returns></returns>
-        public bool TryGetById(string entryId, out TData entry)
+        /// <returns>true если запись найдена, иначе false</returns>
+        public bool GetById(string entryId, out TData entry)
         {
             entry = null;
             
             if (string.IsNullOrEmpty(entryId))
             {
+                ServiceDebug.LogError("Невалидный id, данные не найдены");
                 return false;
             }
 
@@ -91,16 +100,53 @@ namespace Extensions.Data.InMemoryData
         /// Получение конкретной записи по идентификатору
         /// </summary>
         /// <param name="entryId">Идентификатор записи</param>
-        /// <returns></returns>
+        /// <returns>Найденная запись или null</returns>
         public TData GetById(string entryId)
         {
-            if (TryGetById(entryId, out TData entry))
+            if (GetById(entryId, out TData entry))
             {
                 return entry;
             }
 
             ServiceDebug.LogWarning($"Данные с id «{entryId}» не найдены в контейнере {name} ({nameof(TData)})");
             return null;
+        }
+
+        /// <summary>
+        /// Попытка получения конкретной записи по индексу
+        /// </summary>
+        /// <param name="index">Индекс</param>
+        /// <param name="entry">Найденная запись</param>
+        /// <returns>true если запись найдена, иначе false</returns>
+        public bool GetByIndex(int index, out TData entry)
+        {
+            entry = null;
+            
+            if (index < 0 || index >= data.Count)
+            {
+                ServiceDebug.LogError("Невалидный индекс, данные не найдены");
+                return false;
+            }
+
+            entry = data[index];
+            return true;
+        }
+
+        /// <summary>
+        /// Получение конкретной записи по индексу
+        /// </summary>
+        /// <param name="index">Индекс</param>
+        /// <param name="entry">Найденная запись</param>
+        /// <returns>Найденная запись или null</returns>
+        public TData GetByIndex(int index)
+        {
+            if (index < 0 || index >= data.Count)
+            {
+                ServiceDebug.LogError("Невалидный индекс, данные не найдены");
+                return null;
+            }
+
+            return data[index];
         }
 
         #endregion
@@ -111,9 +157,9 @@ namespace Extensions.Data.InMemoryData
         /// Добавить запись данных
         /// </summary>
         /// <param name="data">Данные записи для добавления</param>
-        public void Add(TData data)
+        public void Add(TData entry) // TODO Рассмотреть Insert и сортировку
         {
-            if (data == null)
+            if (entry == null)
             {
                 ServiceDebug.LogWarning("Попытка добавить пустые данные, запись не добавлена");
                 return;
@@ -121,38 +167,36 @@ namespace Extensions.Data.InMemoryData
             
             EnsureLoaded();
 
-            if (string.IsNullOrEmpty(data.Id))
-            {
-                data.Id = Guid.NewGuid().ToString(FORMAT);
-            }
+            data.Add(entry);
 
-            this.data.Add(data);
-
-            onDataAdd?.Invoke();
+            int index = data.Count - 1;
+            onEntryAdded?.Invoke(index, entry);
+            onDataUpdated?.Invoke();
             MarkDirty();
         }
 
         /// <summary>
         /// Удалить запись данных по экземпляру
         /// </summary>
-        /// <param name="entryData">Экземпляр записи данных для удаления</param>
-        public void Remove(TData entryData)
+        /// <param name="entry">Экземпляр записи данных для удаления</param>
+        public void Remove(TData entry)
         {
             EnsureLoaded();
 
-            if (entryData == null || string.IsNullOrEmpty(entryData.Id))
+            if (entry == null || string.IsNullOrEmpty(entry.Id))
             {
                 ServiceDebug.LogWarning("Данные или его идентификатор пусты, запись не удалена");
                 return;
             }
 
-            if (data.Remove(entryData))
+            if (data.Remove(entry))
             {
-                onDataRemove?.Invoke();
+                onEntryRemoved?.Invoke();
+                onDataUpdated?.Invoke();
                 MarkDirty();
             }
             else
-                ServiceDebug.LogWarning($"Запись с id {entryData.Id} не найдена, запись не удалена");
+                ServiceDebug.LogWarning($"Запись с id {entry.Id} не найдена, запись не удалена");
         }
 
         /// <summary>
@@ -176,7 +220,8 @@ namespace Extensions.Data.InMemoryData
                 {
                     data.RemoveAt(i);
 
-                    onDataRemove?.Invoke();
+                    onEntryRemoved?.Invoke();
+                    onDataUpdated?.Invoke();
                     MarkDirty();
                     return;
                 }
@@ -194,54 +239,14 @@ namespace Extensions.Data.InMemoryData
 
             data.Clear();
 
-            onDataClear?.Invoke();
+            onDataCleared?.Invoke();
+            onDataUpdated?.Invoke();
             MarkDirty();
         }
 
         #endregion
 
         #region SaveLoad
-
-        /// <summary>
-        /// Запрос обновления записи списка 
-        /// </summary>
-        /// <param name="entryId">Идентификатор записи для обновления</param>
-        /// <param name="newData">Новые данные записи</param>
-        /// <returns></returns>
-        public bool TryUpdate(string entryId, TData newData)
-        {
-            if (string.IsNullOrEmpty(entryId))
-            {
-                ServiceDebug.LogWarning($"Идентификатор «{nameof(entryId)}» пуст, запись не обновлена");
-                return false;
-            }
-
-            if (newData == null)
-            {
-                ServiceDebug.LogWarning($"Назначаемые данные отсутствуют, запись не обновлена");
-                return false;
-            }
-
-            EnsureLoaded();
-
-            newData.Id = entryId;
-
-            for (int i = 0; i < data.Count; i++)
-            {
-                TData item = data[i];
-                if (item != null && item.Id == entryId)
-                {
-                    data[i] = newData;
-
-                    OnDataUpdate();
-                    MarkDirty();
-                    return true;
-                }
-            }
-
-            ServiceDebug.LogWarning($"Запись с id «{entryId}» не найдена, запись не обновлена");
-            return false;
-        }
         
         protected override void MarkDirty()
         {
