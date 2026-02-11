@@ -227,7 +227,7 @@ namespace Blackset.Inventory.Inventories
         /// Добавить новую ячейку с предметом (с мерджем в существущие ячейки)
         /// </summary>
         /// <param name="itemCell">Новая ячейка с данными предмета</param>
-        /// <returns>true если добавление успешно, иначе false</returns>
+        /// <returns>Количество не вместившихся предметов</returns>
         public int AddItem(TItemCell itemCell, bool autoMerge = true)
         {
             if (itemCell == null)
@@ -349,7 +349,7 @@ namespace Blackset.Inventory.Inventories
             int residue = cell.DecreaseAmount(movedAmount);
             if (residue > 0)
             {
-                ServiceDebug.LogWarning($"{name}: перемещение выполнено некорректно, остаток удаления = {residue}");
+                onCellUpdated?.Invoke(cell.Id);
                 return false;
             }
 

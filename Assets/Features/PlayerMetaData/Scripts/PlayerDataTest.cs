@@ -14,9 +14,7 @@ namespace Blackset.Player
     {
         [Header("Реестры игровых данных"), Space]
         [SerializeField]
-        protected DiceDataRegistry diceDataRegistry;
-        [SerializeField]
-        protected DiceTypeRegistry diceTypeDataRegistry;
+        protected DataRegistriesFacade gameDataRegistry;
         
         [Header("Контейнера данных игрока"), Space]
         [SerializeField]
@@ -42,10 +40,11 @@ namespace Blackset.Player
             // Деньги
             metaData.AddMoney(money);
             // Случайный дайс
-            int randomIndex = Random.Range(0, diceDataRegistry.Data.Count);
-            DiceData randomDice = diceDataRegistry.Data[randomIndex];
-            randomIndex = Random.Range(0, diceTypeDataRegistry.Data.Count);
-            DiceType randomDiceType = diceTypeDataRegistry.Data[randomIndex];
+            IReadOnlyList<DiceData> diceData = gameDataRegistry.Dices.Data;
+            int randomIndex = Random.Range(0, diceData.Count);
+            DiceData randomDice = diceData[randomIndex];
+            randomIndex = Random.Range(0, diceData.Count);
+            DiceType randomDiceType = gameDataRegistry.DiceTypes.Data[randomIndex];
             playerDataFacade.DicesInventory.Add(new DiceItemCell(randomDice.Id, randomDiceType.Id));
             
             // Вывод данных игрока после обновления
@@ -59,8 +58,8 @@ namespace Blackset.Player
             string dicesInInventory = String.Empty;
             foreach (DiceItemCell cell in playerDataFacade.DicesInventory.Data)
             {
-                DiceData diceInCell = cell.GetItemData(diceDataRegistry);
-                DiceType diceType = cell.GetTypeData(diceTypeDataRegistry);
+                DiceData diceInCell = cell.GetItemData(gameDataRegistry.Dices);
+                DiceType diceType = cell.GetTypeData(gameDataRegistry.DiceTypes);
                 dicesInInventory += $"{diceInCell.DataName} [{diceType.DataName}], ";
             }
 

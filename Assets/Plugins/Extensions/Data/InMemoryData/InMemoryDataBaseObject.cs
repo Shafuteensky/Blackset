@@ -15,24 +15,24 @@ namespace Extensions.Data.InMemoryData
         #region Events
         
         /// <summary>
-        /// Событие загрузки данных 
+        /// Событие загрузки данных хранилища
         /// </summary>
         public event Action onDataLoaded;
         /// <summary>
-        /// Событие сохранения таблицы
+        /// Событие сохранения хранилища
         /// </summary>
         public event Action onDataSaved;
         /// <summary>
-        /// Событие ошибки сохранения таблицы 
+        /// Событие ошибки сохранения хранилища 
         /// </summary>
         public event Action onDataSaveError;
         /// <summary>
-        /// Событие изменения данных таблицы
+        /// Событие изменения данных хранилища
         /// </summary>
-        public event Action onDataChange;
+        public event Action onDataChanged;
         
         /// <summary>
-        /// Событие обновления данных таблицы
+        /// Событие обновления данных хранилища
         /// </summary>
         public event Action onDataUpdate;
         
@@ -201,7 +201,7 @@ namespace Extensions.Data.InMemoryData
         {
             dirty = true;
             
-            onDataChange?.Invoke();
+            onDataChanged?.Invoke();
 
             if (autoSave)
             {

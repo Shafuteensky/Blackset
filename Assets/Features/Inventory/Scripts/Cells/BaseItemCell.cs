@@ -14,7 +14,9 @@ namespace Blackset.Inventory.Cells
     /// <typeparam name="TData">Тип данных предмета</typeparam>
     /// <typeparam name="TType">Тип типа предмета</typeparam>
     [Serializable]
-    public abstract class BaseItemCell<TData, TType> : InMemoryDataItem where TData : BaseData where TType : BaseItemType
+    public abstract class BaseItemCell<TData, TType> : InMemoryDataItem 
+        where TData : BaseData 
+        where TType : BaseItemType
     {
         /// <summary>
         /// Максимальное количество предмета в ячейке

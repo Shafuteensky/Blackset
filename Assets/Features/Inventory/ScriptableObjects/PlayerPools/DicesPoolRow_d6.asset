@@ -19,5 +19,8 @@ MonoBehaviour:
   typeRegistry: {fileID: 11400000, guid: a20b45fa0f8fca54eb745fd54815faf1, type: 2}
   slotsCount: 2
   allowedItemType: {fileID: 11400000, guid: 471cbfaa75a8b904fb3c95d36db6426f, type: 2}
-  defaultItemsData:
-  - {fileID: 11400000, guid: c6be3b2a199fce44487b5c70e985fa69, type: 2}
+  fillCellsWithDefaults: 0
+  defaultItems:
+  - ItemData: {fileID: 11400000, guid: c6be3b2a199fce44487b5c70e985fa69, type: 2}
+    ItemTypeData: {fileID: 11400000, guid: 471cbfaa75a8b904fb3c95d36db6426f, type: 2}
+    ItemAmount: 1

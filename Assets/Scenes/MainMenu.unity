@@ -697,8 +697,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 149cb5d951d3488492e8acbcb6f21a65, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Blackset.Player.PlayerDataTest
-  diceDataRegistry: {fileID: 11400000, guid: 9e2de7d4160160646b95730d66ba2888, type: 2}
-  diceTypeDataRegistry: {fileID: 11400000, guid: a20b45fa0f8fca54eb745fd54815faf1, type: 2}
+  gameDataRegistry: {fileID: 11400000, guid: 601338559ca9def4c9bb4a1b24686c63, type: 2}
   playerDataFacade: {fileID: 11400000, guid: 2c23989d68545684e9ab72265b43e0bc, type: 2}
   money: 1
 --- !u!1 &872777716

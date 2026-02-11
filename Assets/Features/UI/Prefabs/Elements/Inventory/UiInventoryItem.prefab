@@ -85,6 +85,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3105094021550392694}
   - component: {fileID: 4261660326960136825}
+  - component: {fileID: 6190256673466262804}
   m_Layer: 0
   m_Name: UiInventoryItem
   m_TagString: Untagged
@@ -110,7 +111,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 120, y: 120}
+  m_SizeDelta: {x: 0, y: 120}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &4261660326960136825
 MonoBehaviour:
@@ -126,3 +127,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.AspectRatioFitter
   m_AspectMode: 2
   m_AspectRatio: 1
+--- !u!114 &6190256673466262804
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7832653202750547814}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 674d532a784e4328bac333279955ef35, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Blackset.UI.Inventory.DiceItemElement
+  dataRegistry: {fileID: 11400000, guid: a20b45fa0f8fca54eb745fd54815faf1, type: 2}
+  itemIconImage: {fileID: 755724977203275305}
