@@ -15,7 +15,8 @@ namespace Blackset.Inventory.Inventories
     {
         protected override DiceItemCell CreateCell(string itemId, string itemTypeId, int amount)
         {
-            return new DiceItemCell(itemId, itemTypeId, amount);
+            DiceItemCell newCell = new DiceItemCell(itemId, itemTypeId, amount);
+            return newCell;
         }
     }
 }

@@ -94,9 +94,19 @@ namespace Blackset.Inventory.Inventories
         [SerializeField]
         [Tooltip("Разрешенный тип предметов (оставить пустым, если без ограничений)")]
         protected TType allowedItemType;
+
+        [Header("Заполнение по-умолчанию"), Space] 
+        [SerializeField]
+        [Tooltip("Заполнить ли инвентарь дефолтными ячейками (только при активном ограничении количества слотов)")]
+        protected bool fillCellsWithDefaults;
         [SerializeField]
         [Tooltip("Дефолтные предметы, не дающие инвентарю быть пустующим (заполняют пустые ячейки; оставить путым, если заполнение не нужно)")]
-        protected List<TData> defaultItemsData = new List<TData>();
+        protected List<DefaultInventoryItemCell<TData, TType>> defaultItems = new List<DefaultInventoryItemCell<TData, TType>>();
+        
+        [NonSerialized]
+        private HashSet<string> defaultItemIdsCache;
+        [NonSerialized]
+        private int defaultFillPointer;
         
         #region Получение данных ячеек
         
@@ -145,33 +155,40 @@ namespace Blackset.Inventory.Inventories
         /// <summary>
         /// Добавить новую ячейку с предметом (с мерджем в существущие ячейки)
         /// </summary>
-        /// <param name="itemId"></param>
-        /// <param name="itemTypeId"></param>
-        /// <param name="amount"></param>
-        /// <returns>true если добавление успешно, иначе false</returns>
-        public bool AddItem(string itemId, string itemTypeId, int amount, bool autoMerge = true)
+        /// <param name="itemId">Идентификатор предмета в ячейке</param>
+        /// <param name="itemTypeId">Тип предмета в ячейке</param>
+        /// <param name="amount">Количество предмета в ячейке</param>
+        /// <returns>Количество не вместившихся предметов</returns>
+        public int AddItem(string itemId, string itemTypeId, int amount, bool autoMerge = true)
         {
             if (string.IsNullOrEmpty(itemId) || string.IsNullOrEmpty(itemTypeId))
             {
                 ServiceDebug.LogWarning($"{name}: невалидный(е) id, добавление отменено");
-                return false;
+                return amount;
             }
             if (amount <= 0)
             {
                 ServiceDebug.LogWarning($"{name}: невалидное количество ({amount}), добавление отменено");
-                return false;
+                return 0;
             }
 
             EnsureLoaded();
 
-            int remaining = amount;
+            if (!IsAllowedType(itemTypeId))
+            {
+                return amount;
+            }
 
+            int remaining = amount;
             if (autoMerge)
             {
                 // Мердж в существующие стаки
                 for (int i = 0; i < data.Count && remaining > 0; i++)
                 {
                     TItemCell cell = data[i];
+                    if (cell == null) 
+                        continue;
+
                     if (!cell.IsSame(itemId, itemTypeId)) continue;
                     if (cell.ItemAmount >= BaseItemCell<TData, TType>.MAX_AMOUNT) continue;
 
@@ -185,13 +202,25 @@ namespace Blackset.Inventory.Inventories
             {
                 int chunk = Mathf.Min(BaseItemCell<TData, TType>.MAX_AMOUNT, remaining);
 
-                TItemCell newCell = CreateCell(itemId, itemTypeId, chunk);
-                Add(newCell);
+                EnsureSlotForNewCell();
 
+                if (IsSlotsLimited() && data.Count >= slotsCount) 
+                    break;
+
+                TItemCell newCell = CreateCell(itemId, itemTypeId, chunk);
+                if (newCell == null)
+                {
+                    ServiceDebug.LogError($"{name}: создание ячейки завершено ошибкой, добавление прервано");
+                    break;
+                }
+                
+                Add(newCell);
                 remaining -= chunk;
                 onCellAdded?.Invoke(newCell.Id);
             }
-            return true;
+
+            FillDefaultSlotsIfNeeded();
+            return remaining;
         }
 
         /// <summary>
@@ -199,17 +228,17 @@ namespace Blackset.Inventory.Inventories
         /// </summary>
         /// <param name="itemCell">Новая ячейка с данными предмета</param>
         /// <returns>true если добавление успешно, иначе false</returns>
-        public bool AddItem(TItemCell itemCell, bool autoMerge = true)
+        public int AddItem(TItemCell itemCell, bool autoMerge = true)
         {
             if (itemCell == null)
             {
                 ServiceDebug.LogWarning($"{name}: попытка добавить пустую ячейку, добавление отменено");
-                return false;
+                return 0;
             }
 
             return AddItem(itemCell.ItemId, itemCell.ItemTypeId, itemCell.ItemAmount, autoMerge);
         }
-
+        
         /// <summary>
         /// Удалить существующую ячейку по идентификатору
         /// </summary>
@@ -223,14 +252,19 @@ namespace Blackset.Inventory.Inventories
                 return false;
             }
 
-            if (!GetById(itemCellId, out TItemCell cell) || cell == null)
+            int index = GetIndexById(itemCellId);
+            if (index < 0)
             {
                 ServiceDebug.LogWarning($"{name}: ячейка с id «{itemCellId}» не найдена, удаление отменено");
                 return false;
             }
 
-            Remove(cell);
-            onCellRemoved?.Invoke(GetIndexById(itemCellId));
+            if (!RemoveItem(index))
+            {
+                return false;
+            }
+
+            FillDefaultSlotsIfNeeded();
             return true;
         }
 
@@ -263,7 +297,14 @@ namespace Blackset.Inventory.Inventories
                 return false;
             }
 
-            return RemoveItem(GetIdByIndex(index));
+            if (!Remove(index))
+            {
+                return false;
+            }
+
+            onCellRemoved?.Invoke(index);
+            FillDefaultSlotsIfNeeded();
+            return true;
         }
         
         /// <summary>
@@ -290,15 +331,35 @@ namespace Blackset.Inventory.Inventories
                 return false;
             }
 
-            if (!targetInventory.AddItem(cell.ItemId, cell.ItemTypeId, cell.ItemAmount))
+            int index = GetIndexById(cellId);
+            int remaining = targetInventory.AddItem(cell.ItemId, cell.ItemTypeId, cell.ItemAmount);
+            int movedAmount = cell.ItemAmount - remaining;
+
+            if (movedAmount <= 0) return false;
+
+            if (remaining <= 0)
             {
+                RemoveItem(cell);
+                onCellMoved?.Invoke(index);
+
+                FillDefaultSlotsIfNeeded();
+                return true;
+            }
+
+            int residue = cell.DecreaseAmount(movedAmount);
+            if (residue > 0)
+            {
+                ServiceDebug.LogWarning($"{name}: перемещение выполнено некорректно, остаток удаления = {residue}");
                 return false;
             }
 
-            Remove(cell);
-            onCellMoved?.Invoke(GetIndexById(cellId));
+            onCellUpdated?.Invoke(cell.Id);
+            onCellMoved?.Invoke(index);
+
+            FillDefaultSlotsIfNeeded();
             return true;
         }
+
         
         /// <summary>
         /// Разделение стаков существующей ячейки
@@ -329,12 +390,20 @@ namespace Blackset.Inventory.Inventories
                 return false;
             }
 
+            if (IsSlotsLimited() && data.Count >= slotsCount && GetFirstDefaultCellIndex() < 0)
+            {
+                ServiceDebug.LogWarning($"{name}: нет слота для новой ячейки (slotsCount={slotsCount}), разделение отменено");
+                return false;
+            }
+
             int residue = cell.DecreaseAmount(splitAmount);
             if (residue > 0)
             {
                 ServiceDebug.LogWarning($"{name}: разделение выполнено некорректно, остаток удаления = {residue}");
                 return false;
             }
+
+            EnsureSlotForNewCell();
 
             TItemCell newCell = CreateCell(cell.ItemId, cell.ItemTypeId, splitAmount);
             if (newCell == null)
@@ -344,8 +413,10 @@ namespace Blackset.Inventory.Inventories
             }
 
             Add(newCell);
-            
+
             onCellSplitted?.Invoke(itemCellId, newCell.Id);
+
+            FillDefaultSlotsIfNeeded();
             return true;
         }
         
@@ -367,7 +438,7 @@ namespace Blackset.Inventory.Inventories
             {
                 return false;
             }
-            
+
             EnsureLoaded();
 
             int firstIndex = GetIndexById(firstItemCellId);
@@ -375,6 +446,7 @@ namespace Blackset.Inventory.Inventories
 
             if (!SwapItem(firstIndex, secondIndex)) return false;
 
+            FillDefaultSlotsIfNeeded();
             return true;
         }
 
@@ -386,14 +458,16 @@ namespace Blackset.Inventory.Inventories
         /// <returns>true если обмен успешен, иначе false</returns>
         public bool SwapItem(int firstItemCellIndex, int secondItemCellIndex)
         {
-            if (firstItemCellIndex == secondItemCellIndex)
-            {
-                return false;
-            }
+            if (firstItemCellIndex == secondItemCellIndex) return false;
 
             if (firstItemCellIndex < 0 || secondItemCellIndex < 0)
             {
                 ServiceDebug.LogWarning($"{name}: одна из ячеек не найдена, обмен отменён");
+                return false;
+            }
+            if (firstItemCellIndex >= data.Count || secondItemCellIndex >= data.Count)
+            {
+                ServiceDebug.LogError($"{name}: невалидный(е) индекс(ы), обмен отменён");
                 return false;
             }
 
@@ -405,16 +479,14 @@ namespace Blackset.Inventory.Inventories
             onCellSwapped?.Invoke(GetIdByIndex(firstItemCellIndex), GetIdByIndex(secondItemCellIndex));
             return true;
         }
+
         
         #endregion
-        
+
         #region Internal
         
-        /// <summary>
-        /// Создать новую ячейку
-        /// </summary>
-        protected abstract TItemCell CreateCell(string itemId, string itemTypeId, int amount);
-
+        #region Проверки
+        
         /// <summary>
         /// Проверка на null ячейки и реестра
         /// </summary>
@@ -435,6 +507,34 @@ namespace Blackset.Inventory.Inventories
 
             return true;
         }
+        
+        /// <summary>
+        /// Ограничено ли количество слотов в данном инвентаре
+        /// </summary>
+        private bool IsSlotsLimited() => slotsCount != INFINITE_CELLS_SIGN;
+        
+        /// <summary>
+        /// Разрешен ли тип предмета в данном инвентаре
+        /// </summary>
+        private bool IsAllowedType(string itemTypeId)
+        {
+            if (allowedItemType == null) return true;
+
+            if (typeRegistry == null)
+            {
+                ServiceDebug.LogError($"{name}: задано ограничение типа, но не назначен реестр типов");
+                return false;
+            }
+
+            TType type = typeRegistry.GetById(itemTypeId);
+            if (type == null) return false;
+
+            return type.Id == allowedItemType.Id;
+        }
+        
+        #endregion
+
+        #region Id & Index ячеек
         
         /// <summary>
         /// Получить текущее значение индекса конкретной ячейки по ее идентификатору
@@ -460,7 +560,158 @@ namespace Blackset.Inventory.Inventories
         /// </summary>
         private string GetIdByIndex(int itemIndex) => data[itemIndex].Id;
         
+        /// <summary>
+        /// Кэширует Id всех предметов из defaultItemsData
+        /// </summary>
+        /// <remarks>
+        /// Нужно для быстрого определения, является ли ячейка дефолтной
+        /// </remarks>
+        private HashSet<string> GetDefaultItemIds()
+        {
+            if (defaultItemIdsCache != null)
+            {
+                return defaultItemIdsCache;
+            }
+
+            defaultItemIdsCache = new HashSet<string>();
+
+            if (defaultItems == null) return defaultItemIdsCache;
+
+            foreach (DefaultInventoryItemCell<TData, TType> defaultItemCell in defaultItems)
+            {
+                if (defaultItemCell.ItemData == null) continue;
+                
+                if (!string.IsNullOrEmpty(defaultItemCell.ItemData.Id))
+                {
+                    defaultItemIdsCache.Add(defaultItemCell.ItemData.Id);
+                }
+            }
+
+            return defaultItemIdsCache;
+        }
+
+        #endregion
+
+        #region Манипуляции ячейками
+
+        /// <summary>
+        /// Создать новую ячейку
+        /// </summary>
+        protected abstract TItemCell CreateCell(string itemId, string itemTypeId, int amount);
+
+        /// <summary>
+        /// Удаляет одну дефолтную ячейку, чтобы освободить место для новой.
+        /// </summary>
+        private void EnsureSlotForNewCell()
+        {
+            if (!IsSlotsLimited()) return;
+            if (data.Count < slotsCount) return;
+
+            int defaultIndex = GetFirstDefaultCellIndex();
+            if (defaultIndex < 0)  return;
+
+            Remove(defaultIndex);
+        }
+        
+        #endregion
+
+        #region Дефолтные ячейки
+
+        /// <summary>
+        /// Если слоты ограничены и текущих ячеек меньше максимума, дозаполняет инвентарь дефолтными ячейками
+        /// </summary>
+        private void FillDefaultSlotsIfNeeded()
+        {
+            if (!fillCellsWithDefaults || !IsSlotsLimited() || defaultItems == null || defaultItems.Count == 0) return;
+
+            EnsureLoaded();
+
+            while (data.Count < slotsCount)
+            {
+                if (GetNextDefaultItem(out DefaultInventoryItemCell<TData, TType> nextDefault) == false) return;
+
+                string defaultItemId = nextDefault.ItemData.Id;
+                string defaultItemTypeId = nextDefault.ItemTypeData.Id;
+
+                if (string.IsNullOrEmpty(defaultItemId) || string.IsNullOrEmpty(defaultItemTypeId))
+                {
+                    ServiceDebug.LogWarning($"{name}: дефолтный предмет содержит невалидный(е) id, заполнение прервано");
+                    return;
+                }
+                if (!IsAllowedType(defaultItemTypeId))
+                {
+                    defaultFillPointer++;
+                    continue;
+                }
+
+                TItemCell newCell = CreateCell(defaultItemId, defaultItemTypeId, 1);
+                Add(newCell);
+                onCellAdded?.Invoke(newCell.Id);
+            }
+        }
+
+        /// <summary>
+        /// Возвращает следующий дефолтный предмет по кругу, используя defaultFillPointer
+        /// </summary>
+        private bool GetNextDefaultItem(out DefaultInventoryItemCell<TData, TType> defaultItem)
+        {
+            defaultItem = new DefaultInventoryItemCell<TData, TType>();
+            
+            if (defaultItems == null || defaultItems.Count == 0)
+            {
+                return false;
+            }
+
+            int attempts = 0;
+
+            while (attempts < defaultItems.Count)
+            {
+                int index = defaultFillPointer % defaultItems.Count;
+                defaultFillPointer++;
+
+                DefaultInventoryItemCell<TData, TType> item = defaultItems[index];
+                if (!item.IsNull())
+                {
+                    defaultItem = item;
+                    return true;
+                }
+
+                attempts++;
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Находит индекс любой дефолтной ячейки в списке
+        /// </summary>
+        /// <remarks>
+        /// Используется для вытеснения дефолта, если нужно освободить слот для недефолтного предмета
+        /// </remarks>
+        private int GetFirstDefaultCellIndex()
+        {
+            HashSet<string> ids = GetDefaultItemIds();
+            if (ids == null || ids.Count == 0)
+            {
+                return -1;
+            }
+
+            for (int i = 0; i < data.Count; i++)
+            {
+                TItemCell cell = data[i];
+                if (cell == null) continue;
+
+                if (ids.Contains(cell.ItemId))
+                {
+                    return i;
+                }
+            }
+
+            return -1;
+        }
+        
         #endregion
         
+        #endregion
     }
 }

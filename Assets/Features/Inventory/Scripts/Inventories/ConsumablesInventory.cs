@@ -15,7 +15,8 @@ namespace Blackset.Inventory.Inventories
     {
         protected override ConsumableItemCell CreateCell(string itemId, string itemTypeId, int amount)
         {
-            return new ConsumableItemCell(itemId, itemTypeId, amount);
+            ConsumableItemCell newCell = new ConsumableItemCell(itemId, itemTypeId, amount);
+            return newCell;
         }
     }
 }

@@ -157,12 +157,13 @@ namespace Extensions.Data.InMemoryData
         /// Добавить запись данных
         /// </summary>
         /// <param name="data">Данные записи для добавления</param>
-        public void Add(TData entry) // TODO Рассмотреть Insert и сортировку
+        /// <returns>true если добавление успешно, иначе false</returns>
+        public bool Add(TData entry) // TODO Рассмотреть Insert и сортировку
         {
             if (entry == null)
             {
                 ServiceDebug.LogWarning("Попытка добавить пустые данные, запись не добавлена");
-                return;
+                return false;
             }
             
             EnsureLoaded();
@@ -173,20 +174,22 @@ namespace Extensions.Data.InMemoryData
             onEntryAdded?.Invoke(index, entry);
             onDataUpdated?.Invoke();
             MarkDirty();
+            return true;
         }
 
         /// <summary>
         /// Удалить запись данных по экземпляру
         /// </summary>
         /// <param name="entry">Экземпляр записи данных для удаления</param>
-        public void Remove(TData entry)
+        /// <returns>true если удаление успешно, иначе false</returns>
+        public bool Remove(TData entry)
         {
             EnsureLoaded();
 
             if (entry == null || string.IsNullOrEmpty(entry.Id))
             {
                 ServiceDebug.LogWarning("Данные или его идентификатор пусты, запись не удалена");
-                return;
+                return false;
             }
 
             if (data.Remove(entry))
@@ -194,23 +197,26 @@ namespace Extensions.Data.InMemoryData
                 onEntryRemoved?.Invoke();
                 onDataUpdated?.Invoke();
                 MarkDirty();
+                return true;
             }
-            else
-                ServiceDebug.LogWarning($"Запись с id {entry.Id} не найдена, запись не удалена");
+            
+            ServiceDebug.LogWarning($"Запись с id {entry.Id} не найдена, запись не удалена");
+            return false;
         }
 
         /// <summary>
         /// Удалить запись данных по идентификатору
         /// </summary>
         /// <param name="entryId">Идентификатор записи данных для удаления</param>
-        public void Remove(string entryId)
+        /// <returns>true если удаление успешно, иначе false</returns>
+        public bool Remove(string entryId)
         {
             EnsureLoaded();
 
             if (string.IsNullOrEmpty(entryId))
             {
                 ServiceDebug.LogWarning("Идентификатор пуст, запись не удалена");
-                return;
+                return false;
             }
 
             for (int i = 0; i < data.Count; i++)
@@ -218,16 +224,34 @@ namespace Extensions.Data.InMemoryData
                 TData item = data[i];
                 if (item != null && item.Id == entryId)
                 {
-                    data.RemoveAt(i);
-
-                    onEntryRemoved?.Invoke();
-                    onDataUpdated?.Invoke();
-                    MarkDirty();
-                    return;
+                    Remove(i);
+                    return true;
                 }
             }
 
             ServiceDebug.LogWarning($"Запись с id {entryId} не найдена, запись не удалена");
+            return false;
+        }
+
+        /// <summary>
+        /// Удалить запись данных по индексу
+        /// </summary>
+        /// <param name="index">Индекс записи данных для удаления</param>
+        /// <returns>true если удаление успешно, иначе false</returns>
+        public bool Remove(int index)
+        {
+            if (index < 0 || index >= data.Count)
+            {
+                return false;
+            }
+
+            data.RemoveAt(index);
+
+            onEntryRemoved?.Invoke();
+            onDataUpdated?.Invoke();
+            MarkDirty();
+
+            return true;
         }
 
         /// <summary>
