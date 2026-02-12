@@ -21,7 +21,7 @@ namespace Blackset.Inventory.Inventories
         
         protected override ConsumableItemCell CreateEmptyCell()
         {
-            ConsumableItemCell newCell = new ConsumableItemCell();
+            ConsumableItemCell newCell = new ConsumableItemCell("", "", 0, true, true);
             return newCell;
         }
     }

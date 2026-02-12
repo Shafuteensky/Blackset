@@ -85,7 +85,7 @@ namespace Blackset.Inventory.Cells
         /// <param name="itemId">Идентификатор данных предмета в этой ячейке</param>
         /// <param name="itemTypeId">Идентификатор типа данных предмета в этой ячейке</param>
         /// <param name="itemAmount">Количество предметов в ячейке</param>
-        protected BaseItemCell(string itemId, string itemTypeId, int itemAmount = 1, bool isDefault = true)
+        protected BaseItemCell(string itemId, string itemTypeId, int itemAmount = 1, bool isDefault = false, bool isEmpty = false)
         {
             if (String.IsNullOrEmpty(itemId))
             {
@@ -100,23 +100,12 @@ namespace Blackset.Inventory.Cells
             
             if (itemAmount <= 0) itemAmount = 1;
             
-            isEmpty = false;
+            this.isEmpty = isEmpty;
             this.isDefault = isDefault;
             
             this.itemId = itemId;
             this.itemTypeId = itemTypeId;
             this.itemAmount = itemAmount;
-        }
-
-        /// <summary>
-        /// Конструктор пустой ячейки инвентаря
-        /// </summary>
-        protected BaseItemCell()
-        {
-            isEmpty = true;
-            isDefault = false;
-            
-            itemAmount = 0;
         }
 
         #region Манипуляции количеством

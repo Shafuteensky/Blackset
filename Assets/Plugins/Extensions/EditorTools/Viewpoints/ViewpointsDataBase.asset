@@ -12,6 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 663d587e742d4e38bf3d9a6a1c630b34, type: 3}
   m_Name: ViewpointsDataBase
   m_EditorClassIdentifier: Assembly-CSharp::Extensions.EditorTools.Navigator.ViewpointsDataBase
-  saveFileName: ViewpointsDataBase
-  id: {fileID: 0}
+  id: Editor Viewpoints
   autoSave: 1

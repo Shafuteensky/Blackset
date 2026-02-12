@@ -12,8 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f91e9e3aa7f34132a70ba8bfb1ca453f, type: 3}
   m_Name: DicesPoolRow_d10
   m_EditorClassIdentifier: Assembly-CSharp::Blackset.Inventory.ItemPools.DicesPoolRow
-  id: {fileID: 11400000, guid: 5a7297c9dd4e9574c9e68d13db209277, type: 2}
-  saveKey: DicesPoolRow_d10
+  id: DicesPoolRow_d10
   autoSave: 1
   dataRegistry: {fileID: 11400000, guid: 9e2de7d4160160646b95730d66ba2888, type: 2}
   typeRegistry: {fileID: 11400000, guid: a20b45fa0f8fca54eb745fd54815faf1, type: 2}

@@ -12,8 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe119e4838344f5493073490f617f2cc, type: 3}
   m_Name: PlayerMetaDataContainer
   m_EditorClassIdentifier: Assembly-CSharp::Blackset.Player.PlayerDataContainer
-  id: {fileID: 11400000, guid: 40dbe7db260072e4e96db190832297e8, type: 2}
-  saveKey: PlayerData
+  id: b1f69c07d92145539eb99782a2260f93
   autoSave: 1
   dicesInventory: {fileID: 11400000, guid: e067d24e7d7288947bf92dca08496108, type: 2}
   dicesPool:

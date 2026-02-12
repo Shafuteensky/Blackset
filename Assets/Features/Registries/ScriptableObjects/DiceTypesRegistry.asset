@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 33dfad2d687449348a9beaba3724acca, type: 3}
   m_Name: DiceTypesRegistry
   m_EditorClassIdentifier: Assembly-CSharp::Blackset.Data.Registries.DiceTypeRegistry
-  id: efa292b824154e6885710c5e0f7b0487
+  id: DiceTypesRegistry
   dataName: Dice Types Registry
   data:
   - {fileID: 11400000, guid: fb2b925e10496d94cba7f76cb0fdfdf8, type: 2}

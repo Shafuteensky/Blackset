@@ -12,8 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2525b9534aac45b5b33479f950545bc1, type: 3}
   m_Name: ConsumablesInventory
   m_EditorClassIdentifier: Assembly-CSharp::Blackset.Inventory.Inventories.ConsumablesInventory
-  id: {fileID: 11400000, guid: 1d8aa551794cdd240bfd8cb554e39ba4, type: 2}
-  saveKey: ConsumablesInventory
+  id: ConsumablesInventory
   autoSave: 1
   dataRegistry: {fileID: 11400000, guid: 6acb295a4077a9c4ca12486b902fd956, type: 2}
   typeRegistry: {fileID: 11400000, guid: 825ddbad5a8d8b44184241c51e8d3433, type: 2}
+  slotsCount: 0
+  allowedItemType: {fileID: 0}
+  fillCellsWithDefaults: 0
+  defaultItems: []

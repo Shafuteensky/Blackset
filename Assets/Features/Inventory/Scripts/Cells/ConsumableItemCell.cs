@@ -10,8 +10,7 @@ namespace Blackset.Inventory.Cells
     [Serializable]
     public sealed class ConsumableItemCell : BaseItemCell<ConsumableData, ConsumableType>
     {
-        public ConsumableItemCell(string itemId, string itemTypeId, int itemAmount = 1, bool isDefault = true) 
-            : base(itemId, itemTypeId, itemAmount, isDefault) { }
-        public ConsumableItemCell() : base() { }
+        public ConsumableItemCell(string itemId, string itemTypeId, int itemAmount = 1, bool isDefault = false, bool isEmpty = false) 
+            : base(itemId, itemTypeId, itemAmount, isDefault, isEmpty) { }
     }
 }

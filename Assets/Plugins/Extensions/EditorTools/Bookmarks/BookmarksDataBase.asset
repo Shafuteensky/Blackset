@@ -12,6 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4af6932bfad6aa8428d4c27b094e5e8f, type: 3}
   m_Name: BookmarksDataBase
   m_EditorClassIdentifier: Assembly-CSharp::Extensions.EditorTools.Bookmarks.BookmarksDataBase
-  saveFileName: BookmarksDataBase
-  id: {fileID: 0}
+  id: Editor Bookmarks
   autoSave: 1

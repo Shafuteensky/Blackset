@@ -1,4 +1,6 @@
 using System;
+using Unity.VisualScripting;
+using UnityEditor;
 using UnityEngine;
 
 namespace Extensions.Identification
@@ -17,15 +19,16 @@ namespace Extensions.Identification
         
         [Header("Идентификация"), Space]
         [SerializeField]
-        protected string id = string.Empty;
+        protected string id;
 
         protected virtual void OnValidate()
         {
             if (string.IsNullOrEmpty(id))
             {
                 id = Guid.NewGuid().ToString(GUID_FORMAT);
+                EditorUtility.SetDirty(this);
+                AssetDatabase.SaveAssets();
             }
         }
-        protected void Awake() => id = name;
     }
 }

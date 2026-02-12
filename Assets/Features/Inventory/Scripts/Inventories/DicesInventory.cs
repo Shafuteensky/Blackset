@@ -21,7 +21,7 @@ namespace Blackset.Inventory.Inventories
         
         protected override DiceItemCell CreateEmptyCell()
         {
-            DiceItemCell newCell = new DiceItemCell();
+            DiceItemCell newCell = new DiceItemCell("", "", 0, true, true);
             return newCell;
         }
     }

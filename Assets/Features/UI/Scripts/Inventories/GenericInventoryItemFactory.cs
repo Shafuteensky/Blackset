@@ -25,7 +25,9 @@ namespace Blackset.UI.Inventory
         [SerializeField]
         protected TInventory inventory;
         [SerializeField]
-        protected DataRegistriesFacade gameDataRegistry;
+        protected BaseDataRegistry<TItemType> typeRegistry; 
+        [SerializeField]
+        protected BaseDataRegistry<TData> dataRegistry; 
 
         [Header("Фильтрация"), Space]
         [SerializeField] 
@@ -35,7 +37,7 @@ namespace Blackset.UI.Inventory
         [Header("UI элемент"), Space]
         [SerializeField]
         [Tooltip("Префаб выводимого элемента")]
-        protected GenericInventoryItemElement<TItemCell, TData, TItemType> itemElementPrefab;
+        protected GenericInventoryItemElement<TInventory, TItemCell, TData, TItemType> itemElementPrefab;
         [SerializeField]
         [Tooltip("Корень заспавненных элементов")]
         protected Transform elementsRoot;
@@ -77,7 +79,7 @@ namespace Blackset.UI.Inventory
         /// </summary>
         public void Rebuild()
         {
-            if (inventory == null || gameDataRegistry == null || itemElementPrefab == null)
+            if (inventory == null || typeRegistry == null || dataRegistry == null || itemElementPrefab == null)
             {
                 ServiceDebug.LogError($"{name}: не все ссылки заполнены");
                 return;
@@ -112,7 +114,7 @@ namespace Blackset.UI.Inventory
 
                 if (instance != null)
                 {
-                    instance.Initialize(item);
+                    instance.Initialize(inventory, item.Id, typeRegistry, dataRegistry);
                 }
             }
         }

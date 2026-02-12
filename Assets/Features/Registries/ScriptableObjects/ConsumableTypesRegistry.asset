@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: afcca8e71a0f4a09b7260b2664f063ba, type: 3}
   m_Name: ConsumableTypesRegistry
   m_EditorClassIdentifier: Assembly-CSharp::Blackset.Data.Registries.ConsumableTypeRegistry
-  id: 3b8b417d75374fc6b8ec7a3fd73f104c
+  id: ConsumableTypesRegistry
   dataName: Consumables Types Registry
   data:
   - {fileID: 11400000, guid: 0e1a15f03f84f8d46ba873a79cfd79ab, type: 2}
