@@ -13,9 +13,15 @@ namespace Blackset.Inventory.Inventories
         fileName = nameof(ConsumablesInventory))]
     public sealed class ConsumablesInventory : BaseInventory<ConsumableItemCell, ConsumableData, ConsumableType>
     {
-        protected override ConsumableItemCell CreateCell(string itemId, string itemTypeId, int amount)
+        protected override ConsumableItemCell CreateCell(string itemId, string itemTypeId, int amount, bool isDefault = false)
         {
-            ConsumableItemCell newCell = new ConsumableItemCell(itemId, itemTypeId, amount);
+            ConsumableItemCell newCell = new ConsumableItemCell(itemId, itemTypeId, amount, isDefault);
+            return newCell;
+        }
+        
+        protected override ConsumableItemCell CreateEmptyCell()
+        {
+            ConsumableItemCell newCell = new ConsumableItemCell();
             return newCell;
         }
     }

@@ -158,7 +158,7 @@ namespace Extensions.Data.InMemoryData
         /// </summary>
         /// <param name="data">Данные записи для добавления</param>
         /// <returns>true если добавление успешно, иначе false</returns>
-        public bool Add(TData entry) // TODO Рассмотреть Insert и сортировку
+        public bool Add(TData entry, int index = -1) // TODO Рассмотреть Insert и сортировку
         {
             if (entry == null)
             {
@@ -168,10 +168,20 @@ namespace Extensions.Data.InMemoryData
             
             EnsureLoaded();
 
-            data.Add(entry);
+            if (index <= -1 || index >= data.Count)
+            {
+                data.Add(entry);
 
-            int index = data.Count - 1;
-            onEntryAdded?.Invoke(index, entry);
+                int newEntryIndex = data.Count - 1;
+                onEntryAdded?.Invoke(newEntryIndex, entry);
+            }
+            else
+            {
+                data.Insert(index, entry);
+                onEntryAdded?.Invoke(index, entry);
+            }
+            
+            
             onDataUpdated?.Invoke();
             MarkDirty();
             return true;
@@ -205,6 +215,27 @@ namespace Extensions.Data.InMemoryData
         }
 
         /// <summary>
+        /// Удалить запись данных по индексу
+        /// </summary>
+        /// <param name="index">Индекс записи данных для удаления</param>
+        /// <returns>true если удаление успешно, иначе false</returns>
+        public bool Remove(int index)
+        {
+            if (index < 0 || index >= data.Count)
+            {
+                return false;
+            }
+
+            data.RemoveAt(index);
+
+            onEntryRemoved?.Invoke();
+            onDataUpdated?.Invoke();
+            MarkDirty();
+
+            return true;
+        }
+
+        /// <summary>
         /// Удалить запись данных по идентификатору
         /// </summary>
         /// <param name="entryId">Идентификатор записи данных для удаления</param>
@@ -231,27 +262,6 @@ namespace Extensions.Data.InMemoryData
 
             ServiceDebug.LogWarning($"Запись с id {entryId} не найдена, запись не удалена");
             return false;
-        }
-
-        /// <summary>
-        /// Удалить запись данных по индексу
-        /// </summary>
-        /// <param name="index">Индекс записи данных для удаления</param>
-        /// <returns>true если удаление успешно, иначе false</returns>
-        public bool Remove(int index)
-        {
-            if (index < 0 || index >= data.Count)
-            {
-                return false;
-            }
-
-            data.RemoveAt(index);
-
-            onEntryRemoved?.Invoke();
-            onDataUpdated?.Invoke();
-            MarkDirty();
-
-            return true;
         }
 
         /// <summary>

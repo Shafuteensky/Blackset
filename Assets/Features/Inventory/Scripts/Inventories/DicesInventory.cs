@@ -13,9 +13,15 @@ namespace Blackset.Inventory.Inventories
         fileName = nameof(DicesInventory))]
     public sealed class DicesInventory : BaseInventory<DiceItemCell, DiceData, DiceType>
     {
-        protected override DiceItemCell CreateCell(string itemId, string itemTypeId, int amount)
+        protected override DiceItemCell CreateCell(string itemId, string itemTypeId, int amount, bool isDefault = false)
         {
-            DiceItemCell newCell = new DiceItemCell(itemId, itemTypeId, amount);
+            DiceItemCell newCell = new DiceItemCell(itemId, itemTypeId, amount, isDefault);
+            return newCell;
+        }
+        
+        protected override DiceItemCell CreateEmptyCell()
+        {
+            DiceItemCell newCell = new DiceItemCell();
             return newCell;
         }
     }

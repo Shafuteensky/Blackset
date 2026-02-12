@@ -86,10 +86,10 @@ namespace Blackset.UI.Inventory
             Clear();
             
             IReadOnlyList<TItemCell> data = inventory.Data;
-            RebuildRoutine(data);
+            Rebuild(data);
         }
 
-        protected void RebuildRoutine(IReadOnlyList<TItemCell> data)
+        protected void Rebuild(IReadOnlyList<TItemCell> data)
         {
             if (data == null)
             {

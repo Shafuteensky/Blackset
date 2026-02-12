@@ -50,6 +50,15 @@ namespace Blackset.Inventory.Cells
         #endregion
         
         /// <summary>
+        /// Пуста ли ячейка
+        /// </summary>
+        public bool IsEmpty => isEmpty;
+        /// <summary>
+        /// Является ли ячейка дефолтной
+        /// </summary>
+        public bool IsDefault => isDefault;
+        
+        /// <summary>
         /// Идентификатор данных предмета в этой ячейке
         /// </summary>
         public string ItemId => itemId;
@@ -63,20 +72,20 @@ namespace Blackset.Inventory.Cells
         /// </summary>
         public int ItemAmount => itemAmount;
 
-        [SerializeField]
-        protected string itemId = string.Empty;
-        [SerializeField]
-        protected string itemTypeId = string.Empty;
-        [SerializeField]
+        protected bool isEmpty;
+        protected bool isDefault;
+        
+        protected string itemId;
+        protected string itemTypeId;
         protected int itemAmount;
 
         /// <summary>
-        /// Конструктор ячейки инвентаря
+        /// Конструктор заполненной ячейки инвентаря
         /// </summary>
         /// <param name="itemId">Идентификатор данных предмета в этой ячейке</param>
         /// <param name="itemTypeId">Идентификатор типа данных предмета в этой ячейке</param>
         /// <param name="itemAmount">Количество предметов в ячейке</param>
-        public BaseItemCell(string itemId, string itemTypeId, int itemAmount = 1)
+        protected BaseItemCell(string itemId, string itemTypeId, int itemAmount = 1, bool isDefault = true)
         {
             if (String.IsNullOrEmpty(itemId))
             {
@@ -91,9 +100,23 @@ namespace Blackset.Inventory.Cells
             
             if (itemAmount <= 0) itemAmount = 1;
             
+            isEmpty = false;
+            this.isDefault = isDefault;
+            
             this.itemId = itemId;
             this.itemTypeId = itemTypeId;
             this.itemAmount = itemAmount;
+        }
+
+        /// <summary>
+        /// Конструктор пустой ячейки инвентаря
+        /// </summary>
+        protected BaseItemCell()
+        {
+            isEmpty = true;
+            isDefault = false;
+            
+            itemAmount = 0;
         }
 
         #region Манипуляции количеством
@@ -165,6 +188,7 @@ namespace Blackset.Inventory.Cells
         /// <returns>Данные предмета</returns>
         public TData GetItemData(BaseDataRegistry<TData> dataRegistry)
         {
+            if (isEmpty) return null;
             if (dataRegistry == null)
             {
                 ServiceDebug.LogError("Реестр данных предметов не задан, данные не найдены");
@@ -187,6 +211,7 @@ namespace Blackset.Inventory.Cells
         /// <returns>Данные типа предмета</returns>
         public TType GetTypeData(BaseDataRegistry<TType> typeRegistry)
         {
+            if (isEmpty) return null;
             if (typeRegistry == null)
             {
                 ServiceDebug.LogError("Реестр данных предметов не задан, данные не найдены");
@@ -203,7 +228,7 @@ namespace Blackset.Inventory.Cells
         }
 
         /// <summary>
-        /// Сравнение двух предметов
+        /// Сравнение двух ячеек (по свойствам)
         /// </summary>
         /// <param name="otherItemId">Идентификатор сравниваемого предмета</param>
         /// <param name="otherItemTypeId">Идентификатор типа сравниваемого предмета</param>
@@ -217,6 +242,27 @@ namespace Blackset.Inventory.Cells
             }
             
             if (itemId == otherItemId && itemTypeId == otherItemTypeId)
+            {
+                return true;
+            }
+            
+            return false;
+        }
+
+        /// <summary>
+        /// Сравнение двух ячеек
+        /// </summary>
+        /// <param name="otherCell">Сравниваемая (другая) ячейка</param>
+        /// <returns>true если предмет и тип совпадают, иначе false</returns>
+        public bool IsSame(BaseItemCell<TData, TType> otherCell)
+        {
+            if (String.IsNullOrEmpty(otherCell.ItemId) || String.IsNullOrEmpty(otherCell.ItemTypeId))
+            {
+                ServiceDebug.LogError("Получены невалидные id, сравнение не выполнено");
+                return false;
+            }
+            
+            if (itemId == otherCell.itemId && itemTypeId == otherCell.itemTypeId)
             {
                 return true;
             }

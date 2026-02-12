@@ -17,9 +17,9 @@ MonoBehaviour:
   autoSave: 1
   dataRegistry: {fileID: 11400000, guid: 6acb295a4077a9c4ca12486b902fd956, type: 2}
   typeRegistry: {fileID: 11400000, guid: 825ddbad5a8d8b44184241c51e8d3433, type: 2}
-  slotsCount: 4
+  slotsCount: 2
   allowedItemType: {fileID: 0}
-  fillCellsWithDefaults: 0
+  fillCellsWithDefaults: 1
   defaultItems:
   - ItemData: {fileID: 11400000, guid: b7ecc4b8edcdbe440a303c0019ea547e, type: 2}
     ItemTypeData: {fileID: 11400000, guid: 993bee1bbd4e925439649326aceece27, type: 2}

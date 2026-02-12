@@ -61,7 +61,6 @@ namespace Blackset.UI.Inventory
             if (itemIconImage != null && dataRegistry != null && itemCell != null)
             {
                 itemIconImage.sprite = dataRegistry.GetById(itemCell.ItemTypeId).Icon;
-                Debug.Log(dataRegistry.GetById(itemCell.ItemTypeId).Icon);
             }
         }
     }
