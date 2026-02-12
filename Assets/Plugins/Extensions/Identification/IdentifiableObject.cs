@@ -15,6 +15,7 @@ namespace Extensions.Identification
         /// </summary>
         public string Id => id;
         
+        [Header("Идентификация"), Space]
         [SerializeField]
         protected string id = string.Empty;
 

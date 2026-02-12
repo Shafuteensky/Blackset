@@ -38,19 +38,9 @@ namespace Extensions.Data.InMemoryData
         
         #endregion
         
-        [SerializeField]
-        protected ID id = default;
-
-        [SerializeField]
-        protected string saveKey = string.Empty;
-        
+        [Header("Сохранение данных контейнера"), Space]
         [SerializeField]
         protected bool autoSave = true;
-        
-        /// <summary>
-        /// Название файла сохранения
-        /// </summary>
-        public string SaveKey => saveKey;
 
         /// <summary>
         /// Хранимые данные
@@ -72,15 +62,6 @@ namespace Extensions.Data.InMemoryData
         [NonSerialized]
         protected bool dirty;
         
-        protected virtual void OnEnable()
-        {
-            // Назначает имя файла сохранения при создании нового скриптового файла хранилища данных
-            if (string.IsNullOrEmpty(saveKey))
-            {
-                saveKey = GetType().Name;
-            }
-        }
-        
         /// <summary>
         /// Гарантированная загрузка данных (синхронно через кэш)
         /// </summary>
@@ -93,7 +74,7 @@ namespace Extensions.Data.InMemoryData
 
             OnInitialize();
             // Синхронная загрузка через кэш JsonSaveLoad
-            data = JsonSaveLoad.Load(saveKey, default(TData));
+            data = JsonSaveLoad.Load(id, default(TData));
             if (data == null || data.Equals(default(TData)))
             {
                 ServiceDebug.LogWarning($"Данные контейнера {name} пусты, загружены данные по-умолчанию");
@@ -142,7 +123,7 @@ namespace Extensions.Data.InMemoryData
             }
 
             // Синхронное сохранение через кэш
-            if (JsonSaveLoad.Save(data, saveKey))
+            if (JsonSaveLoad.Save(data, id))
             {
                 dirty = false;
                 onDataSaved?.Invoke();
@@ -168,7 +149,7 @@ namespace Extensions.Data.InMemoryData
                 return false;
             }
 
-            if (await JsonSaveLoad.SaveAsync(data, saveKey))
+            if (await JsonSaveLoad.SaveAsync(data, id))
             {
                 dirty = false;
                 onDataSaved?.Invoke();
@@ -191,7 +172,7 @@ namespace Extensions.Data.InMemoryData
                 return;
             }
 
-            await JsonSaveLoad.PreloadAsync(saveKey, new TData());
+            await JsonSaveLoad.PreloadAsync(id, new TData());
             
             // После preload данные уже в кэше, можем загрузить синхронно
             EnsureLoaded();
@@ -219,7 +200,7 @@ namespace Extensions.Data.InMemoryData
     /// <summary>
     /// Абстракция
     /// </summary>
-    public abstract class InMemoryDataBaseObject : ScriptableObject
+    public abstract class InMemoryDataBaseObject : IdentifiableObject
     {
         public abstract bool RequestSave();
         public abstract UniTask  PreloadAsync();
