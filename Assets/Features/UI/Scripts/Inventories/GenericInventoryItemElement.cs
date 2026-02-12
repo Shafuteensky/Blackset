@@ -56,7 +56,7 @@ namespace Blackset.UI.Inventory
         /// <summary>
         /// Инициализация элемента
         /// </summary>
-        /// <param name="newItemCellId">Идентификатор зранимых данных</param>
+        /// <param name="newItemCellId">Идентификатор хранимых данных</param>
         public void Initialize(TInventory inventory, string itemCellId, 
             BaseDataRegistry<TItemType> typeRegistry, BaseDataRegistry<TData> dataRegistry)
         {
