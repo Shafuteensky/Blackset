@@ -48,8 +48,8 @@ namespace Blackset.Player
         {
             PlayerMetaData metaData = playerDataFacade.MetaData.Data;
             
-            metaData.AddMoney(moneyToAdd);
-            ServiceDebug.Log($"Добавлена валюта ({money}, в сумме {metaData.Money})");
+            playerDataFacade.MetaData.AddMoney(moneyToAdd);
+            ServiceDebug.Log($"Добавлена валюта ({moneyToAdd}, в сумме {playerDataFacade.MetaData.Data.Money})");
         }
 
         [ContextMenu("Print All Player Data")]

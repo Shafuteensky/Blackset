@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-using Blackset.Inventory.Inventories;
 using Extensions.Data.InMemoryData;
 using Extensions.Log;
 using UnityEngine;
@@ -14,26 +12,17 @@ namespace Blackset.Player
         menuName = "Blackset/Player/" + nameof(PlayerMetaDataContainer))]
     public class PlayerMetaDataContainer : InMemorySingleDataContainer<PlayerMetaData>
     {
-        [Header("Дайсы"), Space]
-        [SerializeField]
-        protected DicesInventory dicesInventory;
-        [SerializeField]
-        protected List<DicesInventory> dicesPool;
-        
-        [Header("Расходники"), Space]
-        [SerializeField]
-        protected ConsumablesInventory consumablesInventory;
-        [SerializeField]
-        protected ConsumablesInventory consumablesPool;
-        
-        protected override void OnInitialize()
+        public void AddMoney(int amount)
         {
-            if (dicesInventory == null || dicesPool == null ||
-                consumablesInventory == null || consumablesPool == null)
+            if (data == null || amount < 0)
             {
-                ServiceDebug.LogError("Ошибка инициализации данных игрока: не все поля заполнены");
+                ServiceDebug.LogError("Ошибка добавления валюты");
                 return;
             }
+            
+            data.AddMoney(amount);
+            OnDataUpdate();
+            MarkDirty();
         }
     }
 }
