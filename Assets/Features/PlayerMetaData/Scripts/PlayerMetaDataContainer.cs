@@ -21,7 +21,7 @@ namespace Blackset.Player
             }
             
             data.AddMoney(amount);
-            OnDataUpdate();
+            OnDataUpdated();
             MarkDirty();
         }
     }

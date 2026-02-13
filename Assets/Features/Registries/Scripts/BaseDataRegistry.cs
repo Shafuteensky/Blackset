@@ -42,13 +42,13 @@ namespace Blackset.Data.Registries
 
             if (dataById == null)
             {
-                ServiceDebug.LogError("Ошибка получения индекса записей");
+                ServiceDebug.LogError("Ошибка получения реестра записей");
                 return null;
             }
             
             if (dataById.TryGetValue(id, out TData result)) return result;
             
-            ServiceDebug.LogError($"Данные с Id {id} не найдены в индексе записей");
+            ServiceDebug.LogError($"Данные с Id {id} не найдены в реестре записей");
             return null;
         }
         

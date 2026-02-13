@@ -1,5 +1,7 @@
 using System.Collections.Generic;
+using Blackset.Data.Items.Types;
 using Blackset.Inventory.Inventories;
+using Extensions.Log;
 using UnityEngine;
 
 namespace Blackset.Player
@@ -47,5 +49,21 @@ namespace Blackset.Player
         [field:SerializeField]
         [field: Tooltip("Пул расходников")]
         public ConsumablesInventory ConsumablesPool { get; private set; }
+
+        /// <summary>
+        /// Получить пул дайсов определенного типа
+        /// </summary>
+        /// <param name="diceType">Тип требуемого пула</param>
+        /// <returns>Пул дайсов определенного типа</returns>
+        public DicesInventory GetDicePoolRow(DiceType diceType)
+        {
+            foreach (DicesInventory dicePoolRow in DicesPoolRows)
+            {
+                if (dicePoolRow.AllowedItemType == diceType) return dicePoolRow;
+            }
+            
+            ServiceDebug.LogError($"Пул дайсов типа {diceType.DataName} не найден");
+            return null;
+        }
     }
 }

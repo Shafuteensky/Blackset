@@ -4,6 +4,7 @@ using Blackset.Data;
 using Blackset.Data.Items.Types;
 using Blackset.Data.Registries;
 using Blackset.Inventory.Cells;
+using Blackset.Inventory.Inventories;
 using Extensions.Log;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -39,7 +40,7 @@ namespace Blackset.Player
             playerDataFacade.DicesInventory.AddItem(new DiceItemCell(randomDice.Id, randomDiceType.Id));
             
             ServiceDebug.Log($"Добавлен новый дайс: {randomDice.DataName}, {randomDiceType.DataName}. " +
-                             $"\nТеперь в инвентаре {dicesInventoryData.Count} дайсов: {GetDicesInventoryList("    ")}");
+                             $"\nТеперь в инвентаре {dicesInventoryData.Count} дайсов: {GetDicesInventoryList(playerDataFacade.DicesInventory, "    ")}");
         }
 
         [ContextMenu("Add 10 Money")]
@@ -57,17 +58,19 @@ namespace Blackset.Player
         {
             PlayerMetaData metaData = playerDataFacade.MetaData.Data;
             List<DiceItemCell> dicesInventoryData = playerDataFacade.DicesInventory.Data;
-            
+
             ServiceDebug.Log($"Данные игрока:" +
                              $"\nВалюта: {metaData.Money}$" +
                              $"\nИнвантарь:" +
-                             $"\n   - Дайсы ({dicesInventoryData.Count} в сумме): {GetDicesInventoryList("        ")}");
+                             $"\n   - Дайсы ({dicesInventoryData.Count} в сумме): {GetDicesInventoryList(playerDataFacade.DicesInventory, "        ")}" +
+                             $"\nПулы дайсов:" + GetDicesPoolList("        ")
+                             );
         }
 
-        private string GetDicesInventoryList(string prefix = "")
+        private string GetDicesInventoryList(DicesInventory inventory, string prefix = "")
         {
             string dicesInInventory = String.Empty;
-            foreach (DiceItemCell cell in playerDataFacade.DicesInventory.Data)
+            foreach (DiceItemCell cell in inventory.Data)
             {
                 DiceData diceInCell = cell.GetItemData(gameDataRegistry.Dices);
                 if (diceInCell == null) continue;
@@ -76,6 +79,17 @@ namespace Blackset.Player
             }
 
             return dicesInInventory;
+        }
+
+        private string GetDicesPoolList(string prefix = "")
+        {
+            string dicesInPools = String.Empty;
+            foreach (DicesInventory poolRow in playerDataFacade.DicesPoolRows)
+            {
+                dicesInPools += $"\n   - {poolRow.AllowedItemType.DataName} ({poolRow.Data.Count} в сумме): ";
+                dicesInPools += GetDicesInventoryList(poolRow, prefix);
+            }
+            return dicesInPools;
         }
     }
 }

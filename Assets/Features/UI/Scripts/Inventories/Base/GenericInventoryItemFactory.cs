@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using Blackset.Data.Base;
 using Blackset.Data.Items.Types;
-using Blackset.Data.Registries;
 using Blackset.Inventory.Cells;
 using UnityEngine;
 using Blackset.Inventory.Inventories;
@@ -12,8 +11,9 @@ namespace Blackset.UI.Inventory
     /// <summary>
     /// Базовый класс UI фабрики содержимого инвентаря
     /// </summary>
-    /// <typeparam name="TInventory">Тип инвентаря</typeparam>
+    /// <typeparam name="TInventory">Инвентарь</typeparam>
     /// <typeparam name="TItemCell">Ячейка инвентаря</typeparam>
+    /// <typeparam name="TData">Данные предмета инвентаря</typeparam>
     /// <typeparam name="TItemType">Тип предметов инвентаря</typeparam>
     public abstract class GenericInventoryItemFactory<TInventory, TItemCell, TData, TItemType> : MonoBehaviour
         where TInventory : BaseInventory<TItemCell, TData, TItemType>
@@ -21,13 +21,14 @@ namespace Blackset.UI.Inventory
         where TData : BaseData
         where TItemType : BaseItemType
     {
+        /// <summary>
+        /// Инвентарь, данные которого выводятся
+        /// </summary>
+        public TInventory Inventory => inventory;
+        
         [Header("Данные"), Space]
         [SerializeField]
         protected TInventory inventory;
-        [SerializeField]
-        protected BaseDataRegistry<TItemType> typeRegistry; 
-        [SerializeField]
-        protected BaseDataRegistry<TData> dataRegistry; 
 
         [Header("Фильтрация"), Space]
         [SerializeField] 
@@ -68,10 +69,13 @@ namespace Blackset.UI.Inventory
         
         protected virtual void OnEnable()
         {
-            if (rebuildOnEnable)
-            {
-                Rebuild();
-            }
+            if (inventory != null) inventory.onDataUpdated += Rebuild;
+            if (rebuildOnEnable) Rebuild();
+        }
+        
+        protected virtual void OnDisable()
+        {
+            if (inventory != null) inventory.onDataUpdated -= Rebuild;
         }
 
         /// <summary>
@@ -79,19 +83,20 @@ namespace Blackset.UI.Inventory
         /// </summary>
         public void Rebuild()
         {
-            if (inventory == null || typeRegistry == null || dataRegistry == null || itemElementPrefab == null)
+            if (inventory == null || itemElementPrefab == null)
             {
                 ServiceDebug.LogError($"{name}: не все ссылки заполнены");
                 return;
             }
 
+            ServiceDebug.Log($"Rebuild");
             Clear();
             
             IReadOnlyList<TItemCell> data = inventory.Data;
-            Rebuild(data);
+            Populate(data);
         }
 
-        protected void Rebuild(IReadOnlyList<TItemCell> data)
+        protected void Populate(IReadOnlyList<TItemCell> data)
         {
             if (data == null)
             {
@@ -114,7 +119,7 @@ namespace Blackset.UI.Inventory
 
                 if (instance != null)
                 {
-                    instance.Initialize(inventory, item.Id, typeRegistry, dataRegistry);
+                    instance.Initialize(inventory, item.Id);
                 }
             }
         }

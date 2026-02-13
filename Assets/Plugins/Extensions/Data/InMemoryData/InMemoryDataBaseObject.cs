@@ -34,7 +34,7 @@ namespace Extensions.Data.InMemoryData
         /// <summary>
         /// Событие обновления данных хранилища
         /// </summary>
-        public event Action onDataUpdate;
+        public event Action onDataUpdated;
         
         #endregion
         
@@ -45,7 +45,7 @@ namespace Extensions.Data.InMemoryData
         /// <summary>
         /// Хранимые данные
         /// </summary>
-        public TData Data
+        public virtual TData Data
         {
             get
             {
@@ -192,7 +192,7 @@ namespace Extensions.Data.InMemoryData
 
         #endregion
         
-        protected void OnDataUpdate() => onDataUpdate?.Invoke();
+        protected void OnDataUpdated() => onDataUpdated?.Invoke();
 
         protected virtual void OnInitialize() { }
     }

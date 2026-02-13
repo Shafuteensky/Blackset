@@ -37,10 +37,6 @@ namespace Extensions.Data.InMemoryData
         /// Событие удаления всех записей хранилища 
         /// </summary>
         public event Action onDataCleared;
-        /// <summary>
-        /// Событие любого обновления содержимого хранилища 
-        /// </summary>
-        public event Action onDataUpdated;
 
         #endregion
 
@@ -182,7 +178,7 @@ namespace Extensions.Data.InMemoryData
             }
             
             
-            onDataUpdated?.Invoke();
+            OnDataUpdated();
             MarkDirty();
             return true;
         }
@@ -205,7 +201,7 @@ namespace Extensions.Data.InMemoryData
             if (data.Remove(entry))
             {
                 onEntryRemoved?.Invoke();
-                onDataUpdated?.Invoke();
+                OnDataUpdated();
                 MarkDirty();
                 return true;
             }
@@ -229,7 +225,7 @@ namespace Extensions.Data.InMemoryData
             data.RemoveAt(index);
 
             onEntryRemoved?.Invoke();
-            onDataUpdated?.Invoke();
+            OnDataUpdated();
             MarkDirty();
 
             return true;
@@ -274,7 +270,7 @@ namespace Extensions.Data.InMemoryData
             data.Clear();
 
             onDataCleared?.Invoke();
-            onDataUpdated?.Invoke();
+            OnDataUpdated();
             MarkDirty();
         }
 

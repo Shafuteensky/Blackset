@@ -42,7 +42,7 @@ namespace Extensions.Data.InMemoryData
             EnsureLoaded();
             
             MarkDirty(); 
-            OnDataUpdate();
+            OnDataUpdated();
         }
     }
 }

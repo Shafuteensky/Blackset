@@ -217,12 +217,12 @@ namespace Blackset.Inventory.Cells
         }
 
         /// <summary>
-        /// Сравнение двух ячеек (по свойствам)
+        /// Сравнение содержимого двух ячеек (по свойствам)
         /// </summary>
         /// <param name="otherItemId">Идентификатор сравниваемого предмета</param>
         /// <param name="otherItemTypeId">Идентификатор типа сравниваемого предмета</param>
         /// <returns>true если предмет и тип совпадают, иначе false</returns>
-        public bool IsSame(string otherItemId, string otherItemTypeId)
+        public bool IsContentSame(string otherItemId, string otherItemTypeId)
         {
             if (String.IsNullOrEmpty(otherItemId) || String.IsNullOrEmpty(otherItemTypeId))
             {
@@ -239,11 +239,11 @@ namespace Blackset.Inventory.Cells
         }
 
         /// <summary>
-        /// Сравнение двух ячеек
+        /// Сравнение содержимого двух ячеек
         /// </summary>
         /// <param name="otherCell">Сравниваемая (другая) ячейка</param>
         /// <returns>true если предмет и тип совпадают, иначе false</returns>
-        public bool IsSame(BaseItemCell<TData, TType> otherCell)
+        public bool IsContentSame(BaseItemCell<TData, TType> otherCell)
         {
             if (String.IsNullOrEmpty(otherCell.ItemId) || String.IsNullOrEmpty(otherCell.ItemTypeId))
             {

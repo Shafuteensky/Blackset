@@ -1,4 +1,5 @@
 using System;
+using Extensions.Log;
 using UnityEngine;
 
 namespace Extensions.Generics
@@ -27,6 +28,15 @@ namespace Extensions.Generics
         {
             _isInitialized = true;
             onInitialized?.Invoke();
+        }
+        
+        /// <summary>
+        /// Оповещение о состоянии инициализации
+        /// </summary>
+        [HideInCallstack]
+        public virtual void NotifyInitialized()
+        {
+            if (!IsInitialized) ServiceDebug.LogError("Скрипт не инициализирован");
         }
     }
 }

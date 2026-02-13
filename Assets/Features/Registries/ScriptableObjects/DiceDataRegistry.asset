@@ -15,6 +15,7 @@ MonoBehaviour:
   id: DiceDataRegistry
   dataName: Dice data registry
   data:
+  - {fileID: 11400000, guid: c6be3b2a199fce44487b5c70e985fa69, type: 2}
   - {fileID: 11400000, guid: 4bc081f65e2f08b46adea273e7eff6e3, type: 2}
   - {fileID: 11400000, guid: 9471336848a38104cbcdea3ee5d326fe, type: 2}
   - {fileID: 11400000, guid: e4fcc1457ee9f8445bee2f89e9b6deef, type: 2}
