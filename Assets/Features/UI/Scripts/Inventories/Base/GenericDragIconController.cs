@@ -40,6 +40,8 @@ namespace Blackset.UI.Inventory
         
         protected virtual void OnDisable()
         {
+            if (!IsInitialized) return;
+            
             dragDropCoordinator.onDragStarted -= InitializeElement; 
             dragDropCoordinator.onDragPositionChanged -= UpdatePosition; 
             dragDropCoordinator.onDragEnded -= FreeElement; 

@@ -28,6 +28,15 @@ namespace Blackset.UI.Inventory
         /// </summary>
         public CanvasGroup CanvasGroup => canvasGroup;
         
+        /// <summary>
+        /// Прилинкованный инвнетарь элемента
+        /// </summary>
+        public TInventory Inventory => inventory;
+        /// <summary>
+        /// Идентификатор прилинкованной ячейки инвентаря
+        /// </summary>
+        public string ItemCellId => itemCellId;
+        
         [SerializeField]
         protected CanvasGroup canvasGroup;
         
