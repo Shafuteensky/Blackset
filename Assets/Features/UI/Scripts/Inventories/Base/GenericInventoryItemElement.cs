@@ -53,18 +53,18 @@ namespace Blackset.UI.Inventory
         }
         
         #region Drag'n'Drop
-        
-        public void OnDrag(PointerEventData eventData)
-        {
-            if (!IsInitialized) return;
-            dropCoordinator.UpdatePosition(eventData.position);
-        }
 
         public void OnBeginDrag(PointerEventData eventData)
         {
             if (!IsInitialized) return;
             itemIconImage.CrossFadeAlpha(0.25f, 0.1f, false);
             dropCoordinator.BeginDrag(inventory, itemCellId);
+        }
+        
+        public void OnDrag(PointerEventData eventData)
+        {
+            if (!IsInitialized) return;
+            dropCoordinator.UpdatePosition(eventData.position);
         }
 
         public void OnEndDrag(PointerEventData eventData)

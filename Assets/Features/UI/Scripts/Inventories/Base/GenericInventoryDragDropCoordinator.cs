@@ -32,6 +32,10 @@ namespace Blackset.UI.Inventory
         /// </summary>
         public event Action onDragEnded;
         /// <summary>
+        /// Дроп 
+        /// </summary>
+        public event Action onDrop;
+        /// <summary>
         /// Попытка дропа
         /// </summary>
         /// <param name="TInventory">Инвентарь</param>
@@ -76,8 +80,6 @@ namespace Blackset.UI.Inventory
         /// </summary>
         public void EndDrag()
         {
-            if (!hasPayload) return;
-
             ClearData();
             onDragEnded?.Invoke();
         }
@@ -94,6 +96,7 @@ namespace Blackset.UI.Inventory
 
             DropItem(targetInventory, targetCellId);
             onDropRequested?.Invoke(targetInventory, targetCellId);
+            onDrop?.Invoke();
             ClearData();
         }
         
@@ -142,28 +145,29 @@ namespace Blackset.UI.Inventory
         /// </summary>
         /// <param name="targetInventory">Инвентарь, из которого происходит пермещение</param>
         /// <param name="targetCellId">Идентификатор перемещаемой ячейки</param>
-        private void DropItem(TInventory targetInventory, string targetCellId)
+        private void DropItem(TInventory targetInventory, string targetCellId = null)
         {
-            if (targetInventory == null || String.IsNullOrEmpty(targetCellId))
+            if (targetInventory == null)
             {
-                ServiceDebug.LogError("Ссылка на инвентарь отсутствует или id ячейки невалиден, drop не выполнен");
+                ServiceDebug.LogError("Ссылка на инвентарь отсутствует, drop не выполнен");
                 return;
             }
             
             TItemCell sourceCell = sourceInventory.GetById(sourceCellId);
-            TItemCell targetCell = targetInventory.GetById(targetCellId);
+            TItemCell targetCell = null;
+            if ( !String.IsNullOrEmpty(targetCellId) ) targetCell = targetInventory.GetById(targetCellId);
 
-            if (targetCell == null || sourceCell == null)
+            if (sourceCell == null)
             {
-                ServiceDebug.LogError("Ячейка не найдена, drop не выполнен");
+                ServiceDebug.LogError("Ячейка исходных данных не найдена, drop не выполнен");
                 return;
             }
             
-            if (!hasPayload || targetCell == sourceCell) return;
-            if (sourceCell.IsDefault || sourceCell.IsEmpty) return;
+            if ( !hasPayload || ReferenceEquals(targetCell, sourceCell) ) return;
+            if ( sourceCell.IsDefault || sourceCell.IsEmpty ) return;
             
             // Перемещение в определенную ячейку
-            if (!String.IsNullOrEmpty(targetCellId))
+            if ( !String.IsNullOrEmpty(targetCellId) )
             {
                 if (sourceCell.IsContentSame(targetCell))
                 {
