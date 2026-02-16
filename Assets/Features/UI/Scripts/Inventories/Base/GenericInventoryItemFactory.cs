@@ -1,10 +1,12 @@
 using System.Collections.Generic;
 using Blackset.Data.Base;
 using Blackset.Data.Items.Types;
+using Blackset.Effects;
 using Blackset.Inventory.Cells;
 using UnityEngine;
 using Blackset.Inventory.Inventories;
 using Extensions.Log;
+using Unity.VisualScripting;
 
 namespace Blackset.UI.Inventory
 {
@@ -18,7 +20,7 @@ namespace Blackset.UI.Inventory
     public abstract class GenericInventoryItemFactory<TInventory, TItemCell, TData, TItemType> : MonoBehaviour
         where TInventory : BaseInventory<TItemCell, TData, TItemType>
         where TItemCell : BaseItemCell<TData, TItemType>
-        where TData : BaseData
+        where TData : EffectingItemData
         where TItemType : BaseItemType
     { // TODO Реалиовать обновление определенной ячейки без полного перепостроения + заселение элементами из пула (для этого Dictionary-индекс Id/индекс ячейки)
         /// <summary>
@@ -57,6 +59,7 @@ namespace Blackset.UI.Inventory
         protected void Awake()
         {
             Clear();
+            PrepareDropZone();
         }
         
         protected void Start()
@@ -89,11 +92,9 @@ namespace Blackset.UI.Inventory
                 return;
             }
 
-            ServiceDebug.Log($"Rebuild");
             Clear();
             
-            IReadOnlyList<TItemCell> data = inventory.Data;
-            Populate(data);
+            Populate(inventory.Data);
         }
 
         protected void Populate(IReadOnlyList<TItemCell> data)
@@ -137,5 +138,7 @@ namespace Blackset.UI.Inventory
                 Destroy(elementsRoot.GetChild(i).gameObject);
             }
         }
+
+        protected abstract void PrepareDropZone();
     }
 }

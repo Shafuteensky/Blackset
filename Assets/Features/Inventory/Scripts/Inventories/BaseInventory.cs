@@ -163,7 +163,9 @@ namespace Blackset.Inventory.Inventories
         /// <returns>Количество не вместившихся предметов (0 если операция полностью успешна)</returns>
         public int AddItem(string itemId, string itemTypeId, int amount, bool autoMerge = true, int targetIndex = -1)
         {
-            if ( !checkId(itemId) || !checkId(itemTypeId) || !checkAmount(amount) ) return amount;
+            if ( !checkId(itemId) || 
+                 !checkId(itemTypeId) || 
+                 !checkAmount(amount) ) return amount;
             EnsureLoaded();
             if (!isAllowedType(itemTypeId)) return amount;
 
@@ -245,8 +247,10 @@ namespace Blackset.Inventory.Inventories
         /// <returns>Количество не удаленных предметов (0 если операция полностью успешна)</returns>
         public int RemoveItem(int index, int amount = -1)
         {
-            if ( !checkIndex(index) || ( amount != -1 && !checkAmount(amount) ) ) return amount;
-            if (Data[index].IsEmpty || Data[index].IsDefault) return amount; 
+            if ( !checkIndex(index) || 
+                 ( amount != -1 && !checkAmount(amount) ) ) return amount;
+            if (Data[index].IsEmpty || 
+                Data[index].IsDefault) return amount; 
 
             if (amount == -1)
             {
@@ -280,7 +284,8 @@ namespace Blackset.Inventory.Inventories
         /// <returns>Количество не удаленных предметов (0 если операция полностью успешна)</returns>
         public int RemoveItem(string itemCellId, int amount = -1)
         {
-            if ( !checkId(itemCellId) || ( amount != -1 && !checkAmount(amount) ) ) return amount;
+            if ( !checkId(itemCellId) || 
+                 ( amount != -1 && !checkAmount(amount) ) ) return amount;
             int index = GetIndexById(itemCellId);
             if ( !checkIndex(index) ) return amount;
 
@@ -307,9 +312,13 @@ namespace Blackset.Inventory.Inventories
         /// <returns>Количество не перемещенных предметов (0 если операция полностью успешна)</returns>
         public int MoveItem(string cellId, BaseInventory<TItemCell, TData, TType> targetInventory)
         {
-            if ( !checkId(cellId) || !GetById(cellId, out TItemCell cell)) return -1;
-            if (  !checkCell(cell) || !checkInventory(targetInventory) ) return cell.ItemAmount;
-            if ( targetInventory.allowedItemType != null && GetById(cellId).ItemTypeId != targetInventory.allowedItemType.Id ) return cell.ItemAmount;
+            if (targetInventory.Id == Id) return 0;
+            if ( !checkId(cellId) || 
+                 !GetById(cellId, out TItemCell cell)) return -1;
+            if ( !checkCell(cell) || 
+                 !checkInventory(targetInventory) ) return cell.ItemAmount;
+            if ( targetInventory.allowedItemType != null && 
+                 GetById(cellId).ItemTypeId != targetInventory.allowedItemType.Id ) return cell.ItemAmount;
             
             if (cell.IsEmpty || cell.IsDefault) return -1;
 
@@ -350,16 +359,24 @@ namespace Blackset.Inventory.Inventories
         /// <returns>Количество не перемещенных предметов (0 если операция полностью успешна)</returns>
         public int MoveItem(string cellId, BaseInventory<TItemCell, TData, TType> targetInventory, string targetCellId)
         {
-            if (!checkId(cellId) || !checkId(targetCellId) || !checkInventory(targetInventory)) return -1;
-            if (!GetById(cellId, out TItemCell thisCell) || !checkCell(thisCell)) return -1;
-            if (!targetInventory.GetById(targetCellId, out TItemCell thatCell) || !checkCell(thatCell)) return thisCell.ItemAmount;
+            if ( ReferenceEquals(targetInventory, this) ) return 0;
+            if ( !checkId(cellId) || 
+                 !checkId(targetCellId) || 
+                 !checkInventory(targetInventory) ) return -1;
+            if ( !GetById(cellId, out TItemCell thisCell) || 
+                 !checkCell(thisCell) ) return -1;
+            if ( !targetInventory.GetById(targetCellId, out TItemCell thatCell ) || 
+                 !checkCell(thatCell)) return thisCell.ItemAmount;
 
-            if (thisCell.IsEmpty || thisCell.IsDefault) return -1;
-            if (targetInventory.allowedItemType != null && thisCell.ItemTypeId != targetInventory.allowedItemType.Id) return thisCell.ItemAmount;
+            if ( thisCell.IsEmpty || 
+                 thisCell.IsDefault ) return -1;
+            if ( targetInventory.allowedItemType != null && 
+                 thisCell.ItemTypeId != targetInventory.allowedItemType.Id ) return thisCell.ItemAmount;
 
             int thisCellIndex = GetIndexById(cellId);
             int targetCellIndex = targetInventory.GetIndexById(targetCellId);
-            if (!checkIndex(thisCellIndex) || !checkIndex(targetCellIndex, targetInventory.Data.Count)) return thisCell.ItemAmount;
+            if ( !checkIndex(thisCellIndex) || 
+                 !checkIndex(targetCellIndex, targetInventory.Data.Count) ) return thisCell.ItemAmount;
 
             int ApplyMoveResult(int remaining)
             {
@@ -473,9 +490,10 @@ namespace Blackset.Inventory.Inventories
         /// <returns>true если обмен успешен, иначе false</returns>
         public bool SwapItem(int firstItemCellIndex, int secondItemCellIndex, BaseInventory<TItemCell, TData, TType> targetInventory = null)
         {
-            if (firstItemCellIndex == secondItemCellIndex) return false;
-            if (targetInventory == null) targetInventory = this;
-            if ( !checkIndex(firstItemCellIndex) || !checkIndex(secondItemCellIndex, targetInventory.Data.Count) ) return false;
+            if ( firstItemCellIndex == secondItemCellIndex ) return false;
+            if ( targetInventory == null ) targetInventory = this;
+            if ( !checkIndex(firstItemCellIndex) || 
+                 !checkIndex(secondItemCellIndex, targetInventory.Data.Count) ) return false;
 
             (Data[firstItemCellIndex], targetInventory.Data[secondItemCellIndex]) = 
                 (targetInventory.Data[secondItemCellIndex], Data[firstItemCellIndex]);
@@ -545,9 +563,6 @@ namespace Blackset.Inventory.Inventories
         #endregion
         
         #region Internal
-        
-        // При первой инициализации инвентаря заполнять слоты дефолтами по необходимости
-        protected override void OnFirstDataInit() => FillDefaultSlotsIfNeeded();
         
         #region Проверки
         
@@ -691,8 +706,6 @@ namespace Blackset.Inventory.Inventories
         {
             if (!IsDefaultsNeeded()) return;
 
-            EnsureLoaded();
-
             while (Data.Count < slotsCount)
             {
                 AddDefaultSlot();
@@ -802,6 +815,13 @@ namespace Blackset.Inventory.Inventories
         }
         
         #endregion
+
+        protected override void OnDataLoaded()
+        {
+            base.OnDataLoaded();
+            // При первом запуске заполнять дефолтные инвентари
+            FillDefaultSlotsIfNeeded();
+        }
         
         #endregion
     }

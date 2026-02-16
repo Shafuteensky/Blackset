@@ -7,13 +7,13 @@ using Unity.VisualScripting;
 namespace Blackset.UI.Inventory
 {
     /// <summary>
-    /// UI фабрика содержимого инвентаря дайсов
+    /// UI фабрика содержимого инвентаря расходников
     /// </summary>
-    public class DiceItemsFactory : GenericInventoryItemFactory<DicesInventory, DiceItemCell, DiceData, DiceType>
+    public class ConsumablesItemsFactory : GenericInventoryItemFactory<ConsumablesInventory, ConsumableItemCell, ConsumableData, ConsumableType>
     {
         protected override void PrepareDropZone()
         {
-            DiceItemElement dropZone = transform.AddComponent<DiceItemElement>();
+            ConsumableItemElement dropZone = transform.AddComponent<ConsumableItemElement>();
             dropZone.InitializeElement(inventory);
         }
     }

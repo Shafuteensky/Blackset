@@ -15,6 +15,7 @@ MonoBehaviour:
   id: SpecialDiceTest (3)
   dataName: SpecialDiceTest (3)
   effect: {fileID: 11400000, guid: 98a8da743f9bb34469f43227ce710b37, type: 2}
+  color: {r: 0.2396226, g: 1, b: 0.43506366, a: 1}
   availableTypes:
   - {fileID: 11400000, guid: 0ae8218b9522594459de916a9dc1bdfb, type: 2}
   - {fileID: 11400000, guid: 62af0b23df6100641ba60be783e31f76, type: 2}

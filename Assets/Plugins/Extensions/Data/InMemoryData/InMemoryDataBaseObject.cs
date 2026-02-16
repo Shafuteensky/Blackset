@@ -45,14 +45,12 @@ namespace Extensions.Data.InMemoryData
             get
             {
                 EnsureLoaded();
-                OnBeforeDataGet();
                 
                 return data;
             }
             set
             {
                 EnsureLoaded();
-                OnBeforeDataSet();
                 
                 data = value;
                 MarkDirty();
@@ -60,10 +58,10 @@ namespace Extensions.Data.InMemoryData
         }
 
         [NonSerialized]
-        private TData data;
+        public TData data;
         
         [NonSerialized]
-        protected bool loaded = false;
+        protected bool loaded;
         [NonSerialized]
         protected bool dirty;
         
@@ -80,18 +78,23 @@ namespace Extensions.Data.InMemoryData
             OnInitialize();
             // Синхронная загрузка через кэш JsonSaveLoad
             data = JsonSaveLoad.Load(id, default(TData));
+            // Первый запсук (сохранений нет)
             if (data == null || data.Equals(default(TData)))
             {
                 ServiceDebug.LogWarning($"Данные контейнера {name} пусты, загружены данные по-умолчанию");
                 data = new TData();
-                OnFirstDataInit();
                 Save(true); // Форсированное сохранение пустых данных при первом запуске
             }
 
             loaded = true;
-            onDataLoaded?.Invoke();
+            OnDataLoaded();
         }
 
+        /// <summary>
+        /// Метод, вызываемый после первой инициализации
+        /// </summary>
+        protected virtual void OnDataLoaded() => onDataLoaded?.Invoke();
+        
         #region  Save/Load
 
         /// <summary>
@@ -202,9 +205,6 @@ namespace Extensions.Data.InMemoryData
         #endregion
         
         protected virtual void OnInitialize() { }
-        protected virtual void OnBeforeDataGet() { }
-        protected virtual void OnBeforeDataSet() { }
-        protected virtual void OnFirstDataInit() { }
 
         #endregion
     }

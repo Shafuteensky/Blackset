@@ -31,6 +31,16 @@ namespace Extensions.Generics
         }
         
         /// <summary>
+        /// Инициализация
+        /// </summary>
+        public virtual void Initialize(bool initialize)
+        {
+            _isInitialized = initialize;
+            if (_isInitialized) onInitialized?.Invoke();
+            NotifyInitialized();
+        }
+        
+        /// <summary>
         /// Оповещение о состоянии инициализации
         /// </summary>
         [HideInCallstack]
