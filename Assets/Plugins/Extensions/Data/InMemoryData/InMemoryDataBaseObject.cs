@@ -27,11 +27,6 @@ namespace Extensions.Data.InMemoryData
         /// </summary>
         public event Action onDataSaveError;
         /// <summary>
-        /// Событие изменения данных хранилища
-        /// </summary>
-        public event Action onDataChanged;
-        
-        /// <summary>
         /// Событие обновления данных хранилища
         /// </summary>
         public event Action onDataUpdated;
@@ -50,12 +45,22 @@ namespace Extensions.Data.InMemoryData
             get
             {
                 EnsureLoaded();
+                OnBeforeDataGet();
+                
                 return data;
+            }
+            set
+            {
+                EnsureLoaded();
+                OnBeforeDataSet();
+                
+                data = value;
+                MarkDirty();
             }
         }
 
         [NonSerialized]
-        protected TData data;
+        private TData data;
         
         [NonSerialized]
         protected bool loaded = false;
@@ -79,6 +84,7 @@ namespace Extensions.Data.InMemoryData
             {
                 ServiceDebug.LogWarning($"Данные контейнера {name} пусты, загружены данные по-умолчанию");
                 data = new TData();
+                OnFirstDataInit();
                 Save(true); // Форсированное сохранение пустых данных при первом запуске
             }
 
@@ -178,11 +184,14 @@ namespace Extensions.Data.InMemoryData
             EnsureLoaded();
         }
 
+
+        #region Internal
+
         protected virtual void MarkDirty()
         {
             dirty = true;
             
-            onDataChanged?.Invoke();
+            onDataUpdated?.Invoke();
 
             if (autoSave)
             {
@@ -192,9 +201,12 @@ namespace Extensions.Data.InMemoryData
 
         #endregion
         
-        protected void OnDataUpdated() => onDataUpdated?.Invoke();
-
         protected virtual void OnInitialize() { }
+        protected virtual void OnBeforeDataGet() { }
+        protected virtual void OnBeforeDataSet() { }
+        protected virtual void OnFirstDataInit() { }
+
+        #endregion
     }
 
     /// <summary>

@@ -1,9 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Cysharp.Threading.Tasks;
 using Extensions.Log;
-using Extensions.Identification;
-using UnityEngine;
 
 namespace Extensions.Data.InMemoryData
 {
@@ -49,9 +46,9 @@ namespace Extensions.Data.InMemoryData
 
                 if (indexById == null || indexDirty)
                 {
-                    indexById = new Dictionary<string, TData>(data.Count);
+                    indexById = new Dictionary<string, TData>(Data.Count);
 
-                    foreach (var item in data)
+                    foreach (var item in Data)
                     {
                         if (item == null || string.IsNullOrEmpty(item.Id))
                         {
@@ -118,13 +115,13 @@ namespace Extensions.Data.InMemoryData
         {
             entry = null;
             
-            if (index < 0 || index >= data.Count)
+            if (index < 0 || index >= Data.Count)
             {
                 ServiceDebug.LogError("Невалидный индекс, данные не найдены");
                 return false;
             }
 
-            entry = data[index];
+            entry = Data[index];
             return true;
         }
 
@@ -136,13 +133,13 @@ namespace Extensions.Data.InMemoryData
         /// <returns>Найденная запись или null</returns>
         public TData GetByIndex(int index)
         {
-            if (index < 0 || index >= data.Count)
+            if (index < 0 || index >= Data.Count)
             {
                 ServiceDebug.LogError("Невалидный индекс, данные не найдены");
                 return null;
             }
 
-            return data[index];
+            return Data[index];
         }
 
         #endregion
@@ -152,7 +149,8 @@ namespace Extensions.Data.InMemoryData
         /// <summary>
         /// Добавить запись данных
         /// </summary>
-        /// <param name="data">Данные записи для добавления</param>
+        /// <param name="entry">Данные записи для добавления</param>
+        /// <param name="index">Индекс, по которому расзместить новую запись (-1 если в конец)</param>
         /// <returns>true если добавление успешно, иначе false</returns>
         public bool Add(TData entry, int index = -1) // TODO Рассмотреть Insert и сортировку
         {
@@ -164,21 +162,19 @@ namespace Extensions.Data.InMemoryData
             
             EnsureLoaded();
 
-            if (index <= -1 || index >= data.Count)
+            if (index <= -1 || index >= Data.Count)
             {
-                data.Add(entry);
+                Data.Add(entry);
 
-                int newEntryIndex = data.Count - 1;
+                int newEntryIndex = Data.Count - 1;
                 onEntryAdded?.Invoke(newEntryIndex, entry);
             }
             else
             {
-                data.Insert(index, entry);
+                Data.Insert(index, entry);
                 onEntryAdded?.Invoke(index, entry);
             }
             
-            
-            OnDataUpdated();
             MarkDirty();
             return true;
         }
@@ -198,10 +194,9 @@ namespace Extensions.Data.InMemoryData
                 return false;
             }
 
-            if (data.Remove(entry))
+            if (Data.Remove(entry))
             {
                 onEntryRemoved?.Invoke();
-                OnDataUpdated();
                 MarkDirty();
                 return true;
             }
@@ -217,15 +212,14 @@ namespace Extensions.Data.InMemoryData
         /// <returns>true если удаление успешно, иначе false</returns>
         public bool Remove(int index)
         {
-            if (index < 0 || index >= data.Count)
+            if (index < 0 || index >= Data.Count)
             {
                 return false;
             }
 
-            data.RemoveAt(index);
+            Data.RemoveAt(index);
 
             onEntryRemoved?.Invoke();
-            OnDataUpdated();
             MarkDirty();
 
             return true;
@@ -246,9 +240,9 @@ namespace Extensions.Data.InMemoryData
                 return false;
             }
 
-            for (int i = 0; i < data.Count; i++)
+            for (int i = 0; i < Data.Count; i++)
             {
-                TData item = data[i];
+                TData item = Data[i];
                 if (item != null && item.Id == entryId)
                 {
                     Remove(i);
@@ -267,10 +261,9 @@ namespace Extensions.Data.InMemoryData
         {
             EnsureLoaded();
 
-            data.Clear();
+            Data.Clear();
 
             onDataCleared?.Invoke();
-            OnDataUpdated();
             MarkDirty();
         }
 

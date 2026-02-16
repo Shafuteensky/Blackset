@@ -14,14 +14,13 @@ namespace Blackset.Player
     {
         public void AddMoney(int amount)
         {
-            if (data == null || amount < 0)
+            if (Data == null || amount < 0)
             {
                 ServiceDebug.LogError("Ошибка добавления валюты");
                 return;
             }
             
-            data.AddMoney(amount);
-            OnDataUpdated();
+            Data.AddMoney(amount);
             MarkDirty();
         }
     }

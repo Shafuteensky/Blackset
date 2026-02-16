@@ -20,7 +20,7 @@ namespace Blackset.UI.Inventory
         where TItemCell : BaseItemCell<TData, TItemType>
         where TData : BaseData
         where TItemType : BaseItemType
-    {
+    { // TODO Реалиовать обновление определенной ячейки без полного перепостроения + заселение элементами из пула (для этого Dictionary-индекс Id/индекс ячейки)
         /// <summary>
         /// Инвентарь, данные которого выводятся
         /// </summary>
@@ -119,7 +119,7 @@ namespace Blackset.UI.Inventory
 
                 if (instance != null)
                 {
-                    instance.Initialize(inventory, item.Id);
+                    instance.InitializeElement(inventory, item.Id);
                 }
             }
         }

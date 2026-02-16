@@ -4,6 +4,7 @@ using Blackset.Data.Items.Types;
 using Blackset.Inventory.Cells;
 using Blackset.Inventory.Inventories;
 using Extensions.Generics;
+using Extensions.Helpers;
 using Extensions.Log;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -29,6 +30,9 @@ namespace Blackset.UI.Inventory
         
         protected TInventory inventory;
         protected string itemCellId;
+        
+        protected bool canDrag = true;
+        protected bool canDrop = true;
 
         protected virtual void OnEnable()
         {
@@ -71,7 +75,7 @@ namespace Blackset.UI.Inventory
         /// Инициализация элемента
         /// </summary>
         /// <param name="newItemCellId">Идентификатор хранимых данных</param>
-        public void Initialize(TInventory inventory, string itemCellId)
+        public void InitializeElement(TInventory inventory, string itemCellId)
         {
             if (inventory == null || String.IsNullOrEmpty(itemCellId))
             {
@@ -82,17 +86,34 @@ namespace Blackset.UI.Inventory
             this.inventory = inventory;
             this.itemCellId = itemCellId;
             
+            TItemCell cell = inventory.GetById(itemCellId);
+            if (cell != null && (cell.IsDefault || cell.IsEmpty))
+            {
+                canDrag = false;
+                canDrop = true;
+            }
             SetIcon();
         }
 
         private void SetIcon()
         {
+            if ( String.IsNullOrEmpty(itemCellId) )
+            {
+                ServiceDebug.LogError($"Идентификатор «{itemCellId}» невалиден, иконка не назначена");
+                return;
+            }
             TItemCell cell = inventory.GetById(itemCellId);
+            
+            if ( cell == null )
+            {
+                ServiceDebug.LogError($"Ячейка с идентификатором «{itemCellId}» не найдена, иконка не назначена");
+                return;
+            }
             TItemType itemType = cell.GetTypeData(inventory.TypeRegistry);
             
-            if (itemIconImage == null || itemType.Icon == null)
+            if (itemIconImage == null || itemType == null || itemType.Icon == null)
             {
-                ServiceDebug.LogError("Иконка не назначена, NRE");
+                ServiceDebug.LogError("Информация об иконке отсутствует, иконка не назначена");
                 return;
             }
 
