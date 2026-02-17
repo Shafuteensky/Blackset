@@ -43,6 +43,24 @@ namespace Blackset.Player
                              $"\nТеперь в инвентаре {dicesInventoryData.Count} дайсов: {GetDicesInventoryList(playerDataFacade.DicesInventory, "    ")}");
         }
 
+        [ContextMenu("Add Random Consumable")]
+        public void AddRandomConsumable()
+        {
+            IReadOnlyList<ConsumableData> consumablesData = gameDataRegistry.Consumables.Data;
+            List<ConsumableItemCell> consumabledInventoryData = playerDataFacade.ConsumablesInventory.Data;
+            
+            int randomIndex = Random.Range(0, consumablesData.Count);
+            ConsumableData randomConsumable = consumablesData[randomIndex];
+            randomIndex = Random.Range(0, gameDataRegistry.ConsumableTypes.Data.Count);
+            ConsumableType randomConsumableType = gameDataRegistry.ConsumableTypes.Data[randomIndex];
+            
+            playerDataFacade.ConsumablesInventory.AddItem(new ConsumableItemCell(randomConsumable.Id, randomConsumableType.Id));
+            
+            ServiceDebug.Log($"Добавлен новый расходник: {randomConsumable.DataName}, {randomConsumableType.DataName}. " +
+                             $"\nТеперь в инвентаре {consumabledInventoryData.Count} расходников: " +
+                             $"{GetConsumablesInventoryList(playerDataFacade.ConsumablesInventory, "    ")}");
+        }
+        
         [ContextMenu("Add 10 Money")]
         public void AddSomeMoney() => AddMoney();
         public void AddMoney(int moneyToAdd = 10)
@@ -50,7 +68,17 @@ namespace Blackset.Player
             PlayerMetaData metaData = playerDataFacade.MetaData.Data;
             
             playerDataFacade.MetaData.AddMoney(moneyToAdd);
-            ServiceDebug.Log($"Добавлена валюта ({moneyToAdd}, в сумме {playerDataFacade.MetaData.Data.Money})");
+            ServiceDebug.Log($"Добавлена валюта ({moneyToAdd}, в сумме {metaData.Money})");
+        }
+
+        [ContextMenu("Add Experience")]
+        public void AddExp()
+        {
+            PlayerMetaData metaData = playerDataFacade.MetaData.Data;
+            
+            int expToAdd = Random.Range( metaData.GetThisLevelRequiredExp()/12, metaData.GetThisLevelRequiredExp()/8 );
+            playerDataFacade.MetaData.AddExperience(expToAdd);
+            ServiceDebug.Log($"Добавлен опыт ({expToAdd}, до нового уровня {metaData.GetExpToNextLevel()}, в сумме {metaData.SumExperience})");
         }
 
         [ContextMenu("Print All Player Data")]
@@ -58,12 +86,17 @@ namespace Blackset.Player
         {
             PlayerMetaData metaData = playerDataFacade.MetaData.Data;
             List<DiceItemCell> dicesInventoryData = playerDataFacade.DicesInventory.Data;
+            List<ConsumableItemCell> consumablesInventoryData = playerDataFacade.ConsumablesInventory.Data;
 
             ServiceDebug.Log($"Данные игрока:" +
                              $"\nВалюта: {metaData.Money}$" +
-                             $"\nИнвантарь:" +
-                             $"\n   - Дайсы ({dicesInventoryData.Count} в сумме): {GetDicesInventoryList(playerDataFacade.DicesInventory, "        ")}" +
-                             $"\nПулы дайсов:" + GetDicesPoolList("        ")
+                             $"\nОпыт: {metaData.GetThisLevelExp()}/{metaData.GetThisLevelRequiredExp()}$" +
+                             $"\nИнвантарь дайсов ({dicesInventoryData.Count} в сумме):" +
+                             $"{GetDicesInventoryList(playerDataFacade.DicesInventory, "    ")}" +
+                             $"\nПулы дайсов:" + GetDicesPoolList("        ") +
+                             $"\nИнвентарь расходников ({consumablesInventoryData.Count} в сумме): " +
+                             $"{GetConsumablesInventoryList(playerDataFacade.ConsumablesInventory, "    ")}" +
+                             $"\nПул расходников:" + GetConsumablesInventoryList(playerDataFacade.ConsumablesPool, "    ")
                              );
         }
 
@@ -77,7 +110,6 @@ namespace Blackset.Player
                 DiceType diceType = cell.GetTypeData(gameDataRegistry.DiceTypes);
                 dicesInInventory += $"\n{prefix}- {diceInCell.DataName}, {diceType.DataName} ({cell.ItemAmount} шт)";
             }
-
             return dicesInInventory;
         }
 
@@ -90,6 +122,19 @@ namespace Blackset.Player
                 dicesInPools += GetDicesInventoryList(poolRow, prefix);
             }
             return dicesInPools;
+        }
+
+        private string GetConsumablesInventoryList(ConsumablesInventory inventory, string prefix = "")
+        {
+            string consumablesInInventory = String.Empty;
+            foreach (ConsumableItemCell cell in inventory.Data)
+            {
+                ConsumableData consumableInCell = cell.GetItemData(gameDataRegistry.Consumables);
+                if (consumableInCell == null) continue;
+                ConsumableType consumableType = cell.GetTypeData(gameDataRegistry.ConsumableTypes);
+                consumablesInInventory += $"\n{prefix}- {consumableInCell.DataName}, {consumableType.DataName} ({cell.ItemAmount} шт)";
+            }
+            return consumablesInInventory;
         }
     }
 }
