@@ -23,11 +23,15 @@ namespace Blackset.UI.Inventory
         [SerializeField]
         protected RectTransform popupRect;
         [SerializeField]
+        protected GameObject budgetIndicator;
+        [SerializeField]
         protected Vector2 screenOffset = new Vector2(16f, -16f);
         
         [Header("Графика"), Space]
         [SerializeField]
         protected Image iconImage;
+        [SerializeField]
+        protected Image rarityImage;
 
         [Header("Текст"), Space]
         [SerializeField]
@@ -38,6 +42,10 @@ namespace Blackset.UI.Inventory
         protected TMP_Text setText;
         [SerializeField]
         protected TMP_Text descriptionText;
+        [SerializeField]
+        protected TMP_Text priceText;
+        [SerializeField]
+        protected TMP_Text budgetText;
 
         protected Vector2 screenPosition;
 
@@ -52,6 +60,7 @@ namespace Blackset.UI.Inventory
         {
             GenericInventoryItemHoverInfoEmitter<TInventory, TItemCell, TData, TItemType>.onShowRequested += OnShowRequested;
             GenericInventoryItemHoverInfoEmitter<TInventory, TItemCell, TData, TItemType>.onHideRequested += OnHideRequested;
+            Reset();
             HideImmediate();
         }
 
@@ -63,6 +72,8 @@ namespace Blackset.UI.Inventory
 
         protected void OnShowRequested(TInventory inventory, string cellId, Vector2 position)
         {
+            Reset();
+            
             screenPosition = position;
             if ( inventory == null || string.IsNullOrEmpty(cellId) ) return;
             var cell = inventory.GetById(cellId);
@@ -71,12 +82,12 @@ namespace Blackset.UI.Inventory
             var item = cell.GetItemData(inventory.DataRegistry);
             var type = cell.GetTypeData(inventory.TypeRegistry);
             if (type == null) return;
-    
+
             if (titleText != null) titleText.text = item.DataName;
             if (typeText != null) typeText.text = type.DataName;
             if (setText != null) setText.text = item.Set.DataName;
             if (descriptionText != null) descriptionText.text = item.DataDescription;
-
+            if (priceText != null) priceText.text = item.GetPrice(type).ToString();
             if (iconImage != null)
             {
                 iconImage.sprite = type.Icon;
@@ -94,7 +105,10 @@ namespace Blackset.UI.Inventory
                     }
                 }
             }
-
+            
+            budgetIndicator.SetActive(budgetText != null);
+            OnDataShow(item);
+            
             UpdateHoverPanelPosition();
             ShowImmediate();
         }
@@ -112,6 +126,13 @@ namespace Blackset.UI.Inventory
             if (canvasGroup == null) return;
             popupRect.gameObject.SetActive(false);
         }
+
+        protected void Reset()
+        {
+            budgetIndicator.SetActive(false);
+        }
+
+        protected virtual void OnDataShow(TData data) { }
 
         #region Hover Panel Position
         

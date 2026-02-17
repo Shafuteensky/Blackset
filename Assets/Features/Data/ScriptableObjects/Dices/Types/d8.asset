@@ -16,5 +16,6 @@ MonoBehaviour:
   dataName: d8
   dataDescription: d8 dice
   icon: {fileID: 21300000, guid: b8e09d37d921d584293a9b7ed54e8f86, type: 3}
+  priceMultiplier: 2
   sidesNumber: 8
   visualDice: {fileID: 0}

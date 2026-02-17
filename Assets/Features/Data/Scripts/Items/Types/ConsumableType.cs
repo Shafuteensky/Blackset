@@ -1,4 +1,3 @@
-using Blackset.Data.Base;
 using UnityEngine;
 
 namespace Blackset.Data.Items.Types

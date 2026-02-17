@@ -13,10 +13,20 @@ namespace Blackset.Data.Items.Types
         /// </summary>
         public Sprite Icon => icon;
 
-        [Header("Параметры репрезентации типа"), Space]
+        /// <summary>
+        /// Множитель для мазовой цены расходника
+        /// </summary>
+        public int PriceMultiplier => priceMultiplier;
         
+        [Header("Параметры репрезентации типа"), Space]
         [SerializeField]
         [Tooltip("Иконка типа")]
         private Sprite icon;
+            
+        [Header("Множитель цены")]
+        [SerializeField]
+        [Range(1, 10)]
+        [Tooltip("Множитель для базовой цены расходника")]
+        private int priceMultiplier;
     }
 }

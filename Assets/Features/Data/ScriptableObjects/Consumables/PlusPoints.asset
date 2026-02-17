@@ -20,4 +20,5 @@ MonoBehaviour:
   set: {fileID: 11400000, guid: 121386a12336b73448b8d431d37a61d5, type: 2}
   availableTypes:
   - {fileID: 11400000, guid: 0e1a15f03f84f8d46ba873a79cfd79ab, type: 2}
+  price: 2
   visualConsumable: {fileID: 0}

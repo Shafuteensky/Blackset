@@ -2764,6 +2764,33 @@ Light:
   m_LightUnit: 1
   m_LuxAtDistance: 1
   m_EnableSpotReflector: 1
+--- !u!114 &1142848659 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5220310662397483375, guid: 039cbf86d2c961c4a8e79992d57ccfe5, type: 3}
+  m_PrefabInstance: {fileID: 2146443525}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
+--- !u!1 &1142848660 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 335989199947574740, guid: 039cbf86d2c961c4a8e79992d57ccfe5, type: 3}
+  m_PrefabInstance: {fileID: 2146443525}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1142848661 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3147146632869839804, guid: 039cbf86d2c961c4a8e79992d57ccfe5, type: 3}
+  m_PrefabInstance: {fileID: 2146443525}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
 --- !u!1 &1147585660
 GameObject:
   m_ObjectHideFlags: 0
@@ -3985,12 +4012,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Blackset.UI.Inventory.DiceItemInfoPopupController
   canvasGroup: {fileID: 2146443530}
   popupRect: {fileID: 2146443526}
+  budgetIndicator: {fileID: 1142848660}
   screenOffset: {x: 0, y: 0}
   iconImage: {fileID: 2146443528}
   titleText: {fileID: 2146443529}
   typeText: {fileID: 61059026}
   setText: {fileID: 2146443527}
   descriptionText: {fileID: 1377067612}
+  priceText: {fileID: 1142848661}
+  budgetText: {fileID: 1142848659}
 --- !u!114 &1802786224
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4051,12 +4081,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Blackset.UI.Inventory.ConsumableItemInfoPopupController
   canvasGroup: {fileID: 2146443530}
   popupRect: {fileID: 2146443526}
+  budgetIndicator: {fileID: 1142848660}
   screenOffset: {x: 0, y: 0}
   iconImage: {fileID: 2146443528}
   titleText: {fileID: 2146443529}
   typeText: {fileID: 61059026}
   setText: {fileID: 2146443527}
   descriptionText: {fileID: 1377067612}
+  priceText: {fileID: 1142848661}
+  budgetText: {fileID: 0}
 --- !u!1 &1936877673
 GameObject:
   m_ObjectHideFlags: 0

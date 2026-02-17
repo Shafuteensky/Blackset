@@ -39,5 +39,17 @@ namespace Blackset.Effects
         [Header("Типы")]
         [SerializeField]
         private List<BaseItemType> availableTypes = new List<BaseItemType>();
+        
+        [Header("Ценники")]
+        [SerializeField]
+        [Range(1, 100)]
+        [Tooltip("Базовая стоимость в софт-валюте (без учета редкости и типа)")]
+        private int price = 1;
+
+        /// <summary>
+        /// Получить актуальную цену предмета
+        /// </summary>
+        /// <returns>Стоимость предмета с учетом редкости и типа</returns>
+        public int GetPrice(BaseItemType type) => price * type.PriceMultiplier;
     }
 }

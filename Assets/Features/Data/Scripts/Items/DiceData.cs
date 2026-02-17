@@ -1,7 +1,4 @@
-using System.Collections.Generic;
-using Blackset.Data.Base;
 using Blackset.Data.Configurations;
-using Blackset.Data.Items.Types;
 using Blackset.Data.Items.Visual;
 using Blackset.Effects;
 using UnityEngine;
@@ -17,6 +14,11 @@ namespace Blackset.Data
     public sealed class DiceData : EffectingItemData
     {
         /// <summary>
+        /// Бюджетная стоимость
+        /// </summary>
+        public int BudgetPrice => budgetPrice;
+        
+        /// <summary>
         /// Визуальный стиль дайса
         /// </summary>
         public DiceStyle Style => style;
@@ -25,11 +27,16 @@ namespace Blackset.Data
         /// </summary>
         public SideNumbersConfig NumbersConfig => numbersConfig;
 
+        [SerializeField]
+        [Range(1, 10)]
+        [Tooltip("Базовая стоимость бюджета сборки (без учета редкости и типа)")]
+        private int budgetPrice = 1;
+        
         [Header("Стиль")]
         [SerializeField]
-        private DiceStyle style = default;
+        private DiceStyle style;
         [Header("Грани")]
         [SerializeField]
-        private SideNumbersConfig numbersConfig = default;
+        private SideNumbersConfig numbersConfig;
     }
 }
