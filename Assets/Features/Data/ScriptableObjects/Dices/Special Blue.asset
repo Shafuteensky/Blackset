@@ -10,20 +10,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0633c8754f25404fa70edb0d98fc5f93, type: 3}
-  m_Name: Basic
+  m_Name: Special Blue
   m_EditorClassIdentifier: Assembly-CSharp::Blackset.Data.DiceData
-  id: BasicDice
-  dataName: Basic dice
-  dataDescription: Usual typical dice with no effects
+  id: SpecialDiceTest (2)
+  dataName: Special blue
+  dataDescription: Unique special blue-colored dice with no effect, but unique face
+    configuration
   effect: {fileID: 0}
-  color: {r: 1, g: 1, b: 1, a: 1}
-  set: {fileID: 11400000, guid: f3f0561c00f9c8942aa4724610bf93e3, type: 2}
+  color: {r: 0.216981, g: 0.6950082, b: 1, a: 1}
+  set: {fileID: 11400000, guid: b2a881d0ec08cb24988a7c8f02c8ad53, type: 2}
   availableTypes:
   - {fileID: 11400000, guid: fbd3a5ad0b3ef2940a4f73d042a419d7, type: 2}
   - {fileID: 11400000, guid: 471cbfaa75a8b904fb3c95d36db6426f, type: 2}
   - {fileID: 11400000, guid: 7b2c54bf4725d1a4db115c84e52f3363, type: 2}
-  - {fileID: 11400000, guid: 0ae8218b9522594459de916a9dc1bdfb, type: 2}
-  - {fileID: 11400000, guid: 62af0b23df6100641ba60be783e31f76, type: 2}
-  - {fileID: 11400000, guid: 98144d8369c0fd649a1a4aa9083c6aff, type: 2}
-  style: {fileID: 11400000, guid: 3c13255d07d3177489f088c2231a082a, type: 2}
-  numbersConfig: {fileID: 11400000, guid: 7e62f7f30d5c99345886153742ab05fa, type: 2}
+  style: {fileID: 11400000, guid: 4b2d87f763c7b02488eb498e84a1e60b, type: 2}
+  numbersConfig: {fileID: 11400000, guid: 1d69828527d317944a25e4dbbcba60a5, type: 2}

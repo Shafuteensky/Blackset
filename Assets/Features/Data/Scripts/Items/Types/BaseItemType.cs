@@ -13,7 +13,7 @@ namespace Blackset.Data.Items.Types
         /// </summary>
         public Sprite Icon => icon;
 
-        [Header("Параметры реперзентации типа"), Space]
+        [Header("Параметры репрезентации типа"), Space]
         
         [SerializeField]
         [Tooltip("Иконка типа")]

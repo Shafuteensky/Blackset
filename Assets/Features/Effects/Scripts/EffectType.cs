@@ -11,7 +11,10 @@ namespace Blackset.Effects
         Stone,
         Iron,
         Mirror,
+        
         Advantage,
-        Disadvantage
+        Disadvantage,
+        PlusPoints,
+        MinusPoints
     }
 }

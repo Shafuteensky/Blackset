@@ -10,15 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 371d2bb3ca10457ea70ed4b7d76dba72, type: 3}
-  m_Name: Advantage
+  m_Name: PlusPoints
   m_EditorClassIdentifier: Assembly-CSharp::Blackset.Data.ConsumableData
-  id: 01fc5117fdeb4464ab961bdaac1d2232
-  dataName: Advantage
-  dataDescription: Throw 2 dices, take best result
-  effect: {fileID: 11400000, guid: 497d61c6951711e448b1de9e80550735, type: 2}
-  color: {r: 0.57924527, g: 1, b: 0.767773, a: 1}
-  set: {fileID: 11400000, guid: 27cada2d73a18a543a23e1a7fea1f12b, type: 2}
+  id: e2217dcf002c46d49fe6d7fff59b2ace
+  dataName: PlusPoints
+  dataDescription: Add some points to your score
+  effect: {fileID: 11400000, guid: 720de6e4f0af2ae4db45d32b0b7cbf83, type: 2}
+  color: {r: 0.103773475, g: 0.70735455, b: 1, a: 1}
+  set: {fileID: 11400000, guid: 121386a12336b73448b8d431d37a61d5, type: 2}
   availableTypes:
   - {fileID: 11400000, guid: 0e1a15f03f84f8d46ba873a79cfd79ab, type: 2}
-  - {fileID: 11400000, guid: 993bee1bbd4e925439649326aceece27, type: 2}
   visualConsumable: {fileID: 0}

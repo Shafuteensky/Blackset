@@ -14,5 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Blackset.Data.Items.Types.ConsumableType
   id: Infinite
   dataName: Infinite
+  dataDescription: Reusable item
   icon: {fileID: 21300000, guid: f1ff15773ee84a64b9ca5e21eda49e8e, type: 3}
   singleUse: 0

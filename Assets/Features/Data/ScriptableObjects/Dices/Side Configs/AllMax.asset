@@ -14,5 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Blackset.Data.Configurations.SideNumbersConfig
   id: e9fa8dbeecdf451bace9923906954c8b
   dataName: All sides max
+  dataDescription: All sides at dice maximum value
   sideNumbersRules:
   - rule: 1

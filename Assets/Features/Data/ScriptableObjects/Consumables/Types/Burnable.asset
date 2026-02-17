@@ -14,5 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Blackset.Data.Items.Types.ConsumableType
   id: Burnable
   dataName: Burnable
+  dataDescription: One time use consumable
   icon: {fileID: 21300000, guid: f1ff15773ee84a64b9ca5e21eda49e8e, type: 3}
   singleUse: 1

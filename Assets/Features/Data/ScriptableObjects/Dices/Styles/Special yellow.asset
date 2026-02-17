@@ -10,20 +10,21 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0dd7dcfdc4c5411db173a1a89252eaa2, type: 3}
-  m_Name: Special (3)
+  m_Name: Special yellow
   m_EditorClassIdentifier: Assembly-CSharp::Blackset.Data.Items.Visual.DiceStyle
-  id: 6eac8f7ae1204fffab3a9668e21e8e69
-  dataName: Special Dice Style 3
+  id: f893b5b6a8ef4422ab5ffcc9121bf5a1
+  dataName: Special Dice Style Yellow
+  dataDescription: 
   typePrefabs:
   - type: {fileID: 11400000, guid: fbd3a5ad0b3ef2940a4f73d042a419d7, type: 2}
-    material: {fileID: 2100000, guid: 1e693118656b6874a8018f215aee5859, type: 2}
+    material: {fileID: 2100000, guid: 8ed1d4ef73b72c64e9271894be8a6b85, type: 2}
   - type: {fileID: 11400000, guid: 471cbfaa75a8b904fb3c95d36db6426f, type: 2}
-    material: {fileID: 2100000, guid: 1e693118656b6874a8018f215aee5859, type: 2}
+    material: {fileID: 2100000, guid: 8ed1d4ef73b72c64e9271894be8a6b85, type: 2}
   - type: {fileID: 11400000, guid: 7b2c54bf4725d1a4db115c84e52f3363, type: 2}
-    material: {fileID: 2100000, guid: 1e693118656b6874a8018f215aee5859, type: 2}
+    material: {fileID: 2100000, guid: 8ed1d4ef73b72c64e9271894be8a6b85, type: 2}
   - type: {fileID: 11400000, guid: 0ae8218b9522594459de916a9dc1bdfb, type: 2}
-    material: {fileID: 2100000, guid: 1e693118656b6874a8018f215aee5859, type: 2}
+    material: {fileID: 2100000, guid: 8ed1d4ef73b72c64e9271894be8a6b85, type: 2}
   - type: {fileID: 11400000, guid: 62af0b23df6100641ba60be783e31f76, type: 2}
-    material: {fileID: 2100000, guid: 1e693118656b6874a8018f215aee5859, type: 2}
+    material: {fileID: 2100000, guid: 8ed1d4ef73b72c64e9271894be8a6b85, type: 2}
   - type: {fileID: 11400000, guid: 98144d8369c0fd649a1a4aa9083c6aff, type: 2}
-    material: {fileID: 2100000, guid: 1e693118656b6874a8018f215aee5859, type: 2}
+    material: {fileID: 2100000, guid: 8ed1d4ef73b72c64e9271894be8a6b85, type: 2}

@@ -10,7 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: aecc964481164e049fb0f78c4bb26542, type: 3}
-  m_Name: Basic
+  m_Name: Blue&Green Dices
   m_EditorClassIdentifier: Assembly-CSharp::Blackset.Data.DiceSet
-  id: 773d4e388bb647008fc138494f14d76b
-  dataName: Basic set
+  id: cc057491c2ab4bac9bf4a91311bcd875
+  dataName: Blue&Green Dices
+  dataDescription: Special unique dices

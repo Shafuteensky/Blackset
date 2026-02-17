@@ -35,9 +35,9 @@ namespace Blackset.UI.Inventory
         [SerializeField]
         protected TMP_Text typeText;
         [SerializeField]
-        protected TMP_Text descriptionText;
+        protected TMP_Text setText;
         [SerializeField]
-        protected TMP_Text metaText;
+        protected TMP_Text descriptionText;
 
         protected Vector2 screenPosition;
 
@@ -72,19 +72,10 @@ namespace Blackset.UI.Inventory
             var type = cell.GetTypeData(inventory.TypeRegistry);
             if (type == null) return;
     
-            if (titleText != null) titleText.text = item.name;
-            if (typeText != null) typeText.text = type.name;
-
-            if (descriptionText != null)
-            {
-                descriptionText.text = string.Empty;
-            }
-
-            if (metaText != null)
-            {
-                if (cell.ItemAmount > 1) metaText.text = $"x{cell.ItemAmount}";
-                else metaText.text = string.Empty;
-            }
+            if (titleText != null) titleText.text = item.DataName;
+            if (typeText != null) typeText.text = type.DataName;
+            if (setText != null) setText.text = item.Set.DataName;
+            if (descriptionText != null) descriptionText.text = item.DataDescription;
 
             if (iconImage != null)
             {

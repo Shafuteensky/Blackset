@@ -10,7 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: aecc964481164e049fb0f78c4bb26542, type: 3}
-  m_Name: Specials Test
+  m_Name: Red&Yellow Dices
   m_EditorClassIdentifier: Assembly-CSharp::Blackset.Data.DiceSet
-  id: 4fedd6c7b20a4908b08bf3d56e996626
-  dataName: Specials Test Set
+  id: a3c4c3385e334db0b116713ed00f92fd
+  dataName: Red&Yellow Dices
+  dataDescription: Special unique dices

@@ -14,6 +14,7 @@ namespace Blackset.Data.Configurations
     {
         private const int DEFAULT_DICE_SIDE_VALUE = 1;
         
+        [Header("Правила заполнения граней"), Space]
         [SerializeField]
         private List<SideNumberRule> sideNumbersRules = new();
 

@@ -35,7 +35,7 @@ namespace Blackset.Player
             int randomIndex = Random.Range(0, diceData.Count);
             DiceData randomDice = diceData[randomIndex];
             randomIndex = Random.Range(0, randomDice.AvailableTypes.Count);
-            DiceType randomDiceType = randomDice.AvailableTypes[randomIndex];
+            DiceType randomDiceType = (DiceType)randomDice.AvailableTypes[randomIndex];
             
             playerDataFacade.DicesInventory.AddItem(new DiceItemCell(randomDice.Id, randomDiceType.Id));
             

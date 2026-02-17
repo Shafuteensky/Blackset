@@ -18,6 +18,7 @@ namespace Blackset.Data.Registries
         /// </summary>
         public IReadOnlyList<TData> Data => data;
         
+        [Header("Хранимые данные"), Space]
         [SerializeField]
         protected List<TData> data = new List<TData>();
 

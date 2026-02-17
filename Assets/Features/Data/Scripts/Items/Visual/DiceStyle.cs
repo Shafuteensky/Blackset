@@ -17,7 +17,9 @@ namespace Blackset.Data.Items.Visual
         /// </summary>
         public IReadOnlyList<DiceTypePrefabPair> TypePrefabs => typePrefabs;
 
+        [Header("Префабы внешнего вида дайса"), Space]
         [SerializeField]
+        [Tooltip("Уникальны для каждого игрового типа дайса")]
         private List<DiceTypePrefabPair> typePrefabs = new List<DiceTypePrefabPair>();
     }
 }

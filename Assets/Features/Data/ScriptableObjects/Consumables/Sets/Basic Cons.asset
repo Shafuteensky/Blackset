@@ -10,7 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 514a5a0c38ae4ed2a79b972402fbf416, type: 3}
-  m_Name: Basic
+  m_Name: Basic Cons
   m_EditorClassIdentifier: Assembly-CSharp::Blackset.Data.ConsumableSet
   id: 7a515c1ca7d84ff2a721e044878a217b
   dataName: Basic Consumable Set
+  dataDescription: Standart consumables
