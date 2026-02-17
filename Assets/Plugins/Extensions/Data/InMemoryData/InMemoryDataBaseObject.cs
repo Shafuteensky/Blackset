@@ -58,7 +58,7 @@ namespace Extensions.Data.InMemoryData
         }
 
         [NonSerialized]
-        public TData data;
+        protected TData data;
         
         [NonSerialized]
         protected bool loaded;

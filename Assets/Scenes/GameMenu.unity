@@ -2105,7 +2105,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6fb4aa04597a4e5fa7a2f3fade609ffb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Blackset.UI.Inventory.DiceInventoryDragDropCoordinator
-  dontDestroyOnLoad: 1
+  dontDestroyOnLoad: 0
 --- !u!114 &841436085
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2118,7 +2118,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac177b38a4b4489c86ab9b707a31163e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Blackset.UI.Inventory.ConsumableInventoryDragDropCoordinator
-  dontDestroyOnLoad: 1
+  dontDestroyOnLoad: 0
 --- !u!1001 &859770340
 PrefabInstance:
   m_ObjectHideFlags: 0

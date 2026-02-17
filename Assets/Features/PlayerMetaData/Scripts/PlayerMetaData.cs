@@ -1,4 +1,4 @@
-using Unity.VisualScripting;
+using System;
 using UnityEngine;
 
 namespace Blackset.Player
@@ -6,6 +6,7 @@ namespace Blackset.Player
     /// <summary>
     /// Структура мета-данных игрока
     /// </summary>
+    [Serializable]
     public class PlayerMetaData
     {
         #region Константы
@@ -25,22 +26,15 @@ namespace Blackset.Player
         /// <summary>
         /// Количество софт-валюты
         /// </summary>
-        public int Money => money;
+        public int Money { get; private set; }
         /// <summary>
         /// Суммарный опыт
         /// </summary>
-        public int SumExperience => sumExperience;
+        public int SumExperience { get; private set; }
         /// <summary>
         /// Счетчик уровней игрока
         /// </summary>
-        public int PlayerLevelCounter => playerLevelCounter;
-
-        [Serialize]
-        private int money;
-        [Serialize]
-        private int sumExperience;
-        [Serialize]
-        private int playerLevelCounter;
+        public int PlayerLevelCounter { get; private set; }
 
         #region Money
 
@@ -51,7 +45,7 @@ namespace Blackset.Player
         public void AddMoney(int amount)
         {
             if (amount <= 0) return;
-            money += amount;
+            Money += amount;
         }
         
         /// <summary>
@@ -61,7 +55,7 @@ namespace Blackset.Player
         public void RemoveMoney(int amount)
         {
             if (amount <= 0) return;
-            money -= amount;
+            Money -= amount;
         }
         
         #endregion
@@ -75,7 +69,7 @@ namespace Blackset.Player
         public void AddExperience(int amount)
         {
             if (amount <= 0) return;
-            sumExperience += amount;
+            SumExperience += amount;
         }
 
         /// <summary>
@@ -85,7 +79,7 @@ namespace Blackset.Player
         public void SetLevelCounter(int lvl)
         {
             if (lvl <= 0) return;
-            playerLevelCounter = lvl;
+            PlayerLevelCounter = lvl;
         }
         
         /// <summary>
@@ -109,12 +103,12 @@ namespace Blackset.Player
         /// </summary>
         public int GetPlayerLvl()
         {
-            if (sumExperience <= 0) return 1;
+            if (SumExperience <= 0) return 1;
 
             // Обратная формула к TotalExp(L):
             // EXP_A*n^2 + EXP_B*n - SumExperience = 0, где n = (L-1)
             // n = floor( (-EXP_B + sqrt(EXP_B^2 + 4*EXP_A*SumExperience)) / (2*EXP_A) )
-            float disc = (EXP_B * EXP_B) + (4f * EXP_A * sumExperience);
+            float disc = (EXP_B * EXP_B) + (4f * EXP_A * SumExperience);
             float sqrt = Mathf.Sqrt(disc);
 
             int n = Mathf.FloorToInt((-EXP_B + sqrt) / (2f * EXP_A));
@@ -131,7 +125,7 @@ namespace Blackset.Player
         {
             int lvl = GetPlayerLvl();
             int start = GetTotalExpForLevel(lvl);
-            int value = sumExperience - start;
+            int value = SumExperience - start;
             if (value < 0) value = 0;
             return value;
         }
@@ -143,7 +137,7 @@ namespace Blackset.Player
         {
             int lvl = GetPlayerLvl();
             int next = GetTotalExpForLevel(lvl + 1);
-            int value = next - sumExperience;
+            int value = next - SumExperience;
             if (value < 0) value = 0;
             return value;
         }

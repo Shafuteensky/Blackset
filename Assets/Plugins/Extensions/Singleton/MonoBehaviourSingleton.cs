@@ -9,7 +9,7 @@ namespace Extensions.Singleton
     public class MonoBehaviourSingleton<T> : MonoBehaviour where T : MonoBehaviour
     {
         [SerializeField]
-        protected bool dontDestroyOnLoad = true;
+        protected bool dontDestroyOnLoad = false;
         
         private static T _instance;
 
@@ -40,7 +40,11 @@ namespace Extensions.Singleton
             if (_instance == null)
             {
                 _instance = this as T;
-                if (dontDestroyOnLoad) DontDestroyOnLoad(gameObject);
+                if (dontDestroyOnLoad)
+                {
+                    gameObject.transform.parent = null;
+                    DontDestroyOnLoad(gameObject);
+                }
             }
             else if (_instance != this)
             {

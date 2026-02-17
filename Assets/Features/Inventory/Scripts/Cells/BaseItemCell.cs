@@ -52,25 +52,25 @@ namespace Blackset.Inventory.Cells
         /// <summary>
         /// Пуста ли ячейка
         /// </summary>
-        public bool IsEmpty => isEmpty;
+        public bool IsEmpty { get => isEmpty; private set => isEmpty = value; }
         /// <summary>
         /// Является ли ячейка дефолтной
         /// </summary>
-        public bool IsDefault => isDefault;
+        public bool IsDefault { get => isDefault; private set => isDefault = value; }
         
         /// <summary>
         /// Идентификатор данных предмета в этой ячейке
         /// </summary>
-        public string ItemId => itemId;
+        public string ItemId { get => itemId; private set => itemId = value; }
         /// <summary>
         /// Идентификатор данных типа предмета в этой ячейке
         /// </summary>
-        public string ItemTypeId => itemTypeId;
+        public string ItemTypeId { get => itemTypeId; private set => itemTypeId = value; }
 
         /// <summary>
         /// Количество предметов в ячейке
         /// </summary>
-        public int ItemAmount => itemAmount;
+        public int ItemAmount { get => itemAmount; private set => itemAmount = value; }
 
         protected bool isEmpty;
         protected bool isDefault;

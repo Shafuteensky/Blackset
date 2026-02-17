@@ -1,5 +1,4 @@
 using System;
-using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 
@@ -15,7 +14,7 @@ namespace Extensions.Identification
         /// <summary>
         /// Идентификатор
         /// </summary>
-        public string Id => id;
+        public string Id { get => id; private set => id = value; }
         
         [Header("Идентификация"), Space]
         [SerializeField]

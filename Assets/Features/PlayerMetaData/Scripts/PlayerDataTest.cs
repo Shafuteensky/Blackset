@@ -90,7 +90,8 @@ namespace Blackset.Player
 
             ServiceDebug.Log($"Данные игрока:" +
                              $"\nВалюта: {metaData.Money}$" +
-                             $"\nОпыт: {metaData.GetThisLevelExp()}/{metaData.GetThisLevelRequiredExp()}$" +
+                             $"\nОпыт: {metaData.GetThisLevelExp()}/{metaData.GetThisLevelRequiredExp()}" +
+                             $"\nУровень: {metaData.GetPlayerLvl()}" +
                              $"\nИнвантарь дайсов ({dicesInventoryData.Count} в сумме):" +
                              $"{GetDicesInventoryList(playerDataFacade.DicesInventory, "    ")}" +
                              $"\nПулы дайсов:" + GetDicesPoolList("        ") +
