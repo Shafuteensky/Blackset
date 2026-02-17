@@ -9,7 +9,7 @@ namespace Blackset.Data.Items.Types
         menuName = "Blackset/Items/Types/" + nameof(ConsumableType),
         fileName = nameof(ConsumableType))]
     public sealed class ConsumableType : BaseItemType // TODO Сделать runtime-генерируемым полем внутри ConsumableData (либо поле в ConsumableItem)?
-                                                  // Иначе дубликаты данных
+                                                      // // Иначе дубликаты данных
     {
         /// <summary>
         /// Одноразовый ли расходник
@@ -19,5 +19,7 @@ namespace Blackset.Data.Items.Types
         [Header("Тип использования")]
         [SerializeField]
         private bool singleUse;
+        
+        // TODO Шанс появления в магазине/награде — относительная фактическая редкость появления типа
     }
 }

@@ -21,6 +21,12 @@ namespace Blackset.Player
         [field:SerializeField]
         [field: Tooltip("Контейнер мета-данных")]
         public PlayerMetaDataContainer MetaData { get; private set; }
+        /// <summary>
+        /// Контейнер данных прогресса
+        /// </summary>
+        [field:SerializeField]
+        [field: Tooltip("Контейнер данных прогресса")]
+        public PlayerProgressDataContainer ProgressData { get; private set; }
         
         [field: Header("Инвентари"), Space]
         /// <summary>

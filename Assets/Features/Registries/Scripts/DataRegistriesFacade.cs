@@ -1,3 +1,4 @@
+using Features.ItemGenerators;
 using UnityEngine;
 
 namespace Blackset.Data.Registries

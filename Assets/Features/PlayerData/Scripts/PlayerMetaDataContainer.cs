@@ -1,6 +1,5 @@
 using System;
 using Extensions.Data.InMemoryData;
-using Extensions.Log;
 using UnityEngine;
 
 namespace Blackset.Player
