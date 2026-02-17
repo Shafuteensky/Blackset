@@ -105,6 +105,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 7832653202750547814, guid: ef58cc00ff4104c4fbb5766090f18e29, type: 3}
       insertIndex: -1
       addedObject: {fileID: -8082756641609332484}
+    - targetCorrespondingSourceObject: {fileID: 7832653202750547814, guid: ef58cc00ff4104c4fbb5766090f18e29, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2335239199857447751}
   m_SourcePrefab: {fileID: 100100000, guid: ef58cc00ff4104c4fbb5766090f18e29, type: 3}
 --- !u!114 &4306909240444870479 stripped
 MonoBehaviour:
@@ -148,6 +151,20 @@ MonoBehaviour:
   canvasGroup: {fileID: 9010973510156884268}
   itemIconImage: {fileID: 4306909240444870479}
   amountText: {fileID: 6112031886120040645}
+--- !u!114 &2335239199857447751
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6704386950348054016}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff3df939908e421998d46c5c059411a2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Blackset.UI.Inventory.ConsumableItemHoverEmitter
+  element: {fileID: -8082756641609332484}
+  holdSeconds: 0.33
 --- !u!225 &9010973510156884268 stripped
 CanvasGroup:
   m_CorrespondingSourceObject: {fileID: 5527183741289242698, guid: ef58cc00ff4104c4fbb5766090f18e29, type: 3}
