@@ -1,5 +1,4 @@
 using System;
-using UnityEditor;
 using UnityEngine;
 
 namespace Extensions.Identification
@@ -14,20 +13,21 @@ namespace Extensions.Identification
         /// <summary>
         /// Идентификатор
         /// </summary>
-        public string Id { get => id; private set => id = value; }
+        public string Id => id;
         
         [Header("Идентификация"), Space]
         [SerializeField]
         protected string id;
 
+#if UNITY_EDITOR
         protected virtual void OnValidate()
         {
-            if (string.IsNullOrEmpty(id))
-            {
-                id = Guid.NewGuid().ToString(GUID_FORMAT);
-                EditorUtility.SetDirty(this);
-                AssetDatabase.SaveAssets();
-            }
+            if (!string.IsNullOrEmpty(id))
+                return;
+
+            id = Guid.NewGuid().ToString(GUID_FORMAT);
+            UnityEditor.EditorUtility.SetDirty(this);
         }
+#endif
     }
 }

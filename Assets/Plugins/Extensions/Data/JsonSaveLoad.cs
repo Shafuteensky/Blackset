@@ -8,7 +8,6 @@ using Extensions.Log;
 using Newtonsoft.Json; // Newtonsoft.Json
 using UnityEngine;
 using System.Threading;
-using Newtonsoft.Json.Serialization;
 
 namespace Extensions.Data
 {
