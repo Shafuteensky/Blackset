@@ -10,8 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ae5dd1b65ea84b97ac65fb1abef8d36e, type: 3}
-  m_Name: FloatValue
+  m_Name: DefaultButtonHoldDuration
   m_EditorClassIdentifier: Assembly-CSharp-firstpass::Extensions.ScriptableValues.FloatValue
-  id: 
-  value: 0
+  id: 9fe4dcece930427795e75ebbecf4a9e1
+  value: 1
   isSaveable: 0
