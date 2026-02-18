@@ -14,9 +14,8 @@ namespace Extensions.ScriptableValues
         /// <summary>
         /// Событие изменения значения
         /// </summary>
-        /// <typeparam name="">Новое значение</typeparam>
         public event Action<T> onValueChanged;
-        
+
         /// <summary>
         /// Текущее значение
         /// </summary>
@@ -25,44 +24,66 @@ namespace Extensions.ScriptableValues
             get
             {
                 LoadIfNeeded();
-                return value;
+                return runtimeValue;
             }
             set => SetValue(value);
         }
         
         [Header("Хранимое значение"), Space]
         [SerializeField]
-        protected T value = default;
+        [Tooltip("Дефолтное значение, используемое если нет сохранения или оно отключено")]
+        protected T defaultValue = default;
         [SerializeField]
         [Tooltip("Сохранять ли значение между сессиями")]
         protected bool isSaveable = false;
 
+        [NonSerialized]
+        protected T runtimeValue;
+
         protected bool isLoaded = false;
-        
-        protected virtual void OnEnable() => isLoaded = false;
-        
+
+        protected virtual void OnEnable()
+        {
+            isLoaded = false;
+            runtimeValue = defaultValue;
+        }
+
         /// <summary>
         /// Установка значения
         /// </summary>
         public virtual void SetValue(T newValue)
         {
             LoadIfNeeded();
-            if (EqualityComparer<T>.Default.Equals(value, newValue)) return;
 
-            value = newValue;
+            if (EqualityComparer<T>.Default.Equals(runtimeValue, newValue))
+                return;
 
-            onValueChanged?.Invoke(value);
-            if (Application.isPlaying && isSaveable) JsonSaveLoad.Save(value, Id);
+            runtimeValue = newValue;
+
+            onValueChanged?.Invoke(runtimeValue);
+
+            if (Application.isPlaying && isSaveable)
+            {
+                JsonSaveLoad.Save(runtimeValue, Id);
+            }
         }
 
         protected virtual void LoadIfNeeded()
         {
-            if ( !Application.isPlaying || !isSaveable || isLoaded ) return;
-            T newValue = JsonSaveLoad.Load(Id, value);
-            if (newValue.Equals(null)) return;
-            
-            value = newValue;
+            if (!Application.isPlaying || isLoaded) return;
             isLoaded = true;
+
+            // Если значение не сохраняемое — всегда используем дефолт
+            if (!isSaveable)
+            {
+                runtimeValue = defaultValue;
+                return;
+            }
+
+            T loadedValue = JsonSaveLoad.Load(Id, defaultValue);
+
+            // Если загрузка вернула null или default — используем дефолт
+            runtimeValue = EqualityComparer<T>.Default.Equals(loadedValue, default) ? defaultValue : loadedValue;
         }
     }
 }
