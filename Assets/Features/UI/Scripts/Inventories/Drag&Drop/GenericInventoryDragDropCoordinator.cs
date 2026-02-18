@@ -169,27 +169,10 @@ namespace Blackset.UI.Inventory
             // Перемещение в определенную ячейку
             if ( !String.IsNullOrEmpty(targetCellId) )
             {
-                if (sourceCell.IsContentSame(targetCell))
-                {
-                    int residue = targetInventory.AddItem(sourceCell, true, targetInventory.GetIndexById(targetCellId));
-                    
-                    // Если перемещено все — удалить 
-                    if (residue == 0)
-                        sourceInventory.RemoveItem(sourceCell);
-                    // Если не все перемещено — просто убавить
-                    else
-                    {
-                        int added = targetCell.ItemAmount - residue;
-                        sourceInventory.RemoveItem(sourceCell, added);
-                    }
-                }
+                if (targetInventory == sourceInventory)
+                    sourceInventory.SwapItem(sourceCellId, targetCellId);
                 else
-                {
-                    if (targetInventory == sourceInventory)
-                        sourceInventory.SwapItem(sourceCellId, targetCellId);
-                    else
-                        sourceInventory.MoveItem(sourceCellId, targetInventory, targetCellId);
-                }
+                    sourceInventory.MoveItem(sourceCellId, targetInventory, targetCellId);
             }
             // Перемещение в любую ячейку
             else
