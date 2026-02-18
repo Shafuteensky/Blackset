@@ -9,9 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ae5dd1b65ea84b97ac65fb1abef8d36e, type: 3}
-  m_Name: DefaultButtonHoldDuration
-  m_EditorClassIdentifier: Assembly-CSharp-firstpass::Extensions.ScriptableValues.FloatValue
-  id: 9fe4dcece930427795e75ebbecf4a9e1
-  defaultValue: 1
+  m_Script: {fileID: 11500000, guid: e88f72230c8c4cf38f9ba929b3a8c65d, type: 3}
+  m_Name: BoughtItemContext
+  m_EditorClassIdentifier: Assembly-CSharp::Features.Shop.ItemContextValue
+  id: 38c88c4c47494e29a6114fcf0b0604c2
   isSaveable: 0

@@ -10,8 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ae5dd1b65ea84b97ac65fb1abef8d36e, type: 3}
-  m_Name: DefaultButtonHoldDuration
+  m_Name: ShopButtonHoldDuration
   m_EditorClassIdentifier: Assembly-CSharp-firstpass::Extensions.ScriptableValues.FloatValue
-  id: 9fe4dcece930427795e75ebbecf4a9e1
+  id: a2f67ce742844553a9fa7cbfc6d74729
   defaultValue: 1
   isSaveable: 0

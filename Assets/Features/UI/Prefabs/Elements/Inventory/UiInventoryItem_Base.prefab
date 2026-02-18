@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 755724977203275305}
   - component: {fileID: 8721060610465570624}
   m_Layer: 0
-  m_Name: ItemImage
+  m_Name: Image_ItemIcon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -122,7 +122,7 @@ MonoBehaviour:
   targetGO: {fileID: 0}
   tweenTargetIsTargetGO: 1
   delay: 0
-  duration: 0.05
+  duration: 0.1
   easeType: 6
   easeCurve:
     serializedVersion: 2
@@ -164,7 +164,7 @@ MonoBehaviour:
   forcedTargetType: 0
   autoPlay: 0
   useTargetAsV3: 0
-  endValueFloat: 1.1
+  endValueFloat: 1.2
   endValueV3: {x: 0, y: 0, z: 0}
   endValueV2: {x: 0, y: 0}
   endValueColor: {r: 1, g: 1, b: 1, a: 1}
@@ -195,12 +195,10 @@ GameObject:
   - component: {fileID: 3105094021550392694}
   - component: {fileID: 4261660326960136825}
   - component: {fileID: 5527183741289242698}
-  - component: {fileID: 6190256673466262804}
-  - component: {fileID: 1771457615102084477}
   - component: {fileID: 5220039855773583475}
   - component: {fileID: 2796626930491245074}
   m_Layer: 0
-  m_Name: UiInventoryItem_Dices
+  m_Name: UiInventoryItem_Base
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -254,35 +252,6 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
---- !u!114 &6190256673466262804
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7832653202750547814}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 674d532a784e4328bac333279955ef35, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Blackset.UI.Inventory.DiceItemElement
-  canvasGroup: {fileID: 5527183741289242698}
-  itemIconImage: {fileID: 755724977203275305}
-  amountText: {fileID: 7308115554014626211}
---- !u!114 &1771457615102084477
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7832653202750547814}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1c8bfa6b68734dd797666e042caf6048, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Blackset.UI.Inventory.DiceItemHoverEmitter
-  element: {fileID: 6190256673466262804}
-  holdSeconds: 0.33
 --- !u!114 &5220039855773583475
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -356,7 +325,7 @@ GameObject:
   - component: {fileID: 2999226260218053886}
   - component: {fileID: 2994311808326847830}
   m_Layer: 0
-  m_Name: CellImage
+  m_Name: Image_CellBack
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -557,7 +526,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9055592504994352095, guid: a910fd4978c069f439a50ae6c0d92741, type: 3}
       propertyPath: m_Name
-      value: Text
+      value: Text_Amount
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -567,17 +536,6 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 8377483115726500557}
   m_SourcePrefab: {fileID: 100100000, guid: a910fd4978c069f439a50ae6c0d92741, type: 3}
---- !u!114 &7308115554014626211 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7763099104423868807, guid: a910fd4978c069f439a50ae6c0d92741, type: 3}
-  m_PrefabInstance: {fileID: 1069523416339118116}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8321623548170482683}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
 --- !u!224 &8254885460256315274 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 8960064799417806766, guid: a910fd4978c069f439a50ae6c0d92741, type: 3}

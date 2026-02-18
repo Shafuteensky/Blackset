@@ -1,5 +1,4 @@
 using System;
-using Blackset.Data.Base;
 using Blackset.Data.Items.Types;
 using Blackset.Effects;
 using Blackset.Inventory.Cells;
@@ -29,7 +28,7 @@ namespace Blackset.UI.Inventory
         public CanvasGroup CanvasGroup => canvasGroup;
         
         /// <summary>
-        /// Прилинкованный инвнетарь элемента
+        /// Прилинкованный инвентарь элемента
         /// </summary>
         public TInventory Inventory => inventory;
         /// <summary>
@@ -45,19 +44,27 @@ namespace Blackset.UI.Inventory
         protected Image itemIconImage;
         [SerializeField]
         protected TMP_Text amountText;
+        [SerializeField]
+        protected TMP_Text setNameText;
+        [SerializeField]
+        protected TMP_Text priceText;
+        
+        [Header("Параметры ячейки"), Space]
+        [SerializeField]
+        protected bool canDrag = true;
+        [SerializeField]
+        protected bool canDrop = true;
 
         protected GenericInventoryDragDropCoordinator<TInventory, TItemCell, TData, TItemType> dropCoordinator;
         
         protected TInventory inventory;
         protected string itemCellId;
         
-        protected bool canDrag = true;
-        protected bool canDrop = true;
 
         protected virtual void OnEnable()
         {
             dropCoordinator = GenericInventoryDragDropCoordinator<TInventory, TItemCell, TData, TItemType>.Instance;
-            if (dropCoordinator != null) Initialize();
+            if ( dropCoordinator != null ) Initialize();
             NotifyInitialized();
         }
         
@@ -65,27 +72,27 @@ namespace Blackset.UI.Inventory
 
         public void OnBeginDrag(PointerEventData eventData)
         {
-            if (!IsInitialized) return;
+            if ( !IsInitialized || !canDrag ) return;
             itemIconImage.CrossFadeAlpha(0.25f, 0.1f, false);
             dropCoordinator.BeginDrag(inventory, itemCellId);
         }
         
         public void OnDrag(PointerEventData eventData)
         {
-            if (!IsInitialized) return;
+            if ( !IsInitialized || !canDrag ) return;
             dropCoordinator.UpdatePosition(eventData.position);
         }
 
         public void OnEndDrag(PointerEventData eventData)
         {
-            if (!IsInitialized) return;
+            if ( !IsInitialized || !canDrag ) return;
             itemIconImage.CrossFadeAlpha(1, 0.1f, false);
             dropCoordinator.EndDrag();
         }
 
         public void OnDrop(PointerEventData eventData)
         {
-            if (!IsInitialized) return;
+            if ( !IsInitialized || !canDrop ) return;
 
             dropCoordinator.RequestDrop(inventory, itemCellId);
         }
@@ -120,40 +127,43 @@ namespace Blackset.UI.Inventory
             {
                 TItemCell cell = inventory.GetById(itemCellId);
                 
-                if ( String.IsNullOrEmpty(itemCellId) || (cell != null && (cell.IsDefault || cell.IsEmpty)) )
+                if (cell == null)
                 {
-                    canDrag = false;
-                    canDrop = true;
+                    ServiceDebug.LogError($"Ячейка с идентификатором «{itemCellId}» не найдена, инициализация провалена");
+                    return;
                 }
-                SetIcon();
-
-                if ( amountText != null )
+                
+                TData cellItemData = inventory.GetCellItemData(cell);
+                TItemType cellItemTypeData = inventory.GetCellTypeData(cell);
+                
+                if (cellItemTypeData == null || cellItemData == null)
                 {
-                    if ( cell is { ItemAmount: > 1 } )
-                        amountText.text = $"x{cell.ItemAmount}";
-                    else
-                        amountText.text = String.Empty;
+                    ServiceDebug.LogError("Данные ячейки не полные, инициализация провалена");
+                    return;
                 }
+                
+                SetDragDropConfig(cell);
+                SetIcon(cell, cellItemData, cellItemTypeData);
+                
+                SetAmountText(cell);
+                SetItemSetText(cellItemData);
+                SetItemPriceText(cellItemData, cellItemTypeData);
             }
         }
 
-        private void SetIcon()
+        #region Internal
+        
+        private void SetDragDropConfig(TItemCell cell)
         {
-            TItemCell cell = inventory.GetById(itemCellId);
-            if ( cell == null )
+            if ( String.IsNullOrEmpty(itemCellId) || ( cell != null && (cell.IsDefault || cell.IsEmpty) ) )
             {
-                ServiceDebug.LogError($"Ячейка с идентификатором «{itemCellId}» не найдена, иконка не назначена");
-                return;
+                canDrag = false;
+                canDrop = true;
             }
-            TData item = cell.GetItemData(inventory.DataRegistry);
-            TItemType itemType = cell.GetTypeData(inventory.TypeRegistry);
-            
-            if (itemIconImage == null || itemType == null || itemType.Icon == null)
-            {
-                ServiceDebug.LogError("Информация об иконке отсутствует, иконка не назначена");
-                return;
-            }
+        }
 
+        private void SetIcon(TItemCell cell, TData item, TItemType itemType)
+        {
             itemIconImage.sprite = itemType.Icon;
             if (cell.IsDefault)
             {
@@ -164,5 +174,32 @@ namespace Blackset.UI.Inventory
             else
                 itemIconImage.color = item.Color;
         }
+
+        private void SetAmountText(TItemCell cell)
+        {
+            if (amountText != null)
+            {
+                if ( cell is {ItemAmount: > 1} )
+                    amountText.text = $"x{cell.ItemAmount}";
+                else
+                    amountText.text = String.Empty;
+            }
+        }
+
+        private void SetItemSetText(TData cellItemData)
+        {
+            if (setNameText != null) setNameText.text = cellItemData.Set.DataName;
+        }
+
+        private void SetItemPriceText(TData cellItemData, TItemType cellItemTypeData)
+        {
+            if (priceText != null)
+            {
+                int cellItemPrice = cellItemData.GetPrice(cellItemTypeData);
+                priceText.text = cellItemPrice.ToString();
+            }
+        }
+        
+        #endregion
     }
 }

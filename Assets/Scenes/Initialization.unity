@@ -130,7 +130,7 @@ GameObject:
   - component: {fileID: 91436748}
   - component: {fileID: 91436747}
   m_Layer: 0
-  m_Name: DataLoading
+  m_Name: DataPrewarm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -159,6 +159,10 @@ MonoBehaviour:
   - {fileID: 11400000, guid: a0a957aef7db8a341a54142ee2749335, type: 2}
   - {fileID: 11400000, guid: ee3c96ee49eb2e342ad6513b78fd7fca, type: 2}
   - {fileID: 11400000, guid: 4abf2057643eb644db65b4c4aa11100a, type: 2}
+  - {fileID: 11400000, guid: c26b1e70b3e18a545b9e2d4d034f4e13, type: 2}
+  - {fileID: 11400000, guid: ba40e594e13b8a54a9236b42bcd2687c, type: 2}
+  - {fileID: 11400000, guid: 7c72a0058de183b41b6a85e47a824dfa, type: 2}
+  - {fileID: 11400000, guid: 17ee8251bddc18f4ea674b81cbf3a26f, type: 2}
   useAsyncPreload: 0
   showLoadingLog: 0
 --- !u!4 &91436748
@@ -364,7 +368,7 @@ Transform:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
-  - {fileID: 1089915601}
   - {fileID: 91436748}
-  - {fileID: 749275885}
   - {fileID: 634467916}
+  - {fileID: 1089915601}
+  - {fileID: 749275885}

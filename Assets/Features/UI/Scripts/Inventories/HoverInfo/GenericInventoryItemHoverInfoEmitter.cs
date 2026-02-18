@@ -3,6 +3,7 @@ using System.Collections;
 using Blackset.Inventory.Cells;
 using Blackset.Inventory.Inventories;
 using Extensions.Coroutines;
+using Extensions.ScriptableValues;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -38,9 +39,8 @@ namespace Blackset.UI.Inventory
         [Tooltip("UI-элемент")]
         protected GenericInventoryItemElement<TInventory, TItemCell, TData, TItemType> element;
         [SerializeField]
-        [Range(0f, 2f)]
         [Tooltip("Время удержания курсора над элементом до отправки запроса на вывод информации")]
-        protected float holdSeconds = 0.75f;
+        protected FloatValue holdSeconds;
 
         protected bool isPointerInside;
         protected CoroutineTask holdTask;
@@ -69,7 +69,7 @@ namespace Blackset.UI.Inventory
         {
             float time = 0f;
 
-            while (time < holdSeconds)
+            while (time < holdSeconds.Value)
             {
                 if ( !isPointerInside || 
                      !isActiveAndEnabled ) 

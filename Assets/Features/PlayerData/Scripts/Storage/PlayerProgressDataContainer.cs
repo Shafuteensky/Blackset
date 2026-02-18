@@ -11,7 +11,14 @@ namespace Blackset.Player
         fileName = nameof(PlayerProgressDataContainer),
         menuName = "Blackset/Player/" + nameof(PlayerProgressDataContainer))]
     public class PlayerProgressDataContainer : InMemorySingleDataContainer<PlayerProgressData>
-    {   
-        
+    {
+        /// <summary>
+        /// Засчитать сыгранную дуэль
+        /// </summary>
+        public void DuelPlayed()
+        {
+            Data.DuelPlayed();
+            MarkDirty();
+        }
     }
 }

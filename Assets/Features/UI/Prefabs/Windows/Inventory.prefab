@@ -1047,7 +1047,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Blackset.UI.Inventory.DiceItemsFactory
   inventory: {fileID: 11400000, guid: e067d24e7d7288947bf92dca08496108, type: 2}
   filterItemType: {fileID: 11400000, guid: 0ae8218b9522594459de916a9dc1bdfb, type: 2}
-  itemElementPrefab: {fileID: 6190256673466262804, guid: ef58cc00ff4104c4fbb5766090f18e29, type: 3}
+  itemElementPrefab: {fileID: 5808050745875397734, guid: 5aa33f7d6cf7b67409982d3b3898dc29, type: 3}
   elementsRoot: {fileID: 1323016624375775749}
   rebuildOnStart: 0
   rebuildOnEnable: 1
@@ -2084,7 +2084,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Blackset.UI.Inventory.DiceItemsFactory
   inventory: {fileID: 11400000, guid: e3440cbea87581040b4a8c7a55c70ac6, type: 2}
   filterItemType: {fileID: 11400000, guid: fbd3a5ad0b3ef2940a4f73d042a419d7, type: 2}
-  itemElementPrefab: {fileID: 6190256673466262804, guid: ef58cc00ff4104c4fbb5766090f18e29, type: 3}
+  itemElementPrefab: {fileID: 5808050745875397734, guid: 5aa33f7d6cf7b67409982d3b3898dc29, type: 3}
   elementsRoot: {fileID: 4344685197309065152}
   rebuildOnStart: 0
   rebuildOnEnable: 1
@@ -2917,7 +2917,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Blackset.UI.Inventory.DiceItemsFactory
   inventory: {fileID: 11400000, guid: 2ee230a204b1b9a4b83842cacb3de3a4, type: 2}
   filterItemType: {fileID: 11400000, guid: 471cbfaa75a8b904fb3c95d36db6426f, type: 2}
-  itemElementPrefab: {fileID: 6190256673466262804, guid: ef58cc00ff4104c4fbb5766090f18e29, type: 3}
+  itemElementPrefab: {fileID: 5808050745875397734, guid: 5aa33f7d6cf7b67409982d3b3898dc29, type: 3}
   elementsRoot: {fileID: 4518334452365873533}
   rebuildOnStart: 0
   rebuildOnEnable: 1
@@ -3113,7 +3113,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Blackset.UI.Inventory.DiceItemsFactory
   inventory: {fileID: 11400000, guid: e067d24e7d7288947bf92dca08496108, type: 2}
   filterItemType: {fileID: 11400000, guid: 98144d8369c0fd649a1a4aa9083c6aff, type: 2}
-  itemElementPrefab: {fileID: 6190256673466262804, guid: ef58cc00ff4104c4fbb5766090f18e29, type: 3}
+  itemElementPrefab: {fileID: 5808050745875397734, guid: 5aa33f7d6cf7b67409982d3b3898dc29, type: 3}
   elementsRoot: {fileID: 2247660525607892247}
   rebuildOnStart: 0
   rebuildOnEnable: 1
@@ -7317,7 +7317,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Blackset.UI.Inventory.DiceItemsFactory
   inventory: {fileID: 11400000, guid: 4abf2057643eb644db65b4c4aa11100a, type: 2}
   filterItemType: {fileID: 11400000, guid: 98144d8369c0fd649a1a4aa9083c6aff, type: 2}
-  itemElementPrefab: {fileID: 6190256673466262804, guid: ef58cc00ff4104c4fbb5766090f18e29, type: 3}
+  itemElementPrefab: {fileID: 5808050745875397734, guid: 5aa33f7d6cf7b67409982d3b3898dc29, type: 3}
   elementsRoot: {fileID: 1109569907067908907}
   rebuildOnStart: 0
   rebuildOnEnable: 1
@@ -7729,7 +7729,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Blackset.UI.Inventory.DiceItemsFactory
   inventory: {fileID: 11400000, guid: e067d24e7d7288947bf92dca08496108, type: 2}
   filterItemType: {fileID: 11400000, guid: 62af0b23df6100641ba60be783e31f76, type: 2}
-  itemElementPrefab: {fileID: 6190256673466262804, guid: ef58cc00ff4104c4fbb5766090f18e29, type: 3}
+  itemElementPrefab: {fileID: 5808050745875397734, guid: 5aa33f7d6cf7b67409982d3b3898dc29, type: 3}
   elementsRoot: {fileID: 3351293791789678293}
   rebuildOnStart: 0
   rebuildOnEnable: 1
@@ -10025,7 +10025,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Blackset.UI.Inventory.DiceItemsFactory
   inventory: {fileID: 11400000, guid: 7a9813f1d279d4f45bd2ed4324ac51cb, type: 2}
   filterItemType: {fileID: 11400000, guid: 7b2c54bf4725d1a4db115c84e52f3363, type: 2}
-  itemElementPrefab: {fileID: 6190256673466262804, guid: ef58cc00ff4104c4fbb5766090f18e29, type: 3}
+  itemElementPrefab: {fileID: 5808050745875397734, guid: 5aa33f7d6cf7b67409982d3b3898dc29, type: 3}
   elementsRoot: {fileID: 8882375431260637525}
   rebuildOnStart: 0
   rebuildOnEnable: 1
@@ -10759,7 +10759,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Blackset.UI.Inventory.DiceItemsFactory
   inventory: {fileID: 11400000, guid: e067d24e7d7288947bf92dca08496108, type: 2}
   filterItemType: {fileID: 11400000, guid: 471cbfaa75a8b904fb3c95d36db6426f, type: 2}
-  itemElementPrefab: {fileID: 6190256673466262804, guid: ef58cc00ff4104c4fbb5766090f18e29, type: 3}
+  itemElementPrefab: {fileID: 5808050745875397734, guid: 5aa33f7d6cf7b67409982d3b3898dc29, type: 3}
   elementsRoot: {fileID: 5182989535250783758}
   rebuildOnStart: 0
   rebuildOnEnable: 1
@@ -11364,7 +11364,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Blackset.UI.Inventory.DiceItemsFactory
   inventory: {fileID: 11400000, guid: a0a957aef7db8a341a54142ee2749335, type: 2}
   filterItemType: {fileID: 11400000, guid: 0ae8218b9522594459de916a9dc1bdfb, type: 2}
-  itemElementPrefab: {fileID: 6190256673466262804, guid: ef58cc00ff4104c4fbb5766090f18e29, type: 3}
+  itemElementPrefab: {fileID: 5808050745875397734, guid: 5aa33f7d6cf7b67409982d3b3898dc29, type: 3}
   elementsRoot: {fileID: 7120811146069947975}
   rebuildOnStart: 0
   rebuildOnEnable: 1
@@ -13191,7 +13191,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Blackset.UI.Inventory.DiceItemsFactory
   inventory: {fileID: 11400000, guid: e067d24e7d7288947bf92dca08496108, type: 2}
   filterItemType: {fileID: 11400000, guid: 7b2c54bf4725d1a4db115c84e52f3363, type: 2}
-  itemElementPrefab: {fileID: 6190256673466262804, guid: ef58cc00ff4104c4fbb5766090f18e29, type: 3}
+  itemElementPrefab: {fileID: 5808050745875397734, guid: 5aa33f7d6cf7b67409982d3b3898dc29, type: 3}
   elementsRoot: {fileID: 8851019049728411054}
   rebuildOnStart: 0
   rebuildOnEnable: 1
@@ -13474,7 +13474,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Blackset.UI.Inventory.DiceItemsFactory
   inventory: {fileID: 11400000, guid: ee3c96ee49eb2e342ad6513b78fd7fca, type: 2}
   filterItemType: {fileID: 11400000, guid: 62af0b23df6100641ba60be783e31f76, type: 2}
-  itemElementPrefab: {fileID: 6190256673466262804, guid: ef58cc00ff4104c4fbb5766090f18e29, type: 3}
+  itemElementPrefab: {fileID: 5808050745875397734, guid: 5aa33f7d6cf7b67409982d3b3898dc29, type: 3}
   elementsRoot: {fileID: 6355484290403508826}
   rebuildOnStart: 0
   rebuildOnEnable: 1
@@ -15243,7 +15243,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Blackset.UI.Inventory.DiceItemsFactory
   inventory: {fileID: 11400000, guid: e067d24e7d7288947bf92dca08496108, type: 2}
   filterItemType: {fileID: 11400000, guid: fbd3a5ad0b3ef2940a4f73d042a419d7, type: 2}
-  itemElementPrefab: {fileID: 6190256673466262804, guid: ef58cc00ff4104c4fbb5766090f18e29, type: 3}
+  itemElementPrefab: {fileID: 5808050745875397734, guid: 5aa33f7d6cf7b67409982d3b3898dc29, type: 3}
   elementsRoot: {fileID: 7795994208834246269}
   rebuildOnStart: 0
   rebuildOnEnable: 1

@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: PlayerDataFacade
   m_EditorClassIdentifier: Assembly-CSharp::Blackset.Player.PlayerDataFacade
   <MetaData>k__BackingField: {fileID: 11400000, guid: 4016e62c20ae05e4db79f0162046c6cd, type: 2}
+  <ProgressData>k__BackingField: {fileID: 11400000, guid: 612ad6dd014e45a49a3e89e85f57277c, type: 2}
   <DicesInventory>k__BackingField: {fileID: 11400000, guid: e067d24e7d7288947bf92dca08496108, type: 2}
   <ConsumablesInventory>k__BackingField: {fileID: 11400000, guid: 7ef245ecadf41734eb1ebc32e905b695, type: 2}
   <DicesPoolRows>k__BackingField:

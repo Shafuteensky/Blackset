@@ -23,11 +23,12 @@ namespace Blackset.Effects
         /// Набор, к которому относится предмет
         /// </summary>
         public BaseSet Set => set;
+        
         /// <summary>
         /// Доступные типы предметов для этих данных
         /// </summary>
         public List<BaseItemType> AvailableTypes => availableTypes;
-
+        
         [Header("Особенности"), Space]
         [SerializeField]
         protected EffectConfig effect;

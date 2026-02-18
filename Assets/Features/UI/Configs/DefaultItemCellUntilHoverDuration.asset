@@ -10,8 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ae5dd1b65ea84b97ac65fb1abef8d36e, type: 3}
-  m_Name: DefaultButtonHoldDuration
+  m_Name: DefaultItemCellUntilHoverDuration
   m_EditorClassIdentifier: Assembly-CSharp-firstpass::Extensions.ScriptableValues.FloatValue
-  id: 9fe4dcece930427795e75ebbecf4a9e1
-  defaultValue: 1
+  id: 1a1aef7b34eb462cbe512897a99e0f61
+  defaultValue: 0.33
   isSaveable: 0

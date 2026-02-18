@@ -14,7 +14,7 @@ namespace Extensions.Generics
     [RequireComponent(typeof(Button))]
     public abstract class GenericHoldButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IPointerExitHandler
     {
-        protected const float DEFAULT_HOLD_DURATION = 2f;
+        protected const float DEFAULT_HOLD_DURATION = 1f;
         
         #region События
         

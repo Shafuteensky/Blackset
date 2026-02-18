@@ -146,6 +146,24 @@ namespace Blackset.Inventory.Inventories
             if (!isReferencesValid(itemCell, typeRegistry)) return null;
             return itemCell.GetTypeData(typeRegistry);
         }
+        
+        /// <summary>
+        /// Получить данные типа предмета конкретной ячейки по идентификатору ячейки
+        /// </summary>
+        /// <param name="item">Ячейка предмета</param>
+        public TType GetCellTypeData(string cellId)
+        {
+            if (string.IsNullOrEmpty(cellId))
+            {
+                ServiceDebug.LogError($"{name}: невалидный id, данные не получены");
+                return null;
+            }
+
+            TItemCell itemCell = GetById(cellId);
+            TType itemTypeData = GetCellTypeData(itemCell);
+            
+            return itemTypeData;
+        }
 
         #endregion
 
