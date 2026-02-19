@@ -9,7 +9,7 @@ namespace Extensions.Generics
     public class HoldButtonFillIndicator : MonoBehaviour
     {
         [SerializeField]
-        protected GenericHoldButton holdButton = default;
+        protected AbstractHoldButton holdButton = default;
         [SerializeField]
         protected Image fillImage = default;
 

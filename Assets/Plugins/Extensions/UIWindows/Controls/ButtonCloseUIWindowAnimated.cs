@@ -13,7 +13,7 @@ namespace Extensions.UIWindows
     /// <summary>
     /// Кнопка для закрытия окна интерфейса с анимацией DOTWEEN
     /// </summary>
-    public class ButtonCloseUIWindowAnimated : GenericButton
+    public class ButtonCloseUIWindowAnimated : AbstractButton
     {
 #if DOTWEEN
         [SerializeField]

@@ -15,10 +15,11 @@ MonoBehaviour:
   id: e2217dcf002c46d49fe6d7fff59b2ace
   dataName: PlusPoints
   dataDescription: Add some points to your score
-  effect: {fileID: 11400000, guid: 720de6e4f0af2ae4db45d32b0b7cbf83, type: 2}
-  color: {r: 0.103773475, g: 0.70735455, b: 1, a: 1}
+  itemClass: 2
+  price: 2
   set: {fileID: 11400000, guid: 121386a12336b73448b8d431d37a61d5, type: 2}
   availableTypes:
   - {fileID: 11400000, guid: 0e1a15f03f84f8d46ba873a79cfd79ab, type: 2}
-  price: 2
+  effect: {fileID: 11400000, guid: 720de6e4f0af2ae4db45d32b0b7cbf83, type: 2}
+  color: {r: 0.103773475, g: 0.70735455, b: 1, a: 1}
   visualConsumable: {fileID: 0}

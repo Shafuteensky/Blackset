@@ -232,6 +232,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a910fd4978c069f439a50ae6c0d92741, type: 3}
+--- !u!114 &8021145449447427916 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7763099104423868807, guid: a910fd4978c069f439a50ae6c0d92741, type: 3}
+  m_PrefabInstance: {fileID: 354874837909927627}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
 --- !u!224 &8697664459979610469 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 8960064799417806766, guid: a910fd4978c069f439a50ae6c0d92741, type: 3}
@@ -245,6 +256,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2299443926370784396, guid: a9e0a9c0936f1c5448e7f978974f2ae7, type: 3}
+      propertyPath: m_Type
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2299443926370784396, guid: a9e0a9c0936f1c5448e7f978974f2ae7, type: 3}
       propertyPath: m_Sprite
       value: 
@@ -445,11 +460,20 @@ PrefabInstance:
       propertyPath: m_ShowMaskGraphic
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8164219541401129275, guid: a9e0a9c0936f1c5448e7f978974f2ae7, type: 3}
+      propertyPath: setNameText
+      value: 
+      objectReference: {fileID: 8021145449447427916}
+    - target: {fileID: 8164219541401129275, guid: a9e0a9c0936f1c5448e7f978974f2ae7, type: 3}
+      propertyPath: itemIconImage
+      value: 
+      objectReference: {fileID: 3973976282479905354}
     - target: {fileID: 8729866529250760131, guid: a9e0a9c0936f1c5448e7f978974f2ae7, type: 3}
       propertyPath: m_Name
       value: UiInventoryItem_BaseBoxShop
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 773411163043268539, guid: a9e0a9c0936f1c5448e7f978974f2ae7, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 4504190348966672339, guid: a9e0a9c0936f1c5448e7f978974f2ae7, type: 3}

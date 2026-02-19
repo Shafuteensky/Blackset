@@ -16,14 +16,15 @@ MonoBehaviour:
   dataName: Special blue
   dataDescription: Unique special blue-colored dice with no effect, but unique face
     configuration
-  effect: {fileID: 0}
-  color: {r: 0.216981, g: 0.6950082, b: 1, a: 1}
+  itemClass: 1
+  price: 2
   set: {fileID: 11400000, guid: b2a881d0ec08cb24988a7c8f02c8ad53, type: 2}
   availableTypes:
   - {fileID: 11400000, guid: fbd3a5ad0b3ef2940a4f73d042a419d7, type: 2}
   - {fileID: 11400000, guid: 471cbfaa75a8b904fb3c95d36db6426f, type: 2}
   - {fileID: 11400000, guid: 7b2c54bf4725d1a4db115c84e52f3363, type: 2}
-  price: 2
+  effect: {fileID: 0}
+  color: {r: 0.216981, g: 0.6950082, b: 1, a: 1}
   budgetPrice: 3
   style: {fileID: 11400000, guid: 4b2d87f763c7b02488eb498e84a1e60b, type: 2}
   numbersConfig: {fileID: 11400000, guid: 1d69828527d317944a25e4dbbcba60a5, type: 2}

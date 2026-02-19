@@ -9,14 +9,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f91e9e3aa7f34132a70ba8bfb1ca453f, type: 3}
+  m_Script: {fileID: 11500000, guid: 6623fd50c9874f108445f49990016da6, type: 3}
   m_Name: DicesPoolRow_d10
   m_EditorClassIdentifier: Assembly-CSharp::Blackset.Inventory.ItemPools.DicesPoolRow
-  id: DicesPoolRow_d10
+  id: 0404d2be79cc4766a4bd747506f57c76
   autoSave: 1
-  dataRegistry: {fileID: 11400000, guid: 9e2de7d4160160646b95730d66ba2888, type: 2}
-  typeRegistry: {fileID: 11400000, guid: a20b45fa0f8fca54eb745fd54815faf1, type: 2}
+  dataRegistry: {fileID: 11400000, guid: ed018a7561b12ba4f96674954885bfdc, type: 2}
+  typeRegistry: {fileID: 11400000, guid: baff5f3f39c21ed4085b2717f755f0a8, type: 2}
   slotsCount: 2
+  allowedItemClass: 1
   allowedItemType: {fileID: 11400000, guid: 0ae8218b9522594459de916a9dc1bdfb, type: 2}
   fillCellsWithDefaults: 1
   defaultItems:

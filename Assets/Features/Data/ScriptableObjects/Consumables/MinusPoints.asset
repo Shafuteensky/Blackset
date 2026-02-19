@@ -15,10 +15,11 @@ MonoBehaviour:
   id: 0f7a433bc7734ad289c13cb6e8754804
   dataName: MinusPoints
   dataDescription: Remove some points to your score
-  effect: {fileID: 11400000, guid: 6c6ee8762addc5c47af88d8e5d451ed4, type: 2}
-  color: {r: 1, g: 0.8483827, b: 0.2924527, a: 1}
+  itemClass: 2
+  price: 2
   set: {fileID: 11400000, guid: 121386a12336b73448b8d431d37a61d5, type: 2}
   availableTypes:
   - {fileID: 11400000, guid: 0e1a15f03f84f8d46ba873a79cfd79ab, type: 2}
-  price: 2
+  effect: {fileID: 11400000, guid: 6c6ee8762addc5c47af88d8e5d451ed4, type: 2}
+  color: {r: 1, g: 0.8483827, b: 0.2924527, a: 1}
   visualConsumable: {fileID: 0}

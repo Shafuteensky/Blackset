@@ -1,5 +1,4 @@
 using Blackset.Data.Registries;
-using Blackset.Inventory.Inventories;
 using Blackset.Player;
 using Extensions.Data;
 using Extensions.Generics;
@@ -8,7 +7,7 @@ using Extensions.Log;
 using Features.ItemGenerators;
 using UnityEngine;
 
-namespace Features.Shop
+namespace Blackset.Shop
 {
     /// <summary>
     /// Контроллер магазина предметов
@@ -34,13 +33,13 @@ namespace Features.Shop
         
         [Header("Инвентари магазина"), Space]
         [SerializeField]
-        private DicesInventory shopDicesInventory;
+        private Blackset.Inventory.Inventories.Inventory shopDicesInventory;
         [SerializeField]
-        private ConsumablesInventory shopConsumablesInventory;
+        private Blackset.Inventory.Inventories.Inventory shopConsumablesInventory;
         [SerializeField]
-        private DicesInventory shopDicesBoxInventory;
+        private Blackset.Inventory.Inventories.Inventory shopDicesBoxInventory;
         [SerializeField]
-        private ConsumablesInventory shopConsumablesBoxInventory;
+        private Blackset.Inventory.Inventories.Inventory shopConsumablesBoxInventory;
         
         [Header("Игровые данные"), Space]
         [SerializeField]
@@ -87,7 +86,7 @@ namespace Features.Shop
             RefillConsumableInventory(shopConsumablesBoxInventory, consumablesPacksToSell);
         }
         
-        private void RefillDiceInventory(DicesInventory inventory, int amount)
+        private void RefillDiceInventory(Blackset.Inventory.Inventories.Inventory inventory, int amount)
         {
             inventory.Clear();
 
@@ -98,7 +97,7 @@ namespace Features.Shop
             }
         }
 
-        private void RefillConsumableInventory(ConsumablesInventory inventory, int amount)
+        private void RefillConsumableInventory(Blackset.Inventory.Inventories.Inventory inventory, int amount)
         {
             inventory.Clear();
 

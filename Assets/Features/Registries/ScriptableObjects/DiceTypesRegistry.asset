@@ -9,11 +9,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 33dfad2d687449348a9beaba3724acca, type: 3}
+  m_Script: {fileID: 11500000, guid: 8c2263ec8f4e423f8bc6990f6ea6c781, type: 3}
   m_Name: DiceTypesRegistry
-  m_EditorClassIdentifier: Assembly-CSharp::Blackset.Data.Registries.DiceTypeRegistry
-  id: DiceTypesRegistry
-  dataName: Dice Types Registry
+  m_EditorClassIdentifier: Assembly-CSharp::Blackset.Data.Registries.InventoryItemTypesRegistry
+  id: 6b06108847b343bc8d9be1db466c361f
+  dataName: 
+  dataDescription: 
   data:
   - {fileID: 11400000, guid: fb2b925e10496d94cba7f76cb0fdfdf8, type: 2}
   - {fileID: 11400000, guid: fbd3a5ad0b3ef2940a4f73d042a419d7, type: 2}

@@ -8,7 +8,7 @@ namespace Blackset.Data.Items.Types
     [CreateAssetMenu(
         menuName = "Blackset/Items/Types/" + nameof(ConsumableType),
         fileName = nameof(ConsumableType))]
-    public sealed class ConsumableType : BaseItemType // TODO Сделать runtime-генерируемым полем внутри ConsumableData (либо поле в ConsumableItem)?
+    public sealed class ConsumableType : InventoryItemType // TODO Сделать runtime-генерируемым полем внутри ConsumableData (либо поле в ConsumableItem)?
                                                       // // Иначе дубликаты данных
     {
         /// <summary>

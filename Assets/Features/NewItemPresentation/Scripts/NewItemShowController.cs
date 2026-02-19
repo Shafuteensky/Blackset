@@ -1,8 +1,4 @@
-using System;
 using System.Collections.Generic;
-using Blackset.Data;
-using Blackset.Data.Items.Types;
-using Blackset.Inventory.Inventories;
 using Extensions.Generics;
 using Extensions.Log;
 using Extensions.UIWindows;
@@ -21,9 +17,9 @@ namespace Features.Shop
         
         [Header("Инвентари игрока"), Space]
         [SerializeField]
-        private DicesInventory playerDicesInventory;
+        private Blackset.Inventory.Inventories.Inventory playerDicesInventory;
         [SerializeField]
-        private ConsumablesInventory playerConsumablesInventory;
+        private Blackset.Inventory.Inventories.Inventory playerConsumablesInventory;
 
         private UIWindowsController uiWindowsController;
         

@@ -7,7 +7,7 @@ namespace Blackset.UI
     /// <summary>
     /// Кнопка выхода из игры
     /// </summary>
-    public class QuitButton : GenericButton
+    public class QuitButton : AbstractButton
     {
         public override void OnButtonClick()
         {

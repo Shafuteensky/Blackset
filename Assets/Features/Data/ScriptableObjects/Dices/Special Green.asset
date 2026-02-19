@@ -15,14 +15,15 @@ MonoBehaviour:
   id: SpecialDiceTest (3)
   dataName: Special green
   dataDescription: Unique special green-colored dice with active effect
-  effect: {fileID: 11400000, guid: 98a8da743f9bb34469f43227ce710b37, type: 2}
-  color: {r: 0.2396226, g: 1, b: 0.43506366, a: 1}
+  itemClass: 1
+  price: 6
   set: {fileID: 11400000, guid: b2a881d0ec08cb24988a7c8f02c8ad53, type: 2}
   availableTypes:
   - {fileID: 11400000, guid: 0ae8218b9522594459de916a9dc1bdfb, type: 2}
   - {fileID: 11400000, guid: 62af0b23df6100641ba60be783e31f76, type: 2}
   - {fileID: 11400000, guid: 98144d8369c0fd649a1a4aa9083c6aff, type: 2}
-  price: 6
+  effect: {fileID: 11400000, guid: 98a8da743f9bb34469f43227ce710b37, type: 2}
+  color: {r: 0.2396226, g: 1, b: 0.43506366, a: 1}
   budgetPrice: 4
   style: {fileID: 11400000, guid: 8ae7078df7284d046a465d854a124ebf, type: 2}
   numbersConfig: {fileID: 11400000, guid: 7e62f7f30d5c99345886153742ab05fa, type: 2}

@@ -1,6 +1,8 @@
 using System;
 using Blackset.Data.Base;
 using Blackset.Data.Items.Types;
+using Blackset.Effects;
+using Features.Inventory.Scripts.Items;
 using UnityEngine;
 
 namespace Blackset.Inventory.Inventories
@@ -11,14 +13,12 @@ namespace Blackset.Inventory.Inventories
     /// <typeparam name="TData">Тип данных предмета</typeparam>
     /// <typeparam name="TType">Тип типа предмета</typeparam>
     [Serializable]
-    public struct DefaultInventoryItemCell<TData, TType>
-        where TData : BaseData
-        where TType : BaseItemType
+    public struct DefaultInventoryItemCell
     {
         [SerializeField]
-        public TData ItemData;
+        public InventoryItem ItemData;
         [SerializeField]
-        public TType ItemTypeData;
+        public InventoryItemType ItemTypeData;
         [SerializeField]
         [Min(1)]
         public int ItemAmount;

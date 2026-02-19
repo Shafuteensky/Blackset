@@ -197,6 +197,8 @@ GameObject:
   - component: {fileID: 5527183741289242698}
   - component: {fileID: 5220039855773583475}
   - component: {fileID: 2796626930491245074}
+  - component: {fileID: 7266762127616091038}
+  - component: {fileID: 2246784491602441502}
   m_Layer: 0
   m_Name: UiInventoryItem_Base
   m_TagString: Untagged
@@ -313,6 +315,39 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
+--- !u!114 &7266762127616091038
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7832653202750547814}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b78ee9e7ff74e1e8b5201844c99013f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Blackset.UI.Inventory.InventoryItemElement
+  canvasGroup: {fileID: 5527183741289242698}
+  itemIconImage: {fileID: 755724977203275305}
+  amountText: {fileID: 7308115554014626211}
+  setNameText: {fileID: 0}
+  priceText: {fileID: 0}
+  canDrag: 1
+  canDrop: 1
+--- !u!114 &2246784491602441502
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7832653202750547814}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0ba87b11d293466a8d08acfe3d76ce66, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Blackset.UI.Inventory.InventoryItemHoverInfoEmitter
+  element: {fileID: 7266762127616091038}
+  holdSeconds: {fileID: 11400000, guid: c0a36e4a3850b154594fa82a285983c9, type: 2}
 --- !u!1 &8348507175140030489
 GameObject:
   m_ObjectHideFlags: 0
@@ -536,6 +571,17 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 8377483115726500557}
   m_SourcePrefab: {fileID: 100100000, guid: a910fd4978c069f439a50ae6c0d92741, type: 3}
+--- !u!114 &7308115554014626211 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7763099104423868807, guid: a910fd4978c069f439a50ae6c0d92741, type: 3}
+  m_PrefabInstance: {fileID: 1069523416339118116}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8321623548170482683}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
 --- !u!224 &8254885460256315274 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 8960064799417806766, guid: a910fd4978c069f439a50ae6c0d92741, type: 3}

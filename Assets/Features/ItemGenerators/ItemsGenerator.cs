@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Blackset.Data;
 using Blackset.Data.Items.Types;
 using Blackset.Data.Registries;
+using Blackset.Effects;
 using Extensions.Log;
 using UnityEngine;
 
@@ -41,7 +42,7 @@ namespace Features.ItemGenerators
             
             var allDices = gameData.Dices.Data;
             if (set != null) allDices = GetDicesBySet(set);
-            newDice.Item = allDices[Random.Range(0, allDices.Count)];
+            newDice.Item = (DiceItem)allDices[Random.Range(0, allDices.Count)];
             
             var availableDiceTypes = newDice.Item.AvailableTypes;
             newDice.Type = availableDiceTypes[Random.Range(0, availableDiceTypes.Count)] as DiceType;
@@ -62,7 +63,7 @@ namespace Features.ItemGenerators
             
             var allConsumables = gameData.Consumables.Data;
             if (set != null) allConsumables = GetConsumablesBySet(set);
-            newConsumable.Item = allConsumables[Random.Range(0, allConsumables.Count)];
+            newConsumable.Item = (ConsumableItem)allConsumables[Random.Range(0, allConsumables.Count)];
             
             var availableDiceTypes = newConsumable.Item.AvailableTypes;
             newConsumable.Type = availableDiceTypes[Random.Range(0, availableDiceTypes.Count)] as ConsumableType;
@@ -72,31 +73,31 @@ namespace Features.ItemGenerators
 
         #region Internal
         
-        protected List<DiceData> GetDicesBySet(DiceSet set)
+        protected List<EffectingItem> GetDicesBySet(DiceSet set)
         {
             if (gameData == null || gameData.Dices == null || gameData.Dices.Data == null) return null;
             
             var allDices = gameData.Dices.Data;
-            List<DiceData> dicesBySet = new();
+            List<EffectingItem> dicesBySet = new();
             
-            foreach (var dice in allDices)
+            foreach (var item in allDices)
             {
-                if (dice.Set == set) dicesBySet.Add(dice);
+                if (item is DiceItem dice && dice.Set == set) dicesBySet.Add(dice);
             }
 
             return dicesBySet;
         }
 
-        protected List<ConsumableData> GetConsumablesBySet(ConsumableSet set)
+        protected List<EffectingItem> GetConsumablesBySet(ConsumableSet set)
         {
             if (gameData == null || gameData.Consumables == null || gameData.Consumables.Data == null) return null;
             
             var allConsumables = gameData.Consumables.Data;
-            List<ConsumableData> consumablesBySet = new();
+            List<EffectingItem> consumablesBySet = new();
             
-            foreach (var consumable in allConsumables)
+            foreach (var item in allConsumables)
             {
-                if (consumable.Set == set) consumablesBySet.Add(consumable);
+                if (item is ConsumableItem consumable && consumable.Set == set) consumablesBySet.Add(consumable);
             }
 
             return consumablesBySet;

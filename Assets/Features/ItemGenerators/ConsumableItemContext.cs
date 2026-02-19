@@ -8,7 +8,7 @@ namespace Features.ItemGenerators
     /// </summary>
     public struct ConsumableItemContext
     {
-        public ConsumableData Item;
+        public ConsumableItem Item;
         public ConsumableType Type;
         //public BaseItemRarity Rarity;
     }

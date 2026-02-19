@@ -3,27 +3,26 @@ using System.Collections.Generic;
 using Blackset.Data.Base;
 using UnityEngine;
 using Extensions.Log;
-using Random = UnityEngine.Random;
 
 namespace Blackset.Data.Registries
 {
     /// <summary>
-    /// Базовый реестр игровых данных
+    /// Абстракция реестра игровых данных
     /// </summary>
     /// <typeparam name="TData">Тип данных</typeparam>
-    public abstract class BaseDataRegistry<TData> : BaseData where TData : BaseData
+    public abstract class BaseDataRegistry<T> : BaseDataRegistry where T : BaseData
     {
         /// <summary>
         /// Данные реестра
         /// </summary>
-        public IReadOnlyList<TData> Data => data;
+        public IReadOnlyList<T> Data => data;
         
         [Header("Хранимые данные"), Space]
         [SerializeField]
-        protected List<TData> data = new List<TData>();
+        protected List<T> data = new List<T>();
 
         [NonSerialized]
-        protected Dictionary<string, TData> dataById;
+        protected Dictionary<string, T> dataById;
         [NonSerialized]
         protected bool isIndexBuilt;
 
@@ -31,7 +30,7 @@ namespace Blackset.Data.Registries
         /// Получить данные по идентификатору
         /// </summary>
         /// <param name="id">Идентификатор</param>
-        public TData GetById(string id)
+        public T GetById(string id)
         {
             if (string.IsNullOrEmpty(id))
             {
@@ -47,7 +46,7 @@ namespace Blackset.Data.Registries
                 return null;
             }
             
-            if (dataById.TryGetValue(id, out TData result)) return result;
+            if (dataById.TryGetValue(id, out T result)) return result;
             
             ServiceDebug.LogError($"Данные с Id {id} не найдены в реестре записей");
             return null;
@@ -68,7 +67,7 @@ namespace Blackset.Data.Registries
 
             for (int i = 0; i < data.Count; i++)
             {
-                TData entry = data[i];
+                BaseData entry = data[i];
                 if (entry == null)
                 {
                     ServiceDebug.LogWarning($"[{name}] Элемент списка data (index {i}) = null");
@@ -106,7 +105,7 @@ namespace Blackset.Data.Registries
 
             if (dataById == null)
             {
-                dataById = new Dictionary<string, TData>(data.Count);
+                dataById = new Dictionary<string, T>(data.Count);
             }
             else
             {
@@ -115,7 +114,7 @@ namespace Blackset.Data.Registries
 
             for (int i = 0; i < data.Count; i++)
             {
-                TData entry = data[i];
+                T entry = data[i];
                 if (entry == null) continue;
 
                 string entryId = entry.Id;
@@ -134,4 +133,9 @@ namespace Blackset.Data.Registries
             }
         }
     }
+    
+    /// <summary>
+    /// Базовый класс реестра
+    /// </summary>
+    public abstract class BaseDataRegistry : BaseData { }
 }

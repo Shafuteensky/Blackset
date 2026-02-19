@@ -7,7 +7,7 @@ namespace Extensions.UIWindows
     /// <summary>
     /// Кнопка для открытия окна интерфейса
     /// </summary>
-    public class ButtonOpenUIWindow : GenericButton
+    public class ButtonOpenUIWindow : AbstractButton
     {
         [SerializeField] 
         protected bool needToCloseFocused = true;

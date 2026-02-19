@@ -98,8 +98,34 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 237524754985521658, guid: 35cc4fb6ab77ace409aba3d0edb5cfaa, type: 3}
       insertIndex: -1
       addedObject: {fileID: 8898092044103017015}
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 2376912779908048106, guid: 35cc4fb6ab77ace409aba3d0edb5cfaa, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4144823467076495505}
   m_SourcePrefab: {fileID: 100100000, guid: 35cc4fb6ab77ace409aba3d0edb5cfaa, type: 3}
+--- !u!1 &520724288717142028 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2376912779908048106, guid: 35cc4fb6ab77ace409aba3d0edb5cfaa, type: 3}
+  m_PrefabInstance: {fileID: 2865844550170467558}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &4144823467076495505
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 520724288717142028}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f721f42dbe9d438a882ec75304b1b9bc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Blackset.UI.Inventory.InventoryItemFactory
+  inventory: {fileID: 0}
+  filterItemType: {fileID: 0}
+  itemElementPrefab: {fileID: 7266762127616091038, guid: ef58cc00ff4104c4fbb5766090f18e29, type: 3}
+  elementsRoot: {fileID: 1440171396157948608}
+  rebuildOnStart: 0
+  rebuildOnEnable: 1
 --- !u!224 &2634146111729716508 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 237524754985521658, guid: 35cc4fb6ab77ace409aba3d0edb5cfaa, type: 3}
@@ -291,6 +317,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7ac43a347648b0d4faedfaec8880cb82, type: 3}
+--- !u!224 &1440171396157948608 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 8614617401285223368, guid: 7ac43a347648b0d4faedfaec8880cb82, type: 3}
+  m_PrefabInstance: {fileID: 7237777884556648712}
+  m_PrefabAsset: {fileID: 0}
 --- !u!224 &8898092044103017015 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 2237619629508789055, guid: 7ac43a347648b0d4faedfaec8880cb82, type: 3}

@@ -7,7 +7,7 @@ namespace Extensions.SceneFlow
     /// <summary>
     /// Открыть сцену по нажатию кнопки
     /// </summary>
-    public class LoadSceneButton : GenericButton
+    public class LoadSceneButton : AbstractButton
     {
         [SerializeField]
         protected SceneID targetScene = default;

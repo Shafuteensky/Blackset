@@ -15,11 +15,12 @@ MonoBehaviour:
   id: 90947dc44a974435b1582fe4e0c266d1
   dataName: Disadvantage
   dataDescription: Throw 2 dices, take worst result
-  effect: {fileID: 11400000, guid: 1c799dc0bd0d22c48b0aabdf28898c0d, type: 2}
-  color: {r: 1, g: 0.7062172, b: 0.61698115, a: 1}
+  itemClass: 2
+  price: 1
   set: {fileID: 11400000, guid: 27cada2d73a18a543a23e1a7fea1f12b, type: 2}
   availableTypes:
   - {fileID: 11400000, guid: 0e1a15f03f84f8d46ba873a79cfd79ab, type: 2}
   - {fileID: 11400000, guid: 993bee1bbd4e925439649326aceece27, type: 2}
-  price: 1
+  effect: {fileID: 11400000, guid: 1c799dc0bd0d22c48b0aabdf28898c0d, type: 2}
+  color: {r: 1, g: 0.7062172, b: 0.61698115, a: 1}
   visualConsumable: {fileID: 0}

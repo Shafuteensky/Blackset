@@ -1,0 +1,74 @@
+using System;
+using Blackset.Data;
+using Blackset.Data.Items.Types;
+using Blackset.Inventory.Cells;
+using Blackset.Player;
+using Blackset.UI.Inventory;
+using Extensions.Generics;
+using Extensions.Log;
+using Features.Inventory.Scripts.Items;
+using UnityEngine;
+
+namespace Blackset.Shop
+{
+    /// <summary>
+    /// Абстракция кнопки покупки предмета магазина
+    /// </summary>
+    public class BuyShopItemButton : AbstractHoldButton
+    {
+        #region События
+
+        /// <summary>
+        /// Невозможность покупки из-за нехватки денег у игрока
+        /// </summary>
+        /// <typeparam name="int">Недостаточное количество денег</typeparam>
+        public static event Action<int> onNotEnoughMoney;
+        /// <summary>
+        /// Факт покупки определенного предмета (боавление его в инвентарь игрока)
+        /// </summary>
+        public static event Action onItemBought;
+
+        #endregion
+        
+        [Header("Ячейка"), Space]
+        [SerializeField]
+        protected InventoryItemElement itemElement;
+        
+        [Header("Игровые данные"), Space]
+        [SerializeField]
+        protected PlayerDataFacade playerData;
+        
+        public override void OnButtonClick()
+        {
+            if (playerData == null || itemElement == null)
+            {
+                ServiceDebug.LogError("Не все ссылки заполнены");
+                return;
+            }
+
+            TryBuyItem();
+        }
+
+        protected void TryBuyItem()
+        {
+            InventoryCell cell = itemElement.Inventory.GetById(itemElement.ItemCellId);
+            InventoryItem shopItem = itemElement.Inventory.GetCellItemData(itemElement.ItemCellId);
+            InventoryItemType shopItemType = itemElement.Inventory.GetCellTypeData(itemElement.ItemCellId);
+            int playerMoney = playerData.MetaData.Data.Money;
+            int itemPrice = shopItem.GetPrice(itemElement.Inventory.GetCellTypeData(itemElement.ItemCellId));
+            
+            if (playerMoney < itemPrice)
+            {
+                onNotEnoughMoney?.Invoke(Math.Abs(playerMoney - itemPrice));
+                return;
+            }
+            
+            playerData.MetaData.RemoveMoney(itemPrice);
+            if (shopItem is DiceItem) playerData.DicesInventory.AddItem(cell);
+            else if (shopItem is ConsumableItem) playerData.ConsumablesInventory.AddItem(cell);
+            itemElement.Inventory.RemoveItem(cell);
+
+            onItemBought?.Invoke();
+        }
+    }
+}

@@ -16,8 +16,8 @@ MonoBehaviour:
   dataName: Special yellow
   dataDescription: Unique special yellow-colored dice with no effect, but unique
     face configuration
-  effect: {fileID: 0}
-  color: {r: 1, g: 0.9101796, b: 0, a: 1}
+  itemClass: 1
+  price: 3
   set: {fileID: 11400000, guid: 856a47c752457244f81e34de38ba0b74, type: 2}
   availableTypes:
   - {fileID: 11400000, guid: fbd3a5ad0b3ef2940a4f73d042a419d7, type: 2}
@@ -26,7 +26,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 0ae8218b9522594459de916a9dc1bdfb, type: 2}
   - {fileID: 11400000, guid: 62af0b23df6100641ba60be783e31f76, type: 2}
   - {fileID: 11400000, guid: 98144d8369c0fd649a1a4aa9083c6aff, type: 2}
-  price: 3
+  effect: {fileID: 0}
+  color: {r: 1, g: 0.9101796, b: 0, a: 1}
   budgetPrice: 2
   style: {fileID: 11400000, guid: 6726cadfb4e7763469702377737dc3c9, type: 2}
   numbersConfig: {fileID: 11400000, guid: 144a64f56a1b1c0459d39d6d1b128903, type: 2}

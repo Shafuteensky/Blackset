@@ -8,7 +8,7 @@ namespace Features.ItemGenerators
     /// </summary>
     public struct DiceItemContext
     {
-        public DiceData Item;
+        public DiceItem Item;
         public DiceType Type;
         //public BaseItemRarity Rarity;
     }

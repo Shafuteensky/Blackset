@@ -1,3 +1,5 @@
+using Blackset.Data.Items.Types;
+using Blackset.Effects;
 using Features.ItemGenerators;
 using UnityEngine;
 
@@ -17,13 +19,13 @@ namespace Blackset.Data.Registries
         /// </summary>
         [field:SerializeField]
         [field: Tooltip("Реестр дайсов")]
-        public DiceDataRegistry Dices { get; private set; }
+        public InventoryItemsRegistry Dices { get; private set; }
         /// <summary>
         /// Реестр расходников
         /// </summary>
         [field:SerializeField]
         [field: Tooltip("Реестр расходников")]
-        public ConsumableDataRegistry Consumables { get; private set; }
+        public InventoryItemsRegistry Consumables { get; private set; }
         
         [field: Header("Реестры типов предметов"), Space]
         /// <summary>
@@ -31,12 +33,12 @@ namespace Blackset.Data.Registries
         /// </summary>
         [field:SerializeField]
         [field: Tooltip("Реестр типов дайсов")]
-        public DiceTypeRegistry DiceTypes { get; private set; }
+        public InventoryItemTypesRegistry DiceTypes { get; private set; }
         /// <summary>
         /// Реестр типов расходников
         /// </summary>
         [field:SerializeField]
         [field: Tooltip("Реестр типов расходников")]
-        public ConsumableTypeRegistry ConsumableTypes { get; private set; }
+        public InventoryItemTypesRegistry ConsumableTypes { get; private set; }
     }
 }

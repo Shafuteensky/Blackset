@@ -8,7 +8,7 @@ namespace Blackset.Data.Registries
     /// </summary>
     /// <typeparam name="TData">Тип данных</typeparam>
     // TODO Возможно стоит заменить наследование на раздельный класс RegistrySelectionContext
-    public abstract class SelectableDataRegistry<TData> : BaseDataRegistry<TData> where TData : BaseData
+    public abstract class SelectableDataRegistry<T> : BaseDataRegistry<T> where T : BaseData
     {
         /// <summary>
         /// Идентификатор выбранных данных

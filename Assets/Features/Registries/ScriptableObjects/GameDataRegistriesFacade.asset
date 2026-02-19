@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc34c9253ee14378801ee457a845e15e, type: 3}
   m_Name: GameDataRegistriesFacade
   m_EditorClassIdentifier: Assembly-CSharp::Blackset.Data.Registries.DataRegistriesFacade
-  <Dices>k__BackingField: {fileID: 11400000, guid: 9e2de7d4160160646b95730d66ba2888, type: 2}
-  <Consumables>k__BackingField: {fileID: 11400000, guid: 6acb295a4077a9c4ca12486b902fd956, type: 2}
-  <DiceTypes>k__BackingField: {fileID: 11400000, guid: a20b45fa0f8fca54eb745fd54815faf1, type: 2}
-  <ConsumableTypes>k__BackingField: {fileID: 11400000, guid: 825ddbad5a8d8b44184241c51e8d3433, type: 2}
+  <Dices>k__BackingField: {fileID: 11400000, guid: ed018a7561b12ba4f96674954885bfdc, type: 2}
+  <Consumables>k__BackingField: {fileID: 11400000, guid: d68c7f8b5e8d57343b1bade366855ab2, type: 2}
+  <DiceTypes>k__BackingField: {fileID: 11400000, guid: baff5f3f39c21ed4085b2717f755f0a8, type: 2}
+  <ConsumableTypes>k__BackingField: {fileID: 11400000, guid: cc58f8da688b0ba4591b5b872639060e, type: 2}

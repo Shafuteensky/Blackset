@@ -10,7 +10,7 @@ namespace Extensions.Data.InMemoryData.SelectionContext
     /// </summary>
     /// <typeparam name="TData">Тип данных</typeparam>
     [RequireComponent(typeof(ContextIdHolder))]
-    public abstract class AssignSelectionContextButton<TData> : GenericButton
+    public abstract class AssignSelectionContextButton<TData> : AbstractButton
         where TData : InMemoryDataItem
     {
         [SerializeField]

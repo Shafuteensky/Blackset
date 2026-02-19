@@ -9,7 +9,7 @@ namespace Extensions.UIWindows
     /// <summary>
     /// Кнопка для закрытия окна интерфейса
     /// </summary>
-    public class ButtonCloseUIWindow : GenericButton
+    public class ButtonCloseUIWindow : AbstractButton
     {
         /// <summary>
         /// Закрытие текущего окна в фокусе и открытие предыдущего

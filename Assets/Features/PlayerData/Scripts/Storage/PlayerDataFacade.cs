@@ -34,13 +34,13 @@ namespace Blackset.Player
         /// </summary>
         [field:SerializeField]
         [field: Tooltip("Инвентарь дайсов")]
-        public DicesInventory DicesInventory { get; private set; }
+        public Inventory.Inventories.Inventory DicesInventory { get; private set; }
         /// <summary>
         /// Инвентарь расходников
         /// </summary>
         [field:SerializeField]
         [field: Tooltip("Инвентарь расходников")]
-        public ConsumablesInventory ConsumablesInventory { get; private set; }
+        public Inventory.Inventories.Inventory ConsumablesInventory { get; private set; }
         
         [field: Header("Пулы"), Space]
         /// <summary>
@@ -48,22 +48,22 @@ namespace Blackset.Player
         /// </summary>
         [field:SerializeField]
         [field: Tooltip("Пулы дайсов (по номиналам)")]
-        public List<DicesInventory> DicesPoolRows { get; private set; }
+        public List<Inventory.Inventories.Inventory> DicesPoolRows { get; private set; }
         /// <summary>
         /// Пул расходников
         /// </summary>
         [field:SerializeField]
         [field: Tooltip("Пул расходников")]
-        public ConsumablesInventory ConsumablesPool { get; private set; }
+        public Inventory.Inventories.Inventory ConsumablesPool { get; private set; }
 
         /// <summary>
         /// Получить пул дайсов определенного типа
         /// </summary>
         /// <param name="diceType">Тип требуемого пула</param>
         /// <returns>Пул дайсов определенного типа</returns>
-        public DicesInventory GetDicePoolRow(DiceType diceType)
+        public Inventory.Inventories.Inventory GetDicePoolRow(DiceType diceType)
         {
-            foreach (DicesInventory dicePoolRow in DicesPoolRows)
+            foreach (Inventory.Inventories.Inventory dicePoolRow in DicesPoolRows)
             {
                 if (dicePoolRow.AllowedItemType == diceType) return dicePoolRow;
             }

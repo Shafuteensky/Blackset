@@ -17,7 +17,7 @@ namespace Extensions.Audio
         
         [Header("Кнопка"), Space]
         [SerializeField]
-        protected GenericHoldButton holdButton;
+        protected AbstractHoldButton holdButton;
 
         protected override void OnEnable()
         {

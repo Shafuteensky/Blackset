@@ -9,11 +9,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: afcca8e71a0f4a09b7260b2664f063ba, type: 3}
+  m_Script: {fileID: 11500000, guid: 8c2263ec8f4e423f8bc6990f6ea6c781, type: 3}
   m_Name: ConsumableTypesRegistry
-  m_EditorClassIdentifier: Assembly-CSharp::Blackset.Data.Registries.ConsumableTypeRegistry
-  id: ConsumableTypesRegistry
-  dataName: Consumables Types Registry
+  m_EditorClassIdentifier: Assembly-CSharp::Blackset.Data.Registries.InventoryItemTypesRegistry
+  id: c9542dfc2461422691d4600900776a9f
+  dataName: 
+  dataDescription: 
   data:
   - {fileID: 11400000, guid: 0e1a15f03f84f8d46ba873a79cfd79ab, type: 2}
   - {fileID: 11400000, guid: 993bee1bbd4e925439649326aceece27, type: 2}
