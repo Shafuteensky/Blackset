@@ -1,11 +1,11 @@
 using System;
 using Blackset.Data;
-using Blackset.Data.Items.Types;
 using Blackset.Inventory.Cells;
 using Blackset.Player;
 using Blackset.UI.Inventory;
 using Extensions.Generics;
 using Extensions.Log;
+using Extensions.ScriptableValues;
 using Features.Inventory.Scripts.Items;
 using UnityEngine;
 
@@ -32,6 +32,11 @@ namespace Blackset.Shop
         
         [Header("Ячейка"), Space]
         [SerializeField]
+        [Tooltip("Опциональная фиксированная стоимость лота (оставить пустым чтобы брать цену от предмета)")]
+        protected IntValue fixedPrice;
+        
+        [Header("Ячейка"), Space]
+        [SerializeField]
         protected InventoryItemElement itemElement;
         
         [Header("Игровые данные"), Space]
@@ -53,9 +58,11 @@ namespace Blackset.Shop
         {
             InventoryCell cell = itemElement.Inventory.GetById(itemElement.ItemCellId);
             InventoryItem shopItem = itemElement.Inventory.GetCellItemData(itemElement.ItemCellId);
-            InventoryItemType shopItemType = itemElement.Inventory.GetCellTypeData(itemElement.ItemCellId);
             int playerMoney = playerData.MetaData.Data.Money;
-            int itemPrice = shopItem.GetPrice(itemElement.Inventory.GetCellTypeData(itemElement.ItemCellId));
+            
+            int itemPrice;
+            if (fixedPrice != null) itemPrice = fixedPrice.Value;
+            else itemPrice = shopItem.GetPrice(itemElement.Inventory.GetCellTypeData(itemElement.ItemCellId));
             
             if (playerMoney < itemPrice)
             {

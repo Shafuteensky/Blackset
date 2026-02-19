@@ -35,9 +35,13 @@ namespace Blackset.UI.Inventory
         [SerializeField]
         protected CanvasGroup canvasGroup;
         
-        [Header("Вывод"), Space]
+        [Header("Графика"), Space]
         [SerializeField]
         protected Image itemIconImage;
+        [SerializeField]
+        protected Image setImage;
+            
+        [Header("Текст"), Space]
         [SerializeField]
         protected TMP_Text amountText;
         [SerializeField]
@@ -176,7 +180,10 @@ namespace Blackset.UI.Inventory
                 itemIconImage.color = newColor;
             }
             else
+            {
                 itemIconImage.color = item.Color;
+                if (setImage != null) setImage.color = item.Set.Color;
+            }
         }
 
         private void SetAmountText(InventoryCell cell)

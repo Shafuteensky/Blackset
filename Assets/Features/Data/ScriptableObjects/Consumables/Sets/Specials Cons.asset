@@ -13,5 +13,6 @@ MonoBehaviour:
   m_Name: Specials Cons
   m_EditorClassIdentifier: Assembly-CSharp::Blackset.Data.ConsumableSet
   id: df0ed3c5f896423caebe210b556d3563
-  dataName: Special Consumables
+  dataName: Special consumables set
   dataDescription: Special unique consumables
+  color: {r: 0.5560249, g: 0.17094338, b: 0.5999999, a: 1}

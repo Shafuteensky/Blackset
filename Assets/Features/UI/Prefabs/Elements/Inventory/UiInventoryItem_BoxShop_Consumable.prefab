@@ -88,6 +88,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1190728570505006796, guid: 06f53f77646099743bd5828c8a816450, type: 3}
+      propertyPath: intValue
+      value: 
+      objectReference: {fileID: 11400000, guid: ef58e64d0361d694daf5a451cee73f2d, type: 2}
     - target: {fileID: 2317565076098598902, guid: 06f53f77646099743bd5828c8a816450, type: 3}
       propertyPath: m_Type
       value: 0
@@ -104,6 +108,10 @@ PrefabInstance:
       propertyPath: m_SizeDelta.x
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8831153011377760544, guid: 06f53f77646099743bd5828c8a816450, type: 3}
+      propertyPath: fixedPrice
+      value: 
+      objectReference: {fileID: 11400000, guid: ef58e64d0361d694daf5a451cee73f2d, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

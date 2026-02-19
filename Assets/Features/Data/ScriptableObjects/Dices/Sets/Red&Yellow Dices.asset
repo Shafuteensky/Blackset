@@ -13,5 +13,6 @@ MonoBehaviour:
   m_Name: Red&Yellow Dices
   m_EditorClassIdentifier: Assembly-CSharp::Blackset.Data.DiceSet
   id: a3c4c3385e334db0b116713ed00f92fd
-  dataName: Red&Yellow Dices
+  dataName: Red&Yellow dices set
   dataDescription: Special unique dices
+  color: {r: 0.690566, g: 0.48748797, b: 0.09250979, a: 1}

@@ -13,5 +13,6 @@ MonoBehaviour:
   m_Name: Basic Cons
   m_EditorClassIdentifier: Assembly-CSharp::Blackset.Data.ConsumableSet
   id: 7a515c1ca7d84ff2a721e044878a217b
-  dataName: Basic Consumable Set
-  dataDescription: Standart consumables
+  dataName: Basic consumable set
+  dataDescription: 'Standart consumables '
+  color: {r: 0.65882355, g: 0.6313726, b: 0.53333336, a: 1}

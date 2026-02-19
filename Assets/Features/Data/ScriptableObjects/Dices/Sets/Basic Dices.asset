@@ -13,5 +13,6 @@ MonoBehaviour:
   m_Name: Basic Dices
   m_EditorClassIdentifier: Assembly-CSharp::Blackset.Data.DiceSet
   id: 773d4e388bb647008fc138494f14d76b
-  dataName: Basic Dice Set
+  dataName: Basic dice set
   dataDescription: Standart dices
+  color: {r: 0.65882355, g: 0.6313726, b: 0.53333336, a: 1}
