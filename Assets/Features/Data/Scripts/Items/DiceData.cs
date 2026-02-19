@@ -29,7 +29,7 @@ namespace Blackset.Data
 
         [SerializeField]
         [Range(1, 10)]
-        [Tooltip("Базовая стоимость бюджета сборки (без учета редкости и типа)")]
+        [Tooltip("Стоимость бюджета сборки")]
         private int budgetPrice = 1;
         
         [Header("Стиль")]
