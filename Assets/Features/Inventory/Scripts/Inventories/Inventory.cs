@@ -403,7 +403,7 @@ namespace Blackset.Inventory.Inventories
 
             if ( thisCell.IsEmpty || 
                  thisCell.IsDefault ) return -1;
-            if (!IsItemAllowed(GetById(cellId), targetInventory)) return thisCell.ItemAmount;
+            if (!targetInventory.IsItemAllowed(GetById(cellId), this)) return thisCell.ItemAmount;
 
             int thisCellIndex = GetIndexById(cellId);
             int targetCellIndex = targetInventory.GetIndexById(targetCellId);
@@ -589,7 +589,7 @@ namespace Blackset.Inventory.Inventories
         private bool IsItemAllowed(string itemId, string typeId, Inventory fromInventory)
         {
             // Реестры данных различных
-            if (fromInventory.dataRegistry.Id != dataRegistry.Id &&
+            if (fromInventory.dataRegistry.Id != dataRegistry.Id ||
                 fromInventory.typeRegistry.Id != typeRegistry.Id) return false;
             
             // Нет ограничений от инвентаря — true
@@ -784,11 +784,28 @@ namespace Blackset.Inventory.Inventories
             InventoryCell newTargetCell = targetInventory.CreateCell(thisCell.ItemId, thisCell.ItemTypeId, movedToTarget, false);
             if (newTargetCell == null) return false;
 
-            int returnedRemaining = AddItem(thatCell.ItemId, thatCell.ItemTypeId, thatCell.ItemAmount, true, -1);
-            if (returnedRemaining > 0)
+            bool isFullMove = thisCell.ItemAmount <= movedToTarget;
+
+            if (isFullMove)
             {
-                RemoveItemAmountByContent(thatCell.ItemId, thatCell.ItemTypeId, thatCell.ItemAmount - returnedRemaining);
-                return false;
+                if (!IsItemAllowed(thatCell, targetInventory)) return false;
+
+                int clamped = Mathf.Min(thatCell.ItemAmount, maxCellAmount);
+                InventoryCell newSourceCell = CreateCell(thatCell.ItemId, thatCell.ItemTypeId, clamped, false);
+                if (newSourceCell == null) return false;
+
+                Data[thisItemCellIndex] = newSourceCell;
+                onCellUpdated?.Invoke(newSourceCell.Id);
+                MarkDirty();
+            }
+            else
+            {
+                int returnedRemaining = AddItem(thatCell.ItemId, thatCell.ItemTypeId, thatCell.ItemAmount, true, -1);
+                if (returnedRemaining > 0)
+                {
+                    RemoveItemAmountByContent(thatCell.ItemId, thatCell.ItemTypeId, thatCell.ItemAmount - returnedRemaining);
+                    return false;
+                }
             }
 
             targetInventory.Data[targetItemCellIndex] = newTargetCell;
@@ -806,16 +823,20 @@ namespace Blackset.Inventory.Inventories
                 return false;
             }
 
-            if (thisCell.ItemAmount <= 0)
+            if (!isFullMove && thisCell.ItemAmount <= 0)
             {
                 int removedIndex = GetIndexById(thisCell.Id);
                 RemoveItem(thisCell);
                 if (removedIndex >= 0) onCellMoved?.Invoke(removedIndex);
             }
-            else
+            else if (!isFullMove)
             {
                 onCellUpdated?.Invoke(thisCell.Id);
                 MarkDirty();
+                onCellMoved?.Invoke(thisItemCellIndex);
+            }
+            else
+            {
                 onCellMoved?.Invoke(thisItemCellIndex);
             }
 
