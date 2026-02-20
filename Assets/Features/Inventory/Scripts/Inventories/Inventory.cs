@@ -435,6 +435,7 @@ namespace Blackset.Inventories
             }
 
             int movedToTarget = 0;
+            
             // Перемещение в дефолтную или пустую ячейку — заменить ее на нужную ячейку
             if (thatCell.IsDefault || thatCell.IsEmpty)
             {
@@ -452,6 +453,7 @@ namespace Blackset.Inventories
                 int remaining = thisCell.ItemAmount - movedToTarget;
                 return ApplyMoveResult(remaining);
             }
+            
             // Перемещение в ячейку с таким же содержимым — увеличить количество
             if (thatCell.IsContentSame(thisCell))
             {
@@ -466,6 +468,7 @@ namespace Blackset.Inventories
 
                 return ApplyMoveResult(remaining);
             }
+            
             // Перемещение в заполненную иным содержимым ячейку — поменять ячейки местами
             if (allowedItemType != null && thatCell.ItemTypeId != allowedItemType.Id) return thisCell.ItemAmount;
 
@@ -493,8 +496,10 @@ namespace Blackset.Inventories
 
             movedToTarget = Mathf.Min(thisCell.ItemAmount, targetInventory.maxCellAmount);
             if (movedToTarget <= 0) return thisCell.ItemAmount;
-
-            if (!CanFitItemCompletely(this, thatCell.ItemId, thatCell.ItemTypeId, thatCell.ItemAmount)) return thisCell.ItemAmount;
+            
+            int additionalAvailableCells = 0;
+            if (IsSlotsLimited() && thisCell.ItemAmount <= movedToTarget) additionalAvailableCells = 1;
+            if (!CanFitItemCompletely(this, thatCell.ItemId, thatCell.ItemTypeId, thatCell.ItemAmount, additionalAvailableCells)) return thisCell.ItemAmount;
 
             InventoryCell displacedCell = thatCell;
 
@@ -671,12 +676,12 @@ namespace Blackset.Inventories
         /// </summary>
         /// <param name="InventoryCell">Ячейка инвентаря</param>
         /// <returns>true если класс и тип подходят, иначе false</returns>
-        private bool IsItemAllowed(InventoryCell cell, Inventory fromInventory)
-        {
-            return IsItemAllowed(cell.ItemId, cell.ItemTypeId, fromInventory);
-        }
-        
-        private bool CanFitItemCompletely(Inventory inventory, string itemId, string itemTypeId, int amount)
+        private bool IsItemAllowed(InventoryCell cell, Inventory fromInventory) => IsItemAllowed(cell.ItemId, cell.ItemTypeId, fromInventory);
+
+        /// <summary>
+        /// Полностью ли вмещается предмет из ячейки в инвентарь
+        /// </summary>
+        private bool CanFitItemCompletely(Inventory inventory, string itemId, string itemTypeId, int amount, int additionalAvailableCells = 0)
         {
             if (amount <= 0) return true;
 
@@ -709,7 +714,7 @@ namespace Blackset.Inventories
             int freeSlots = 0;
             if (inventory.Data.Count < inventory.slotsCount) freeSlots = inventory.slotsCount - inventory.Data.Count;
 
-            int availableNewCells = freeSlots + defaultCount;
+            int availableNewCells = freeSlots + defaultCount + Mathf.Max(0, additionalAvailableCells);
             int neededNewCells = Mathf.CeilToInt((float)remaining / inventory.maxCellAmount);
 
             return availableNewCells >= neededNewCells;
