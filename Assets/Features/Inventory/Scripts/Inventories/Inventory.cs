@@ -342,7 +342,7 @@ namespace Blackset.Inventory.Inventories
             if ( !CheckCell(thisCell) || 
                  !CheckInventory(targetInventory) ) return thisCell.ItemAmount;
             int itemAmount = thisCell.ItemAmount;
-            if (!IsItemAllowed(GetById(cellId), targetInventory)) return itemAmount;
+            if (!targetInventory.IsItemAllowed(GetById(cellId), this)) return itemAmount;
             
             if (thisCell.IsEmpty || thisCell.IsDefault) return -1;
 
@@ -386,6 +386,16 @@ namespace Blackset.Inventory.Inventories
             if ( !CheckId(cellId) || 
                  !CheckId(targetCellId) || 
                  !CheckInventory(targetInventory) ) return -1;
+            
+            if (targetInventory.Id == Id)
+            {
+                if (cellId == targetCellId) return 0;
+                if (!SwapItem(cellId, targetCellId, this)) return -1;
+                FillDefaultSlotsIfNeeded();
+                MarkDirty();
+                return 0;
+            }
+            
             if ( !GetById(cellId, out InventoryCell thisCell) || 
                  !CheckCell(thisCell) ) return -1;
             if ( !targetInventory.GetById(targetCellId, out InventoryCell thatCell ) || 
@@ -426,7 +436,18 @@ namespace Blackset.Inventory.Inventories
             // Перемещение в дефолтную или пустую ячейку — заменить ее на нужную ячейку
             if (thatCell.IsDefault || thatCell.IsEmpty)
             {
-                int remaining = targetInventory.AddItem(thisCell, false, targetCellIndex);
+                int movedToTarget = Mathf.Min(thisCell.ItemAmount, targetInventory.maxCellAmount);
+                if (movedToTarget <= 0) return thisCell.ItemAmount;
+
+                InventoryCell newCell = targetInventory.CreateCell(thisCell.ItemId, thisCell.ItemTypeId, movedToTarget, false);
+                if (newCell == null) return thisCell.ItemAmount;
+
+                targetInventory.Data[targetCellIndex] = newCell;
+                targetInventory.onCellRemoved?.Invoke(targetCellIndex);
+                targetInventory.onCellAdded?.Invoke(newCell.Id);
+                targetInventory.MarkDirty();
+
+                int remaining = thisCell.ItemAmount - movedToTarget;
                 return ApplyMoveResult(remaining);
             }
             // Перемещение в ячейку с таким же содержимым — увеличить количество
@@ -445,7 +466,7 @@ namespace Blackset.Inventory.Inventories
             }
             // Перемещение в заполненную иным содержимым ячейку — поменять ячейки местами
             if (allowedItemType != null && thatCell.ItemTypeId != allowedItemType.Id) return thisCell.ItemAmount;
-            if (!SwapItem(thisCellIndex, targetCellIndex, targetInventory)) return thisCell.ItemAmount;
+            if (!SwapItemSmart(thisCellIndex, targetCellIndex, targetInventory)) return thisCell.ItemAmount;
 
             targetInventory.FillDefaultSlotsIfNeeded();
             targetInventory.MarkDirty();
@@ -731,6 +752,163 @@ namespace Blackset.Inventory.Inventories
             if (!SwapItem(firstIndex, secondIndex, targetInventory)) return false;
 
             return true;
+        }
+        
+        private bool SwapItemSmart(int thisItemCellIndex, int targetItemCellIndex, Inventory targetInventory)
+        {
+            if (targetInventory == null) return false;
+            if (thisItemCellIndex == targetItemCellIndex && targetInventory.Id == Id) return false;
+
+            if (!CheckIndex(thisItemCellIndex) ||
+                !CheckIndex(targetItemCellIndex, targetInventory.Data.Count)) return false;
+
+            InventoryCell thisCell = Data[thisItemCellIndex];
+            InventoryCell thatCell = targetInventory.Data[targetItemCellIndex];
+
+            if (!CheckCell(thisCell) || !CheckCell(thatCell)) return false;
+
+            if (thisCell.IsEmpty || thisCell.IsDefault) return false;
+            if (thatCell.IsEmpty || thatCell.IsDefault) return false;
+
+            if (!IsItemAllowed(thisCell, this)) return false;
+            if (!targetInventory.IsItemAllowed(thisCell, this)) return false;
+
+            if (!IsItemAllowed(thatCell, targetInventory)) return false;
+            if (!IsItemAllowed(thatCell.ItemId, thatCell.ItemTypeId, targetInventory)) return false;
+
+            int movedToTarget = Mathf.Min(thisCell.ItemAmount, targetInventory.maxCellAmount);
+            if (movedToTarget <= 0) return false;
+
+            if (!CanFitItem(thatCell.ItemId, thatCell.ItemTypeId, thatCell.ItemAmount, targetInventory)) return false;
+
+            InventoryCell newTargetCell = targetInventory.CreateCell(thisCell.ItemId, thisCell.ItemTypeId, movedToTarget, false);
+            if (newTargetCell == null) return false;
+
+            int returnedRemaining = AddItem(thatCell.ItemId, thatCell.ItemTypeId, thatCell.ItemAmount, true, -1);
+            if (returnedRemaining > 0)
+            {
+                RemoveItemAmountByContent(thatCell.ItemId, thatCell.ItemTypeId, thatCell.ItemAmount - returnedRemaining);
+                return false;
+            }
+
+            targetInventory.Data[targetItemCellIndex] = newTargetCell;
+            targetInventory.onCellUpdated?.Invoke(newTargetCell.Id);
+            targetInventory.MarkDirty();
+
+            int residue = thisCell.DecreaseAmount(movedToTarget, maxCellAmount);
+            if (residue > 0)
+            {
+                targetInventory.Data[targetItemCellIndex] = thatCell;
+                targetInventory.onCellUpdated?.Invoke(thatCell.Id);
+                targetInventory.MarkDirty();
+
+                RemoveItemAmountByContent(thatCell.ItemId, thatCell.ItemTypeId, thatCell.ItemAmount);
+                return false;
+            }
+
+            if (thisCell.ItemAmount <= 0)
+            {
+                int removedIndex = GetIndexById(thisCell.Id);
+                RemoveItem(thisCell);
+                if (removedIndex >= 0) onCellMoved?.Invoke(removedIndex);
+            }
+            else
+            {
+                onCellUpdated?.Invoke(thisCell.Id);
+                MarkDirty();
+                onCellMoved?.Invoke(thisItemCellIndex);
+            }
+
+            string firstCellId = thisCell.Id;
+            string secondCellId = newTargetCell.Id;
+            onCellSwapped?.Invoke(firstCellId, secondCellId, targetInventory);
+
+            FillDefaultSlotsIfNeeded();
+            MarkDirty();
+            return true;
+        }
+
+        private bool CanFitItem(string itemId, string itemTypeId, int amount, Inventory fromInventory)
+        {
+            if (amount <= 0) return true;
+            if (!CheckId(itemId) || !CheckId(itemTypeId)) return false;
+
+            if (!IsItemAllowed(itemId, itemTypeId, fromInventory)) return false;
+
+            int mergeSpace = 0;
+            for (int i = 0; i < Data.Count; i++)
+            {
+                InventoryCell cell = Data[i];
+                if (cell == null) continue;
+                if (cell.IsEmpty || cell.IsDefault) continue;
+
+                if (!cell.IsContentSame(itemId, itemTypeId)) continue;
+
+                int free = maxCellAmount - cell.ItemAmount;
+                if (free > 0) mergeSpace += free;
+
+                if (mergeSpace >= amount) return true;
+            }
+
+            if (!IsSlotsLimited())
+            {
+                return mergeSpace >= amount || maxCellAmount > 0;
+            }
+
+            int freeSlots = slotsCount - Data.Count;
+            if (freeSlots < 0) freeSlots = 0;
+
+            int defaultSlots = 0;
+            for (int i = 0; i < Data.Count; i++)
+            {
+                InventoryCell cell = Data[i];
+                if (cell == null) continue;
+                if (cell.IsDefault) defaultSlots++;
+            }
+
+            int newCells = freeSlots + defaultSlots;
+            if (newCells <= 0) return mergeSpace >= amount;
+
+            long newCellsCapacity = (long)newCells * (long)maxCellAmount;
+            long totalCapacity = (long)mergeSpace + newCellsCapacity;
+
+            return totalCapacity >= amount;
+        }
+
+        private void RemoveItemAmountByContent(string itemId, string itemTypeId, int amount)
+        {
+            if (amount <= 0) return;
+
+            int remaining = amount;
+
+            for (int i = Data.Count - 1; i >= 0 && remaining > 0; i--)
+            {
+                InventoryCell cell = Data[i];
+                if (cell == null) continue;
+                if (cell.IsEmpty || cell.IsDefault) continue;
+
+                if (!cell.IsContentSame(itemId, itemTypeId)) continue;
+
+                int before = cell.ItemAmount;
+                int residue = cell.DecreaseAmount(remaining, maxCellAmount);
+                int removed = remaining - residue;
+
+                if (removed > 0)
+                {
+                    onCellUpdated?.Invoke(cell.Id);
+                    MarkDirty();
+                }
+
+                if (cell.ItemAmount <= 0)
+                {
+                    RemoveItem(cell);
+                    onCellRemoved?.Invoke(i);
+                }
+
+                remaining = residue;
+            }
+
+            FillDefaultSlotsIfNeeded();
         }
         
         #endregion
