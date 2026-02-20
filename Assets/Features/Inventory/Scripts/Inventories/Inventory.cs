@@ -434,10 +434,11 @@ namespace Blackset.Inventories
                 return 0;
             }
 
+            int movedToTarget = 0;
             // Перемещение в дефолтную или пустую ячейку — заменить ее на нужную ячейку
             if (thatCell.IsDefault || thatCell.IsEmpty)
             {
-                int movedToTarget = Mathf.Min(thisCell.ItemAmount, targetInventory.maxCellAmount);
+                movedToTarget = Mathf.Min(thisCell.ItemAmount, targetInventory.maxCellAmount);
                 if (movedToTarget <= 0) return thisCell.ItemAmount;
 
                 InventoryCell newCell = targetInventory.CreateCell(thisCell.ItemId, thisCell.ItemTypeId, movedToTarget);
@@ -467,12 +468,66 @@ namespace Blackset.Inventories
             }
             // Перемещение в заполненную иным содержимым ячейку — поменять ячейки местами
             if (allowedItemType != null && thatCell.ItemTypeId != allowedItemType.Id) return thisCell.ItemAmount;
-            if (!SwapItem(thisCellIndex, targetCellIndex, targetInventory)) return thisCell.ItemAmount;
+
+            bool isSwapPossibleByAmounts =
+                thisCell.ItemAmount <= targetInventory.maxCellAmount &&
+                thatCell.ItemAmount <= maxCellAmount;
+
+            if (isSwapPossibleByAmounts)
+            {
+                if (!SwapItem(thisCellIndex, targetCellIndex, targetInventory)) return thisCell.ItemAmount;
+
+                TryAutoMergeCell(thisCellIndex);
+                targetInventory.TryAutoMergeCell(targetCellIndex);
+
+                targetInventory.FillDefaultSlotsIfNeeded();
+                targetInventory.MarkDirty();
+
+                FillDefaultSlotsIfNeeded();
+                MarkDirty();
+
+                return 0;
+            }
+
+            if (!IsItemAllowed(thatCell.ItemId, thatCell.ItemTypeId, targetInventory)) return thisCell.ItemAmount;
+
+            movedToTarget = Mathf.Min(thisCell.ItemAmount, targetInventory.maxCellAmount);
+            if (movedToTarget <= 0) return thisCell.ItemAmount;
+
+            if (!CanFitItemCompletely(this, thatCell.ItemId, thatCell.ItemTypeId, thatCell.ItemAmount)) return thisCell.ItemAmount;
+
+            InventoryCell displacedCell = thatCell;
+
+            InventoryCell newTargetCell = targetInventory.CreateCell(thisCell.ItemId, thisCell.ItemTypeId, movedToTarget);
+            if (newTargetCell == null) return thisCell.ItemAmount;
+
+            targetInventory.Data[targetCellIndex] = newTargetCell;
+            targetInventory.onCellRemoved?.Invoke(targetCellIndex);
+            targetInventory.onCellAdded?.Invoke(newTargetCell.Id);
+            targetInventory.MarkDirty();
+
+            int displacedRemaining = AddItem(displacedCell.ItemId, displacedCell.ItemTypeId, displacedCell.ItemAmount, true, -1);
+            if (displacedRemaining > 0)
+            {
+                targetInventory.Data[targetCellIndex] = displacedCell;
+                targetInventory.onCellRemoved?.Invoke(targetCellIndex);
+                targetInventory.onCellAdded?.Invoke(displacedCell.Id);
+                targetInventory.MarkDirty();
+                return thisCell.ItemAmount;
+            }
+
+            int remainingAfterMove = thisCell.ItemAmount - movedToTarget;
+            int result = ApplyMoveResult(remainingAfterMove);
+
+            targetInventory.TryAutoMergeCell(targetCellIndex);
 
             targetInventory.FillDefaultSlotsIfNeeded();
             targetInventory.MarkDirty();
 
-            return 0;
+            FillDefaultSlotsIfNeeded();
+            MarkDirty();
+
+            return result;
         }
         
         /// <summary>
@@ -621,6 +676,45 @@ namespace Blackset.Inventories
             return IsItemAllowed(cell.ItemId, cell.ItemTypeId, fromInventory);
         }
         
+        private bool CanFitItemCompletely(Inventory inventory, string itemId, string itemTypeId, int amount)
+        {
+            if (amount <= 0) return true;
+
+            int remaining = amount;
+
+            for (int i = 0; i < inventory.Data.Count && remaining > 0; i++)
+            {
+                InventoryCell cell = inventory.Data[i];
+                if (cell == null) continue;
+                if (cell.IsDefault || cell.IsEmpty) continue;
+                if (!cell.IsContentSame(itemId, itemTypeId)) continue;
+
+                int free = inventory.maxCellAmount - cell.ItemAmount;
+                if (free <= 0) continue;
+
+                remaining -= Mathf.Min(free, remaining);
+            }
+
+            if (remaining <= 0) return true;
+            if (!inventory.IsSlotsLimited()) return true;
+
+            int defaultCount = 0;
+            for (int i = 0; i < inventory.Data.Count; i++)
+            {
+                InventoryCell cell = inventory.Data[i];
+                if (cell == null) continue;
+                if (cell.IsDefault) defaultCount++;
+            }
+
+            int freeSlots = 0;
+            if (inventory.Data.Count < inventory.slotsCount) freeSlots = inventory.slotsCount - inventory.Data.Count;
+
+            int availableNewCells = freeSlots + defaultCount;
+            int neededNewCells = Mathf.CeilToInt((float)remaining / inventory.maxCellAmount);
+
+            return availableNewCells >= neededNewCells;
+        }
+        
         [HideInCallstack]
         private bool CheckIndex(int index, int count = -1)
         {
@@ -701,6 +795,55 @@ namespace Blackset.Inventories
 
             Remove(firstDefaultCellIndex);
             return firstDefaultCellIndex;
+        }
+        
+        private void TryAutoMergeCell(int cellIndex)
+        {
+            if (!CheckIndex(cellIndex)) return;
+
+            InventoryCell cell = Data[cellIndex];
+            if (cell == null) return;
+            if (cell.IsDefault || cell.IsEmpty) return;
+            if (cell.ItemAmount <= 0) return;
+
+            int remaining = cell.ItemAmount;
+
+            for (int i = 0; i < Data.Count && remaining > 0; i++)
+            {
+                if (i == cellIndex) continue;
+
+                InventoryCell presentCell = Data[i];
+                if (presentCell == null) continue;
+                if (presentCell.IsDefault || presentCell.IsEmpty) continue;
+                if (!presentCell.IsContentSame(cell)) continue;
+                if (presentCell.ItemAmount >= maxCellAmount) continue;
+
+                int before = presentCell.ItemAmount;
+                remaining = presentCell.IncreaseAmount(remaining, maxCellAmount);
+
+                if (presentCell.ItemAmount != before)
+                {
+                    onCellUpdated?.Invoke(presentCell.Id);
+                }
+            }
+
+            if (remaining == cell.ItemAmount) return;
+
+            int moved = cell.ItemAmount - remaining;
+            if (moved > 0)
+            {
+                cell.DecreaseAmount(moved, maxCellAmount);
+                onCellUpdated?.Invoke(cell.Id);
+                MarkDirty();
+            }
+
+            if (remaining <= 0)
+            {
+                Remove(cellIndex);
+                AddDefaultSlotIfNeeded(cellIndex);
+                onCellRemoved?.Invoke(cellIndex);
+                MarkDirty();
+            }
         }
         
         /// <summary>
