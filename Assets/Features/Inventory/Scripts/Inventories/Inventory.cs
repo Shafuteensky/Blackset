@@ -439,7 +439,7 @@ namespace Blackset.Inventory.Inventories
                 int movedToTarget = Mathf.Min(thisCell.ItemAmount, targetInventory.maxCellAmount);
                 if (movedToTarget <= 0) return thisCell.ItemAmount;
 
-                InventoryCell newCell = targetInventory.CreateCell(thisCell.ItemId, thisCell.ItemTypeId, movedToTarget, false);
+                InventoryCell newCell = targetInventory.CreateCell(thisCell.ItemId, thisCell.ItemTypeId, movedToTarget);
                 if (newCell == null) return thisCell.ItemAmount;
 
                 targetInventory.Data[targetCellIndex] = newCell;
@@ -735,8 +735,9 @@ namespace Blackset.Inventory.Inventories
         /// <summary>
         /// Поменять ячейки местами
         /// </summary>
-        /// <param name="firstItemCellId">Идентификатор первой ячейки</param>
-        /// <param name="secondItemCellId">Идентификатор второй ячейки</param>
+        /// <param name="firstItemCellId">Идентификатор первой ячейки (этот инвентарь)</param>
+        /// <param name="secondItemCellId">Идентификатор второй ячейки (целевой инвентарь)</param>
+        /// <param name="targetInventory">Инвентарь второй ячейки (целевой)</param>
         /// <returns>true если обмен успешен, иначе false</returns>
         private bool SwapItem(string firstItemCellId, string secondItemCellId, Inventory targetInventory = null)
         {
@@ -754,6 +755,15 @@ namespace Blackset.Inventory.Inventories
             return true;
         }
         
+        /// <summary>
+        /// Выполняет частичный свап между инвентарями с учетом maxCellAmount
+        /// </summary>
+        /// <remarks>
+        /// Не допускает потери предметов и корректно возвращает вытеснённый предмет
+        /// </remarks>
+        /// <param name="firstItemCellId">Идентификатор первой ячейки (этот инвентарь)</param>
+        /// <param name="secondItemCellId">Идентификатор второй ячейки (целевой инвентарь)</param>
+        /// <param name="targetInventory">Инвентарь второй ячейки (целевой)</param>
         private bool SwapItemSmart(int thisItemCellIndex, int targetItemCellIndex, Inventory targetInventory)
         {
             if (targetInventory == null) return false;
@@ -781,7 +791,7 @@ namespace Blackset.Inventory.Inventories
 
             if (!CanFitItem(thatCell.ItemId, thatCell.ItemTypeId, thatCell.ItemAmount, targetInventory)) return false;
 
-            InventoryCell newTargetCell = targetInventory.CreateCell(thisCell.ItemId, thisCell.ItemTypeId, movedToTarget, false);
+            InventoryCell newTargetCell = targetInventory.CreateCell(thisCell.ItemId, thisCell.ItemTypeId, movedToTarget);
             if (newTargetCell == null) return false;
 
             bool isFullMove = thisCell.ItemAmount <= movedToTarget;
@@ -791,7 +801,7 @@ namespace Blackset.Inventory.Inventories
                 if (!IsItemAllowed(thatCell, targetInventory)) return false;
 
                 int clamped = Mathf.Min(thatCell.ItemAmount, maxCellAmount);
-                InventoryCell newSourceCell = CreateCell(thatCell.ItemId, thatCell.ItemTypeId, clamped, false);
+                InventoryCell newSourceCell = CreateCell(thatCell.ItemId, thatCell.ItemTypeId, clamped);
                 if (newSourceCell == null) return false;
 
                 Data[thisItemCellIndex] = newSourceCell;
@@ -800,7 +810,7 @@ namespace Blackset.Inventory.Inventories
             }
             else
             {
-                int returnedRemaining = AddItem(thatCell.ItemId, thatCell.ItemTypeId, thatCell.ItemAmount, true, -1);
+                int returnedRemaining = AddItem(thatCell.ItemId, thatCell.ItemTypeId, thatCell.ItemAmount);
                 if (returnedRemaining > 0)
                 {
                     RemoveItemAmountByContent(thatCell.ItemId, thatCell.ItemTypeId, thatCell.ItemAmount - returnedRemaining);
@@ -848,7 +858,10 @@ namespace Blackset.Inventory.Inventories
             MarkDirty();
             return true;
         }
-
+        
+        /// <summary>
+        /// Проверяет, может ли инвентарь вместить указанное количество предмета (с учетом лимитов, мерджа и доступных слотов)
+        /// </summary>
         private bool CanFitItem(string itemId, string itemTypeId, int amount, Inventory fromInventory)
         {
             if (amount <= 0) return true;
@@ -857,9 +870,8 @@ namespace Blackset.Inventory.Inventories
             if (!IsItemAllowed(itemId, itemTypeId, fromInventory)) return false;
 
             int mergeSpace = 0;
-            for (int i = 0; i < Data.Count; i++)
+            foreach (var cell in Data)
             {
-                InventoryCell cell = Data[i];
                 if (cell == null) continue;
                 if (cell.IsEmpty || cell.IsDefault) continue;
 
@@ -873,16 +885,15 @@ namespace Blackset.Inventory.Inventories
 
             if (!IsSlotsLimited())
             {
-                return mergeSpace >= amount || maxCellAmount > 0;
+                return mergeSpace >= amount;
             }
 
             int freeSlots = slotsCount - Data.Count;
             if (freeSlots < 0) freeSlots = 0;
 
             int defaultSlots = 0;
-            for (int i = 0; i < Data.Count; i++)
+            foreach (var cell in Data)
             {
-                InventoryCell cell = Data[i];
                 if (cell == null) continue;
                 if (cell.IsDefault) defaultSlots++;
             }
@@ -890,12 +901,15 @@ namespace Blackset.Inventory.Inventories
             int newCells = freeSlots + defaultSlots;
             if (newCells <= 0) return mergeSpace >= amount;
 
-            long newCellsCapacity = (long)newCells * (long)maxCellAmount;
-            long totalCapacity = (long)mergeSpace + newCellsCapacity;
+            long newCellsCapacity = newCells * maxCellAmount;
+            long totalCapacity = mergeSpace + newCellsCapacity;
 
             return totalCapacity >= amount;
         }
-
+        
+        /// <summary>
+        /// Удаляет указанное количество предметов (распределяя удаление по подходящим ячейкам)
+        /// </summary>
         private void RemoveItemAmountByContent(string itemId, string itemTypeId, int amount)
         {
             if (amount <= 0) return;
@@ -910,7 +924,6 @@ namespace Blackset.Inventory.Inventories
 
                 if (!cell.IsContentSame(itemId, itemTypeId)) continue;
 
-                int before = cell.ItemAmount;
                 int residue = cell.DecreaseAmount(remaining, maxCellAmount);
                 int removed = remaining - residue;
 
