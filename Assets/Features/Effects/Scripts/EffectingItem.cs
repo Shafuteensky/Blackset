@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using Blackset.Data;
 using Blackset.Data.Items.Types;
-using Features.Inventory.Scripts.Items;
+using Blackset.Inventories.Items;
 using UnityEngine;
 
 namespace Blackset.Effects

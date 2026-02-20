@@ -3,7 +3,7 @@ using Blackset.Data.Items.Types;
 using Blackset.Effects;
 using Blackset.Inventories;
 using Blackset.Inventories.Cells;
-using Features.Inventory.Scripts.Items;
+using Blackset.Inventories.Items;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;

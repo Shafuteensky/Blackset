@@ -1,8 +1,6 @@
 using System;
-using Blackset.Data.Base;
 using Blackset.Data.Items.Types;
-using Blackset.Effects;
-using Features.Inventory.Scripts.Items;
+using Blackset.Inventories.Items;
 using UnityEngine;
 
 namespace Blackset.Inventories

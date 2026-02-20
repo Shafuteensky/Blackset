@@ -5,8 +5,8 @@ using Blackset.Data.Items.Types;
 using Blackset.Data.Registries;
 using Blackset.Inventories;
 using Blackset.Inventories.Cells;
+using Blackset.Inventories.Items;
 using Extensions.Log;
-using Features.Inventory.Scripts.Items;
 using UnityEngine;
 using Random = UnityEngine.Random;
 

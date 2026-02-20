@@ -5,6 +5,7 @@ using UnityEngine;
 using Blackset.Data.Registries;
 using Blackset.Data.Items.Types;
 using Blackset.Inventories.Cells;
+using Blackset.Inventories.Items;
 using Extensions.Log;
 using Features.Inventory.Scripts.Items;
 

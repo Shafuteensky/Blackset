@@ -3,6 +3,7 @@ using Blackset.Data.Registries;
 using Extensions.Data.InMemoryData;
 using UnityEngine;
 using Blackset.Data.Items.Types;
+using Blackset.Inventories.Items;
 using Extensions.Log;
 using Features.Inventory.Scripts.Items;
 

@@ -1,8 +1,9 @@
 using Blackset.Data.Base;
 using Blackset.Data.Items.Types;
+using Features.Inventory.Scripts.Items;
 using UnityEngine;
 
-namespace Features.Inventory.Scripts.Items
+namespace Blackset.Inventories.Items
 {
     public class InventoryItem : BaseData
     {

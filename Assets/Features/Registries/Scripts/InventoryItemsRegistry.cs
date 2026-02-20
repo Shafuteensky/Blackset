@@ -1,4 +1,4 @@
-using Features.Inventory.Scripts.Items;
+using Blackset.Inventories.Items;
 using UnityEngine;
 
 namespace Blackset.Data.Registries

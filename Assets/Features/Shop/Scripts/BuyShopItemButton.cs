@@ -1,12 +1,12 @@
 using System;
 using Blackset.Data;
 using Blackset.Inventories.Cells;
+using Blackset.Inventories.Items;
 using Blackset.Player;
 using Blackset.UI.InventoryManagement;
 using Extensions.Generics;
 using Extensions.Log;
 using Extensions.ScriptableValues;
-using Features.Inventory.Scripts.Items;
 using UnityEngine;
 
 namespace Blackset.Shop

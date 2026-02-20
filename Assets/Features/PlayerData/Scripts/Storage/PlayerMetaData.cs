@@ -1,6 +1,12 @@
 using System;
+using System.Collections.Generic;
+using Blackset.Data;
 using UnityEngine;
 using Blackset.Inventories;
+using Blackset.Inventories.Cells;
+using Blackset.Inventories.Items;
+using Extensions.Log;
+using Features.Inventory.Scripts.Items;
 
 namespace Blackset.Player
 {
@@ -200,14 +206,46 @@ namespace Blackset.Player
         /// Текущий использованный бюджет сборки дайсов
         /// </summary>
         /// <returns>Целочисленное значение максимального бюджета сборки дайсов игрока</returns>
-        public int GetTotalUsedDiceBudget()
+        public int GetTotalUsedDiceBudget(List<Inventory> pools)
         {
-            return 0;
+            if (pools == null ||  pools.Count == 0)
+            {
+                ServiceDebug.LogError("Переданы невалидные пулы");
+                return 0;
+            }
+            
+            int totalUsedBudget = 0;
+            foreach (Inventory pool in pools)
+            {
+                totalUsedBudget += GetUsedDiceBudgetByPool(pool);
+            }
+            
+            return totalUsedBudget;
         }
 
-        public int GetUsedDiceBudgetByPool(Inventory inventory)
+        /// <summary>
+        /// Текущий использованный бюджет сборки дайсов определенного номинала
+        /// </summary>
+        /// <returns>Целочисленное значение максимального бюджета сборки дайсов игрока</returns>
+        public int GetUsedDiceBudgetByPool(Inventory pool)
         {
-            return 0;
+            if (pool == null)
+            {
+                ServiceDebug.LogError("Передан невалидный пул");
+                return 0;
+            }
+            
+            int maxBudget = 0;
+            foreach (InventoryCell cell in pool.Data)
+            {
+                if (cell.GetItemData(pool.DataRegistry) is DiceItem item)
+                {
+                    int diceBudgetPrice = item.BudgetPrice;
+                    if (diceBudgetPrice > maxBudget) maxBudget = diceBudgetPrice;
+                }
+            }
+            
+            return maxBudget;
         }
         
         #endregion
