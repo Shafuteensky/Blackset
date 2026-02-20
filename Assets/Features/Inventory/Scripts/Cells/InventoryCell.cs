@@ -3,7 +3,6 @@ using Blackset.Data.Registries;
 using Extensions.Data.InMemoryData;
 using UnityEngine;
 using Blackset.Data.Items.Types;
-using Blackset.Effects;
 using Extensions.Log;
 using Features.Inventory.Scripts.Items;
 
@@ -17,10 +16,7 @@ namespace Blackset.Inventory.Cells
     [Serializable]
     public class InventoryCell : InMemoryDataItem 
     {
-        /// <summary>
-        /// Максимальное количество предмета в ячейке
-        /// </summary>
-        public const int MAX_AMOUNT = 99;
+        public const int DEFAULT_MAX_AMOUNT = 99;
 
         #region События
 
@@ -114,7 +110,7 @@ namespace Blackset.Inventory.Cells
         /// </summary>
         /// <param name="amount">Количество к добавлению</param>
         /// <returns>Излишек (если превысило максимум ячейки)</returns>
-        public int IncreaseAmount(int amount)
+        public int IncreaseAmount(int amount, int maxAmount = DEFAULT_MAX_AMOUNT)
         {
             if (amount <= 0)
             {
@@ -125,9 +121,9 @@ namespace Blackset.Inventory.Cells
             int before = itemAmount;
             int target = before + amount;
 
-            int excess = Mathf.Max(0, target - MAX_AMOUNT);
+            int excess = Mathf.Max(0, target - maxAmount);
 
-            SetAmount(target);
+            SetAmount(target, maxAmount);
 
             if (excess > 0)
             {
@@ -142,7 +138,7 @@ namespace Blackset.Inventory.Cells
         /// </summary>
         /// <param name="amount">Количество к убавлению</param>
         /// <returns>Остаток, который удалить не удалось (если в ячейке было меньше, чем удалялось)</returns>
-        public int DecreaseAmount(int amount)
+        public int DecreaseAmount(int amount, int maxAmount = DEFAULT_MAX_AMOUNT)
         {
             if (amount <= 0)
             {
@@ -159,7 +155,7 @@ namespace Blackset.Inventory.Cells
             int removed = Mathf.Min(before, amount);
             int target = before - removed;
 
-            SetAmount(target);
+            SetAmount(target, maxAmount);
 
             int residue = amount - removed;
             return residue;
@@ -250,7 +246,7 @@ namespace Blackset.Inventory.Cells
                 return false;
             }
             
-            if (itemId == otherCell.itemId && itemTypeId == otherCell.itemTypeId)
+            if (itemId == otherCell.itemId && itemTypeId == otherCell.itemTypeId) // TODO добавить проверку на редкость
             {
                 return true;
             }
@@ -262,7 +258,7 @@ namespace Blackset.Inventory.Cells
         
         #region Internal
 
-        private void SetAmount(int value)
+        private void SetAmount(int value, int maxAmount = DEFAULT_MAX_AMOUNT)
         {
             if (value < 0)
             {
@@ -273,7 +269,11 @@ namespace Blackset.Inventory.Cells
             int before = itemAmount;
 
             int clamped = value;
-            if (clamped > MAX_AMOUNT) clamped = MAX_AMOUNT;
+            if (clamped > maxAmount)
+            {
+                ServiceDebug.LogWarning($"Превышен максимум количества ячейки инвентаря, понижено с {clamped} до {maxAmount}");
+                clamped = maxAmount;
+            }
 
             if (before == clamped) return;
 
