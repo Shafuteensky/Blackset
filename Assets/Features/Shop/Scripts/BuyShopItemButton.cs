@@ -1,8 +1,8 @@
 using System;
 using Blackset.Data;
-using Blackset.Inventory.Cells;
+using Blackset.Inventories.Cells;
 using Blackset.Player;
-using Blackset.UI.Inventory;
+using Blackset.UI.InventoryManagement;
 using Extensions.Generics;
 using Extensions.Log;
 using Extensions.ScriptableValues;

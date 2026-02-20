@@ -1,13 +1,14 @@
 using Blackset.Data;
 using Blackset.Data.Items.Types;
 using Blackset.Effects;
-using Blackset.Inventory.Cells;
+using Blackset.Inventories;
+using Blackset.Inventories.Cells;
 using Features.Inventory.Scripts.Items;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Blackset.UI.Inventory
+namespace Blackset.UI.InventoryManagement
 {
     /// <summary>
     /// Абстракция контроллера выводимой инфомрации о предмете инвентаря
@@ -67,7 +68,7 @@ namespace Blackset.UI.Inventory
             InventoryCellHoverInfoEmitter.onHideRequested -= OnHideRequested;
         }
 
-        protected void OnShowRequested(Blackset.Inventory.Inventories.Inventory inventory, string cellId, Vector2 position)
+        protected void OnShowRequested(Inventory inventory, string cellId, Vector2 position)
         {
             Reset();
             

@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using Blackset.Data;
 using Blackset.Data.Items.Types;
 using Blackset.Data.Registries;
-using Blackset.Inventory.Cells;
+using Blackset.Inventories;
+using Blackset.Inventories.Cells;
 using Extensions.Log;
 using Features.Inventory.Scripts.Items;
 using UnityEngine;
@@ -105,7 +106,7 @@ namespace Blackset.Player
                              );
         }
 
-        private string GetDicesInventoryList(Inventory.Inventories.Inventory inventory, string prefix = "")
+        private string GetDicesInventoryList(Inventory inventory, string prefix = "")
         {
             string dicesInInventory = String.Empty;
             foreach (InventoryCell cell in inventory.Data)
@@ -121,7 +122,7 @@ namespace Blackset.Player
         private string GetDicesPoolList(string prefix = "")
         {
             string dicesInPools = String.Empty;
-            foreach (Inventory.Inventories.Inventory poolRow in playerDataFacade.DicesPoolRows)
+            foreach (Inventory poolRow in playerDataFacade.DicesPoolRows)
             {
                 dicesInPools += $"\n   - {poolRow.AllowedItemType.DataName} ({poolRow.Data.Count} в сумме): ";
                 dicesInPools += GetDicesInventoryList(poolRow, prefix);
@@ -129,7 +130,7 @@ namespace Blackset.Player
             return dicesInPools;
         }
 
-        private string GetConsumablesInventoryList(Inventory.Inventories.Inventory inventory, string prefix = "")
+        private string GetConsumablesInventoryList(Inventory inventory, string prefix = "")
         {
             string consumablesInInventory = String.Empty;
             foreach (InventoryCell cell in inventory.Data)

@@ -3,8 +3,9 @@ using Extensions.Generics;
 using Extensions.Log;
 using Extensions.UIWindows;
 using UnityEngine;
+using Blackset.Inventories;
 
-namespace Features.Shop
+namespace Blackset.Shop
 {
     /// <summary>
     /// Контроллер вывода информации о новом полученном предмете
@@ -17,9 +18,9 @@ namespace Features.Shop
         
         [Header("Инвентари игрока"), Space]
         [SerializeField]
-        private Blackset.Inventory.Inventories.Inventory playerDicesInventory;
+        private Inventory playerDicesInventory;
         [SerializeField]
-        private Blackset.Inventory.Inventories.Inventory playerConsumablesInventory;
+        private Inventory playerConsumablesInventory;
 
         private UIWindowsController uiWindowsController;
         

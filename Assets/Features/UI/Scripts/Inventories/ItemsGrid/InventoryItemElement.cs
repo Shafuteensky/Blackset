@@ -1,7 +1,8 @@
 using System;
 using Blackset.Data.Items.Types;
 using Blackset.Effects;
-using Blackset.Inventory.Cells;
+using Blackset.Inventories;
+using Blackset.Inventories.Cells;
 using Extensions.Generics;
 using Extensions.Log;
 using Features.Inventory.Scripts.Items;
@@ -10,7 +11,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-namespace Blackset.UI.Inventory
+namespace Blackset.UI.InventoryManagement
 {
     /// <summary>
     /// Элемент UI фабрики содержимого инвентаря
@@ -26,7 +27,7 @@ namespace Blackset.UI.Inventory
         /// <summary>
         /// Прилинкованный инвентарь элемента
         /// </summary>
-        public Blackset.Inventory.Inventories.Inventory Inventory => inventory;
+        public Inventory Inventory => inventory;
         /// <summary>
         /// Идентификатор прилинкованной ячейки инвентаря
         /// </summary>
@@ -57,7 +58,7 @@ namespace Blackset.UI.Inventory
 
         protected InventoryDragDropCoordinator dropCoordinator;
         
-        protected Blackset.Inventory.Inventories.Inventory inventory;
+        protected Inventories.Inventory inventory;
         protected string itemCellId;
         
 
@@ -103,7 +104,7 @@ namespace Blackset.UI.Inventory
         /// Инициализация элемента
         /// </summary>
         /// <param name="newItemCellId">Идентификатор хранимых данных</param>
-        public void InitializeElement(Blackset.Inventory.Inventories.Inventory newInventory, string newItemCellId = null)
+        public void InitializeElement(Inventories.Inventory newInventory, string newItemCellId = null)
         {
             if (newInventory == null)
             {

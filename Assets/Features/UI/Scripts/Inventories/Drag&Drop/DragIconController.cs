@@ -1,11 +1,8 @@
-using Blackset.Data.Items.Types;
-using Blackset.Effects;
-using Blackset.Inventory.Cells;
-using Blackset.Inventory.Inventories;
 using Extensions.Generics;
 using UnityEngine;
+using Blackset.Inventories;
 
-namespace Blackset.UI.Inventory
+namespace Blackset.UI.InventoryManagement
 {
     /// <summary>
     /// Абстракция контроллера иконки перетаскиваемого из инвентаря предмета
@@ -46,7 +43,7 @@ namespace Blackset.UI.Inventory
 
         #region UI Element
 
-        protected void InitializeElement(Blackset.Inventory.Inventories.Inventory inventory, string cellId)
+        protected void InitializeElement(Inventory inventory, string cellId)
         {
             cellElement.CanvasGroup.blocksRaycasts = false;
             cellElement.CanvasGroup.alpha = 1;

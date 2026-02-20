@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using Blackset.Data.Items.Types;
-using Blackset.Inventory.Inventories;
+using Blackset.Inventories;
 using Extensions.Log;
 using UnityEngine;
 
@@ -34,13 +34,13 @@ namespace Blackset.Player
         /// </summary>
         [field:SerializeField]
         [field: Tooltip("Инвентарь дайсов")]
-        public Inventory.Inventories.Inventory DicesInventory { get; private set; }
+        public Inventory DicesInventory { get; private set; }
         /// <summary>
         /// Инвентарь расходников
         /// </summary>
         [field:SerializeField]
         [field: Tooltip("Инвентарь расходников")]
-        public Inventory.Inventories.Inventory ConsumablesInventory { get; private set; }
+        public Inventory ConsumablesInventory { get; private set; }
         
         [field: Header("Пулы"), Space]
         /// <summary>
@@ -48,22 +48,22 @@ namespace Blackset.Player
         /// </summary>
         [field:SerializeField]
         [field: Tooltip("Пулы дайсов (по номиналам)")]
-        public List<Inventory.Inventories.Inventory> DicesPoolRows { get; private set; }
+        public List<Inventory> DicesPoolRows { get; private set; }
         /// <summary>
         /// Пул расходников
         /// </summary>
         [field:SerializeField]
         [field: Tooltip("Пул расходников")]
-        public Inventory.Inventories.Inventory ConsumablesPool { get; private set; }
+        public Inventory ConsumablesPool { get; private set; }
 
         /// <summary>
         /// Получить пул дайсов определенного типа
         /// </summary>
         /// <param name="diceType">Тип требуемого пула</param>
         /// <returns>Пул дайсов определенного типа</returns>
-        public Inventory.Inventories.Inventory GetDicePoolRow(DiceType diceType)
+        public Inventory GetDicePoolRow(DiceType diceType)
         {
-            foreach (Inventory.Inventories.Inventory dicePoolRow in DicesPoolRows)
+            foreach (Inventory dicePoolRow in DicesPoolRows)
             {
                 if (dicePoolRow.AllowedItemType == diceType) return dicePoolRow;
             }

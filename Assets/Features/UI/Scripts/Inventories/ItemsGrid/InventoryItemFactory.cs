@@ -1,14 +1,12 @@
 using System.Collections.Generic;
-using Blackset.Data.Base;
 using Blackset.Data.Items.Types;
-using Blackset.Effects;
-using Blackset.Inventory.Cells;
+using Blackset.Inventories;
+using Blackset.Inventories.Cells;
 using UnityEngine;
-using Blackset.Inventory.Inventories;
 using Extensions.Log;
 using Unity.VisualScripting;
 
-namespace Blackset.UI.Inventory
+namespace Blackset.UI.InventoryManagement
 {
     /// <summary>
     /// Базовый класс UI фабрики содержимого инвентаря
@@ -22,11 +20,11 @@ namespace Blackset.UI.Inventory
         /// <summary>
         /// Инвентарь, данные которого выводятся
         /// </summary>
-        public Blackset.Inventory.Inventories.Inventory Inventory => inventory;
+        public Inventory Inventory => inventory;
         
         [Header("Данные"), Space]
         [SerializeField]
-        protected Blackset.Inventory.Inventories.Inventory inventory;
+        protected Inventories.Inventory inventory;
 
         [Header("Фильтрация"), Space]
         [SerializeField] 

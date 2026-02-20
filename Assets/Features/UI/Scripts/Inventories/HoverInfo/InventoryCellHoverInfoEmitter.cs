@@ -1,11 +1,12 @@
 using System;
 using System.Collections;
+using Blackset.Inventories;
 using Extensions.Coroutines;
 using Extensions.ScriptableValues;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-namespace Blackset.UI.Inventory
+namespace Blackset.UI.InventoryManagement
 {
     /// <summary>
     /// Абстракция контроллера запросов вывода информации о ячейке инвентаря
@@ -21,7 +22,7 @@ namespace Blackset.UI.Inventory
         /// <typeparam name="TInventory">Ивентарь, запрашиваемый для вывода информации</typeparam>
         /// <typeparam name="string">Идентификатор ячейки инвентаря</typeparam>
         /// <typeparam name="Vector2">Позиция UI-элемента</typeparam>
-        public static event Action<Blackset.Inventory.Inventories.Inventory, string, Vector2> onShowRequested;
+        public static event Action<Inventory, string, Vector2> onShowRequested;
         /// <summary>
         /// Запрос прекращения вывода информации
         /// </summary>

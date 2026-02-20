@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using Blackset.Inventories;
 
 namespace Blackset.Player
 {
@@ -177,7 +178,7 @@ namespace Blackset.Player
         /// <summary>
         /// Максимальный актуальный бюджет сборки дайсов
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Целочисленное значение максимального бюджета сборки дайсов игрока</returns>
         public int GetActualMaxDiceBudget()
         {
             int lvl = GetPlayerLvl();
@@ -193,6 +194,20 @@ namespace Blackset.Player
             if (value < 0) value = 0;
 
             return value;
+        }
+
+        /// <summary>
+        /// Текущий использованный бюджет сборки дайсов
+        /// </summary>
+        /// <returns>Целочисленное значение максимального бюджета сборки дайсов игрока</returns>
+        public int GetTotalUsedDiceBudget()
+        {
+            return 0;
+        }
+
+        public int GetUsedDiceBudgetByPool(Inventory inventory)
+        {
+            return 0;
         }
         
         #endregion

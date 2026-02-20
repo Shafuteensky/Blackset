@@ -1,13 +1,11 @@
 using System;
-using Blackset.Data.Base;
-using Blackset.Data.Items.Types;
-using Blackset.Inventory.Cells;
-using Blackset.Inventory.Inventories;
+using Blackset.Inventories;
+using Blackset.Inventories.Cells;
 using Extensions.Log;
 using UnityEngine;
 using Extensions.Singleton;
 
-namespace Blackset.UI.Inventory
+namespace Blackset.UI.InventoryManagement
 {
     /// <summary>
     /// Базовый скрипт координатора drag & drop инвентаря определенного типа хранимых данных
@@ -22,7 +20,7 @@ namespace Blackset.UI.Inventory
         /// </summary>
         /// <param name="TInventory">Инвентарь</param>
         /// <param name="string">Идентификатор ячейки</param>
-        public event Action<Blackset.Inventory.Inventories.Inventory, string> onDragStarted;
+        public event Action<Inventory, string> onDragStarted;
         /// <summary>
         /// Завершение драга
         /// </summary>
@@ -36,7 +34,7 @@ namespace Blackset.UI.Inventory
         /// </summary>
         /// <param name="TInventory">Инвентарь</param>
         /// <param name="string">Идентификатор ячейки</param>
-        public event Action<Blackset.Inventory.Inventories.Inventory, string> onDropRequested;
+        public event Action<Inventory, string> onDropRequested;
 
         /// <summary>
         /// Обновление позиции курсора переноса (для иконки-превью)
@@ -51,7 +49,7 @@ namespace Blackset.UI.Inventory
         public bool HasPayload => hasPayload;
 
         private bool hasPayload;
-        private Blackset.Inventory.Inventories.Inventory sourceInventory;
+        private Inventory sourceInventory;
         private string sourceCellId;
 
         #region Drag&Drop
@@ -61,7 +59,7 @@ namespace Blackset.UI.Inventory
         /// </summary>
         /// <param name="fromInventory">Инвентарь, из которого начинается перетаскивание</param>
         /// <param name="fromCellId">Идентификатор ячейки инвентаря, из которой начинается перетаскивание</param>
-        public void BeginDrag(Blackset.Inventory.Inventories.Inventory fromInventory, string fromCellId)
+        public void BeginDrag(Inventory fromInventory, string fromCellId)
         {
             if (fromInventory == null) return;
             if (IsAbleToDrag(fromInventory.GetById(fromCellId)))
@@ -85,7 +83,7 @@ namespace Blackset.UI.Inventory
         /// </summary>
         /// <param name="targetInventory">Инвентарь, из которого происходит дроп</param>
         /// <param name="targetCellId">Идентификатор ячейки инвентаря, из которой происходит дроп</param>
-        public void RequestDrop(Blackset.Inventory.Inventories.Inventory targetInventory, string targetCellId = null)
+        public void RequestDrop(Inventory targetInventory, string targetCellId = null)
         {
             if (!hasPayload || targetInventory == null || sourceInventory == null) return;
             if (String.IsNullOrEmpty(targetCellId)) targetCellId = String.Empty; // На случай если перенос не в определенную ячейку, а просто в инвентарь
@@ -111,7 +109,7 @@ namespace Blackset.UI.Inventory
         
         #region Данные о перетаскиваемой ячейке
 
-        private void InitializeData(Blackset.Inventory.Inventories.Inventory fromInventory, string fromCellId)
+        private void InitializeData(Inventory fromInventory, string fromCellId)
         {
             if (fromInventory == null || string.IsNullOrEmpty(fromCellId))
             {
@@ -141,7 +139,7 @@ namespace Blackset.UI.Inventory
         /// </summary>
         /// <param name="targetInventory">Инвентарь, из которого происходит пермещение</param>
         /// <param name="targetCellId">Идентификатор перемещаемой ячейки</param>
-        private void DropItem(Blackset.Inventory.Inventories.Inventory targetInventory, string targetCellId = null)
+        private void DropItem(Inventory targetInventory, string targetCellId = null)
         {
             if (targetInventory == null)
             {

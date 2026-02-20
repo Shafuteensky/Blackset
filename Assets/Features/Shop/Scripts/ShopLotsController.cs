@@ -6,6 +6,7 @@ using Extensions.Identification;
 using Extensions.Log;
 using Features.ItemGenerators;
 using UnityEngine;
+using Blackset.Inventories;
 
 namespace Blackset.Shop
 {
@@ -33,13 +34,13 @@ namespace Blackset.Shop
         
         [Header("Инвентари магазина"), Space]
         [SerializeField]
-        private Blackset.Inventory.Inventories.Inventory shopDicesInventory;
+        private Inventory shopDicesInventory;
         [SerializeField]
-        private Blackset.Inventory.Inventories.Inventory shopConsumablesInventory;
+        private Inventory shopConsumablesInventory;
         [SerializeField]
-        private Blackset.Inventory.Inventories.Inventory shopDicesBoxInventory;
+        private Inventory shopDicesBoxInventory;
         [SerializeField]
-        private Blackset.Inventory.Inventories.Inventory shopConsumablesBoxInventory;
+        private Inventory shopConsumablesBoxInventory;
         
         [Header("Игровые данные"), Space]
         [SerializeField]
@@ -86,7 +87,7 @@ namespace Blackset.Shop
             RefillConsumableInventory(shopConsumablesBoxInventory, consumablesPacksToSell);
         }
         
-        private void RefillDiceInventory(Blackset.Inventory.Inventories.Inventory inventory, int amount)
+        private void RefillDiceInventory(Inventory inventory, int amount)
         {
             inventory.Clear();
 
@@ -97,7 +98,7 @@ namespace Blackset.Shop
             }
         }
 
-        private void RefillConsumableInventory(Blackset.Inventory.Inventories.Inventory inventory, int amount)
+        private void RefillConsumableInventory(Inventory inventory, int amount)
         {
             inventory.Clear();
 

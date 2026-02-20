@@ -6,7 +6,7 @@ using Blackset.Data.Items.Types;
 using Extensions.Log;
 using Features.Inventory.Scripts.Items;
 
-namespace Blackset.Inventory.Cells
+namespace Blackset.Inventories.Cells
 {
     /// <summary>
     /// Базовый предмет ячейки инвентаря

@@ -5,7 +5,7 @@ using Blackset.Effects;
 using Features.Inventory.Scripts.Items;
 using UnityEngine;
 
-namespace Blackset.Inventory.Inventories
+namespace Blackset.Inventories
 {
     /// <summary>
     /// Данные дефолтной ячейки инвентаря BaseInventory
