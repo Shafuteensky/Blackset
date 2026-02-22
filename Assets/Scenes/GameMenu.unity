@@ -721,7 +721,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &154413059
 Transform:
@@ -848,8 +848,8 @@ Transform:
   m_Children:
   - {fileID: 200966133}
   - {fileID: 494120020}
-  - {fileID: 154413059}
   - {fileID: 275459775}
+  - {fileID: 154413059}
   - {fileID: 386331336}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
