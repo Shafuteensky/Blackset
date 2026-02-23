@@ -15,7 +15,7 @@ namespace Blackset.Inventories.Cells
     /// <typeparam name="TData">Тип данных предмета</typeparam>
     /// <typeparam name="TType">Тип типа предмета</typeparam>
     [Serializable]
-    public class InventoryCell : InMemoryDataItem 
+    public class InventoryCell : InMemoryDataEntry 
     {
         public const int DEFAULT_MAX_AMOUNT = 99;
 

@@ -42,7 +42,7 @@ namespace Blackset.Inventories
         /// <returns>true если бюджета хватает, иначе false</returns>
         protected bool IsAllowedByBudget(InventoryItem thisItem)
         {
-            if (thisItem is not DiceItem thisDice) return true;
+            if (thisItem is not DiceData thisDice) return true;
 
             if (playerData == null)
             {

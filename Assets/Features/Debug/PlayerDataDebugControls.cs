@@ -6,13 +6,14 @@ using Blackset.Data.Registries;
 using Blackset.Inventories;
 using Blackset.Inventories.Cells;
 using Blackset.Inventories.Items;
+using Blackset.Player;
 using Extensions.Log;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-namespace Blackset.Player
+namespace Blackset.Debug
 {
-    public class PlayerDataTest : MonoBehaviour
+    public class PlayerDataDebugControls : MonoBehaviour
     {
         [Header("Реестры игровых данных"), Space]
         [SerializeField]
@@ -36,7 +37,7 @@ namespace Blackset.Player
             int randomIndex = Random.Range(0, diceData.Count);
             InventoryItem randomItem = diceData[randomIndex];
 
-            if (randomItem is not DiceItem randomDiceItem) return;
+            if (randomItem is not DiceData randomDiceItem) return;
             randomIndex = Random.Range(0, randomDiceItem.AvailableTypes.Count);
             InventoryItemType randomDiceType = randomDiceItem.AvailableTypes[randomIndex];
             
@@ -55,7 +56,7 @@ namespace Blackset.Player
             int randomIndex = Random.Range(0, consumablesData.Count);
             InventoryItem randomItem = consumablesData[randomIndex];
 
-            if (randomItem is not ConsumableItem randomConsumable) return;
+            if (randomItem is not ConsumableData randomConsumable) return;
             randomIndex = Random.Range(0, gameDataRegistry.ConsumableTypes.Data.Count);
             InventoryItemType randomConsumableType = gameDataRegistry.ConsumableTypes.Data[randomIndex];
             

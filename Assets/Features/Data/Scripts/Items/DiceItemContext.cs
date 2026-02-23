@@ -1,14 +1,14 @@
 using Blackset.Data;
 using Blackset.Data.Items.Types;
 
-namespace Features.ItemGenerators
+namespace Blackset.Data
 {
     /// <summary>
     /// Структура данных определенного дайса
     /// </summary>
     public struct DiceItemContext
     {
-        public DiceItem Item;
+        public DiceData Data;
         public DiceType Type;
         //public BaseItemRarity Rarity;
     }

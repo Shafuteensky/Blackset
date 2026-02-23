@@ -11,7 +11,7 @@ namespace Extensions.Data.InMemoryData
     /// </remarks>
     /// </summary>
     /// <typeparam name="TData">Единица данных</typeparam>
-    public abstract class InMemoryDataContainer<TData> : InMemoryDataBaseObject<List<TData>> where TData : InMemoryDataItem
+    public abstract class InMemoryDataContainer<TData> : InMemoryDataBaseObject<List<TData>> where TData : InMemoryDataEntry
     {
         protected const string FORMAT = "N";
 

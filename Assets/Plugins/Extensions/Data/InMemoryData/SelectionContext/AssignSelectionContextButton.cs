@@ -11,7 +11,7 @@ namespace Extensions.Data.InMemoryData.SelectionContext
     /// <typeparam name="TData">Тип данных</typeparam>
     [RequireComponent(typeof(ContextIdHolder))]
     public abstract class AssignSelectionContextButton<TData> : AbstractButton
-        where TData : InMemoryDataItem
+        where TData : InMemoryDataEntry
     {
         [SerializeField]
         private SelectionContext<TData> selectionContext;

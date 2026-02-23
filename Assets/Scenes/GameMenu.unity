@@ -948,7 +948,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2033595508}
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 896409645}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -1093,7 +1093,7 @@ GameObject:
   - component: {fileID: 200966133}
   - component: {fileID: 200966134}
   m_Layer: 0
-  m_Name: ReflectionBrope
+  m_Name: ReflectionProbe
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1330,7 +1330,7 @@ PrefabInstance:
     - target: {fileID: 221380394106339608, guid: 5756bfce9e19bfe458725eda32eaa84a, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 896409644}
+      objectReference: {fileID: 0}
     - target: {fileID: 221380394106339608, guid: 5756bfce9e19bfe458725eda32eaa84a, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
       value: 2
@@ -1462,7 +1462,7 @@ PrefabInstance:
     - target: {fileID: 4244173868435675728, guid: 5756bfce9e19bfe458725eda32eaa84a, type: 3}
       propertyPath: m_Delegates.Array.data[0].callback.m_PersistentCalls.m_Calls.Array.data[1].m_Target
       value: 
-      objectReference: {fileID: 896409644}
+      objectReference: {fileID: 0}
     - target: {fileID: 4244173868435675728, guid: 5756bfce9e19bfe458725eda32eaa84a, type: 3}
       propertyPath: m_Delegates.Array.data[0].callback.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
       value: 2
@@ -2795,7 +2795,7 @@ PrefabInstance:
     - target: {fileID: 221380394106339608, guid: 5756bfce9e19bfe458725eda32eaa84a, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 896409644}
+      objectReference: {fileID: 0}
     - target: {fileID: 221380394106339608, guid: 5756bfce9e19bfe458725eda32eaa84a, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
       value: 2
@@ -2944,7 +2944,7 @@ PrefabInstance:
     - target: {fileID: 221380394106339608, guid: 5756bfce9e19bfe458725eda32eaa84a, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 896409644}
+      objectReference: {fileID: 0}
     - target: {fileID: 221380394106339608, guid: 5756bfce9e19bfe458725eda32eaa84a, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
       value: 2
@@ -3448,29 +3448,13 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 896409645}
-  - component: {fileID: 896409644}
   m_Layer: 0
-  m_Name: PlayerDataTEST
+  m_Name: Debug
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &896409644
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 896409643}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 149cb5d951d3488492e8acbcb6f21a65, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Blackset.Player.PlayerDataTest
-  gameDataRegistry: {fileID: 11400000, guid: 601338559ca9def4c9bb4a1b24686c63, type: 2}
-  playerDataFacade: {fileID: 11400000, guid: 2c23989d68545684e9ab72265b43e0bc, type: 2}
-  money: 1
 --- !u!4 &896409645
 Transform:
   m_ObjectHideFlags: 0
@@ -3483,7 +3467,9 @@ Transform:
   m_LocalPosition: {x: -0.68276, y: 0.64738, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 1497273215}
+  - {fileID: 158152627}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &907754715
@@ -4844,6 +4830,55 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1186030841}
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1336583994
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1336583995}
+  - component: {fileID: 1336583996}
+  m_Layer: 0
+  m_Name: DuelContracts
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1336583995
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1336583994}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1936877674}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1336583996
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1336583994}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5be8f83d30b64e82af7a06c66c9a54ed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Blackset.Opponents.ContractListController
+  identifier: {fileID: 11400000, guid: c9720e780706db14a81e0bec9519509f, type: 2}
+  playerData: {fileID: 11400000, guid: 2c23989d68545684e9ab72265b43e0bc, type: 2}
+  contractList: {fileID: 11400000, guid: 2701bc2e283ae024f9feadaf1bba8a0d, type: 2}
+  opponentsRegistry: {fileID: 11400000, guid: 9dbdb88f7b72033409b48bc18676eb07, type: 2}
+  contractsToGenerate: 3
 --- !u!1 &1350734916
 GameObject:
   m_ObjectHideFlags: 0
@@ -5240,6 +5275,53 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b78ee9e7ff74e1e8b5201844c99013f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Blackset.UI.Inventory.InventoryItemElement
+--- !u!1 &1497273214
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1497273215}
+  - component: {fileID: 1497273216}
+  m_Layer: 0
+  m_Name: PlayerData
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1497273215
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1497273214}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 896409645}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1497273216
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1497273214}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 149cb5d951d3488492e8acbcb6f21a65, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Blackset.Player.PlayerDataTest
+  gameDataRegistry: {fileID: 11400000, guid: 601338559ca9def4c9bb4a1b24686c63, type: 2}
+  playerDataFacade: {fileID: 11400000, guid: 2c23989d68545684e9ab72265b43e0bc, type: 2}
+  money: 1
 --- !u!1001 &1525455325
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5259,7 +5341,7 @@ PrefabInstance:
     - target: {fileID: 221380394106339608, guid: 5756bfce9e19bfe458725eda32eaa84a, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 896409644}
+      objectReference: {fileID: 0}
     - target: {fileID: 221380394106339608, guid: 5756bfce9e19bfe458725eda32eaa84a, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
       value: 2
@@ -5383,7 +5465,7 @@ PrefabInstance:
     - target: {fileID: 4244173868435675728, guid: 5756bfce9e19bfe458725eda32eaa84a, type: 3}
       propertyPath: m_Delegates.Array.data[0].callback.m_PersistentCalls.m_Calls.Array.data[1].m_Target
       value: 
-      objectReference: {fileID: 896409644}
+      objectReference: {fileID: 0}
     - target: {fileID: 4244173868435675728, guid: 5756bfce9e19bfe458725eda32eaa84a, type: 3}
       propertyPath: m_Delegates.Array.data[0].callback.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
       value: 2
@@ -5548,7 +5630,7 @@ PrefabInstance:
     - target: {fileID: 221380394106339608, guid: 5756bfce9e19bfe458725eda32eaa84a, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 896409644}
+      objectReference: {fileID: 0}
     - target: {fileID: 221380394106339608, guid: 5756bfce9e19bfe458725eda32eaa84a, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
       value: 2
@@ -6098,6 +6180,7 @@ Transform:
   - {fileID: 1092818108}
   - {fileID: 1802786222}
   - {fileID: 2136209336}
+  - {fileID: 1336583995}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1939158369
@@ -7193,7 +7276,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6077599271440304517, guid: f11122415c13c7548b80b46cb989f4bd, type: 3}
       propertyPath: m_Name
-      value: Panel Card
+      value: Cheats panel
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -7338,6 +7421,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Features.Shop.ShopController
   identifier: {fileID: 11400000, guid: 9a367d35845259046b1ec5acbdf090ac, type: 2}
+  playerData: {fileID: 11400000, guid: 2c23989d68545684e9ab72265b43e0bc, type: 2}
+  gameData: {fileID: 11400000, guid: 601338559ca9def4c9bb4a1b24686c63, type: 2}
   dicesToSell: 2
   consumablesToSell: 2
   dicesPacksToSell: 2
@@ -7346,8 +7431,6 @@ MonoBehaviour:
   shopConsumablesInventory: {fileID: 11400000, guid: ba40e594e13b8a54a9236b42bcd2687c, type: 2}
   shopDicesBoxInventory: {fileID: 11400000, guid: 7c72a0058de183b41b6a85e47a824dfa, type: 2}
   shopConsumablesBoxInventory: {fileID: 11400000, guid: 17ee8251bddc18f4ea674b81cbf3a26f, type: 2}
-  gameData: {fileID: 11400000, guid: 601338559ca9def4c9bb4a1b24686c63, type: 2}
-  playerData: {fileID: 11400000, guid: 2c23989d68545684e9ab72265b43e0bc, type: 2}
 --- !u!114 &2136209338
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7681,7 +7764,6 @@ SceneRoots:
   m_Roots:
   - {fileID: 1147585663}
   - {fileID: 37828541}
-  - {fileID: 158152627}
-  - {fileID: 1936877674}
   - {fileID: 896409645}
+  - {fileID: 1936877674}
   - {fileID: 156713722}

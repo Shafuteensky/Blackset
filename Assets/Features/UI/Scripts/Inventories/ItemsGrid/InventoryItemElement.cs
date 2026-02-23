@@ -68,8 +68,7 @@ namespace Blackset.UI.InventoryManagement
         protected virtual void OnEnable()
         {
             dropCoordinator = InventoryDragDropCoordinator.Instance;
-            if ( dropCoordinator != null ) Initialize();
-            NotifyInitialized();
+            Initialize(dropCoordinator != null);
         }
         
         #region Drag'n'Drop
@@ -107,7 +106,7 @@ namespace Blackset.UI.InventoryManagement
         /// Инициализация элемента
         /// </summary>
         /// <param name="newItemCellId">Идентификатор хранимых данных</param>
-        public void InitializeElement(Inventories.Inventory newInventory, string newItemCellId = null)
+        public void InitializeElement(Inventory newInventory, string newItemCellId = null)
         {
             if (newInventory == null)
             {
@@ -158,7 +157,7 @@ namespace Blackset.UI.InventoryManagement
                 SetItemSetText(effectingItem);
                 
                 // Параметры для DiceItem
-                if (cellItem is not DiceItem diceItem) return;
+                if (cellItem is not DiceData diceItem) return;
                 SetDiceBudgetText(diceItem);
             }
         }
@@ -219,10 +218,10 @@ namespace Blackset.UI.InventoryManagement
             }
         }
 
-        private void SetDiceBudgetText(DiceItem cellItem)
+        private void SetDiceBudgetText(DiceData cellData)
         {
             if (budgetText == null) return;
-            budgetText.text = cellItem.BudgetPrice.ToString();
+            budgetText.text = cellData.BudgetPrice.ToString();
         }
         
         #endregion

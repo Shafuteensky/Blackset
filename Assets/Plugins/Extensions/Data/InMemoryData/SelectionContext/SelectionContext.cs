@@ -8,7 +8,7 @@ namespace Extensions.Data.InMemoryData.SelectionContext
     /// </summary>
     /// <typeparam name="TData">Тип хранимых данных</typeparam>
     // [CreateAssetMenu(fileName = nameof(SelectionContext), menuName = "Extensions/Data/InMemoryData/" + nameof(SelectionContext))]
-    public abstract class SelectionContext<TData> : BaseSelectionContext where TData : InMemoryDataItem
+    public abstract class SelectionContext<TData> : BaseSelectionContext where TData : InMemoryDataEntry
     {
         /// <summary>
         /// Событие изменения активного элемента

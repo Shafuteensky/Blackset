@@ -9,7 +9,7 @@ namespace Extensions.Data.InMemoryData
     /// </remarks>
     /// </summary>
     [Serializable]
-    public abstract class InMemoryDataItem
+    public abstract class InMemoryDataEntry
     {
         protected const string GUID_FORMAT = "N";
         

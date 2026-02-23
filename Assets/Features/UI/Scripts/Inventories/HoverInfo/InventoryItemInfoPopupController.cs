@@ -113,7 +113,7 @@ namespace Blackset.UI.InventoryManagement
             if (setText != null) setText.text = effectingItem.Set.DataName;
             if (iconImage != null) iconImage.color = effectingItem.Color;
 
-            if (effectingItem is DiceItem diceItem)
+            if (effectingItem is DiceData diceItem)
             {
                 budgetIndicator.SetActive(true);
                 if (budgetText != null) budgetText.text = diceItem.BudgetPrice.ToString();

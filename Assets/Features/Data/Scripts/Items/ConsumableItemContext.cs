@@ -1,14 +1,14 @@
 using Blackset.Data;
 using Blackset.Data.Items.Types;
 
-namespace Features.ItemGenerators
+namespace Blackset.Data
 {
     /// <summary>
     /// Структура данных определенного расходника
     /// </summary>
     public struct ConsumableItemContext
     {
-        public ConsumableItem Item;
+        public ConsumableData Data;
         public ConsumableType Type;
         //public BaseItemRarity Rarity;
     }

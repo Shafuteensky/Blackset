@@ -1,10 +1,7 @@
 using Blackset.Data.Registries;
 using Blackset.Player;
-using Extensions.Data;
-using Extensions.Generics;
-using Extensions.Identification;
 using Extensions.Log;
-using Features.ItemGenerators;
+using Blacklset.ItemGenerators;
 using UnityEngine;
 using Blackset.Inventories;
 
@@ -13,10 +10,10 @@ namespace Blackset.Shop
     /// <summary>
     /// Контроллер магазина предметов
     /// </summary>
-    public sealed class ShopLotsController : InitializableMonoBehaviour
+    public sealed class ShopLotsController : PlayerProgressUpdater
     {
-        [Header("Сохранение данных"), Space] [SerializeField]
-        private ID identifier;
+        [SerializeField]
+        private DataRegistriesFacade gameData;
         
         [Header("Ограничения лотов"), Space]
         [SerializeField]
@@ -42,20 +39,7 @@ namespace Blackset.Shop
         [SerializeField]
         private Inventory shopConsumablesBoxInventory;
         
-        [Header("Игровые данные"), Space]
-        [SerializeField]
-        private DataRegistriesFacade gameData;
-        [SerializeField]
-        private PlayerDataFacade playerData;
-        
         private ItemsGenerator itemsGenerator;
-        private int cachedDuelsPlayed;
-
-        private void Awake()
-        {
-            if (gameData == null) return;
-            itemsGenerator ??= new ItemsGenerator(gameData);
-        }
         
         private void OnEnable()
         {
@@ -65,13 +49,14 @@ namespace Blackset.Shop
                 return;
             }
 
-            
-            Initialize(gameData != null && playerData != null && 
+            Initialize(gameData != null && 
                        shopDicesInventory != null && shopConsumablesInventory != null && 
-                       shopDicesBoxInventory != null && shopConsumablesBoxInventory != null && 
-                       itemsGenerator != null);
+                       shopDicesBoxInventory != null && shopConsumablesBoxInventory != null);
+            if (!IsInitialized) return;
 
-            if (IsPlayerProgressChanged()) FillInventories();
+            if (IsUpdateNeeded()) FillInventories();
+
+            itemsGenerator ??= new ItemsGenerator(gameData);
         }
 
         #region Refilling
@@ -94,7 +79,7 @@ namespace Blackset.Shop
             for (int i = 0; i < amount; i++)
             {
                 var newDice = itemsGenerator.GetRandomDice();
-                inventory.AddItem(newDice.Item.Id, newDice.Type.Id, 1, false);
+                inventory.AddItem(newDice.Data.Id, newDice.Type.Id, 1, false);
             }
         }
 
@@ -105,28 +90,10 @@ namespace Blackset.Shop
             for (int i = 0; i < amount; i++)
             {
                 var newConsumable = itemsGenerator.GetRandomConsumable();
-                inventory.AddItem(newConsumable.Item.Id, newConsumable.Type.Id, 1, false);
+                inventory.AddItem(newConsumable.Data.Id, newConsumable.Type.Id, 1, false);
             }
         }
         
         #endregion
-
-        private bool IsPlayerProgressChanged()
-        {
-            if (identifier == null)
-            {
-                ServiceDebug.LogError("Идентификатор ключа сохранения не задан");
-                return false;
-            }
-            
-            int duelsPlayed = playerData.ProgressData.Data.DuelsPlayed;
-            cachedDuelsPlayed = JsonSaveLoad.Load(identifier.Id, -1);
-
-            if (duelsPlayed == cachedDuelsPlayed) return false;
-            
-            cachedDuelsPlayed = duelsPlayed;
-            JsonSaveLoad.Save(cachedDuelsPlayed, identifier.Id);
-            return true;
-        }
     }
 }

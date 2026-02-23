@@ -6,7 +6,7 @@ using Blackset.Effects;
 using Extensions.Log;
 using UnityEngine;
 
-namespace Features.ItemGenerators
+namespace Blacklset.ItemGenerators
 {
     /// <summary>
     /// Базовый генератор предметов
@@ -42,9 +42,9 @@ namespace Features.ItemGenerators
             
             var allDices = gameData.Dices.Data;
             if (set != null) allDices = GetDicesBySet(set);
-            newDice.Item = (DiceItem)allDices[Random.Range(0, allDices.Count)];
+            newDice.Data = (DiceData)allDices[Random.Range(0, allDices.Count)];
             
-            var availableDiceTypes = newDice.Item.AvailableTypes;
+            var availableDiceTypes = newDice.Data.AvailableTypes;
             newDice.Type = availableDiceTypes[Random.Range(0, availableDiceTypes.Count)] as DiceType;
             
             return newDice;
@@ -63,9 +63,9 @@ namespace Features.ItemGenerators
             
             var allConsumables = gameData.Consumables.Data;
             if (set != null) allConsumables = GetConsumablesBySet(set);
-            newConsumable.Item = (ConsumableItem)allConsumables[Random.Range(0, allConsumables.Count)];
+            newConsumable.Data = (ConsumableData)allConsumables[Random.Range(0, allConsumables.Count)];
             
-            var availableDiceTypes = newConsumable.Item.AvailableTypes;
+            var availableDiceTypes = newConsumable.Data.AvailableTypes;
             newConsumable.Type = availableDiceTypes[Random.Range(0, availableDiceTypes.Count)] as ConsumableType;
             
             return newConsumable;
@@ -82,7 +82,7 @@ namespace Features.ItemGenerators
             
             foreach (var item in allDices)
             {
-                if (item is DiceItem dice && dice.Set == set) dicesBySet.Add(dice);
+                if (item is DiceData dice && dice.Set == set) dicesBySet.Add(dice);
             }
 
             return dicesBySet;
@@ -97,7 +97,7 @@ namespace Features.ItemGenerators
             
             foreach (var item in allConsumables)
             {
-                if (item is ConsumableItem consumable && consumable.Set == set) consumablesBySet.Add(consumable);
+                if (item is ConsumableData consumable && consumable.Set == set) consumablesBySet.Add(consumable);
             }
 
             return consumablesBySet;

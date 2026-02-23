@@ -1,6 +1,4 @@
-using Blackset.Data.Items.Types;
-using Blackset.Effects;
-using Features.ItemGenerators;
+using Blackset.Opponents;
 using UnityEngine;
 
 namespace Blackset.Data.Registries
@@ -14,6 +12,7 @@ namespace Blackset.Data.Registries
     public class DataRegistriesFacade : ScriptableObject
     {
         [field: Header("Реестры предметов"), Space]
+        
         /// <summary>
         /// Реестр дайсов
         /// </summary>
@@ -28,6 +27,7 @@ namespace Blackset.Data.Registries
         public InventoryItemsRegistry Consumables { get; private set; }
         
         [field: Header("Реестры типов предметов"), Space]
+        
         /// <summary>
         /// Реестр типов дайсов
         /// </summary>
@@ -40,5 +40,14 @@ namespace Blackset.Data.Registries
         [field:SerializeField]
         [field: Tooltip("Реестр типов расходников")]
         public InventoryItemTypesRegistry ConsumableTypes { get; private set; }
+        
+        [field: Header("Реестр соперников"), Space]
+        
+        /// <summary>
+        /// Реестр дайсов
+        /// </summary>
+        [field:SerializeField]
+        [field: Tooltip("Реестр соперников")]
+        public OpponentsRegistry Opponents { get; private set; }
     }
 }

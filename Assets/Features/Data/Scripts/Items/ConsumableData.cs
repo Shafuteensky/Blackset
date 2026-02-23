@@ -9,8 +9,8 @@ namespace Blackset.Data
     /// </summary>
     [CreateAssetMenu(
         menuName = "Blackset/Items/Consumable",
-        fileName = nameof(ConsumableItem))]
-    public sealed class ConsumableItem : EffectingItem 
+        fileName = nameof(ConsumableData))]
+    public sealed class ConsumableData : EffectingItem 
     {
         /// <summary>
         /// Визуальный префаб расходника

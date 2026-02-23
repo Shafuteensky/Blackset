@@ -10,8 +10,8 @@ namespace Blackset.Data
     /// </summary>
     [CreateAssetMenu(
         menuName = "Blackset/Items/Dice",
-        fileName = nameof(DiceItem))]
-    public sealed class DiceItem : EffectingItem
+        fileName = nameof(DiceData))]
+    public sealed class DiceData : EffectingItem
     {
         /// <summary>
         /// Бюджетная стоимость
