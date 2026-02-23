@@ -11,7 +11,7 @@ using Extensions.Log;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-namespace Blackset.Debug
+namespace Blackset.GameDebug
 {
     public class PlayerDataDebugControls : MonoBehaviour
     {

@@ -53,10 +53,9 @@ namespace Blackset.Shop
                        shopDicesInventory != null && shopConsumablesInventory != null && 
                        shopDicesBoxInventory != null && shopConsumablesBoxInventory != null);
             if (!IsInitialized) return;
-
-            if (IsUpdateNeeded()) FillInventories();
-
+            
             itemsGenerator ??= new ItemsGenerator(gameData);
+            if (IsUpdateNeeded()) FillInventories();
         }
 
         #region Refilling
