@@ -496,6 +496,11 @@ namespace Blackset.Inventories
         private bool IsItemAllowed(InventoryCell cell, Inventory fromInventory) => IsItemAllowed(cell.ItemId, cell.ItemTypeId, fromInventory);
         
         /// <summary>
+        /// Дополнительная проверка по условиям наследников класса
+        /// </summary>
+        protected virtual bool IsAllowedToReceive(InventoryCell incomingCell, Inventory fromInventory) => true;
+        
+        /// <summary>
         /// Полностью ли вмещается предмет из ячейки в инвентарь
         /// </summary>
         private bool CanFitItemCompletely(Inventory inventory, string itemId, string itemTypeId, int amount, int additionalAvailableCells = 0)
@@ -521,9 +526,8 @@ namespace Blackset.Inventories
             if (!inventory.IsSlotsLimited()) return true;
 
             int defaultCount = 0;
-            for (int i = 0; i < inventory.Data.Count; i++)
+            foreach (InventoryCell cell in inventory.Data)
             {
-                InventoryCell cell = inventory.Data[i];
                 if (cell == null) continue;
                 if (cell.IsDefault) defaultCount++;
             }
@@ -749,6 +753,10 @@ namespace Blackset.Inventories
                  thisCell.IsDefault ) return -1;
             if (!targetInventory.IsItemAllowed(GetById(cellId), this)) return thisCell.ItemAmount;
             
+            // Дополнительные условия наследников
+            if (!targetInventory.IsAllowedToReceive(thisCell, this)) return thisCell.ItemAmount;
+            if (!IsAllowedToReceive(thatCell, targetInventory)) return thisCell.ItemAmount;
+            
             // Получение индексов ячеек
             int thisCellIndex = GetIndexById(cellId);
             int targetCellIndex = targetInventory.GetIndexById(targetCellId);
@@ -778,7 +786,7 @@ namespace Blackset.Inventories
                 return 0;
             }
 
-            int movedToTarget = 0;
+            int movedToTarget;
             
             // Перемещение в дефолтную или пустую ячейку — заменить ее на нужную ячейку
             if (thatCell.IsDefault || thatCell.IsEmpty)
@@ -855,7 +863,7 @@ namespace Blackset.Inventories
             targetInventory.onCellAdded?.Invoke(newTargetCell.Id);
             targetInventory.MarkDirty();
 
-            int displacedRemaining = AddItem(displacedCell.ItemId, displacedCell.ItemTypeId, displacedCell.ItemAmount, true, -1);
+            int displacedRemaining = AddItem(displacedCell.ItemId, displacedCell.ItemTypeId, displacedCell.ItemAmount);
             if (displacedRemaining > 0)
             {
                 targetInventory.Data[targetCellIndex] = displacedCell;

@@ -160,11 +160,6 @@ namespace Blackset.UI.InventoryManagement
             if ( !hasPayload || ReferenceEquals(targetCell, sourceCell) ) return;
             if ( sourceCell.IsDefault || sourceCell.IsEmpty ) return;
             
-            if (targetInventory is DicePoolInventory poolInventory)
-            {
-                if (!poolInventory.IsAllowedByBudget(sourceCell.GetItemData(poolInventory.DataRegistry), 
-                        targetCell.GetItemData(sourceInventory.DataRegistry))) return;
-            }
             sourceInventory.MoveItem(sourceCellId, targetInventory, targetCellId);
         }
 

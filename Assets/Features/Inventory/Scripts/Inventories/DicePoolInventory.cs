@@ -1,5 +1,6 @@
 using System;
 using Blackset.Data;
+using Blackset.Inventories.Cells;
 using Blackset.Inventories.Items;
 using Blackset.Player;
 using Extensions.Log;
@@ -25,13 +26,21 @@ namespace Blackset.Inventories
         [SerializeField]
         protected PlayerDataFacade playerData;
         
+        protected override bool IsAllowedToReceive(InventoryCell incomingCell, Inventory fromInventory)
+        {
+            if (incomingCell == null || fromInventory == null) return false;
+
+            InventoryItem incomingItem = incomingCell.GetItemData(fromInventory.DataRegistry);
+            bool isAllowedByBudget = IsAllowedByBudget(incomingItem);
+
+            return isAllowedByBudget;
+        }
+        
         /// <summary>
         /// Проверка на достаточность дюджета
         /// </summary>
-        /// <param name="thisItem">Предмет в этой ячейке</param>
-        /// <param name="thatItem">Предмет</param>
         /// <returns>true если бюджета хватает, иначе false</returns>
-        public bool IsAllowedByBudget(InventoryItem thisItem, InventoryItem thatItem)
+        protected bool IsAllowedByBudget(InventoryItem thisItem)
         {
             if (thisItem is not DiceItem thisDice) return true;
 
@@ -42,15 +51,8 @@ namespace Blackset.Inventories
             }
             
             int freeBudget = playerData.GetFreeDiceBudget();
-
-            int refund = 0;
-            if (thatItem is DiceItem thatDice) refund = thatDice.BudgetPrice;
-
-            int available = freeBudget + refund;
-            
+            int available = freeBudget + playerData.MetaData.Data.GetUsedDiceBudgetByPool(this);
             int required = thisDice.BudgetPrice;
-            
-            Debug.Log("free " + freeBudget + ", available "  + available + ", required " + required);
             
             if (available < required)
             {
