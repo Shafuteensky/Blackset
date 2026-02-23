@@ -9,7 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6623fd50c9874f108445f49990016da6, type: 3}
+  m_Script: {fileID: 11500000, guid: b459915586e744d0b4759494ed7f5aed, type: 3}
   m_Name: DicesPoolRow_d8
   m_EditorClassIdentifier: Assembly-CSharp::Blackset.Inventory.ItemPools.DicesPoolRow
   id: eef47cf29c23404bafdf6fe84ce684ab
@@ -25,3 +25,4 @@ MonoBehaviour:
   - ItemData: {fileID: 11400000, guid: c6be3b2a199fce44487b5c70e985fa69, type: 2}
     ItemTypeData: {fileID: 11400000, guid: 7b2c54bf4725d1a4db115c84e52f3363, type: 2}
     ItemAmount: 1
+  playerData: {fileID: 11400000, guid: 2c23989d68545684e9ab72265b43e0bc, type: 2}

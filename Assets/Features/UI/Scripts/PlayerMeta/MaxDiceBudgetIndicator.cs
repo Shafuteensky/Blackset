@@ -6,15 +6,16 @@ using UnityEngine;
 namespace Blackset.UI.PlayerMeta
 {
     /// <summary>
-    /// Вывод бюджета сборки дайсов
+    /// Вывод максимального бюджета сборки дайсов
     /// </summary>
-    public sealed class DiceBudgetIndicator : InitializableMonoBehaviour
+    public sealed class MaxDiceBudgetIndicator : InitializableMonoBehaviour
     {
         [SerializeField]
-        private PlayerDataFacade playerDataFacade;
-        
-        [SerializeField]
         private TMP_Text textBudget;
+        
+        [Header("Данные игрока"), Space]
+        [SerializeField]
+        private PlayerDataFacade playerDataFacade;
         
         private void OnEnable()
         {
@@ -23,8 +24,7 @@ namespace Blackset.UI.PlayerMeta
             
             playerDataFacade.MetaData.onLvlChanged += ShowBudget;
             
-            PlayerMetaData meta = playerDataFacade.MetaData.Data;
-            ShowBudget(meta.GetPlayerLvl(), 0);
+            ShowBudget(0, 0);
         }
         
         private void OnDisable()
@@ -33,8 +33,8 @@ namespace Blackset.UI.PlayerMeta
             
             playerDataFacade.MetaData.onLvlChanged -= ShowBudget;
         }
-
-        private void ShowBudget(int curLvl, int prevLvl)
+        
+        private void ShowBudget(int _, int __)
         {
             PlayerMetaData meta = playerDataFacade.MetaData.Data;
             textBudget.text = meta.GetActualMaxDiceBudget().ToString();

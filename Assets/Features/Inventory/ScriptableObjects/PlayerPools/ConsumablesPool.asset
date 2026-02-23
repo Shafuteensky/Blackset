@@ -9,7 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6623fd50c9874f108445f49990016da6, type: 3}
+  m_Script: {fileID: 11500000, guid: b459915586e744d0b4759494ed7f5aed, type: 3}
   m_Name: ConsumablesPool
   m_EditorClassIdentifier: Assembly-CSharp::Blackset.Inventory.ItemPools.ConsumablesPool
   id: 11c28cf6619e4dbc835f4f91781d8e60
@@ -28,3 +28,4 @@ MonoBehaviour:
   - ItemData: {fileID: 11400000, guid: 689640fd0e2d80740b72a67a6b141e72, type: 2}
     ItemTypeData: {fileID: 11400000, guid: 993bee1bbd4e925439649326aceece27, type: 2}
     ItemAmount: 1
+  playerData: {fileID: 11400000, guid: 2c23989d68545684e9ab72265b43e0bc, type: 2}

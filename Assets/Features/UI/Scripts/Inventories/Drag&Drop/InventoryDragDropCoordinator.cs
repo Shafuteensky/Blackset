@@ -160,12 +160,12 @@ namespace Blackset.UI.InventoryManagement
             if ( !hasPayload || ReferenceEquals(targetCell, sourceCell) ) return;
             if ( sourceCell.IsDefault || sourceCell.IsEmpty ) return;
             
-            // Перемещение в определенную ячейку
-            if ( !String.IsNullOrEmpty(targetCellId) )
-                sourceInventory.MoveItem(sourceCellId, targetInventory, targetCellId);
-            // Перемещение в любую ячейку
-            else
-                sourceInventory.MoveItem(sourceCellId, targetInventory); 
+            if (targetInventory is DicePoolInventory poolInventory)
+            {
+                if (!poolInventory.IsAllowedByBudget(sourceCell.GetItemData(poolInventory.DataRegistry), 
+                        targetCell.GetItemData(sourceInventory.DataRegistry))) return;
+            }
+            sourceInventory.MoveItem(sourceCellId, targetInventory, targetCellId);
         }
 
         private bool IsAbleToDrag(InventoryCell cell)

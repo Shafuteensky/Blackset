@@ -23,6 +23,9 @@ namespace Blackset.Inventories
     /// - Инвентарь хранит не просто предметы, а уникальные ячейки с предметами
     /// - Инвентарь является заполненным списком: пустые ячейки не существуют (исключение: заполнение дефолтными предметами до максимума вместимости)
     /// </remarks>
+    [CreateAssetMenu(
+        fileName = nameof(Inventory),
+        menuName = "Blackset/Inventories/" + nameof(Inventory))]
     public class Inventory : InMemoryDataContainer<InventoryCell>
     {
         private const int INFINITE_CELLS_SIGN = 0;
@@ -328,211 +331,25 @@ namespace Blackset.Inventories
 
             return RemoveItem(cell.Id, amount);
         }
+
         
-        /// <summary>
-        /// Переместить ячейку в другой инвентарь
-        /// </summary>
-        /// <param name="cellId">Идентификатор перемещаемой ячейки</param>
-        /// <param name="targetInventory">Другой инвентарь, в который происходит перемещение из этого</param>
-        /// <returns>Количество не перемещенных предметов (0 если операция полностью успешна)</returns>
-        public int MoveItem(string cellId, Inventory targetInventory)
-        {
-            if (targetInventory.Id == Id) return 0;
-            if ( !CheckId(cellId) || 
-                 !GetById(cellId, out InventoryCell thisCell)) return -1;
-            if ( !CheckCell(thisCell) || 
-                 !CheckInventory(targetInventory) ) return thisCell.ItemAmount;
-            int itemAmount = thisCell.ItemAmount;
-            if (!targetInventory.IsItemAllowed(GetById(cellId), this)) return itemAmount;
-            
-            if (thisCell.IsEmpty || thisCell.IsDefault) return -1;
-
-            int index = GetIndexById(cellId);
-            int remaining = targetInventory.AddItem(thisCell.ItemId, thisCell.ItemTypeId, itemAmount);
-            int movedAmount = itemAmount - remaining;
-
-            if (movedAmount <= 0) return itemAmount;
-
-            // Все удалось переместить — удалить ячейку
-            if (remaining <= 0)
-            {
-                RemoveItem(thisCell);
-                onCellMoved?.Invoke(index);
-            }
-            // Не все удалось переместить (осталось количество) — убавить перемещенное количество
-            else
-            {
-                int residue = thisCell.DecreaseAmount(movedAmount, maxCellAmount);
-                
-                onCellUpdated?.Invoke(thisCell.Id);
-                MarkDirty();
-                
-                if (residue > 0) return residue;
-            }
-            
-            FillDefaultSlotsIfNeeded();
-            MarkDirty();
-            return 0;
-        }
-
         /// <summary>
         /// Переместить ячейку в другой инвентарь в определенное место
         /// </summary>
         /// <param name="cellId">Идентификатор перемещаемой ячейки</param>
         /// <param name="targetInventory">Другой инвентарь, в который происходит перемещение из этого инвентаря</param>
-        /// <param name="targetCellId">Ячейка другого инвентаря, в которую происходит перемещение из этой ячейки</param>
+        /// <param name="targetCellId">Ячейка другого инвентаря, в которую происходит перемещение из этой ячейки (если пусто, то в первую свободную)</param>
         /// <returns>Количество не перемещенных предметов (0 если операция полностью успешна)</returns>
-        public int MoveItem(string cellId, Inventory targetInventory, string targetCellId)
+        public int MoveItem(string cellId, Inventory targetInventory, string targetCellId = null)
         {
-            if ( !CheckId(cellId) || 
-                 !CheckId(targetCellId) || 
-                 !CheckInventory(targetInventory) ) return -1;
-            
-            if (targetInventory.Id == Id)
-            {
-                if (cellId == targetCellId) return 0;
-                if (!SwapItem(cellId, targetCellId, this)) return -1;
-                FillDefaultSlotsIfNeeded();
-                MarkDirty();
-                return 0;
-            }
-            
-            if ( !GetById(cellId, out InventoryCell thisCell) || 
-                 !CheckCell(thisCell) ) return -1;
-            if ( !targetInventory.GetById(targetCellId, out InventoryCell thatCell ) || 
-                 !CheckCell(thatCell)) return thisCell.ItemAmount;
-
-            if ( thisCell.IsEmpty || 
-                 thisCell.IsDefault ) return -1;
-            if (!targetInventory.IsItemAllowed(GetById(cellId), this)) return thisCell.ItemAmount;
-
-            int thisCellIndex = GetIndexById(cellId);
-            int targetCellIndex = targetInventory.GetIndexById(targetCellId);
-            if ( !CheckIndex(thisCellIndex) || 
-                 !CheckIndex(targetCellIndex, targetInventory.Data.Count) ) return thisCell.ItemAmount;
-
-            int ApplyMoveResult(int remaining)
-            {
-                int movedAmount = thisCell.ItemAmount - remaining;
-                if (movedAmount <= 0) return thisCell.ItemAmount;
-
-                // Перемещено все — удалить оригинальную ячейку
-                if (remaining <= 0) RemoveItem(thisCell);
-                // Перемещено не все — убавить перемещенное количество
-                else
-                {
-                    int residue = thisCell.DecreaseAmount(movedAmount, maxCellAmount);
-                    onCellUpdated?.Invoke(thisCell.Id);
-                    MarkDirty();
-                    if (residue > 0) return residue;
-                }
-
-                onCellMoved?.Invoke(thisCellIndex);
-                FillDefaultSlotsIfNeeded();
-                MarkDirty();
-
-                return 0;
-            }
-
-            int movedToTarget = 0;
-            
-            // Перемещение в дефолтную или пустую ячейку — заменить ее на нужную ячейку
-            if (thatCell.IsDefault || thatCell.IsEmpty)
-            {
-                movedToTarget = Mathf.Min(thisCell.ItemAmount, targetInventory.maxCellAmount);
-                if (movedToTarget <= 0) return thisCell.ItemAmount;
-
-                InventoryCell newCell = targetInventory.CreateCell(thisCell.ItemId, thisCell.ItemTypeId, movedToTarget);
-                if (newCell == null) return thisCell.ItemAmount;
-
-                targetInventory.Data[targetCellIndex] = newCell;
-                targetInventory.onCellRemoved?.Invoke(targetCellIndex);
-                targetInventory.onCellAdded?.Invoke(newCell.Id);
-                targetInventory.MarkDirty();
-
-                int remaining = thisCell.ItemAmount - movedToTarget;
-                return ApplyMoveResult(remaining);
-            }
-            
-            // Перемещение в ячейку с таким же содержимым — увеличить количество
-            if (thatCell.IsContentSame(thisCell))
-            {
-                int before = thatCell.ItemAmount;
-                int remaining = thatCell.IncreaseAmount(thisCell.ItemAmount, targetInventory.maxCellAmount);
-
-                if (thatCell.ItemAmount != before)
-                {
-                    targetInventory.onCellUpdated?.Invoke(thatCell.Id);
-                    targetInventory.MarkDirty();
-                }
-
-                return ApplyMoveResult(remaining);
-            }
-            
-            // Перемещение в заполненную иным содержимым ячейку — поменять ячейки местами
-            if (allowedItemType != null && thatCell.ItemTypeId != allowedItemType.Id) return thisCell.ItemAmount;
-
-            bool isSwapPossibleByAmounts =
-                thisCell.ItemAmount <= targetInventory.maxCellAmount &&
-                thatCell.ItemAmount <= maxCellAmount;
-
-            if (isSwapPossibleByAmounts)
-            {
-                if (!SwapItem(thisCellIndex, targetCellIndex, targetInventory)) return thisCell.ItemAmount;
-
-                TryAutoMergeCell(thisCellIndex);
-                targetInventory.TryAutoMergeCell(targetCellIndex);
-
-                targetInventory.FillDefaultSlotsIfNeeded();
-                targetInventory.MarkDirty();
-
-                FillDefaultSlotsIfNeeded();
-                MarkDirty();
-
-                return 0;
-            }
-
-            if (!IsItemAllowed(thatCell.ItemId, thatCell.ItemTypeId, targetInventory)) return thisCell.ItemAmount;
-
-            movedToTarget = Mathf.Min(thisCell.ItemAmount, targetInventory.maxCellAmount);
-            if (movedToTarget <= 0) return thisCell.ItemAmount;
-            
-            int additionalAvailableCells = 0;
-            if (IsSlotsLimited() && thisCell.ItemAmount <= movedToTarget) additionalAvailableCells = 1;
-            if (!CanFitItemCompletely(this, thatCell.ItemId, thatCell.ItemTypeId, thatCell.ItemAmount, additionalAvailableCells)) return thisCell.ItemAmount;
-
-            InventoryCell displacedCell = thatCell;
-
-            InventoryCell newTargetCell = targetInventory.CreateCell(thisCell.ItemId, thisCell.ItemTypeId, movedToTarget);
-            if (newTargetCell == null) return thisCell.ItemAmount;
-
-            targetInventory.Data[targetCellIndex] = newTargetCell;
-            targetInventory.onCellRemoved?.Invoke(targetCellIndex);
-            targetInventory.onCellAdded?.Invoke(newTargetCell.Id);
-            targetInventory.MarkDirty();
-
-            int displacedRemaining = AddItem(displacedCell.ItemId, displacedCell.ItemTypeId, displacedCell.ItemAmount, true, -1);
-            if (displacedRemaining > 0)
-            {
-                targetInventory.Data[targetCellIndex] = displacedCell;
-                targetInventory.onCellRemoved?.Invoke(targetCellIndex);
-                targetInventory.onCellAdded?.Invoke(displacedCell.Id);
-                targetInventory.MarkDirty();
-                return thisCell.ItemAmount;
-            }
-
-            int remainingAfterMove = thisCell.ItemAmount - movedToTarget;
-            int result = ApplyMoveResult(remainingAfterMove);
-
-            targetInventory.TryAutoMergeCell(targetCellIndex);
-
-            targetInventory.FillDefaultSlotsIfNeeded();
-            targetInventory.MarkDirty();
-
-            FillDefaultSlotsIfNeeded();
-            MarkDirty();
-
-            return result;
+            int residue;
+            // Перемещение в определенную ячейку
+            if ( !String.IsNullOrEmpty(targetCellId) )
+                residue = MoveItemInternal(cellId, targetInventory, targetCellId);
+            // Перемещение в любую ячейку
+            else
+                residue = MoveItemInternal(cellId, targetInventory);
+            return residue;
         }
         
         /// <summary>
@@ -677,7 +494,7 @@ namespace Blackset.Inventories
         /// <param name="InventoryCell">Ячейка инвентаря</param>
         /// <returns>true если класс и тип подходят, иначе false</returns>
         private bool IsItemAllowed(InventoryCell cell, Inventory fromInventory) => IsItemAllowed(cell.ItemId, cell.ItemTypeId, fromInventory);
-
+        
         /// <summary>
         /// Полностью ли вмещается предмет из ячейки в инвентарь
         /// </summary>
@@ -849,6 +666,217 @@ namespace Blackset.Inventories
                 onCellRemoved?.Invoke(cellIndex);
                 MarkDirty();
             }
+        }
+        
+        /// <summary>
+        /// Переместить ячейку в другой инвентарь
+        /// </summary>
+        /// <param name="cellId">Идентификатор перемещаемой ячейки</param>
+        /// <param name="targetInventory">Другой инвентарь, в который происходит перемещение из этого</param>
+        /// <returns>Количество не перемещенных предметов (0 если операция полностью успешна)</returns>
+        private int MoveItemInternal(string cellId, Inventory targetInventory)
+        {
+            if (targetInventory.Id == Id) return 0;
+            if ( !CheckId(cellId) || 
+                 !GetById(cellId, out InventoryCell thisCell)) return -1;
+            if ( !CheckCell(thisCell) || 
+                 !CheckInventory(targetInventory) ) return thisCell.ItemAmount;
+            int itemAmount = thisCell.ItemAmount;
+            if (!targetInventory.IsItemAllowed(GetById(cellId), this)) return itemAmount;
+            
+            if (thisCell.IsEmpty || thisCell.IsDefault) return -1;
+
+            int index = GetIndexById(cellId);
+            int remaining = targetInventory.AddItem(thisCell.ItemId, thisCell.ItemTypeId, itemAmount);
+            int movedAmount = itemAmount - remaining;
+
+            if (movedAmount <= 0) return itemAmount;
+
+            // Все удалось переместить — удалить ячейку
+            if (remaining <= 0)
+            {
+                RemoveItem(thisCell);
+                onCellMoved?.Invoke(index);
+            }
+            // Не все удалось переместить (осталось количество) — убавить перемещенное количество
+            else
+            {
+                int residue = thisCell.DecreaseAmount(movedAmount, maxCellAmount);
+                
+                onCellUpdated?.Invoke(thisCell.Id);
+                MarkDirty();
+                
+                if (residue > 0) return residue;
+            }
+            
+            FillDefaultSlotsIfNeeded();
+            MarkDirty();
+            return 0;
+        }
+        
+        /// <summary>
+        /// Переместить ячейку в другой инвентарь в определенное место
+        /// </summary>
+        /// <param name="cellId">Идентификатор перемещаемой ячейки</param>
+        /// <param name="targetInventory">Другой инвентарь, в который происходит перемещение из этого инвентаря</param>
+        /// <param name="targetCellId">Ячейка другого инвентаря, в которую происходит перемещение из этой ячейки</param>
+        /// <returns>Количество не перемещенных предметов (0 если операция полностью успешна)</returns>
+        private int MoveItemInternal(string cellId, Inventory targetInventory, string targetCellId)
+        {
+            // Входные данные полные
+            if ( !CheckId(cellId) || 
+                 !CheckId(targetCellId) || 
+                 !CheckInventory(targetInventory) ) return -1;
+            
+            // Операция внутри этого же инвентаря
+            if (targetInventory.Id == Id)
+            {
+                if (cellId == targetCellId) return 0;
+                if (!SwapItem(cellId, targetCellId, this)) return -1;
+                FillDefaultSlotsIfNeeded();
+                MarkDirty();
+                return 0;
+            }
+            
+            // Получение данных о ячейках
+            if ( !GetById(cellId, out InventoryCell thisCell) || 
+                 !CheckCell(thisCell) ) return -1;
+            if ( !targetInventory.GetById(targetCellId, out InventoryCell thatCell ) || 
+                 !CheckCell(thatCell)) return thisCell.ItemAmount;
+
+            // Разрешены ли предметы ячеек в инвентаре
+            if ( thisCell.IsEmpty || 
+                 thisCell.IsDefault ) return -1;
+            if (!targetInventory.IsItemAllowed(GetById(cellId), this)) return thisCell.ItemAmount;
+            
+            // Получение индексов ячеек
+            int thisCellIndex = GetIndexById(cellId);
+            int targetCellIndex = targetInventory.GetIndexById(targetCellId);
+            if ( !CheckIndex(thisCellIndex) || 
+                 !CheckIndex(targetCellIndex, targetInventory.Data.Count) ) return thisCell.ItemAmount;
+
+            int ApplyMoveResult(int remaining)
+            {
+                int movedAmount = thisCell.ItemAmount - remaining;
+                if (movedAmount <= 0) return thisCell.ItemAmount;
+
+                // Перемещено все — удалить оригинальную ячейку
+                if (remaining <= 0) RemoveItem(thisCell);
+                // Перемещено не все — убавить перемещенное количество
+                else
+                {
+                    int residue = thisCell.DecreaseAmount(movedAmount, maxCellAmount);
+                    onCellUpdated?.Invoke(thisCell.Id);
+                    MarkDirty();
+                    if (residue > 0) return residue;
+                }
+
+                onCellMoved?.Invoke(thisCellIndex);
+                FillDefaultSlotsIfNeeded();
+                MarkDirty();
+
+                return 0;
+            }
+
+            int movedToTarget = 0;
+            
+            // Перемещение в дефолтную или пустую ячейку — заменить ее на нужную ячейку
+            if (thatCell.IsDefault || thatCell.IsEmpty)
+            {
+                movedToTarget = Mathf.Min(thisCell.ItemAmount, targetInventory.maxCellAmount);
+                if (movedToTarget <= 0) return thisCell.ItemAmount;
+
+                InventoryCell newCell = targetInventory.CreateCell(thisCell.ItemId, thisCell.ItemTypeId, movedToTarget);
+                if (newCell == null) return thisCell.ItemAmount;
+
+                targetInventory.Data[targetCellIndex] = newCell;
+                targetInventory.onCellRemoved?.Invoke(targetCellIndex);
+                targetInventory.onCellAdded?.Invoke(newCell.Id);
+                targetInventory.MarkDirty();
+
+                int remaining = thisCell.ItemAmount - movedToTarget;
+                return ApplyMoveResult(remaining);
+            }
+            
+            // Перемещение в ячейку с таким же содержимым — увеличить количество
+            if (thatCell.IsContentSame(thisCell))
+            {
+                int before = thatCell.ItemAmount;
+                int remaining = thatCell.IncreaseAmount(thisCell.ItemAmount, targetInventory.maxCellAmount);
+
+                if (thatCell.ItemAmount != before)
+                {
+                    targetInventory.onCellUpdated?.Invoke(thatCell.Id);
+                    targetInventory.MarkDirty();
+                }
+
+                return ApplyMoveResult(remaining);
+            }
+            
+            // Перемещение в заполненную иным содержимым ячейку — поменять ячейки местами
+            if (allowedItemType != null && thatCell.ItemTypeId != allowedItemType.Id) return thisCell.ItemAmount;
+
+            bool isSwapPossibleByAmounts =
+                thisCell.ItemAmount <= targetInventory.maxCellAmount &&
+                thatCell.ItemAmount <= maxCellAmount;
+
+            if (isSwapPossibleByAmounts)
+            {
+                if (!SwapItem(thisCellIndex, targetCellIndex, targetInventory)) return thisCell.ItemAmount;
+
+                TryAutoMergeCell(thisCellIndex);
+                targetInventory.TryAutoMergeCell(targetCellIndex);
+
+                targetInventory.FillDefaultSlotsIfNeeded();
+                targetInventory.MarkDirty();
+
+                FillDefaultSlotsIfNeeded();
+                MarkDirty();
+
+                return 0;
+            }
+
+            if (!IsItemAllowed(thatCell.ItemId, thatCell.ItemTypeId, targetInventory)) return thisCell.ItemAmount;
+
+            movedToTarget = Mathf.Min(thisCell.ItemAmount, targetInventory.maxCellAmount);
+            if (movedToTarget <= 0) return thisCell.ItemAmount;
+            
+            int additionalAvailableCells = 0;
+            if (IsSlotsLimited() && thisCell.ItemAmount <= movedToTarget) additionalAvailableCells = 1;
+            if (!CanFitItemCompletely(this, thatCell.ItemId, thatCell.ItemTypeId, thatCell.ItemAmount, additionalAvailableCells)) return thisCell.ItemAmount;
+
+            InventoryCell displacedCell = thatCell;
+
+            InventoryCell newTargetCell = targetInventory.CreateCell(thisCell.ItemId, thisCell.ItemTypeId, movedToTarget);
+            if (newTargetCell == null) return thisCell.ItemAmount;
+
+            targetInventory.Data[targetCellIndex] = newTargetCell;
+            targetInventory.onCellRemoved?.Invoke(targetCellIndex);
+            targetInventory.onCellAdded?.Invoke(newTargetCell.Id);
+            targetInventory.MarkDirty();
+
+            int displacedRemaining = AddItem(displacedCell.ItemId, displacedCell.ItemTypeId, displacedCell.ItemAmount, true, -1);
+            if (displacedRemaining > 0)
+            {
+                targetInventory.Data[targetCellIndex] = displacedCell;
+                targetInventory.onCellRemoved?.Invoke(targetCellIndex);
+                targetInventory.onCellAdded?.Invoke(displacedCell.Id);
+                targetInventory.MarkDirty();
+                return thisCell.ItemAmount;
+            }
+
+            int remainingAfterMove = thisCell.ItemAmount - movedToTarget;
+            int result = ApplyMoveResult(remainingAfterMove);
+
+            targetInventory.TryAutoMergeCell(targetCellIndex);
+
+            targetInventory.FillDefaultSlotsIfNeeded();
+            targetInventory.MarkDirty();
+
+            FillDefaultSlotsIfNeeded();
+            MarkDirty();
+
+            return result;
         }
         
         /// <summary>

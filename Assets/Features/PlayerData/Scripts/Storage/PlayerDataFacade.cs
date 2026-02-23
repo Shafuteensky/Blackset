@@ -71,5 +71,16 @@ namespace Blackset.Player
             ServiceDebug.LogError($"Пул дайсов типа {diceType.DataName} не найден");
             return null;
         }
+
+        /// <summary>
+        /// Получить значение свободного нераспределенного бюджета
+        /// </summary>
+        /// <returns>Свободный бюджет пулов дайсов</returns>
+        public int GetFreeDiceBudget()
+        {
+            PlayerMetaData meta = MetaData.Data;
+            int freeDiceBudget = meta.GetActualMaxDiceBudget() - meta.GetTotalUsedDiceBudget(DicesPoolRows);
+            return freeDiceBudget;
+        }
     }
 }

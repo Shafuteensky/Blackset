@@ -177,8 +177,20 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6803290253558642765, guid: 7e25937fa10770f4ab1380c011bbd1a7, type: 3}
+      propertyPath: loops
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6803290253558642765, guid: 7e25937fa10770f4ab1380c011bbd1a7, type: 3}
+      propertyPath: isFrom
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6803290253558642765, guid: 7e25937fa10770f4ab1380c011bbd1a7, type: 3}
       propertyPath: targetType
       value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6803290253558642765, guid: 7e25937fa10770f4ab1380c011bbd1a7, type: 3}
+      propertyPath: endValueFloat
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7127305452908531674, guid: 7e25937fa10770f4ab1380c011bbd1a7, type: 3}
       propertyPath: m_Enabled
