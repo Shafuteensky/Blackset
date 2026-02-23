@@ -1,4 +1,5 @@
 using System;
+using Blackset.Data;
 using Blackset.Data.Items.Types;
 using Blackset.Effects;
 using Blackset.Inventories;
@@ -49,6 +50,8 @@ namespace Blackset.UI.InventoryManagement
         protected TMP_Text setNameText;
         [SerializeField]
         protected TMP_Text priceText;
+        [SerializeField]
+        protected TMP_Text budgetText;
         
         [Header("Параметры ячейки"), Space]
         [SerializeField]
@@ -153,6 +156,10 @@ namespace Blackset.UI.InventoryManagement
                 if (cellItem is not EffectingItem effectingItem) return;
                 SetIconColor(cell, effectingItem);
                 SetItemSetText(effectingItem);
+                
+                // Параметры для DiceItem
+                if (cellItem is not DiceItem diceItem) return;
+                SetDiceBudgetText(diceItem);
             }
         }
 
@@ -210,6 +217,12 @@ namespace Blackset.UI.InventoryManagement
                 int cellItemPrice = cellItem.GetPrice(cellItemTypeData);
                 priceText.text = cellItemPrice.ToString();
             }
+        }
+
+        private void SetDiceBudgetText(DiceItem cellItem)
+        {
+            if (budgetText == null) return;
+            budgetText.text = cellItem.BudgetPrice.ToString();
         }
         
         #endregion

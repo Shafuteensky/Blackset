@@ -19,6 +19,7 @@ MonoBehaviour:
     - d0aa4b4bc44aa36429279b512de43a35
     - 568a2a48eba674047ae86d637bdc43fb
     - 390fefee3cc4eec42a522b61edd78188
+    - a25983c86a7143442905ee760d526aca
     values:
     - goDatas_byGlobalId:
         keys:
@@ -250,5 +251,8 @@ MonoBehaviour:
           iconNameOrGuid: AudioClip Icon
           isIconRecursive: 0
           isColorRecursive: 0
+    - goDatas_byGlobalId:
+        keys: []
+        values: []
   bookmarks: []
   bookmarkedScenePaths: []
