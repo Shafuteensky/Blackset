@@ -1,12 +1,13 @@
+using Blackset.Opponents;
 using Extensions.Log;
 using UnityEngine;
 
-namespace Blackset.Opponents
+namespace Blackset.DuelContracts
 {
     /// <summary>
     /// Генератор соперников
     /// </summary>
-    public class OpponentGenerator
+    public class ContractGenerator
     {   
         protected readonly OpponentsRegistry opponentsRegistry;
         //protected readonly PlayerDataFacade playerData; // TODO данные игрока для определения доступности предметов от стадии прогресса
@@ -16,7 +17,7 @@ namespace Blackset.Opponents
         /// </summary>
         /// <param name="gameData">Фасад всех игровых данных</param>
         /// <param name="gameData">Фасад всех данных игрока</param>
-        public OpponentGenerator(OpponentsRegistry opponentsRegistry)
+        public ContractGenerator(OpponentsRegistry opponentsRegistry)
         {
             if (opponentsRegistry == null) ServiceDebug.LogError("Ссылка на реестр данных не получена");
             
@@ -27,10 +28,10 @@ namespace Blackset.Opponents
         /// <summary>
         /// Получить случайного соперника
         /// </summary>
-        public OpponentContract GetRandomOpponent()
+        public DuelContract GetRandomOpponent()
         {
             OpponentData randomOpponent = opponentsRegistry.Data[Random.Range(0, opponentsRegistry.Data.Count)];
-            OpponentContract randomContract = new OpponentContract(randomOpponent.Id);
+            DuelContract randomContract = new DuelContract(randomOpponent.Id);
             return randomContract;
         }
     }

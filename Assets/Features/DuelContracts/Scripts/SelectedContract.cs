@@ -1,7 +1,7 @@
 using Extensions.Data.InMemoryData.SelectionContext;
 using UnityEngine;
 
-namespace Blackset.Opponents
+namespace Blackset.DuelContracts
 {
     /// <summary>
     /// Контекст выбора контракта соперника дуэли
@@ -9,5 +9,5 @@ namespace Blackset.Opponents
     [CreateAssetMenu(
         fileName = nameof(SelectedContract), 
         menuName = "Blackset/Opponents/" + nameof(SelectedContract))]
-    public class SelectedContract : SelectionContext<OpponentContract> { }
+    public class SelectedContract : SelectionContext<DuelContract> { }
 }

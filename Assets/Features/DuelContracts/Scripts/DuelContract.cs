@@ -2,12 +2,12 @@ using System;
 using Extensions.Data.InMemoryData;
 using Extensions.Log;
 
-namespace Blackset.Opponents
+namespace Blackset.DuelContracts
 {
     /// <summary>
     /// Запись о сопернике в пуле доступных контрактов
     /// </summary>
-    public class OpponentContract : InMemoryDataEntry
+    public class DuelContract : InMemoryDataEntry
     {
         /// <summary>
         /// Идентификатор данных оппонента
@@ -20,7 +20,7 @@ namespace Blackset.Opponents
         /// Конструктор записи о сопернике
         /// </summary>
         /// <param name="opponentId">Идентификатор данных оппонента этого контракта</param>
-        public OpponentContract(string opponentId)
+        public DuelContract(string opponentId)
         {
             if (String.IsNullOrEmpty(opponentId))
             {

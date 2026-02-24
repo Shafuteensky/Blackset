@@ -1,7 +1,7 @@
 using Extensions.Data.InMemoryData;
 using UnityEngine;
 
-namespace Blackset.Opponents
+namespace Blackset.DuelContracts
 {
     /// <summary>
     /// Хранилище доступных соперников
@@ -9,5 +9,5 @@ namespace Blackset.Opponents
     [CreateAssetMenu(
         fileName = nameof(ContractListContainer),
         menuName = "Blackset/Opponents/" + nameof(ContractListContainer))]
-    public class ContractListContainer : InMemoryDataContainer<OpponentContract> { }
+    public class ContractListContainer : InMemoryDataContainer<DuelContract> { }
 }

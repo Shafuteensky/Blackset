@@ -1,7 +1,8 @@
+using Blackset.Opponents;
 using Blackset.Player;
 using UnityEngine;
 
-namespace Blackset.Opponents
+namespace Blackset.DuelContracts
 {
     /// <summary>
     /// Контроллер списка контрактов дуэлей
@@ -19,14 +20,14 @@ namespace Blackset.Opponents
         [Range(1, 6)]
         private int contractsToGenerate = 3;
         
-        private OpponentGenerator opponentGenerator;
+        private ContractGenerator _contractGenerator;
         
         private void OnEnable()
         {
             Initialize(contractList != null && opponentsRegistry != null);
             if (!IsInitialized) return;
             
-            opponentGenerator ??= new OpponentGenerator(opponentsRegistry);
+            _contractGenerator ??= new ContractGenerator(opponentsRegistry);
             if (IsUpdateNeeded()) UpdateContractList();
         }
 
@@ -35,7 +36,7 @@ namespace Blackset.Opponents
             contractList.Clear();
             for (int i = 0; i < contractsToGenerate; i++)
             {
-                OpponentContract newContract = opponentGenerator.GetRandomOpponent();
+                DuelContract newContract = _contractGenerator.GetRandomOpponent();
                 contractList.Add(newContract);
             }
         }
