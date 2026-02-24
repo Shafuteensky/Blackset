@@ -327,11 +327,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b78ee9e7ff74e1e8b5201844c99013f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Blackset.UI.Inventory.InventoryItemElement
-  canvasGroup: {fileID: 5527183741289242698}
   itemIconImage: {fileID: 755724977203275305}
+  setImage: {fileID: 0}
   amountText: {fileID: 7308115554014626211}
   setNameText: {fileID: 0}
   priceText: {fileID: 0}
+  budgetText: {fileID: 0}
+  canvasGroup: {fileID: 5527183741289242698}
   canDrag: 1
   canDrop: 1
 --- !u!114 &2246784491602441502
@@ -346,7 +348,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ba87b11d293466a8d08acfe3d76ce66, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Blackset.UI.Inventory.InventoryItemHoverInfoEmitter
-  element: {fileID: 7266762127616091038}
+  dtatSourceElement: {fileID: 7266762127616091038}
   holdSeconds: {fileID: 11400000, guid: c0a36e4a3850b154594fa82a285983c9, type: 2}
 --- !u!1 &8348507175140030489
 GameObject:

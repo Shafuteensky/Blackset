@@ -56,13 +56,13 @@ namespace Blackset.Shop
 
         protected void TryBuyItem()
         {
-            InventoryCell cell = itemElement.Inventory.GetById(itemElement.ItemCellId);
-            InventoryItem shopItem = itemElement.Inventory.GetCellItemData(itemElement.ItemCellId);
+            InventoryCell cell = itemElement.DataContainer.GetById(itemElement.ItemCellId);
+            InventoryItem shopItem = itemElement.DataContainer.GetCellItemData(itemElement.ItemCellId);
             int playerMoney = playerData.MetaData.Data.Money;
             
             int itemPrice;
             if (fixedPrice != null) itemPrice = fixedPrice.Value;
-            else itemPrice = shopItem.GetPrice(itemElement.Inventory.GetCellTypeData(itemElement.ItemCellId));
+            else itemPrice = shopItem.GetPrice(itemElement.DataContainer.GetCellTypeData(itemElement.ItemCellId));
             
             if (playerMoney < itemPrice)
             {
@@ -73,7 +73,7 @@ namespace Blackset.Shop
             playerData.MetaData.RemoveMoney(itemPrice);
             if (shopItem is DiceData) playerData.DicesInventory.AddItem(cell);
             else if (shopItem is ConsumableData) playerData.ConsumablesInventory.AddItem(cell);
-            itemElement.Inventory.RemoveItem(cell);
+            itemElement.DataContainer.RemoveItem(cell);
 
             onItemBought?.Invoke();
         }

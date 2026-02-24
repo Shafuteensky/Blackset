@@ -5,7 +5,7 @@ using Blackset.Effects;
 using Blackset.Inventories;
 using Blackset.Inventories.Cells;
 using Blackset.Inventories.Items;
-using Extensions.Generics;
+using Blackset.UI.HoverInfo;
 using Extensions.Log;
 using TMPro;
 using UnityEngine;
@@ -17,7 +17,7 @@ namespace Blackset.UI.InventoryManagement
     /// <summary>
     /// Элемент UI фабрики содержимого инвентаря
     /// </summary>
-    public class InventoryItemElement : InitializableMonoBehaviour, 
+    public sealed class InventoryItemElement : BaseContainerEntryElement<Inventory, InventoryCell>, 
         IDragHandler, IDropHandler, IBeginDragHandler, IEndDragHandler
     {
         /// <summary>
@@ -25,47 +25,33 @@ namespace Blackset.UI.InventoryManagement
         /// </summary>
         public CanvasGroup CanvasGroup => canvasGroup;
         
-        /// <summary>
-        /// Прилинкованный инвентарь элемента
-        /// </summary>
-        public Inventory Inventory => inventory;
-        /// <summary>
-        /// Идентификатор прилинкованной ячейки инвентаря
-        /// </summary>
-        public string ItemCellId => itemCellId;
-        
-        [SerializeField]
-        protected CanvasGroup canvasGroup;
-        
         [Header("Графика"), Space]
         [SerializeField]
-        protected Image itemIconImage;
+        private Image itemIconImage;
         [SerializeField]
-        protected Image setImage;
+        private Image setImage;
             
         [Header("Текст"), Space]
         [SerializeField]
-        protected TMP_Text amountText;
+        private TMP_Text amountText;
         [SerializeField]
-        protected TMP_Text setNameText;
+        private TMP_Text setNameText;
         [SerializeField]
-        protected TMP_Text priceText;
+        private TMP_Text priceText;
         [SerializeField]
-        protected TMP_Text budgetText;
+        private TMP_Text budgetText;
         
-        [Header("Параметры ячейки"), Space]
+        [Header("Параметры Drag&Drop"), Space]
         [SerializeField]
-        protected bool canDrag = true;
+        private CanvasGroup canvasGroup;
         [SerializeField]
-        protected bool canDrop = true;
+        private bool canDrag = true;
+        [SerializeField]
+        private bool canDrop = true;
 
-        protected InventoryDragDropCoordinator dropCoordinator;
+        private InventoryDragDropCoordinator dropCoordinator;
         
-        protected Inventories.Inventory inventory;
-        protected string itemCellId;
-        
-
-        protected virtual void OnEnable()
+        private void OnEnable()
         {
             dropCoordinator = InventoryDragDropCoordinator.Instance;
             Initialize(dropCoordinator != null);
@@ -77,7 +63,7 @@ namespace Blackset.UI.InventoryManagement
         {
             if ( !IsInitialized || !canDrag ) return;
             itemIconImage.CrossFadeAlpha(0.25f, 0.1f, false);
-            dropCoordinator.BeginDrag(inventory, itemCellId);
+            dropCoordinator.BeginDrag(dataContainer, itemCellId);
         }
         
         public void OnDrag(PointerEventData eventData)
@@ -97,7 +83,7 @@ namespace Blackset.UI.InventoryManagement
         {
             if ( !IsInitialized || !canDrop ) return;
 
-            dropCoordinator.RequestDrop(inventory, itemCellId);
+            dropCoordinator.RequestDrop(dataContainer, itemCellId);
         }
 
         #endregion
@@ -106,16 +92,9 @@ namespace Blackset.UI.InventoryManagement
         /// Инициализация элемента
         /// </summary>
         /// <param name="newItemCellId">Идентификатор хранимых данных</param>
-        public void InitializeElement(Inventory newInventory, string newItemCellId = null)
+        public override void InitializeElement(Inventory newContainer, string newItemCellId = null)
         {
-            if (newInventory == null)
-            {
-                ServiceDebug.LogError("Ссылка на инвентарь отсутствует, инициализация прервана");
-                return;
-            }
-            
-            inventory = newInventory;
-            itemCellId = newItemCellId;
+            base.InitializeElement(newContainer, newItemCellId);
             
             bool isNoCell = String.IsNullOrEmpty(newItemCellId);
             
@@ -128,7 +107,7 @@ namespace Blackset.UI.InventoryManagement
             // Конкретная ячейка
             else
             {
-                InventoryCell cell = newInventory.GetById(newItemCellId);
+                InventoryCell cell = newContainer.GetById(newItemCellId);
                 
                 if (cell == null)
                 {
@@ -136,8 +115,8 @@ namespace Blackset.UI.InventoryManagement
                     return;
                 }
                 
-                InventoryItem cellItem = newInventory.GetCellItemData(cell);
-                InventoryItemType cellItemTypeData = newInventory.GetCellTypeData(cell);
+                InventoryItem cellItem = newContainer.GetCellItemData(cell);
+                InventoryItemType cellItemTypeData = newContainer.GetCellTypeData(cell);
                 
                 if (cellItemTypeData == null || cellItem == null)
                 {
