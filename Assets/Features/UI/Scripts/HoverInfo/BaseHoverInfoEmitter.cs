@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using Extensions.Coroutines;
 using Extensions.Data.InMemoryData;
+using Extensions.Data.InMemoryData.SelectionContext;
 using Extensions.ScriptableValues;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -14,7 +15,7 @@ namespace Blackset.UI.HoverInfo
     public abstract class BaseHoverInfoEmitter<TContainer, TEntry, TElement> : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         where TContainer : InMemoryDataContainer<TEntry> 
         where TEntry : InMemoryDataEntry
-        where TElement : BaseContainerEntryElement<TContainer, TEntry>
+        where TElement : ContextIdHolder<TContainer, TEntry>
     {
         #region События
 
@@ -83,7 +84,7 @@ namespace Blackset.UI.HoverInfo
                  dtatSourceElement == null ) 
                 yield break;
 
-            onShowRequested?.Invoke(dtatSourceElement.DataContainer, dtatSourceElement.ItemCellId, dtatSourceElement.transform.position);
+            onShowRequested?.Invoke(dtatSourceElement.DataContainer, dtatSourceElement.EntryId, dtatSourceElement.transform.position);
         }
     }
 }

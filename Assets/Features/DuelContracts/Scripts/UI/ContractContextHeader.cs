@@ -1,16 +1,14 @@
-using System;
-using Blackset.Data.Registries;
+using Blackset.DuelContracts.HoverInfo;
 using Blackset.Opponents;
 using TMPro;
 using UnityEngine;
-using Extensions.Data.InMemoryData.SelectionContext;
 
 namespace Blackset.DuelContracts
 {
     /// <summary>
     /// Текст заголовка (имени) кнопки выбора контракта
     /// </summary>
-    [RequireComponent(typeof(ContextIdHolder))]
+    [RequireComponent(typeof(ContractEntryUIElement))]
     public sealed class ContractContextHeader : MonoBehaviour
     {
         [SerializeField]
@@ -18,27 +16,27 @@ namespace Blackset.DuelContracts
         [SerializeField]
         private ContractListContainer contractListContainer;
 
-        private ContextIdHolder contextIdHolder;
+        private ContractEntryUIElement contextHolder;
 
         private void Awake()
         {
-            contextIdHolder = GetComponent<ContextIdHolder>();
+            contextHolder = GetComponent<ContractEntryUIElement>();
         }
 
         private void OnEnable()
         {
-            if (!contextIdHolder.IsInitialized) contextIdHolder.onInitialized += SetHeader;
+            if (!contextHolder.IsInitialized) contextHolder.onInitialized += SetHeader;
             else SetHeader();
         }
 
         private void OnDisable()
         {
-            contextIdHolder.onInitialized -= SetHeader;
+            contextHolder.onInitialized -= SetHeader;
         }
 
         private void SetHeader()
         {
-            OpponentData opponentData = contractListContainer.GetOpponentData(contextIdHolder.Id);
+            OpponentData opponentData = contractListContainer.GetOpponentData(contextHolder.EntryId);
             headerText.text = opponentData.DataName;
         }
     }

@@ -1,4 +1,5 @@
 using Extensions.Data.InMemoryData;
+using Extensions.Data.InMemoryData.SelectionContext;
 using UnityEngine;
 
 namespace Blackset.UI.HoverInfo
@@ -9,15 +10,17 @@ namespace Blackset.UI.HoverInfo
     public abstract class BaseInfoPopupController<TContainer, TEntry, TElement> : MonoBehaviour
         where TContainer : InMemoryDataContainer<TEntry> 
         where TEntry : InMemoryDataEntry
-        where TElement : BaseContainerEntryElement<TContainer, TEntry>
+        where TElement : ContextIdHolder<TContainer, TEntry>
     {
         [Header("Ховер-панель"), Space]
         [SerializeField]
         protected CanvasGroup canvasGroup;
         [SerializeField]
         protected RectTransform popupRect;
+        
+        [Header("Положение панели"), Space]
         [SerializeField]
-        protected Vector2 screenOffset = new Vector2(16f, -16f);
+        protected Vector2 screenOffset = new(16f, -16f);
         
         protected Vector2 screenPosition;
 

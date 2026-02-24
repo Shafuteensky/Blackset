@@ -31,7 +31,7 @@ namespace Extensions.Data.InMemoryData.SelectionContext
                 return;
             }
 
-            selectionContext.Select(idHolder.Id);
+            selectionContext.Select(idHolder.EntryId);
         }
     }
 }

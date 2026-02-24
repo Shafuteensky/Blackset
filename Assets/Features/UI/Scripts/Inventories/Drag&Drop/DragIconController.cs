@@ -47,7 +47,7 @@ namespace Blackset.UI.InventoryManagement
         {
             cellElement.CanvasGroup.blocksRaycasts = false;
             cellElement.CanvasGroup.alpha = 1;
-            cellElement.InitializeElement(inventory, cellId);
+            cellElement.Initialize(inventory, cellId);
         }
         
         protected void FreeElement()

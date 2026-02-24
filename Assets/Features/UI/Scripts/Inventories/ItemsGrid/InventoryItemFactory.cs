@@ -23,7 +23,7 @@ namespace Blackset.UI.InventoryManagement
         protected void PrepareDropZone()
         {
             InventoryItemElement dropZone = transform.AddComponent<InventoryItemElement>();
-            dropZone.InitializeElement(dataContainer);
+            dropZone.Initialize(dataContainer, null);
         }
         
         protected override bool OnValidateItem(InventoryCell item)
@@ -34,7 +34,7 @@ namespace Blackset.UI.InventoryManagement
 
         protected override void OnInstanceInitialization(InventoryItemElement instance, InventoryCell item)
         {
-            instance.InitializeElement(dataContainer, item.Id);
+            instance.Initialize(dataContainer, item.Id);
         }
     }
 }

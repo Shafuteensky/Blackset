@@ -123,13 +123,16 @@ PrefabInstance:
       addedObject: {fileID: 9165566596306653947}
     - targetCorrespondingSourceObject: {fileID: 3759911328242118469, guid: 3665a06125009f44ea825be2e4e33ba7, type: 3}
       insertIndex: -1
-      addedObject: {fileID: -1559511503567838995}
+      addedObject: {fileID: 8171616465663320379}
     - targetCorrespondingSourceObject: {fileID: 3759911328242118469, guid: 3665a06125009f44ea825be2e4e33ba7, type: 3}
       insertIndex: -1
       addedObject: {fileID: -418468957396864727}
     - targetCorrespondingSourceObject: {fileID: 3759911328242118469, guid: 3665a06125009f44ea825be2e4e33ba7, type: 3}
       insertIndex: -1
       addedObject: {fileID: 7490037440279508318}
+    - targetCorrespondingSourceObject: {fileID: 3759911328242118469, guid: 3665a06125009f44ea825be2e4e33ba7, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4627789432685252783}
   m_SourcePrefab: {fileID: 100100000, guid: 3665a06125009f44ea825be2e4e33ba7, type: 3}
 --- !u!114 &3775995702214263909 stripped
 MonoBehaviour:
@@ -203,7 +206,7 @@ MonoBehaviour:
   spatialPreset: {fileID: 11400000, guid: b10f41c08c193e348a4d9399e7a45926, type: 2}
   onHoldCompleteSound: {fileID: 8300000, guid: a2be68f1550330d44b83185e27edffff, type: 3}
   holdButton: {fileID: 235497979193186072}
---- !u!114 &-1559511503567838995
+--- !u!114 &8171616465663320379
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -212,9 +215,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 7678346698542929376}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 52b119622a734aa2b4a9f715c705d843, type: 3}
+  m_Script: {fileID: 11500000, guid: 4e34065b13734b908b38443794ba3f35, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp-firstpass::Extensions.Data.InMemoryData.SelectionContext.ContextIdHolder
+  m_EditorClassIdentifier: Assembly-CSharp::Blackset.DuelContracts.HoverInfo.ContractEntryUIElement
 --- !u!114 &-418468957396864727
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -242,3 +245,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Blackset.DuelContracts.ContractContextHeader
   headerText: {fileID: 4820065409120226213}
   contractListContainer: {fileID: 11400000, guid: 2701bc2e283ae024f9feadaf1bba8a0d, type: 2}
+--- !u!114 &4627789432685252783
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7678346698542929376}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 039deda69d0b43408e296c4f8422f8d5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Blackset.DuelContracts.HoverInfo.ContractHoverInfoEmitter
+  dtatSourceElement: {fileID: 8171616465663320379}
+  holdSeconds: {fileID: 11400000, guid: 6ba349697ef68fd45b4bcf67ff561b62, type: 2}

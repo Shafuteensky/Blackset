@@ -56,13 +56,13 @@ namespace Blackset.Shop
 
         protected void TryBuyItem()
         {
-            InventoryCell cell = itemElement.DataContainer.GetById(itemElement.ItemCellId);
-            InventoryItem shopItem = itemElement.DataContainer.GetCellItemData(itemElement.ItemCellId);
+            InventoryCell cell = itemElement.DataContainer.GetById(itemElement.EntryId);
+            InventoryItem shopItem = itemElement.DataContainer.GetCellItemData(itemElement.EntryId);
             int playerMoney = playerData.MetaData.Data.Money;
             
             int itemPrice;
             if (fixedPrice != null) itemPrice = fixedPrice.Value;
-            else itemPrice = shopItem.GetPrice(itemElement.DataContainer.GetCellTypeData(itemElement.ItemCellId));
+            else itemPrice = shopItem.GetPrice(itemElement.DataContainer.GetCellTypeData(itemElement.EntryId));
             
             if (playerMoney < itemPrice)
             {

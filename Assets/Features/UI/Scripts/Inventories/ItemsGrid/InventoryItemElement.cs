@@ -5,7 +5,7 @@ using Blackset.Effects;
 using Blackset.Inventories;
 using Blackset.Inventories.Cells;
 using Blackset.Inventories.Items;
-using Blackset.UI.HoverInfo;
+using Extensions.Data.InMemoryData.SelectionContext;
 using Extensions.Log;
 using TMPro;
 using UnityEngine;
@@ -17,7 +17,7 @@ namespace Blackset.UI.InventoryManagement
     /// <summary>
     /// Элемент UI фабрики содержимого инвентаря
     /// </summary>
-    public sealed class InventoryItemElement : BaseContainerEntryElement<Inventory, InventoryCell>, 
+    public sealed class InventoryItemElement : ContextIdHolder<Inventory, InventoryCell>, 
         IDragHandler, IDropHandler, IBeginDragHandler, IEndDragHandler
     {
         /// <summary>
@@ -54,36 +54,35 @@ namespace Blackset.UI.InventoryManagement
         private void OnEnable()
         {
             dropCoordinator = InventoryDragDropCoordinator.Instance;
-            Initialize(dropCoordinator != null);
         }
         
         #region Drag'n'Drop
 
         public void OnBeginDrag(PointerEventData eventData)
         {
-            if ( !IsInitialized || !canDrag ) return;
+            if ( dropCoordinator == null || !canDrag ) return;
             itemIconImage.CrossFadeAlpha(0.25f, 0.1f, false);
-            dropCoordinator.BeginDrag(dataContainer, itemCellId);
+            dropCoordinator.BeginDrag(dataContainer, EntryId);
         }
         
         public void OnDrag(PointerEventData eventData)
         {
-            if ( !IsInitialized || !canDrag ) return;
+            if ( dropCoordinator == null || !canDrag ) return;
             dropCoordinator.UpdatePosition(eventData.position);
         }
 
         public void OnEndDrag(PointerEventData eventData)
         {
-            if ( !IsInitialized || !canDrag ) return;
+            if ( dropCoordinator == null || !canDrag ) return;
             itemIconImage.CrossFadeAlpha(1, 0.1f, false);
             dropCoordinator.EndDrag();
         }
 
         public void OnDrop(PointerEventData eventData)
         {
-            if ( !IsInitialized || !canDrop ) return;
+            if ( dropCoordinator == null || !canDrop ) return;
 
-            dropCoordinator.RequestDrop(dataContainer, itemCellId);
+            dropCoordinator.RequestDrop(dataContainer, EntryId);
         }
 
         #endregion
@@ -92,9 +91,9 @@ namespace Blackset.UI.InventoryManagement
         /// Инициализация элемента
         /// </summary>
         /// <param name="newItemCellId">Идентификатор хранимых данных</param>
-        public override void InitializeElement(Inventory newContainer, string newItemCellId = null)
+        public override void Initialize(Inventory newContainer, string newItemCellId)
         {
-            base.InitializeElement(newContainer, newItemCellId);
+            base.Initialize(newContainer, newItemCellId);
             
             bool isNoCell = String.IsNullOrEmpty(newItemCellId);
             
@@ -145,7 +144,7 @@ namespace Blackset.UI.InventoryManagement
         
         private void SetDragDropConfig(InventoryCell cell)
         {
-            if ( String.IsNullOrEmpty(itemCellId) || ( cell != null && (cell.IsDefault || cell.IsEmpty) ) )
+            if ( String.IsNullOrEmpty(EntryId) || ( cell != null && (cell.IsDefault || cell.IsEmpty) ) )
             {
                 canDrag = false;
                 canDrop = true;
