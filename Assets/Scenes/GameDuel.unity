@@ -131,36 +131,13 @@ GameObject:
   - component: {fileID: 37828540}
   - component: {fileID: 37828539}
   - component: {fileID: 37828538}
-  - component: {fileID: 37828537}
   m_Layer: 0
-  m_Name: UI
+  m_Name: UI Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &37828537
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 37828536}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: eda20518a83dd2641811f0dfa7afefe7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp-firstpass::Extensions.UIWindows.UIWindowsController
-  dontDestroyOnLoad: 0
-  startWindow: {fileID: 7304694210355963892, guid: 2b74853fa2e5a1440a3aca4ddb855e0e, type: 3}
-  preparedUIWindows:
-  - {fileID: 7304694210355963892, guid: 2b74853fa2e5a1440a3aca4ddb855e0e, type: 3}
-  - {fileID: 7304694210355963892, guid: e7e3e9f7382f74346ab791352f3ec79d, type: 3}
-  - {fileID: 7304694210355963892, guid: b44d46fad908f4d41b06695664e0869c, type: 3}
-  - {fileID: 4212926667585172122, guid: d249de835d1c543469ce0dd83496e84a, type: 3}
-  - {fileID: 4212926667585172122, guid: a46fba16639f00949bceadf3ea6aea2a, type: 3}
-  openedUIWindows: []
-  focusedWindow: {fileID: 0}
 --- !u!114 &37828538
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -991,6 +968,61 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1312721233
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1312721234}
+  - component: {fileID: 1312721235}
+  m_Layer: 0
+  m_Name: WindowsController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1312721234
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1312721233}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1936877674}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1312721235
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1312721233}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eda20518a83dd2641811f0dfa7afefe7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp-firstpass::Extensions.UIWindows.UIWindowsController
+  dontDestroyOnLoad: 0
+  startWindow: {fileID: 7304694210355963892, guid: 2b74853fa2e5a1440a3aca4ddb855e0e, type: 3}
+  preparedUIWindows:
+  - {fileID: 7304694210355963892, guid: 2b74853fa2e5a1440a3aca4ddb855e0e, type: 3}
+  - {fileID: 7304694210355963892, guid: e7e3e9f7382f74346ab791352f3ec79d, type: 3}
+  - {fileID: 7304694210355963892, guid: b44d46fad908f4d41b06695664e0869c, type: 3}
+  - {fileID: 4212926667585172122, guid: d249de835d1c543469ce0dd83496e84a, type: 3}
+  - {fileID: 4212926667585172122, guid: a46fba16639f00949bceadf3ea6aea2a, type: 3}
+  root: {fileID: 37828541}
+  openedUIWindows: []
+  focusedWindow: {fileID: 0}
 --- !u!1 &1383757599
 GameObject:
   m_ObjectHideFlags: 0
@@ -1206,6 +1238,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 1312721234}
   - {fileID: 1921198931}
   - {fileID: 397302197}
   - {fileID: 2105554652}
@@ -1264,8 +1297,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Blackset.UI.Inventory.InventoryItemInfoPopupController
   canvasGroup: {fileID: 240479391}
   popupRect: {fileID: 240479381}
-  budgetIndicator: {fileID: 240479384}
   screenOffset: {x: 0, y: 0}
+  budgetIndicator: {fileID: 240479384}
   iconImage: {fileID: 240479387}
   rarityImage: {fileID: 240479382}
   titleText: {fileID: 240479390}
@@ -1324,7 +1357,7 @@ Canvas:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
-  - {fileID: 1147585663}
   - {fileID: 1936877674}
   - {fileID: 37828541}
   - {fileID: 156713722}
+  - {fileID: 1147585663}

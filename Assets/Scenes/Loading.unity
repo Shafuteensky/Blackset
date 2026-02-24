@@ -119,6 +119,57 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &414656096
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 414656097}
+  - component: {fileID: 414656098}
+  m_Layer: 0
+  m_Name: WindowsController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &414656097
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 414656096}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1333988669}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &414656098
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 414656096}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eda20518a83dd2641811f0dfa7afefe7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp-firstpass::Extensions.UIWindows.UIWindowsController
+  dontDestroyOnLoad: 0
+  startWindow: {fileID: 7304694210355963892, guid: 59aa3eba12c64f840a0c19d00840143c, type: 3}
+  preparedUIWindows:
+  - {fileID: 7304694210355963892, guid: 59aa3eba12c64f840a0c19d00840143c, type: 3}
+  root: {fileID: 2123014976}
+  openedUIWindows: []
+  focusedWindow: {fileID: 0}
 --- !u!1 &640868687
 GameObject:
   m_ObjectHideFlags: 0
@@ -399,7 +450,8 @@ Transform:
   m_LocalPosition: {x: -0.68276, y: 0.64738, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 414656097}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1930267326
@@ -493,32 +545,13 @@ GameObject:
   - component: {fileID: 2123014975}
   - component: {fileID: 2123014974}
   - component: {fileID: 2123014973}
-  - component: {fileID: 2123014972}
   m_Layer: 0
-  m_Name: UI
+  m_Name: UI Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &2123014972
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2123014971}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: eda20518a83dd2641811f0dfa7afefe7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp-firstpass::Extensions.UIWindows.UIWindowsController
-  dontDestroyOnLoad: 0
-  startWindow: {fileID: 7304694210355963892, guid: 59aa3eba12c64f840a0c19d00840143c, type: 3}
-  preparedUIWindows:
-  - {fileID: 7304694210355963892, guid: 59aa3eba12c64f840a0c19d00840143c, type: 3}
-  openedUIWindows: []
-  focusedWindow: {fileID: 0}
 --- !u!114 &2123014973
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -605,7 +638,7 @@ RectTransform:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
-  - {fileID: 1930267329}
   - {fileID: 1333988669}
   - {fileID: 2123014976}
   - {fileID: 640868688}
+  - {fileID: 1930267329}

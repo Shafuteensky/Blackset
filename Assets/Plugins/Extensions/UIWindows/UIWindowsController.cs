@@ -16,22 +16,31 @@ namespace Extensions.UIWindows
         /// </summary>
         public UIWindow FocusedWindow => focusedWindow;
         
+        [Header("Настройки"), Space]
         [SerializeField]
-        protected UIWindow startWindow = default;
-        
+        protected UIWindow startWindow;
         [SerializeField]
         protected List<UIWindow> preparedUIWindows =  new List<UIWindow>();
+        [SerializeField]
+        protected Transform root;
         
-        [Header("Превью (назначаются автоматически)")]
-        
+        [Header("Превью (назначаются автоматически)"), Space]
         [SerializeField]
         protected List<UIWindow> openedUIWindows = new List<UIWindow>();
-        
         [SerializeField]
-        protected UIWindow focusedWindow = default;
+        protected UIWindow focusedWindow;
         
-        protected UIWindowID previousWindow = default;
+        protected UIWindowID previousWindow;
         protected bool transitionInProgress = false;
+
+        protected override void Awake()
+        {
+            base.Awake();
+            Instance.preparedUIWindows = preparedUIWindows;
+            
+            if (root == null) root = transform;
+            OpenNewWindow(startWindow);
+        }
         
         /// <summary>
         /// Открыть окно по идентификатору
@@ -90,18 +99,10 @@ namespace Extensions.UIWindows
                 return;
             
             previousWindow = focusedWindow?.Id;
-            focusedWindow = GameObject.Instantiate(window.gameObject, transform).GetComponent<UIWindow>();
+            focusedWindow = GameObject.Instantiate(window.gameObject, root).GetComponent<UIWindow>();
             if (previousWindow)
                 focusedWindow.SetPreviousWindow(previousWindow);
             openedUIWindows.Add(focusedWindow);
-        }
-
-        protected override void Awake()
-        {
-            base.Awake();
-            Instance.preparedUIWindows = preparedUIWindows;
-            
-            OpenNewWindow(startWindow);
         }
     }
 }
