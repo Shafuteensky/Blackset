@@ -1,3 +1,15 @@
 fileFormatVersion: 2
 guid: 5be8f83d30b64e82af7a06c66c9a54ed
-timeCreated: 1771848958
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - identifier: {fileID: 11400000, guid: c9720e780706db14a81e0bec9519509f, type: 2}
+  - playerData: {fileID: 11400000, guid: 2c23989d68545684e9ab72265b43e0bc, type: 2}
+  - contractList: {fileID: 11400000, guid: 2701bc2e283ae024f9feadaf1bba8a0d, type: 2}
+  - opponentsRegistry: {fileID: 11400000, guid: 9dbdb88f7b72033409b48bc18676eb07, type: 2}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

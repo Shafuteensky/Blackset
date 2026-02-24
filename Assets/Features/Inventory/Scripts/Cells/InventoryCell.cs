@@ -5,7 +5,6 @@ using UnityEngine;
 using Blackset.Data.Items.Types;
 using Blackset.Inventories.Items;
 using Extensions.Log;
-using Features.Inventory.Scripts.Items;
 
 namespace Blackset.Inventories.Cells
 {

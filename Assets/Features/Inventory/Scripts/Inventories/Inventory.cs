@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Extensions.Data.InMemoryData;
 using UnityEngine;
 using Blackset.Data.Registries;
 using Blackset.Data.Items.Types;
@@ -8,6 +7,7 @@ using Blackset.Inventories.Cells;
 using Blackset.Inventories.Items;
 using Extensions.Log;
 using Features.Inventory.Scripts.Items;
+using Blackset.Data.Base;
 
 namespace Blackset.Inventories
 {
@@ -23,7 +23,7 @@ namespace Blackset.Inventories
     [CreateAssetMenu(
         fileName = nameof(Inventory),
         menuName = "Blackset/Inventories/" + nameof(Inventory))]
-    public class Inventory : InMemoryDataContainer<InventoryCell>
+    public class Inventory : RegistrableDataContainer<InventoryCell, InventoryItem, InventoryItemsRegistry>
     {
         private const int INFINITE_CELLS_SIGN = 0;
         
@@ -68,10 +68,6 @@ namespace Blackset.Inventories
         /// <summary>
         /// Реестр данных предметов для разрешения itemId -> данные
         /// </summary>
-        public InventoryItemsRegistry DataRegistry => dataRegistry;
-        /// <summary>
-        /// Реестр данных предметов для разрешения itemId -> данные
-        /// </summary>
         public InventoryItemTypesRegistry TypeRegistry => typeRegistry;
         /// <summary>
         /// Максимум предметов в ячейке инвентаря
@@ -82,9 +78,6 @@ namespace Blackset.Inventories
         /// </summary>
         public InventoryItemType AllowedItemType => allowedItemType;
 
-        [Header("Реестры игровых данных"), Space]
-        [SerializeField]
-        protected InventoryItemsRegistry dataRegistry;
         [SerializeField]
         protected InventoryItemTypesRegistry typeRegistry;
 

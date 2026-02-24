@@ -1,4 +1,5 @@
 using System;
+using Extensions.Log;
 using UnityEngine;
 
 namespace Extensions.Data.InMemoryData.SelectionContext
@@ -26,44 +27,70 @@ namespace Extensions.Data.InMemoryData.SelectionContext
         /// </summary>
         public string SelectedId { get; private set; }
 
-        public override bool HasSelection => Container != null && !string.IsNullOrEmpty(SelectedId);
-
-        public override void Clear()
-        {
-            Container = null;
-            SelectedId = string.Empty;
-
-            onSelectionChanged?.Invoke();
-        }
+        public override bool HasSelection => IsContainerInited() && !string.IsNullOrEmpty(SelectedId);
         
         /// <summary>
         /// Выбрать данные как активные
         /// </summary>
         /// <param name="container">Конейнер данных</param>
         /// <param name="dataItemId">Идентификатор</param>
-        public void Select(InMemoryDataContainer<TData> container, string dataItemId)
+        public void Select(string dataItemId)
         {
-            Container = container;
             SelectedId = dataItemId;
 
             onSelectionChanged?.Invoke();
         }
+        
+        /// <summary>
+        /// Очистить выбор
+        /// </summary>
+        public override void Clear()
+        {
+            SelectedId = string.Empty;
 
+            onSelectionChanged?.Invoke();
+        }
+
+        #region Получение данных
+        
         /// <summary>
         /// Получить активные данные
         /// </summary>
-        /// <param name="dataItem"></param>
-        /// <returns></returns>
-        public bool TryGetSelected(out TData dataItem)
+        /// <returns>Выбранные контекстом данные</returns>
+        public TData GetSelectedData()
+        {
+            if (!HasSelection || !IsContainerInited()) return null;
+            
+            Container.GetById(SelectedId, out TData dataItem);
+
+            return dataItem;
+        }
+
+        /// <summary>
+        /// Попытка получить активные данные
+        /// </summary>
+        /// <param name="dataItem">out: выбранные контекстом данные</param>
+        /// <returns>true если данные в контейнере успешно найдены, иначе false</returns>
+        public bool TryGetSelectedData(out TData dataItem)
         {
             dataItem = null;
 
-            if (!HasSelection)
+            if (!HasSelection || !IsContainerInited()) return false;
+
+            return Container.GetById(SelectedId, out dataItem);
+        }
+        
+        #endregion
+
+        private bool IsContainerInited()
+        {
+            if (Container == null)
             {
+                ServiceDebug.LogError("Контейнер не назначен, данные невозможно получить");
                 return false;
             }
 
-            return Container.GetById(SelectedId, out dataItem);
+            return true;
         }
     }
 }

@@ -6,13 +6,19 @@ namespace Extensions.Generics
     /// <summary>
     /// Индикатор зажатия кнопки GenericHoldButton
     /// </summary>
+    [RequireComponent(typeof(AbstractHoldButton))]
     public class HoldButtonFillIndicator : MonoBehaviour
     {
         [SerializeField]
-        protected AbstractHoldButton holdButton = default;
-        [SerializeField]
         protected Image fillImage = default;
+        
+        protected AbstractHoldButton holdButton = default;
 
+        protected virtual void Awake()
+        {
+            holdButton = GetComponent<AbstractHoldButton>();
+        }
+        
         protected virtual void OnEnable()
         {
             if (!holdButton) return;

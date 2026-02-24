@@ -1,4 +1,3 @@
-using System;
 using Extensions.Generics;
 using Extensions.Log;
 using UnityEngine;
@@ -6,7 +5,7 @@ using UnityEngine;
 namespace Extensions.Data.InMemoryData.SelectionContext
 {
     /// <summary>
-    /// КНопка назначения контекста данных
+    /// Кнопка назначения контекста данных
     /// </summary>
     /// <typeparam name="TData">Тип данных</typeparam>
     [RequireComponent(typeof(ContextIdHolder))]
@@ -15,9 +14,7 @@ namespace Extensions.Data.InMemoryData.SelectionContext
     {
         [SerializeField]
         private SelectionContext<TData> selectionContext;
-        [SerializeField]
-        private InMemoryDataContainer<TData> container;
-
+        
         protected ContextIdHolder idHolder;
         
         protected override void Awake()
@@ -28,13 +25,13 @@ namespace Extensions.Data.InMemoryData.SelectionContext
         
         public override void OnButtonClick()
         {
-            if (selectionContext == null || container == null || string.IsNullOrEmpty(idHolder.Id))
+            if (selectionContext == null || !idHolder.IsInitialized)
             {
                 ServiceDebug.LogError("Инициализация не выполнена или не полностью выполнена");
                 return;
             }
 
-            selectionContext.Select(container, idHolder.Id);
+            selectionContext.Select(idHolder.Id);
         }
     }
 }
