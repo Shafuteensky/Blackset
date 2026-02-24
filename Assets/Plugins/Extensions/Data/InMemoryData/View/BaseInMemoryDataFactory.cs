@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Extensions.Log;
 using UnityEngine;
@@ -12,6 +13,11 @@ namespace Extensions.Data.InMemoryData
         where TEntry : InMemoryDataEntry
         where TContainer : InMemoryDataContainer<TEntry>
     {
+        /// <summary>
+        /// Событие спавна объекта фабрики
+        /// </summary>
+        public event Action<TPrefab> onObjectInstantiated;
+        
         [Header("Данные"), Space]
         [SerializeField]
         protected TContainer dataContainer;
@@ -106,6 +112,7 @@ namespace Extensions.Data.InMemoryData
 
                 TPrefab instance = Instantiate(itemElementPrefab, elementsRoot);
                 if (instance != null) OnInstanceInitialization(instance, item);
+                onObjectInstantiated?.Invoke(instance);
             }
         }
         

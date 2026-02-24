@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Blackset.Opponents;
 using Blackset.Player;
 using UnityEngine;
@@ -7,7 +8,7 @@ namespace Blackset.DuelContracts
     /// <summary>
     /// Контроллер списка контрактов дуэлей
     /// </summary>
-    public sealed class ContractListController : PlayerProgressUpdater
+    public sealed class ContractsListController : PlayerProgressUpdater
     {
         [Header("Данные соперников"), Space]
         [SerializeField]
@@ -17,27 +18,27 @@ namespace Blackset.DuelContracts
         
         [Header("Параметры контрактов"), Space]
         [SerializeField]
-        [Range(1, 6)]
+        [UnityEngine.Range(1, 6)]
         private int contractsToGenerate = 3;
         
-        private ContractGenerator _contractGenerator;
+        private ContractGenerator contractGenerator;
         
         private void OnEnable()
         {
             Initialize(contractList != null && opponentsRegistry != null);
             if (!IsInitialized) return;
             
-            _contractGenerator ??= new ContractGenerator(opponentsRegistry);
+            contractGenerator ??= new ContractGenerator(opponentsRegistry);
             if (IsUpdateNeeded()) UpdateContractList();
         }
 
         private void UpdateContractList()
         {
             contractList.Clear();
-            for (int i = 0; i < contractsToGenerate; i++)
+            List<DuelContract> duelContracts = contractGenerator.GetRandomContractsList(contractsToGenerate);
+            foreach (DuelContract contract in duelContracts)
             {
-                DuelContract newContract = _contractGenerator.GetRandomOpponent();
-                contractList.Add(newContract);
+                contractList.Add(contract);
             }
         }
     }
