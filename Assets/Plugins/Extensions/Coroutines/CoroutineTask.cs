@@ -28,7 +28,10 @@ namespace Extensions.Coroutines
         /// <param name="routine">Корутина</param>
         public void Start(IEnumerator routine)
         {
-            if (!IsOwnerValid())
+            if (routine == null)
+                return;
+
+            if (!IsOwnerValidToStart())
                 return;
 
             Stop();
@@ -44,7 +47,7 @@ namespace Extensions.Coroutines
             if (coroutine == null)
                 return;
 
-            if (IsOwnerValid())
+            if (owner != null)
                 owner.StopCoroutine(coroutine);
 
             coroutine = null;
@@ -56,6 +59,6 @@ namespace Extensions.Coroutines
             coroutine = null;
         }
 
-        protected bool IsOwnerValid() => owner != null && owner.isActiveAndEnabled;
+        protected bool IsOwnerValidToStart() => owner != null && owner.gameObject.activeInHierarchy;
     }
 }
