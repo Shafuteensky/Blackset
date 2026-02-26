@@ -8,8 +8,12 @@ namespace Blackset.Duel.Participants
     /// <summary>
     /// Состояние участника дуэли на текущий ход
     /// </summary>
-    public class TurnParticipantState
+    public struct TurnParticipantState
     {
+        /// <summary>
+        /// Счет боя 
+        /// </summary>
+        public int Score;
         /// <summary>
         /// Спасовал
         /// </summary>
@@ -33,7 +37,7 @@ namespace Blackset.Duel.Participants
         /// <summary>
         /// Раскрытые дайсы (использованные хоть раз за дуэль)
         /// </summary>
-        public List<DiceType> RevealedDices = new();
+        public List<DiceType> RevealedDices;
         /// <summary>
         /// Использован ли расходник в этот ход
         /// </summary>
@@ -42,11 +46,6 @@ namespace Blackset.Duel.Participants
         /// Последний использованный расходник
         /// </summary>
         public ConsumableItemContext LastUsedConsumable;
-
-        /// <summary>
-        /// Конструктор данных
-        /// </summary>
-        public TurnParticipantState() => ResetForNewFight();
         
         /// <summary>
         /// Сброс данных до изначальных для нового хода (броска дайса)
@@ -59,7 +58,6 @@ namespace Blackset.Duel.Participants
             
             LastDeclaredDiceType = String.Empty;
             LastUsedDice = new();
-            LastUsedConsumable = new();
             LastDiceRollResult = 0;
             
             consumableUsedThisTurn = false;

@@ -1,11 +1,12 @@
-using Blackset.Duel.Participants;
+using System.Collections.Generic;
+using Blackset.Duel.Context;
 
-namespace Blackset.Duel.Context
+namespace Blackset.Duel.Participants
 {
     /// <summary>
     /// Данные об участнике дуэли
     /// </summary>
-    public struct DuelParticipantContext
+    public struct DuelParticipantState
     {
         /// <summary>
         /// Идентификатор участника
@@ -26,22 +27,14 @@ namespace Blackset.Duel.Context
         public DuelSetsContext Sets;
         
         /// <summary>
-        /// Счет боя 
-        /// </summary>
-        public int Score;
-        /// <summary>
         /// Количество победных боев
         /// </summary>
-        public int FightWon;
-        /// <summary>
-        /// Количество пасов за бой
-        /// </summary>
-        public int ThrowsPassed;
+        public int FightsWon;
         
         /// <summary>
-        /// Состояние на текущий ход
+        /// Состояние на текущий бой
         /// </summary>
-        public TurnParticipantState TurnState;
+        public FightParticipantState FightState;
         
         /// <summary>
         /// Уровень доверия бота

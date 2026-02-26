@@ -13,7 +13,6 @@ MonoBehaviour:
   m_Name: DuelRulesConfig_Default
   m_EditorClassIdentifier: Assembly-CSharp::Blackset.Duel.DuelRulesConfig
   maxRerolls: 1
-  duelModeFlags: 0
   duelWinPolicy: 0
   maxFightsPerDuel: 3
   fightWinPolicy: 0

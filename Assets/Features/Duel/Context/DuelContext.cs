@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Blackset.Duel.History;
+using Blackset.Duel.Participants;
 using Blackset.Duel.Rules;
 using Blackset.DuelContracts;
 
@@ -30,7 +31,7 @@ namespace Blackset.Duel.Context
         /// <summary>
         /// Участники <идентификатор, данные>
         /// </summary>
-        public Dictionary<int, DuelParticipantContext> Participants;
+        public Dictionary<string, DuelParticipantState> Participants;
         /// <summary>
         /// Денные о целевом значении
         /// </summary>
