@@ -14,8 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Blackset.Duel.Rules.Storm
   id: 1e188cf31c644bc98995ab84603c2e51
   dataName: Race
-  dataDescription: "No loss on target value bust \u2014 the winner is the one who
-    was closer to the target value modulo!"
+  dataDescription: The winner is the one who busted the target value.
   maxRerolls:
     enabled: 0
     value: 0

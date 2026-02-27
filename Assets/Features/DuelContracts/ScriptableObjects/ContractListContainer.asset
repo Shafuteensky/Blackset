@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db1ea9dc964e4c088fbee0d2b4fee5b9, type: 3}
   m_Name: ContractListContainer
   m_EditorClassIdentifier: Assembly-CSharp::Blackset.Opponents.ContractListContainer
-  id: ContractListContainer
+  id: 563d3216e65d43699c0485edfaaf1f3a
   autoSave: 1
   dataRegistry: {fileID: 11400000, guid: 9dbdb88f7b72033409b48bc18676eb07, type: 2}

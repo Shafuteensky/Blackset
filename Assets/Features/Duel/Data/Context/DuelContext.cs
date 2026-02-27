@@ -71,7 +71,7 @@ namespace Blackset.Duel.Context
                 
             // Регистрация участников
             Contract = contract;
-            RegisterBot(contract.Opponent.GetDicesPool(), contract.Opponent.GetConsumablesPool(), contract.Opponent);
+            //RegisterBot(contract.Opponent.GetDicesPool(), contract.Opponent.GetConsumablesPool(), contract.Opponent);
             // TODO на каком этапе регистрировать игрока?
         }
 

@@ -14,28 +14,22 @@ namespace Blackset.DuelContracts
         /// Идентификатор данных оппонента
         /// </summary>
         public string OpponentId => opponentId;
-        /// <summary>
-        /// Оппонент
-        /// </summary>
-        public OpponentData Opponent => opponentsRegistry.GetById(opponentId);
-
+        
         private readonly string opponentId;
-        private readonly OpponentsRegistry opponentsRegistry;
         
         /// <summary>
         /// Конструктор записи о сопернике
         /// </summary>
         /// <param name="opponentId">Идентификатор данных оппонента этого контракта</param>
-        public DuelContract(string opponentId, OpponentsRegistry opponentsRegistry) 
+        public DuelContract(string opponentId ) 
         {
-            if (String.IsNullOrEmpty(opponentId) || opponentsRegistry == null)
+            if (String.IsNullOrEmpty(opponentId))
             {
                 ServiceDebug.LogError("Невалидный id оппонента или ссылка на реестр при создании контракта");
                 opponentId = String.Empty;
             }
             
             this.opponentId = opponentId;
-            this.opponentsRegistry = opponentsRegistry;
         }
     }
 }

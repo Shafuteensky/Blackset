@@ -33,7 +33,7 @@ namespace Blackset.DuelContracts
         public DuelContract GetRandomOpponent()
         {
             OpponentData randomOpponent = opponentsRegistry.Data[Random.Range(0, opponentsRegistry.Data.Count)];
-            DuelContract randomContract = new DuelContract(randomOpponent.Id, opponentsRegistry);
+            DuelContract randomContract = new DuelContract(randomOpponent.Id);
             return randomContract;
         }
         
@@ -80,7 +80,7 @@ namespace Blackset.DuelContracts
                 (indices[i], indices[swapIndex]) = (indices[swapIndex], indices[i]);
 
                 OpponentData opponent = opponentsRegistry.Data[indices[i]];
-                result.Add(new DuelContract(opponent.Id, opponentsRegistry));
+                result.Add(new DuelContract(opponent.Id));
             }
 
             // 3) Если нужно больше, чем есть — добираем с повторами
@@ -89,7 +89,7 @@ namespace Blackset.DuelContracts
                 for (int i = uniqueToTake; i < number; i++)
                 {
                     OpponentData opponent = opponentsRegistry.Data[Random.Range(0, opponentsCount)];
-                    result.Add(new DuelContract(opponent.Id, opponentsRegistry));
+                    result.Add(new DuelContract(opponent.Id));
                 }
             }
 
