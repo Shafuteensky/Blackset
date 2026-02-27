@@ -48,14 +48,14 @@ namespace Blackset.Storms
         /// <param name="config">Конфигурация правил для обновления</param>
         public void Apply(ref DuelRulesConfiguration config)
         {
-            maxRerolls.Apply(ref config.maxRerolls);
-            duelWinPolicy.Apply(ref config.duelWinPolicy);
-            maxFightsPerDuel.Apply(ref config.maxFightsPerDuel);
-            fightWinPolicy.Apply(ref config.fightWinPolicy);
-            fightLossPolicy.Apply(ref config.fightLossPolicy);
-            maxThrowsPerFight.Apply(ref config.maxThrowsPerFight);
-            diceThrowPolicy.Apply(ref config.diceThrowPolicy);
-            effectsPolicy.Apply(ref config.effectsPolicy);
+            maxRerolls.Apply(ref config.MaxRerolls);
+            duelWinPolicy.Apply(ref config.DuelWinPolicy);
+            maxFightsPerDuel.Apply(ref config.MaxFightsPerDuel);
+            fightWinPolicy.Apply(ref config.FightWinPolicy);
+            fightLossPolicy.Apply(ref config.FightLossPolicy);
+            maxThrowsPerFight.Apply(ref config.MaxThrowsPerFight);
+            diceThrowPolicy.Apply(ref config.DiceThrowPolicy);
+            effectsPolicy.Apply(ref config.EffectsPolicy);
         }
     }
 }

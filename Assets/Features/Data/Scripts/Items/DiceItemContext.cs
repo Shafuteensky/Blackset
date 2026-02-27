@@ -1,4 +1,3 @@
-using Blackset.Data;
 using Blackset.Data.Items.Types;
 
 namespace Blackset.Data
@@ -8,8 +7,14 @@ namespace Blackset.Data
     /// </summary>
     public struct DiceItemContext
     {
-        public DiceData Data;
+        /// <summary>
+        /// Игровые данные особого дайса
+        /// </summary>
+        public DiceData Dice;
+        /// <summary>
+        /// Тип дайса
+        /// </summary>
         public DiceType Type;
-        //public BaseItemRarity Rarity;
+        // TODO редкость: public BaseItemRarity Rarity;
     }
 }

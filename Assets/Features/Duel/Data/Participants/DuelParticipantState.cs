@@ -18,6 +18,10 @@ namespace Blackset.Duel.Participants
         /// Является ли участник игроком (иначе считается ботом)
         /// </summary>
         public bool IsPlayer { get; }
+        /// <summary>
+        /// Состояние готовности сборок
+        /// </summary>
+        public bool IsSetsInited => Sets != null;
         
         /// <summary>
         /// Пулы участника
@@ -53,13 +57,13 @@ namespace Blackset.Duel.Participants
         /// <param name="isPlayer">Является ли игроком</param>
         /// <param name="pools">Пулы дайсов и расходников</param>
         /// <param name="sets">Сборки дайсов и расходников</param>
-        public DuelParticipantState(string participantId, bool isPlayer, DuelPoolsContext pools, DuelSetsContext sets)
+        public DuelParticipantState(string participantId, bool isPlayer, DuelPoolsContext pools)
         {
             ParticipantId = participantId;
             IsPlayer = isPlayer;
             
             Pools = pools;
-            Sets = sets;
+            Sets = null;
             
             FightsWon = 0;
             FightState = new FightParticipantState();
@@ -70,12 +74,22 @@ namespace Blackset.Duel.Participants
         }
 
         /// <summary>
+        /// Инициализация сборок
+        /// </summary>
+        /// <param name="sets">Сборки дайсов и расходников</param>
+        public void InitializeSets(DuelSetsContext sets)
+        {
+            if (IsSetsInited) return;
+            Sets = sets;
+        }
+
+        /// <summary>
         /// Инициализация данных участника-бота
         /// </summary>
         /// <param name="contractOpponents"></param>
         public void InitializeBotDuelState(OpponentData contractOpponents)
         {
-            // TrustLevel = contractOpponents.
+            TrustLevel = contractOpponents.CunningLevel; // TODO обновить функцию расчета (брать от данных соперника?)
         }
     }
 }

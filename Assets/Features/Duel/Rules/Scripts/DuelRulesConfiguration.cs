@@ -24,36 +24,36 @@ namespace Blackset.Duel.Rules
         /// <summary>
         /// Максимум рероллов на класс предметов (дайсы, расходники)
         /// </summary>
-        public int maxRerolls;
+        public int MaxRerolls;
         /// <summary>
         /// Максимальное количество битв за дуэль
         /// </summary>
-        public int maxFightsPerDuel;
+        public int MaxFightsPerDuel;
         /// <summary>
         /// Максимальное количество ходов (бросков дайсов) за битву
         /// </summary>
-        public int maxThrowsPerFight;
+        public int MaxThrowsPerFight;
         
         /// <summary>
         /// Политика победы в дуэли
         /// </summary>
-        public DuelWinPolicy duelWinPolicy;
+        public DuelWinPolicy DuelWinPolicy;
         /// <summary>
         /// Политика победы в битве в составе дуэли
         /// </summary>
-        public FightWinPolicy fightWinPolicy;
+        public FightWinPolicy FightWinPolicy;
         /// <summary>
         /// Политика проигрыша в битве в составе дуэли
         /// </summary>
-        public FightLossPolicy fightLossPolicy;
+        public FightLossPolicy FightLossPolicy;
         /// <summary>
         /// Политика броска дайса в течении одной битвы
         /// </summary>
-        public DiceThrowPolicy diceThrowPolicy;
+        public DiceThrowPolicy DiceThrowPolicy;
         /// <summary>
         /// Политика применения эффектов
         /// </summary>
-        public EffectsPolicy effectsPolicy;
+        public EffectsPolicy EffectsPolicy;
 
         /// <summary>
         /// Получить дефолтную конфигурацию правил
@@ -63,15 +63,15 @@ namespace Blackset.Duel.Rules
         {
             return new DuelRulesConfiguration
             {
-                maxRerolls = DEFAULT_MAX_REROLLS,
-                maxFightsPerDuel = DEFAULT_MAX_FIGHTS_PER_DUEL,
-                maxThrowsPerFight = DEFAULT_MAX_THROWS_PER_FIGHT,
+                MaxRerolls = DEFAULT_MAX_REROLLS,
+                MaxFightsPerDuel = DEFAULT_MAX_FIGHTS_PER_DUEL,
+                MaxThrowsPerFight = DEFAULT_MAX_THROWS_PER_FIGHT,
                 
-                duelWinPolicy = DEFAULT_DUEL_WIN_POLICY,
-                fightWinPolicy = DEFAULT_FIGHT_WIN_POLICY,
-                fightLossPolicy = DEFAULT_FIGHT_LOSS_POLICY,
-                diceThrowPolicy = DEFAULT_DICE_THROW_POLICY,
-                effectsPolicy = DEFAULT_EFFECTS_POLICY
+                DuelWinPolicy = DEFAULT_DUEL_WIN_POLICY,
+                FightWinPolicy = DEFAULT_FIGHT_WIN_POLICY,
+                FightLossPolicy = DEFAULT_FIGHT_LOSS_POLICY,
+                DiceThrowPolicy = DEFAULT_DICE_THROW_POLICY,
+                EffectsPolicy = DEFAULT_EFFECTS_POLICY
             };
         }
         

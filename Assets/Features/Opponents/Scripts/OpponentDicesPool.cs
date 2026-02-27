@@ -11,7 +11,7 @@ namespace Blackset.Opponents
     [Serializable]
     public struct OpponentDicesPool
     {
-        public InventoryItemType diceNominal;
+        public DiceType diceNominal;
         public List<DiceData> dices;
     }
 }

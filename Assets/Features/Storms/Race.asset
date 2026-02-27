@@ -1,0 +1,42 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f8694b7dca564d968aaa080d3867c618, type: 3}
+  m_Name: Race
+  m_EditorClassIdentifier: Assembly-CSharp::Blackset.Duel.Rules.Storm
+  id: 1e188cf31c644bc98995ab84603c2e51
+  dataName: Race
+  dataDescription: "No loss on target value bust \u2014 the winner is the one who
+    was closer to the target value modulo!"
+  maxRerolls:
+    enabled: 0
+    value: 0
+  duelWinPolicy:
+    enabled: 0
+    value: 0
+  maxFightsPerDuel:
+    enabled: 0
+    value: 0
+  fightWinPolicy:
+    enabled: 1
+    value: 2
+  fightLossPolicy:
+    enabled: 1
+    value: 1
+  maxThrowsPerFight:
+    enabled: 0
+    value: 0
+  diceThrowPolicy:
+    enabled: 0
+    value: 0
+  effectsPolicy:
+    enabled: 0
+    value: 0

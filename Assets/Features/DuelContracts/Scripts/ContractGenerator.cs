@@ -12,7 +12,6 @@ namespace Blackset.DuelContracts
     public class ContractGenerator
     {   
         protected readonly OpponentsRegistry opponentsRegistry;
-        protected readonly StormsRegistry StormsRegistry;
         //protected readonly PlayerDataFacade playerData; // TODO данные игрока для определения доступности предметов от стадии прогресса
         
         /// <summary>
@@ -25,17 +24,16 @@ namespace Blackset.DuelContracts
             if (gameDataRegistries == null) ServiceDebug.LogError("Ссылка на реестры данных не получена");
             
             opponentsRegistry = gameDataRegistries.Opponents;
-            StormsRegistry = gameDataRegistries.Storms;
             //this.playerData = playerData;
         }
         
         /// <summary>
-        /// Получить случайного соперника из реестра всех существующих
+        /// Получить случайный контракт со случайным соперником из реестра всех существующих
         /// </summary>
         public DuelContract GetRandomOpponent()
         {
             OpponentData randomOpponent = opponentsRegistry.Data[Random.Range(0, opponentsRegistry.Data.Count)];
-            DuelContract randomContract = new DuelContract(randomOpponent.Id);
+            DuelContract randomContract = new DuelContract(randomOpponent.Id, opponentsRegistry);
             return randomContract;
         }
         
@@ -82,7 +80,7 @@ namespace Blackset.DuelContracts
                 (indices[i], indices[swapIndex]) = (indices[swapIndex], indices[i]);
 
                 OpponentData opponent = opponentsRegistry.Data[indices[i]];
-                result.Add(new DuelContract(opponent.Id));
+                result.Add(new DuelContract(opponent.Id, opponentsRegistry));
             }
 
             // 3) Если нужно больше, чем есть — добираем с повторами
@@ -91,7 +89,7 @@ namespace Blackset.DuelContracts
                 for (int i = uniqueToTake; i < number; i++)
                 {
                     OpponentData opponent = opponentsRegistry.Data[Random.Range(0, opponentsCount)];
-                    result.Add(new DuelContract(opponent.Id));
+                    result.Add(new DuelContract(opponent.Id, opponentsRegistry));
                 }
             }
 

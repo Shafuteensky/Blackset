@@ -18,6 +18,8 @@ namespace Blackset.Duel.Context
         /// </summary>
         public bool IsDuelFinished { get; private set; }
 
+        #region Обновление прогресса дуэли
+        
         /// <summary>
         /// Начало новой битвы
         /// </summary>
@@ -42,5 +44,7 @@ namespace Blackset.Duel.Context
         {
             IsDuelFinished = true;
         }
+        
+        #endregion
     }
 }
