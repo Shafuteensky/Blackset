@@ -8,7 +8,7 @@ namespace Blackset.Duel.Context
     /// <summary>
     /// Данные о целевом значении дуэли
     /// </summary>
-    public struct TargetValueContext
+    public class TargetValueContext
     {
         #region События
         
@@ -34,9 +34,10 @@ namespace Blackset.Duel.Context
         /// <summary>
         /// Броски-источники результатов, составивших ЦЗ
         /// </summary>
-        public Dictionary<DiceType, int> SourceRolls { get; private set; }
+        public Dictionary<DiceType, int> SourceRolls => sourceRolls;
 
         private int targetValue;
+        private Dictionary<DiceType, int> sourceRolls = new();
         
         /// <summary>
         /// Установка величины целевого значения
@@ -49,7 +50,7 @@ namespace Blackset.Duel.Context
 
             if (rolls != null)
             {
-                SourceRolls = rolls;
+                sourceRolls = rolls;
                 // targetValueMode = TargetValueMode.????????? // TODO или передавать его параметром сразу? ДА
             }
         }

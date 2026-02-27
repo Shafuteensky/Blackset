@@ -1,15 +1,12 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using Blackset.Data;
-using Blackset.Data.Items.Types;
 
 namespace Blackset.Duel.Participants
 {
     /// <summary>
     /// Состояние участника дуэли на текущую битву
     /// </summary>
-    public struct FightParticipantState
+    public class FightParticipantState
     {
         #region События
 
@@ -49,22 +46,36 @@ namespace Blackset.Duel.Participants
         /// <summary>
         /// Использованные за бой дайсы в порядке применения <id_дайса_в_сборке>
         /// </summary>
-        public List<string> DicesUsed { get; }
+        public List<string> DicesUsed => dicesUsed;
         /// <summary>
         /// Использованные за бой расходники в порядке применения <id_расходника_в_сборке>
         /// </summary>
-        public List<string> ConsumablesUsed { get; }
-        
+        public List<string> ConsumablesUsed => consumablesUsed;
+
         /// <summary>
         /// Результаты бросков дайсов (без эффектов и прочего — "сырые")
         /// </summary>
-        public Dictionary<string, int> RawRollResults { get; }
-        
+        public Dictionary<string, int> RawRollResults => rawRollResults;
+
         /// <summary>
         /// Состояние на текущий ход
         /// </summary>
-        public TurnParticipantState TurnState { get; }
+        public TurnParticipantState TurnState => turnState;
 
+        private readonly List<string> dicesUsed = new();
+        private readonly List<string> consumablesUsed = new();
+        
+        private readonly Dictionary<string, int> rawRollResults = new();
+        private TurnParticipantState turnState = new();
+
+        /// <summary>
+        /// Создание хранилища данных о состоянии участника дуэли во время битвы
+        /// </summary>
+        public FightParticipantState()
+        {
+            ResetForNewFight();
+        }
+        
         #region Сброс данных
         
         /// <summary>
@@ -78,12 +89,12 @@ namespace Blackset.Duel.Participants
             Throws = 0;
             Score = 0;
 
-            DicesUsed.Clear();
-            ConsumablesUsed.Clear();
+            dicesUsed.Clear();
+            consumablesUsed.Clear();
             
-            RawRollResults.Clear();
+            rawRollResults.Clear();
             
-            TurnState.ResetForNewTurn();
+            turnState.ResetForNewTurn();
         }
         
         #endregion
@@ -123,7 +134,7 @@ namespace Blackset.Duel.Participants
         /// <param name="dice">Идентификатор дайса из сборки</param>
         public void MarkDiceUsed(string dice)
         {
-            DicesUsed.Add(dice);
+            dicesUsed.Add(dice);
             onDiceUsed?.Invoke();
         }
 
@@ -133,7 +144,7 @@ namespace Blackset.Duel.Participants
         /// <param name="dice">Идентификатор расходника из сборки</param>
         public void MarkConsumableUsed(string consumable)
         {
-            ConsumablesUsed.Add(consumable);
+            consumablesUsed.Add(consumable);
             onConsumableUsed?.Invoke();
         }
 
@@ -144,16 +155,7 @@ namespace Blackset.Duel.Participants
         /// <param name="rawResult">Сырой результат броска</param>
         public void RegisterRawRollResult(string dice, int rawResult)
         {
-            RawRollResults.Add(dice, rawResult);
-        }
-        
-        #endregion
-
-        #region Internal
-
-        private void SetItems()
-        {
-            
+            rawRollResults[dice] = rawResult;
         }
         
         #endregion

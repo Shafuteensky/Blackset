@@ -8,22 +8,33 @@ namespace Blackset.Duel.Participants
     /// <remarks>
     /// Актуален и существует на протяжении дуэли, поэтому нет необходимости в сбросе
     /// </remarks>
-    public struct KnowledgeState
+    public sealed class KnowledgeState
     {
         /// <summary>
         /// Список открытых за дуэль дайсов (по идентификатору из сборки)
         /// </summary>
-        public List<string> RevealedDices { get; }
+        public IReadOnlyCollection<string> RevealedDices => revealedDices;
+
+        private readonly HashSet<string> revealedDices = new();
 
         /// <summary>
-        /// Статус раскрытия дайса (хотя бы раз использован за дуэль с момента сосздания сборки участника)
+        /// Раскрыть дайс
         /// </summary>
         /// <param name="dice">Идентификатор дайса</param>
-        /// <returns></returns>
-        public bool IsDiceRevealed(string dice)
+        /// <returns>True, если дайс был раскрыт впервые</returns>
+        public bool RevealDice(string dice)
         {
-            bool isRevealed = RevealedDices.Contains(dice);
-            return isRevealed;
+            if (string.IsNullOrEmpty(dice))
+                return false;
+
+            return revealedDices.Add(dice);
         }
+
+        /// <summary>
+        /// Статус раскрытия дайса (хотя бы раз использован за дуэль с момента создания сборки участника)
+        /// </summary>
+        /// <param name="dice">Идентификатор дайса</param>
+        /// <returns>True, если дайс раскрыт</returns>
+        public bool IsDiceRevealed(string dice) => revealedDices.Contains(dice);
     }
 }

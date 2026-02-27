@@ -1,20 +1,18 @@
-using System;
+using Extensions.Helpers;
 using UnityEngine;
 
 namespace Extensions.Identification
 {
     /// <summary>
-    /// Базовый идентифицруемый скриптовый объект
+    /// Базовый идентифицируемый скриптовый объект
     /// </summary>
     public abstract class IdentifiableObject : ScriptableObject
     {
-        protected const string GUID_FORMAT = "N";
-        
         /// <summary>
         /// Идентификатор
         /// </summary>
         public string Id => id;
-        
+
         [Header("Идентификация"), Space]
         [SerializeField]
         protected string id;
@@ -25,7 +23,7 @@ namespace Extensions.Identification
             if (!string.IsNullOrEmpty(id))
                 return;
 
-            id = Guid.NewGuid().ToString(GUID_FORMAT);
+            id = IdGenerator.NewGuid();
             UnityEditor.EditorUtility.SetDirty(this);
         }
 #endif

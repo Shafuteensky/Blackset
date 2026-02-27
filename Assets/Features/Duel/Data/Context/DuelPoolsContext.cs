@@ -7,16 +7,19 @@ namespace Blackset.Duel.Context
     /// <summary>
     /// Пулы кубов и расходников участников дуэли
     /// </summary>
-    public struct DuelPoolsContext
+    public class DuelPoolsContext
     {
         /// <summary>
         /// Пул дайсов
         /// </summary>
-        public Dictionary<DiceType, List<DiceItemContext>> DicesPool { get; private set; }
+        public Dictionary<DiceType, List<DiceItemContext>> DicesPool => dicesPool;
         /// <summary>
         /// Пул расходников
         /// </summary>
-        public List<ConsumableItemContext> ConsumablesPool { get; private set; }
+        public List<ConsumableItemContext> ConsumablesPool => consumablesPool;
+
+        private readonly Dictionary<DiceType, List<DiceItemContext>> dicesPool = new();
+        private readonly List<ConsumableItemContext> consumablesPool = new();
 
         /// <summary>
         /// Заполнить данные пулов участника
@@ -27,15 +30,15 @@ namespace Blackset.Duel.Context
             List<DiceItemContext> dicesForPool,
             List<ConsumableItemContext> consumablesForPool)
         {
-            DicesPool = new Dictionary<DiceType, List<DiceItemContext>>();
-            ConsumablesPool = consumablesForPool;
+            dicesPool = new Dictionary<DiceType, List<DiceItemContext>>();
+            consumablesPool = consumablesForPool;
 
             foreach (DiceItemContext dice in dicesForPool)
             {
-                if (!DicesPool.TryGetValue(dice.Type, out var list))
+                if (!dicesPool.TryGetValue(dice.Type, out var list))
                 {
                     list = new List<DiceItemContext>();
-                    DicesPool[dice.Type] = list;
+                    dicesPool[dice.Type] = list;
                 }
 
                 list.Add(dice);
