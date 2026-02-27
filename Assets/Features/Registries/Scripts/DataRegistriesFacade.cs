@@ -19,6 +19,7 @@ namespace Blackset.Data.Registries
         [field:SerializeField]
         [field: Tooltip("Реестр дайсов")]
         public InventoryItemsRegistry Dices { get; private set; }
+        
         /// <summary>
         /// Реестр расходников
         /// </summary>
@@ -26,7 +27,8 @@ namespace Blackset.Data.Registries
         [field: Tooltip("Реестр расходников")]
         public InventoryItemsRegistry Consumables { get; private set; }
         
-        [field: Header("Реестры типов предметов"), Space]
+        // -----------------------------------------------
+        [field: Header("Реестры типов предметов"), Space] 
         
         /// <summary>
         /// Реестр типов дайсов
@@ -34,6 +36,7 @@ namespace Blackset.Data.Registries
         [field:SerializeField]
         [field: Tooltip("Реестр типов дайсов")]
         public InventoryItemTypesRegistry DiceTypes { get; private set; }
+        
         /// <summary>
         /// Реестр типов расходников
         /// </summary>
@@ -41,7 +44,8 @@ namespace Blackset.Data.Registries
         [field: Tooltip("Реестр типов расходников")]
         public InventoryItemTypesRegistry ConsumableTypes { get; private set; }
         
-        [field: Header("Реестр соперников"), Space]
+        // -----------------------------------------------
+        [field: Header("Реестр данных дуэлей"), Space] 
         
         /// <summary>
         /// Реестр дайсов
@@ -49,5 +53,12 @@ namespace Blackset.Data.Registries
         [field:SerializeField]
         [field: Tooltip("Реестр соперников")]
         public OpponentsRegistry Opponents { get; private set; }
+        
+        /// <summary>
+        /// Реестр штормов
+        /// </summary>
+        [field:SerializeField]
+        [field: Tooltip("Реестр штормов")]
+        public StormsRegistry Storms { get; private set; }
     }
 }

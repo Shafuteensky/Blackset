@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e3fc09e066264f7696e76995db825ee4, type: 3}
+  m_Name: StormsRegistry
+  m_EditorClassIdentifier: Assembly-CSharp::Blackset.Data.Registries.StormsRegistry
+  id: 8fd1c217786b456897c9e558bef90da9
+  dataName: 
+  dataDescription: 
+  data:
+  - {fileID: 11400000, guid: 3f866b6107d324a44b85b98fb8950882, type: 2}

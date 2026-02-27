@@ -17,3 +17,4 @@ MonoBehaviour:
   <DiceTypes>k__BackingField: {fileID: 11400000, guid: baff5f3f39c21ed4085b2717f755f0a8, type: 2}
   <ConsumableTypes>k__BackingField: {fileID: 11400000, guid: cc58f8da688b0ba4591b5b872639060e, type: 2}
   <Opponents>k__BackingField: {fileID: 11400000, guid: 9dbdb88f7b72033409b48bc18676eb07, type: 2}
+  <Storms>k__BackingField: {fileID: 11400000, guid: fd8fdbd3cc44e6047bae4637ed0c1feb, type: 2}
