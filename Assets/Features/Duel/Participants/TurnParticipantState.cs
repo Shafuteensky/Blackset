@@ -1,7 +1,4 @@
 using System;
-using System.Collections.Generic;
-using Blackset.Data;
-using Blackset.Data.Items.Types;
 
 namespace Blackset.Duel.Participants
 {
@@ -11,58 +8,58 @@ namespace Blackset.Duel.Participants
     public struct TurnParticipantState
     {
         /// <summary>
-        /// Счет боя 
-        /// </summary>
-        public int Score;
-        /// <summary>
         /// Спасовал
         /// </summary>
-        public bool HasPassed;
+        public bool HasPassed { get; private set; }
         /// <summary>
         /// Может действовать
         /// </summary>
-        public bool CanAct;
+        public bool CanAct => !HasPassed && !AllActionsDone;
         /// <summary>
-        /// Последний объявленный дайс
+        /// Все ли возможные действия за ход выполнены
         /// </summary>
-        public string LastDeclaredDiceType;
+        public bool AllActionsDone =>
+            !String.IsNullOrEmpty(DeclaredDice)
+            && !String.IsNullOrEmpty(ChosenDice)
+            && consumableUsedThisTurn;
+        
         /// <summary>
-        /// Последний использованный дайс (выбранный по факту)
+        /// Объявленный в этом ходу дайс
         /// </summary>
-        public DiceItemContext LastUsedDice;
+        public string DeclaredDice { get; private set; }
         /// <summary>
-        /// Результат последнего броска
+        /// Выбранный для броска в этом ходу дайс
         /// </summary>
-        public int LastDiceRollResult;
-        /// <summary>
-        /// Раскрытые дайсы (использованные хоть раз за дуэль)
-        /// </summary>
-        public List<DiceType> RevealedDices;
+        public string ChosenDice { get; private set; }
+        
         /// <summary>
         /// Использован ли расходник в этот ход
         /// </summary>
-        public bool consumableUsedThisTurn;
+        public bool consumableUsedThisTurn => !String.IsNullOrEmpty(ChosenConsumable);
         /// <summary>
-        /// Последний использованный расходник
+        /// Выбранный для использования в этом ходу расходник
         /// </summary>
-        public ConsumableItemContext LastUsedConsumable;
+        public string ChosenConsumable { get; private set; }
+
+        #region Сброс данных
         
         /// <summary>
         /// Сброс данных до изначальных для нового хода (броска дайса)
         /// </summary>
         /// <param name="maxThrows"></param>
-        public void ResetForNewFight()
+        public void ResetForNewTurn()
         {
             HasPassed = false;
-            CanAct = true;
-            
-            LastDeclaredDiceType = String.Empty;
-            LastUsedDice = new();
-            LastDiceRollResult = 0;
-            
-            consumableUsedThisTurn = false;
-            LastUsedConsumable = new();
+
+            DeclaredDice = String.Empty;
+            ChosenDice = String.Empty;
+                
+            ChosenConsumable = String.Empty;
         }
+        
+        #endregion
+
+        #region Обновление данных за текущий ход
 
         /// <summary>
         /// Отметить участника как спасовавшего
@@ -72,20 +69,6 @@ namespace Blackset.Duel.Participants
             HasPassed = true;
         }
 
-        /// <summary>
-        /// Отметить использование расходника на этом ходу
-        /// </summary>
-        public void UseConsumable()
-        {
-            consumableUsedThisTurn = true;
-        }
-
-        /// <summary>
-        /// Раскрыть дайс
-        /// </summary>
-        public void RevealDice(DiceType diceType)
-        {
-            RevealedDices.Add(diceType);
-        }
+        #endregion
     }
 }

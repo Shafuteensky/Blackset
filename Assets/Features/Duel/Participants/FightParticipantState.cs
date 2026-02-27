@@ -11,112 +11,151 @@ namespace Blackset.Duel.Participants
     /// </summary>
     public struct FightParticipantState
     {
+        #region События
+
         /// <summary>
-        /// Сдался в бою
+        /// Участник сдался в текущем бою
         /// </summary>
-        public bool HasGivenUp;
+        public event Action onGiveUp; 
         /// <summary>
-        /// Может действовать
+        /// Игровой счет текущего боя обновился
         /// </summary>
-        public bool CanAct;
+        public event Action onScoreUpdate; 
+        /// <summary>
+        /// Дайс из сборки использован в текущем бою
+        /// </summary>
+        public event Action onDiceUsed; 
+        /// <summary>
+        /// Расходник из сборки использован в текущем бою
+        /// </summary>
+        public event Action onConsumableUsed; 
+        
+        #endregion
+        
+        /// <summary>
+        /// Сдался в текущем бою
+        /// </summary>
+        public bool HasGivenUp { get; private set; }
         
         /// <summary>
         /// Количество совершенных бросков
         /// </summary>
-        public int Throws;
+        public int Throws { get; private set; }
         /// <summary>
         /// Счет боя 
         /// </summary>
-        public int Score;
+        public int Score { get; private set; }
 
         /// <summary>
-        /// Состояния использования дайсов <id_дайса_в_сборке, использован_ли>
+        /// Использованные за бой дайсы в порядке применения <id_дайса_в_сборке>
         /// </summary>
-        public Dictionary<string, bool> DicesStates;
+        public List<string> DicesUsed { get; }
         /// <summary>
-        /// Состояния использования расходников <id_расходника_в_сборке, использован_ли>
+        /// Использованные за бой расходники в порядке применения <id_расходника_в_сборке>
         /// </summary>
-        public Dictionary<string, bool> ConsumablesStates;
-
-        /// <summary>
-        /// Порядок использования дайсов (по идентификатору в сборке)
-        /// </summary>
-        public List<string> DicesUsageOrder;
-        /// <summary>
-        /// Порядок использования расходников (по идентификатору в сборке)
-        /// </summary>
-        public List<string> ConsumablesUsageOrder;
+        public List<string> ConsumablesUsed { get; }
         
-        /// <summary>
-        /// Последний объявленный дайс (идентификатор в сборке)
-        /// </summary>
-        public string LastDeclaredDice;
-        /// <summary>
-        /// Последний использованный дайс (идентификатор в сборке; выбранный по факту)
-        /// </summary>
-        public string LastUsedDice => DicesUsageOrder.Last();
         /// <summary>
         /// Результаты бросков дайсов (без эффектов и прочего — "сырые")
         /// </summary>
-        public Dictionary<string, int> RawRollResults;
-        /// <summary>
-        /// Результат последнего броска
-        /// </summary>
-        public int LastDiceRollResult => RawRollResults[LastUsedDice];
+        public Dictionary<string, int> RawRollResults { get; }
         
         /// <summary>
-        /// Использован ли расходник в этот ход
+        /// Состояние на текущий ход
         /// </summary>
-        public bool consumableUsedThisTurn;
-        /// <summary>
-        /// Последний использованный расходник (идентификатор в сборке)
-        /// </summary>
-        public string LastUsedConsumable => ConsumablesUsageOrder.Last();
+        public TurnParticipantState TurnState { get; }
+
+        #region Сброс данных
         
         /// <summary>
-        /// Сброс данных до изначальных для нового хода (броска дайса)
+        /// Сброс данных до изначальных для нового боя
         /// </summary>
         /// <param name="maxThrows"></param>
         public void ResetForNewFight()
         {
             HasGivenUp = false;
-            CanAct = true;
 
             Throws = 0;
             Score = 0;
 
-            foreach (var key in new List<string>(DicesStates.Keys))
-            {
-                DicesStates[key] = false; 
-            }
-            foreach (var key in new List<string>(ConsumablesStates.Keys))
-            {
-                ConsumablesStates[key] = false; 
-            }
-
-            DicesUsageOrder = new();
-            ConsumablesUsageOrder = new();
+            DicesUsed.Clear();
+            ConsumablesUsed.Clear();
             
-            LastDeclaredDice = String.Empty;
             RawRollResults.Clear();
             
-            consumableUsedThisTurn = false;
+            TurnState.ResetForNewTurn();
+        }
+        
+        #endregion
+
+        #region Обновление данных за текущий бой
+        
+        /// <summary>
+        /// Участник совершил бросок
+        /// </summary>
+        public void MarkThrow()
+        {
+            Throws += 1;
         }
 
         /// <summary>
-        /// Отметить участника как спасовавшего
+        /// Обновить счет участника
+        /// </summary>
+        /// <param name="delta">Добавочная величина</param>
+        public void UpdateScore(int delta)
+        {
+            Score += delta;
+            onScoreUpdate?.Invoke();
+        }
+        
+        /// <summary>
+        /// Отметить участника как сдавшегося в этом бою
         /// </summary>
         public void MarkGivenUp()
         {
             HasGivenUp = true;
+            onGiveUp?.Invoke();
         }
 
         /// <summary>
-        /// Отметить использование расходника на этом ходу
+        /// Отметить дайс использованным
         /// </summary>
-        public void UseConsumable()
+        /// <param name="dice">Идентификатор дайса из сборки</param>
+        public void MarkDiceUsed(string dice)
         {
-            consumableUsedThisTurn = true;
+            DicesUsed.Add(dice);
+            onDiceUsed?.Invoke();
         }
+
+        /// <summary>
+        /// Отметить расходник использованным
+        /// </summary>
+        /// <param name="dice">Идентификатор расходника из сборки</param>
+        public void MarkConsumableUsed(string consumable)
+        {
+            ConsumablesUsed.Add(consumable);
+            onConsumableUsed?.Invoke();
+        }
+
+        /// <summary>
+        /// Учесть результат ролла дайса из сборки
+        /// </summary>
+        /// <param name="dice">Идентификатор дайса из сборки</param>
+        /// <param name="rawResult">Сырой результат броска</param>
+        public void RegisterRawRollResult(string dice, int rawResult)
+        {
+            RawRollResults.Add(dice, rawResult);
+        }
+        
+        #endregion
+
+        #region Internal
+
+        private void SetItems()
+        {
+            
+        }
+        
+        #endregion
     }
 }
