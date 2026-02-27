@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Blackset.Duel.TurnSnapshot
+namespace Blackset.Duel.Snapshots
 {
     /// <summary>
     /// Данные зарезолвенного снапшота

@@ -18,7 +18,7 @@ namespace Blackset.Duel.Context
         /// <summary>
         /// Правила дуэли
         /// </summary>
-        public DuelRulesConfig Rules;
+        public DuelRulesConfiguration Rules;
         /// <summary>
         /// Сид дуэли
         /// </summary>
@@ -35,7 +35,7 @@ namespace Blackset.Duel.Context
         /// <summary>
         /// Денные о целевом значении
         /// </summary>
-        public DuelTargetValueContext TargetValue;
+        public TargetValueContext TargetValue;
         /// <summary>
         /// Данные о прогрессе дуэли
         /// </summary>

@@ -1,6 +1,6 @@
 using Blackset.Duel.Context;
 
-namespace Blackset.Duel.TurnSnapshot
+namespace Blackset.Duel.Snapshots
 {
     /// <summary>
     /// Резолвер данных хода (снапшота)

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Blackset.Data.Registries;
 using Blackset.Opponents;
 using Extensions.Log;
 using UnityEngine;
@@ -11,6 +12,7 @@ namespace Blackset.DuelContracts
     public class ContractGenerator
     {   
         protected readonly OpponentsRegistry opponentsRegistry;
+        protected readonly StormsRegistry StormsRegistry;
         //protected readonly PlayerDataFacade playerData; // TODO данные игрока для определения доступности предметов от стадии прогресса
         
         /// <summary>
@@ -18,11 +20,12 @@ namespace Blackset.DuelContracts
         /// </summary>
         /// <param name="gameData">Фасад всех игровых данных</param>
         /// <param name="gameData">Фасад всех данных игрока</param>
-        public ContractGenerator(OpponentsRegistry opponentsRegistry)
+        public ContractGenerator(DataRegistriesFacade gameDataRegistries)
         {
-            if (opponentsRegistry == null) ServiceDebug.LogError("Ссылка на реестр данных не получена");
+            if (gameDataRegistries == null) ServiceDebug.LogError("Ссылка на реестры данных не получена");
             
-            this.opponentsRegistry = opponentsRegistry;
+            opponentsRegistry = gameDataRegistries.Opponents;
+            StormsRegistry = gameDataRegistries.Storms;
             //this.playerData = playerData;
         }
         

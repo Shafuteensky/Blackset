@@ -13,10 +13,8 @@ namespace Blackset.DuelContracts
         /// Идентификатор данных оппонента
         /// </summary>
         public string OpponentId { get => opponentId; private set => opponentId = value; }
-        // public string StormtId { get => stormId; private set => stormId = value; } // TODO учет штормов
 
         protected string opponentId;
-        // protected string stormId;
         
         /// <summary>
         /// Конструктор записи о сопернике

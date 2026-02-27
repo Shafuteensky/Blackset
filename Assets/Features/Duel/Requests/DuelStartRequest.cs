@@ -1,5 +1,6 @@
 using Blackset.Duel.Rules;
 using Blackset.DuelContracts;
+using Blackset.Storms;
 
 namespace Blackset.Duel.Requests
 {
@@ -12,22 +13,32 @@ namespace Blackset.Duel.Requests
         /// Данные выбранного контракта
         /// </summary>
         public DuelContract Contract;
-
-        /// <summary>
-        /// Конфигурация правил дуэли
-        /// </summary>
-        public DuelRulesConfig RulesConfig;
-        
         /// <summary>
         /// Режим дуэли
         /// </summary>
         public DuelMode DuelMode;
 
-        public DuelStartRequest(DuelContract contract, DuelRulesConfig rulesConfig, DuelMode mode)
+        /// <summary>
+        /// Активен ли шторм
+        /// </summary>
+        public bool IsStormActive => Storm != null;
+        /// <summary>
+        /// Активный шторм
+        /// </summary>
+        public Storm Storm;
+
+        /// <summary>
+        /// Запрос начала дуэли по опрделенному контракту
+        /// </summary>
+        /// <param name="contract">Выбранный контракт дуэли</param>
+        /// <param name="rulesConfiguration">Конфигурация правил дуэли</param>
+        /// <param name="mode"></param>
+        public DuelStartRequest(DuelContract contract, DuelMode mode, Storm storm = null)
         {
             Contract = contract;
-            RulesConfig = rulesConfig;
             DuelMode = mode;
+            
+            Storm = storm;
         }
     }
 }

@@ -3,7 +3,7 @@ using Blackset.Duel.Participants;
 using Blackset.Duel.Rules;
 using Blackset.Duel.TurnIntents;
 
-namespace Blackset.Duel.TurnSnapshot
+namespace Blackset.Duel.Snapshots
 {
     /// <summary>
     /// Снапшот хода боя
@@ -13,7 +13,7 @@ namespace Blackset.Duel.TurnSnapshot
         /// <summary>
         /// Правила дуэли
         /// </summary>
-        public DuelRulesConfig Rules;
+        public DuelRulesConfiguration Rules;
         /// <summary>
         /// Целевое значение
         /// </summary>

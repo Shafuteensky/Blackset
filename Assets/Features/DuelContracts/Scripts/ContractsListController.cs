@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using Blackset.Opponents;
+using Blackset.Data.Registries;
 using Blackset.Player;
 using UnityEngine;
 
@@ -14,21 +14,21 @@ namespace Blackset.DuelContracts
         [SerializeField]
         private ContractListContainer contractList;
         [SerializeField]
-        private OpponentsRegistry opponentsRegistry;
+        private DataRegistriesFacade gameDataRegistries;
         
         [Header("Параметры контрактов"), Space]
         [SerializeField]
-        [UnityEngine.Range(1, 6)]
+        [Range(1, 6)]
         private int contractsToGenerate = 3;
         
         private ContractGenerator contractGenerator;
         
         private void OnEnable()
         {
-            Initialize(contractList != null && opponentsRegistry != null);
+            Initialize(contractList != null && gameDataRegistries != null);
             if (!IsInitialized) return;
             
-            contractGenerator ??= new ContractGenerator(opponentsRegistry);
+            contractGenerator ??= new ContractGenerator(gameDataRegistries);
             if (IsUpdateNeeded()) UpdateContractList();
         }
 
