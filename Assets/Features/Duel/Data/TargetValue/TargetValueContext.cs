@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using Blackset.Data.Items.Types;
 using Extensions.Log;
 
-namespace Blackset.Duel.Context
+namespace Blackset.Duel.TargetValue
 {
     /// <summary>
-    /// Данные о целевом значении дуэли
+    /// Данные о целевом значении
     /// </summary>
     public class TargetValueContext
     {

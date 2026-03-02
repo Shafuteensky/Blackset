@@ -1,4 +1,6 @@
 using Blackset.Duel.Context;
+using Blackset.Duel.Pools;
+using Blackset.Duel.Sets;
 using Blackset.Opponents;
 
 namespace Blackset.Duel.Participants

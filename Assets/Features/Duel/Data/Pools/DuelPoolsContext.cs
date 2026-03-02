@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using Blackset.Data;
 using Blackset.Data.Items.Types;
 
-namespace Blackset.Duel.Context
+namespace Blackset.Duel.Pools
 {
     /// <summary>
     /// Пулы кубов и расходников участников дуэли

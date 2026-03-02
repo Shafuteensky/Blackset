@@ -4,19 +4,19 @@ using Blackset.Data.Items.Types;
 using Extensions.Helpers;
 using Extensions.Log;
 
-namespace Blackset.Duel.Context
+namespace Blackset.Duel.Sets
 {
     /// <summary>
-    /// Сборки участников
+    /// Сбори участника дуэли
     /// </summary>
     public class DuelSetsContext
     {
         /// <summary>
-        /// Сборка дайсов <идентификатор, дайс> (id задается при создании сборки)
+        /// Сборка дайсов <идентификатор_на_дуэль, дайс> (id задается при создании сборки)
         /// </summary>
         public Dictionary<string, DiceItemContext> DicesSet => dicesSet;
         /// <summary>
-        /// Сборка расходников <идентификатор, расходник> (id задается при создании сборки)
+        /// Сборка расходников <идентификатор_на_дуэль, расходник> (id задается при создании сборки)
         /// </summary>
         public Dictionary<string, ConsumableItemContext> ConsumablesSet => consumablesSet;
         
