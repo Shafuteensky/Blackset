@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using Extensions.Log;
+using UnityEngine;
 
 namespace Extensions.Helpers
 {
@@ -15,6 +17,7 @@ namespace Extensions.Helpers
         {
             if (source == null)
             {
+                LogInvalidSource();
                 return null;
             }
 
@@ -28,6 +31,7 @@ namespace Extensions.Helpers
         {
             if (source == null)
             {
+                LogInvalidSource();
                 return null;
             }
 
@@ -49,10 +53,12 @@ namespace Extensions.Helpers
         /// <summary>
         /// Shallow-копия словаря (копируются ссылки/значения ключей и значений)
         /// </summary>
+        [HideInCallstack]
         public static Dictionary<TKey, TValue> DictionaryShallow<TKey, TValue>(IDictionary<TKey, TValue> source)
         {
             if (source == null)
             {
+                LogInvalidSource();
                 return null;
             }
 
@@ -69,6 +75,7 @@ namespace Extensions.Helpers
         {
             if (source == null)
             {
+                LogInvalidSource();
                 return null;
             }
 
@@ -100,6 +107,7 @@ namespace Extensions.Helpers
         {
             if (source == null)
             {
+                LogInvalidSource();
                 return null;
             }
 
@@ -112,5 +120,7 @@ namespace Extensions.Helpers
 
             return copy;
         }
+        
+        private static void LogInvalidSource() => ServiceDebug.LogError("Источник данных невалиден, копия не выполнена");
     }
 }

@@ -26,7 +26,7 @@ namespace Blackset.Duel.Context
         {
             get
             {
-                if (targetValue == 0) ServiceDebug.LogError($"Целевое значение не установлено, требуется вызов {nameof(SetTargetValue)}");
+                if (targetValue == 0) ServiceDebug.LogWarning($"Целевое значение равно нулю, возможно не был вызван {nameof(SetTargetValue)}");
                 return targetValue;
             }
         }

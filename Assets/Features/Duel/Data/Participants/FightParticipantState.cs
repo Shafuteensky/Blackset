@@ -112,10 +112,10 @@ namespace Blackset.Duel.Participants
         /// <summary>
         /// Обновить счет участника
         /// </summary>
-        /// <param name="delta">Добавочная величина</param>
-        public void UpdateScore(int delta)
+        /// <param name="newScore">Новое значение счета</param>
+        public void UpdateScore(int newScore)
         {
-            Score += delta;
+            Score = newScore;
             onScoreUpdate?.Invoke();
         }
         

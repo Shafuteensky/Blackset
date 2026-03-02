@@ -6,7 +6,7 @@ namespace Blackset.Duel.Participants
     /// <summary>
     /// Данные об участнике дуэли
     /// </summary>
-    public struct DuelParticipantState
+    public class DuelParticipantState
     {
         private const float DEFAULT_BOT_TRUST_LEVEL = 0.5f;
         
@@ -73,6 +73,8 @@ namespace Blackset.Duel.Participants
             PanicLevel = 0;
         }
 
+        #region Инициализация данных
+        
         /// <summary>
         /// Инициализация сборок
         /// </summary>
@@ -91,5 +93,7 @@ namespace Blackset.Duel.Participants
         {
             TrustLevel = contractOpponents.CunningLevel; // TODO обновить функцию расчета (брать от данных соперника?)
         }
+        
+        #endregion
     }
 }

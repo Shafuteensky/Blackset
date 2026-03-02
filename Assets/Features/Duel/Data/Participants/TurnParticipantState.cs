@@ -1,4 +1,5 @@
 using System;
+using Extensions.Log;
 
 namespace Blackset.Duel.Participants
 {
@@ -21,21 +22,29 @@ namespace Blackset.Duel.Participants
         public bool AllActionsDone =>
             !String.IsNullOrEmpty(DeclaredDice)
             && !String.IsNullOrEmpty(ChosenDice)
-            && consumableUsedThisTurn;
+            && ConsumableChosen;
         
         /// <summary>
         /// Объявленный в этом ходу дайс
         /// </summary>
         public string DeclaredDice { get; private set; }
         /// <summary>
+        /// Объявлен ли дайс в этот ход
+        /// </summary>
+        public bool DiceDeclared { get; private set; }
+        /// <summary>
         /// Выбранный для броска в этом ходу дайс
         /// </summary>
         public string ChosenDice { get; private set; }
+        /// <summary>
+        /// Использован ли дайс в этот ход
+        /// </summary>
+        public bool DiceChosen { get; private set; }
         
         /// <summary>
         /// Использован ли расходник в этот ход
         /// </summary>
-        public bool consumableUsedThisTurn => !String.IsNullOrEmpty(ChosenConsumable);
+        public bool ConsumableChosen { get; private set; }
         /// <summary>
         /// Выбранный для использования в этом ходу расходник
         /// </summary>
@@ -52,9 +61,12 @@ namespace Blackset.Duel.Participants
             HasPassed = false;
 
             DeclaredDice = String.Empty;
+            DiceDeclared = false;
             ChosenDice = String.Empty;
+            DiceChosen = false;
                 
             ChosenConsumable = String.Empty;
+            ConsumableChosen = false;
         }
         
         #endregion
@@ -67,6 +79,42 @@ namespace Blackset.Duel.Participants
         public void MarkPassed()
         {
             HasPassed = true;
+        }
+
+        /// <summary>
+        /// Отметка объявленного дайса
+        /// </summary>
+        /// <param name="diceId">Идентификатор дайса</param>
+        public void DeclareDice(string diceId)
+        {
+            ServiceGuard.NotNullOrEmpty(diceId, nameof(diceId));
+            
+            DeclaredDice = diceId;
+            DiceDeclared = true;
+        }
+
+        /// <summary>
+        /// Отметка выбранного дайса
+        /// </summary>
+        /// <param name="diceId">Идентификатор дайса</param>
+        public void ChoseDice(string diceId)
+        {
+            ServiceGuard.NotNullOrEmpty(diceId, nameof(diceId));
+            
+            ChosenDice = diceId;
+            DiceChosen = true;
+        }
+
+        /// <summary>
+        /// Отметка выбранного расходника
+        /// </summary>
+        /// <param name="consumableId">Идентификатор расходника</param>
+        public void ChoseConsumable(string consumableId)
+        {
+            ServiceGuard.NotNullOrEmpty(consumableId, nameof(consumableId));
+            
+            ChosenConsumable = consumableId;
+            ConsumableChosen = true;
         }
 
         #endregion

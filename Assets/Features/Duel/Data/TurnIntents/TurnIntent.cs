@@ -13,22 +13,18 @@ namespace Blackset.Duel.TurnIntents
         public bool IsPass;
         
         /// <summary>
-        /// Объявленный дайс
-        /// </summary>
-        public DiceItemContext DeclaredDice;
-        /// <summary>
         /// Выбранный дайс (фактический на бросок)
         /// </summary>
-        public DiceItemContext ChosenDice;
+        public string ChosenDice;
         
         /// <summary>
-        /// Использован ли расходник
+        /// Выбран ли расходник для использования
         /// </summary>
-        public bool ConsumableUsed;
+        public bool ConsumableChosen;
         /// <summary>
         /// Выбранный расходник (фактический на бросок)
         /// </summary>
-        public ConsumableItemContext ChosenConsumable;
+        public string ChosenConsumable;
         /// <summary>
         /// Цель расходника
         /// </summary>

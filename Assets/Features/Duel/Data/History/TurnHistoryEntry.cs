@@ -21,7 +21,7 @@ namespace Blackset.Duel.History
         /// <summary>
         /// Состояния участников <идентификатор, состояние>
         /// </summary>
-        public Dictionary<int, DuelParticipantState> ParticipantStates { get; }
+        public Dictionary<string, DuelParticipantState> ParticipantStates { get; }
 
         /// <summary>
         /// Создание новой исторической записи хода
@@ -29,7 +29,7 @@ namespace Blackset.Duel.History
         /// <param name="snapshot">Снапшот данных хода</param>
         /// <param name="duelProgress">Прогресс дуэли на текущий ход</param>
         /// <param name="participantStates">Состояния участников в текущем ходу</param>
-        public TurnHistoryEntry(TurnSnapshot snapshot, DuelProgressContext duelProgress, Dictionary<int, DuelParticipantState> participantStates)
+        public TurnHistoryEntry(TurnSnapshot snapshot, DuelProgressContext duelProgress, Dictionary<string, DuelParticipantState> participantStates)
         {
             Snapshot = snapshot;
             DuelProgress = duelProgress;

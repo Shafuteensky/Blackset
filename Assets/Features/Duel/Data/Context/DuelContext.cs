@@ -77,42 +77,44 @@ namespace Blackset.Duel.Context
 
         #region Регистрация участников дуэли
         
-        private string RegisterPlayer(List<DiceItemContext> dices, List<ConsumableItemContext> consumables)
+        /// <summary>
+        /// Регистрация участника: игрок
+        /// </summary>
+        /// <param name="dices">Дайсы в пуле участника</param>
+        /// <param name="consumables">Расходники в пуле участника</param>
+        /// <returns>Идентификатор зарегестрированного участника</returns>
+        public string RegisterPlayer(List<DiceItemContext> dices, List<ConsumableItemContext> consumables)
         {
-            if (dices == null || consumables == null || dices.Count == 0 || consumables.Count == 0)
-            {
-                ServiceDebug.LogError($"Получены неполные исходные данные о пулах, игрок не зарегестрирован");
-                return String.Empty;
-            }
             return RegisterParticipant(true, dices, consumables);
         }
 
-        private string RegisterBot(List<DiceItemContext> dices, List<ConsumableItemContext> consumables, OpponentData botData)
+        /// <summary>
+        /// Регистрация участника: оппонент-бот
+        /// </summary>
+        /// <param name="dices">Дайсы в пуле участника</param>
+        /// <param name="consumables">Расходники в пуле участника</param>
+        /// <returns>Идентификатор зарегестрированного участника</returns>
+        public string RegisterBot(List<DiceItemContext> dices, List<ConsumableItemContext> consumables, OpponentData botData)
         {
-            if (dices == null || consumables == null || dices.Count == 0 || consumables.Count == 0 || botData == null)
-            {
-                ServiceDebug.LogError($"Получены неполные исходные данные о пулах или сопернике, бот не зарегестрирован");
-                return String.Empty;
-            }
             return RegisterParticipant(false, dices, consumables, botData);
         }
         
         private string RegisterParticipant(bool isPlayer, List<DiceItemContext> dices, List<ConsumableItemContext> consumables, OpponentData botData = null)
         {
-            if (!isPlayer && botData == null)
-            {
-                ServiceDebug.LogError($"Данные {nameof(OpponentData)} бота отсутствуют, участник не зарегестрирован");
-                return String.Empty;
-            }
-            
+            ServiceGuard.NotNull(dices, nameof(dices));
+            ServiceGuard.NotNull(consumables, nameof(consumables));
+            ServiceGuard.IsTrue(dices.Count > 0, "Список дайсов не должен быть пустым");
+            ServiceGuard.IsTrue(consumables.Count > 0, "Список расходников не должен быть пустым");
+            if (!isPlayer) ServiceGuard.NotNull(botData, nameof(botData));
+    
             string newParticipantId = IdGenerator.NewWithPrefix(isPlayer ? "Player" : "AI");
             DuelPoolsContext itemPools = new DuelPoolsContext(dices, consumables);
             DuelParticipantState participantState = new(newParticipantId, isPlayer, itemPools);
             KnowledgeState participantKnowledgeState = new();
-            
+    
             Participants.Add(newParticipantId, participantState);
             PlayerKnowledge.Add(newParticipantId, participantKnowledgeState);
-            
+    
             return newParticipantId;
         }
         

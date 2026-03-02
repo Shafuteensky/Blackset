@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Blackset.Data;
 using Blackset.Data.Items.Types;
 using Extensions.Helpers;
+using Extensions.Log;
 
 namespace Blackset.Duel.Context
 {
@@ -47,49 +48,41 @@ namespace Blackset.Duel.Context
         }
 
         #region Getters
-        
+
         /// <summary>
         /// Получить дайс по идентификатору
         /// </summary>
-        /// <param name="id">Идентификатор дайса</param>
-        /// <returns></returns>
-        public DiceItemContext GetDice(string id)
+        public bool TryGetDice(string id, out DiceItemContext dice)
         {
-            DiceItemContext dice = dicesSet[id];
-            return dice;
+            ServiceGuard.NotNullOrEmpty(id, nameof(id));
+            return dicesSet.TryGetValue(id, out dice);
         }
-        
+
         /// <summary>
         /// Получить дайс определенного типа
         /// </summary>
-        /// <param name="diceType">Тип дайса</param>
-        /// <returns></returns>
         public bool TryGetDice(DiceType diceType, out DiceItemContext foundDice)
         {
-            foreach (DiceItemContext dice in DicesSet.Values)
+            foreach (DiceItemContext dice in dicesSet.Values)
             {
-                if (dice.Type == diceType)
-                {
-                    foundDice = dice;
-                    return true;
-                }
+                if (dice.Type != diceType) continue;
+                foundDice = dice;
+                return true;
             }
-            
+
             foundDice = default;
             return false;
         }
-        
+
         /// <summary>
         /// Получить расходник по идентификатору
         /// </summary>
-        /// <param name="id">Идентификатор расходника</param>
-        /// <returns></returns>
-        public ConsumableItemContext GetConsumable(string id)
+        public bool TryGetConsumable(string id, out ConsumableItemContext consumable)
         {
-            ConsumableItemContext consumable = consumablesSet[id];
-            return consumable;
+            ServiceGuard.NotNullOrEmpty(id, nameof(id));
+            return consumablesSet.TryGetValue(id, out consumable);
         }
-        
+
         #endregion
     }
 }

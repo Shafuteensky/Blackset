@@ -40,8 +40,13 @@ namespace Blackset.Duel.History
         /// <returns>Исторические данные хода</returns>
         public bool TryGetFightEntryByIndex(int index, out FightHistoryEntry entry)
         {
-            entry = fightsHistory.ElementAt(index);
-            return entry != null;
+            if (index < 0 || index >= fightsHistory.Count)
+            {
+                entry = null;
+                return false;
+            }
+            entry = fightsHistory[index];
+            return true;
         }
     }
 }
