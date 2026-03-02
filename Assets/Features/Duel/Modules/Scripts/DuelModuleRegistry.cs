@@ -35,9 +35,10 @@ namespace Blackset.Duel.Modules
         #region Получение модулей
         
         /// <summary>
-        /// Возвращает модуль, реализующий указанный интерфейс.
+        /// Получить модуль, реализующий указанный интерфейс
         /// </summary>
-        /// <typeparam name="TInterface">Интерфейс модуля (наследник IDuelModuleInterface)</typeparam>
+        /// <typeparam name="TInterface">Интерфейс модуля (наследник <see cref="IDuelModuleInterface"/>)</typeparam>
+        /// <returns>Реализация запрашиваемого модуля</returns>
         /// <exception cref="InvalidOperationException">Если модуль не найден или реестр некорректен</exception>
         public TInterface Get<TInterface>() where TInterface : class, IDuelModuleInterface
         {
@@ -64,6 +65,12 @@ namespace Blackset.Duel.Modules
         /// Попытка получить модуль по определенному интерфейсу
         /// </summary>
         /// <typeparam name="TInterface">Интерфейс модуля (наследник <see cref="IDuelModuleInterface"/>)</typeparam>
+        /// <param name="result">
+        /// Реализация запрашиваемого модуля, если метод вернул true; null, если модуль не найден.
+        /// </param>
+        /// <returns>
+        /// true, если модуль найден; иначе false.
+        /// </returns>
         public bool TryGet<TInterface>(out TInterface result) where TInterface : class, IDuelModuleInterface
         {
             result = null;
