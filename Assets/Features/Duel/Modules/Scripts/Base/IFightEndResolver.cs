@@ -6,7 +6,7 @@ namespace Features.Duel.Modules
     /// <summary>
     /// Резолвер окончания боя
     /// </summary>
-    public interface iFightEndResolver
+    public interface IFightEndResolver : IDuelModuleInterface
     {
         /// <summary>
         /// Определение победителя в бою

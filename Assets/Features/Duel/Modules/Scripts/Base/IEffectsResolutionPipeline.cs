@@ -5,7 +5,7 @@ namespace Features.Duel.Modules
     /// <summary>
     /// Пайплайн применения эффектов дайсов и расходников
     /// </summary>
-    public interface IEffectResolutionPipeline
+    public interface IEffectsResolutionPipeline : IDuelModuleInterface
     {
         /// <summary>
         /// Применить эффекты

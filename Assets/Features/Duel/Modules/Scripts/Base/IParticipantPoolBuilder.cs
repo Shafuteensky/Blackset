@@ -6,7 +6,7 @@ namespace Features.Duel.Modules
     /// <summary>
     /// Билдер пулов участников
     /// </summary>
-    public interface IParticipantPoolBuilder
+    public interface IParticipantPoolBuilder : IDuelModuleInterface
     {
         /// <summary>
         /// Заполнение данных пулов предметов участников

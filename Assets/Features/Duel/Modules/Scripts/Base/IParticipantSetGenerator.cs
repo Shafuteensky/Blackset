@@ -6,7 +6,7 @@ namespace Features.Duel.Modules
     /// <summary>
     /// Генератор сборок участника дуэли
     /// </summary>
-    public interface IParticipantSetGenerator
+    public interface IParticipantSetGenerator : IDuelModuleInterface
     {
         /// <summary>
         /// Генерация сборок предметов учатсника дуэли

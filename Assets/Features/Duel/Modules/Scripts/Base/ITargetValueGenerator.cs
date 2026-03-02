@@ -6,7 +6,7 @@ namespace Features.Duel.Modules
     /// <summary>
     /// Генератор целевого значения
     /// </summary>
-    public interface ITargetValueGenerator
+    public interface ITargetValueGenerator : IDuelModuleInterface
     {
         /// <summary>
         /// Сгенерировать целевое значение
