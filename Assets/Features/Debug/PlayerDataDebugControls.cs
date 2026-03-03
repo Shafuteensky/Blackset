@@ -112,9 +112,9 @@ namespace Blackset.GameDebug
             string dicesInInventory = String.Empty;
             foreach (InventoryCell cell in inventory.Data)
             {
-                InventoryItem diceInCell = cell.GetItemData(gameDataRegistry.Dices);
+                InventoryItem diceInCell = GameData.Instance.GetDice(cell.ItemId);
                 if (diceInCell == null) continue;
-                InventoryItemType diceType = cell.GetTypeData(gameDataRegistry.DiceTypes);
+                InventoryItemType diceType = GameData.Instance.GetDiceType(cell.ItemId);
                 dicesInInventory += $"\n{prefix}- {diceInCell.DataName}, {diceType.DataName} ({cell.ItemAmount} шт)";
             }
             return dicesInInventory;
@@ -136,9 +136,9 @@ namespace Blackset.GameDebug
             string consumablesInInventory = String.Empty;
             foreach (InventoryCell cell in inventory.Data)
             {
-                InventoryItem consumableInCell = cell.GetItemData(gameDataRegistry.Consumables);
+                InventoryItem consumableInCell = GameData.Instance.GetConsumable(cell.ItemId);
                 if (consumableInCell == null) continue;
-                InventoryItemType consumableType = cell.GetTypeData(gameDataRegistry.ConsumableTypes);
+                InventoryItemType consumableType = GameData.Instance.GetConsumableType(cell.ItemId);
                 consumablesInInventory += $"\n{prefix}- {consumableInCell.DataName}, {consumableType.DataName} ({cell.ItemAmount} шт)";
             }
             return consumablesInInventory;

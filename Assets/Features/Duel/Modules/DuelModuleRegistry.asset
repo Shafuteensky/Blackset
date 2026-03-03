@@ -12,4 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 07a95bfeeab348c5bc1c6b28a4a286d7, type: 3}
   m_Name: DuelModuleRegistry
   m_EditorClassIdentifier: Assembly-CSharp::Blackset.Duel.Modules.DuelModuleRegistry
-  modules: []
+  modules:
+  - {fileID: 11400000, guid: d089e27ece708624fb6104fcb76a2c0a, type: 2}
+  - {fileID: 11400000, guid: f6f10f0feccf53b4b8b28bd1bdd06d15, type: 2}
+  - {fileID: 11400000, guid: 8436bc7c78e3ec94f91f967bee5fdf4e, type: 2}
+  - {fileID: 11400000, guid: 697273d71224f374bad50188779d572f, type: 2}
+  - {fileID: 11400000, guid: 05a3951b01010ad4daf39052b494c601, type: 2}
+  - {fileID: 11400000, guid: 2c292ee17ccd75047aa20667a107087d, type: 2}
+  - {fileID: 11400000, guid: d0a9b02ecd7d0a144bed855f81299893, type: 2}
+  - {fileID: 11400000, guid: 75985bc60064f684cb834459d1e254c1, type: 2}

@@ -1,5 +1,3 @@
-using Blackset.Data;
-
 namespace Blackset.Duel.TurnIntents
 {
     /// <summary>

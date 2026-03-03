@@ -8,6 +8,7 @@ namespace Features.Duel.Data.FightEnd
         PlayerWon, // Игроком выполнены условия для победы 
         OpponentWon, // ботом
         PlayerLost, // Игроком выполнены условия для проигрыша 
-        OpponentLost // ботом
+        OpponentLost, // ботом
+        Other // Иные причины: например ничья по ограничениям правил
     }
 }

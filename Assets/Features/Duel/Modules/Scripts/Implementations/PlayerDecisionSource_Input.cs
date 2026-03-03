@@ -14,6 +14,17 @@ namespace Features.Duel.Modules
         menuName = "Blackset/Duel/Modules/" + nameof(PlayerDecisionSource_Input))]
     public class PlayerDecisionSource_Input : BaseDuelModule, IPlayerDecisionSource
     {
+        public UniTask<TurnIntent> GetDeclaration(DuelContext context, CancellationToken ct)
+        {
+            var tcs = new UniTaskCompletionSource<TurnIntent>();
+            
+            //ShowUI(context, intent => tcs.TrySetResult(intent));
+            // TODO Учим уроки по UniTask
+            ct.Register(() => tcs.TrySetCanceled());
+            
+            return tcs.Task;
+        }
+        
         public UniTask<TurnIntent> GetTurnIntent(DuelContext context, CancellationToken ct)
         {
             var tcs = new UniTaskCompletionSource<TurnIntent>();

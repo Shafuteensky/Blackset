@@ -43,6 +43,14 @@ namespace Blackset.Duel.Context
         /// Знания об участниках дуэли <идентификатор, знания>
         /// </summary>
         public Dictionary<string, KnowledgeState> PlayerKnowledge = new();
+        /// <summary>
+        /// Идентификатор игрока
+        /// </summary>
+        public string PlayerId = String.Empty;
+        /// <summary>
+        /// Идентификатор соперника-бота
+        /// </summary>
+        public string OpponentId = String.Empty;
         
         /// <summary>
         /// Денные о целевом значении
@@ -87,7 +95,8 @@ namespace Blackset.Duel.Context
         /// <returns>Идентификатор зарегестрированного участника</returns>
         public string RegisterPlayer(List<DiceItemContext> dices, List<ConsumableItemContext> consumables)
         {
-            return RegisterParticipant(true, dices, consumables);
+            PlayerId = RegisterParticipant(true, dices, consumables);
+            return PlayerId;
         }
 
         /// <summary>
@@ -98,7 +107,8 @@ namespace Blackset.Duel.Context
         /// <returns>Идентификатор зарегестрированного участника</returns>
         public string RegisterBot(List<DiceItemContext> dices, List<ConsumableItemContext> consumables, OpponentData botData)
         {
-            return RegisterParticipant(false, dices, consumables, botData);
+            OpponentId = RegisterParticipant(false, dices, consumables, botData);
+            return OpponentId;
         }
         
         private string RegisterParticipant(bool isPlayer, List<DiceItemContext> dices, List<ConsumableItemContext> consumables, OpponentData botData = null)

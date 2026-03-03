@@ -21,7 +21,7 @@ namespace Blackset.DuelContracts
         /// Конструктор записи о сопернике
         /// </summary>
         /// <param name="opponentId">Идентификатор данных оппонента этого контракта</param>
-        public DuelContract(string opponentId ) 
+        public DuelContract(string opponentId) 
         {
             if (String.IsNullOrEmpty(opponentId))
             {
