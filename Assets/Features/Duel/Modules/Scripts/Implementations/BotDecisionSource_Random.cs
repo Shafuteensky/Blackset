@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Blackset.Data;
 using Blackset.Data.Registries;
 using Blackset.Duel.Context;
 using Blackset.Duel.Participants;
@@ -12,7 +11,7 @@ using Random = UnityEngine.Random;
 namespace Features.Duel.Modules
 {
     /// <summary>
-    /// Случайные решения бота
+    /// Случайные решения бота (Источник построения намерений бота)
     /// </summary>
     [CreateAssetMenu(
         fileName = nameof(BotDecisionSource_Random),
@@ -28,9 +27,8 @@ namespace Features.Duel.Modules
         {
             declaredDice = String.Empty;
             DuelParticipantState bot = context.Participants[context.OpponentId];
-            OpponentData opponent = GameData.Instance.GetOpponent(context.Contract.OpponentId);
-            //opponent.CunningLevel
             
+            declaredDice = TakeRandomUnusedId(context, bot.Sets.DicesSet, bot.FightState.DicesUsed);
             
             return declaredDice;
         }
@@ -40,7 +38,12 @@ namespace Features.Duel.Modules
             TurnIntent randomIntents = new TurnIntent();
             DuelParticipantState bot = context.Participants[context.OpponentId];
             
-            randomIntents.ChosenDice = TakeRandomUnusedId(context, bot.Sets.DicesSet, bot.FightState.DicesUsed);
+            // Если хитрый - кидает другой дайс (не который объявил)
+            OpponentData opponent = GameData.Instance.GetOpponent(context.Contract.OpponentId);
+            if (Random.value < opponent.CunningLevel)
+                randomIntents.ChosenDice = TakeRandomUnusedId(context, bot.Sets.DicesSet, bot.FightState.DicesUsed);
+            else
+                randomIntents.ChosenDice = declaredDice; 
             
             randomIntents.ConsumableChosen = Random.value <= CONSUMABLE_USE_CHANCE;
             randomIntents.ChosenConsumable = TakeRandomUnusedId(context, bot.Sets.ConsumablesSet, bot.FightState.ConsumablesUsed);
