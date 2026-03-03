@@ -653,13 +653,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Blackset.Data.Registries.GameData
   dontDestroyOnLoad: 1
-  registries:
-  - {fileID: 11400000, guid: fa1a1e1636dca9241b37ca0b81cf69b8, type: 2}
-  - {fileID: 11400000, guid: 13b1a107b01b0af4e8b3154e9d7d71d3, type: 2}
-  - {fileID: 11400000, guid: bd7d4073876f32042a6f5fd548b2ed02, type: 2}
-  - {fileID: 11400000, guid: e90017ec59f7dc541a0a5d798a4d5efc, type: 2}
-  - {fileID: 11400000, guid: 9dbdb88f7b72033409b48bc18676eb07, type: 2}
-  - {fileID: 11400000, guid: fd8fdbd3cc44e6047bae4637ed0c1feb, type: 2}
+  <Dices>k__BackingField: {fileID: 11400000, guid: ed018a7561b12ba4f96674954885bfdc, type: 2}
+  <Consumables>k__BackingField: {fileID: 11400000, guid: d68c7f8b5e8d57343b1bade366855ab2, type: 2}
+  <DiceTypes>k__BackingField: {fileID: 11400000, guid: baff5f3f39c21ed4085b2717f755f0a8, type: 2}
+  <ConsumableTypes>k__BackingField: {fileID: 11400000, guid: cc58f8da688b0ba4591b5b872639060e, type: 2}
+  <Opponents>k__BackingField: {fileID: 11400000, guid: 9dbdb88f7b72033409b48bc18676eb07, type: 2}
+  <Storms>k__BackingField: {fileID: 11400000, guid: fd8fdbd3cc44e6047bae4637ed0c1feb, type: 2}
 --- !u!4 &2144455386
 Transform:
   m_ObjectHideFlags: 0

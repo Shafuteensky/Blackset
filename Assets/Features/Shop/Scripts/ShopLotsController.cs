@@ -12,9 +12,6 @@ namespace Blackset.Shop
     /// </summary>
     public sealed class ShopLotsController : PlayerProgressUpdater
     {
-        [SerializeField]
-        private DataRegistriesFacade gameData;
-        
         [Header("Ограничения лотов"), Space]
         [SerializeField]
         [Range(1, 6)]
@@ -40,6 +37,7 @@ namespace Blackset.Shop
         private Inventory shopConsumablesBoxInventory;
         
         private ItemsGenerator itemsGenerator;
+        private readonly GameData gameData = GameData.Instance;
         
         private void OnEnable()
         {
@@ -54,7 +52,7 @@ namespace Blackset.Shop
                        shopDicesBoxInventory != null && shopConsumablesBoxInventory != null);
             if (!IsInitialized) return;
             
-            itemsGenerator ??= new ItemsGenerator(gameData);
+            itemsGenerator ??= new ItemsGenerator();
             if (IsUpdateNeeded()) FillInventories();
         }
 

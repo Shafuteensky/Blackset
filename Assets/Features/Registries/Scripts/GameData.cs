@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using Blackset.Data.Base;
 using Blackset.Data.Items.Types;
 using Blackset.Inventories.Items;
@@ -16,69 +14,88 @@ namespace Blackset.Data.Registries
     /// </summary>
     public sealed class GameData : MonoBehaviourSingleton<GameData>
     {
-        [Header("Реестры данных"), Space]
-        [SerializeField]
-        private List<BaseDataRegistry> registries = new List<BaseDataRegistry>();
+        [field: Header("Реестры предметов"), Space]
 
-        private Dictionary<Type, BaseDataRegistry> registryByType;
-
-        private void OnEnable() => BuildIndex();
-
-        private void OnValidate() => registryByType = null;
-
-        #region Фасады для получения конкретных данных
-
-        public OpponentData GetOpponent(string Id) => GetById<OpponentsRegistry, OpponentData>(Id);
-        
-        public DiceData GetDice(string Id) => GetById<DicesDataRegistry, DiceData>(Id);
-        public ConsumableData GetConsumable(string Id) => GetById<ConsumablesDataRegistry, ConsumableData>(Id);
-        
-        public DiceType GetDiceType(string Id) => GetById<DiceTypesDataRegistry, DiceType>(Id);
-        public ConsumableType GetConsumableType(string Id) => GetById<ConsumableTypesDataRegistry, ConsumableType>(Id);
-
-        public Storm GetStorm(string Id) => GetById<StormsRegistry, Storm>(Id);
-        
-        #endregion
-        
-        
-        #region Основные геттеры
-        
         /// <summary>
-        /// Получить реестр по типу
+        /// Реестр дайсов
         /// </summary>
-        /// <typeparam name="TRegistry">Тип реестра</typeparam>
-        /// <returns>Реестр указанного типа или null</returns>
-        public TRegistry GetRegistry<TRegistry>() where TRegistry : BaseDataRegistry
+        [field: SerializeField]
+        [field: Tooltip("Реестр дайсов")]
+        public InventoryItemsRegistry Dices { get; private set; }
+
+        /// <summary>
+        /// Реестр расходников
+        /// </summary>
+        [field: SerializeField]
+        [field: Tooltip("Реестр расходников")]
+        public InventoryItemsRegistry Consumables { get; private set; }
+
+        // -----------------------------------------------
+        [field: Header("Реестры типов предметов"), Space]
+
+        /// <summary>
+        /// Реестр типов дайсов
+        /// </summary>
+        [field: SerializeField]
+        [field: Tooltip("Реестр типов дайсов")]
+        public InventoryItemTypesRegistry DiceTypes { get; private set; }
+
+        /// <summary>
+        /// Реестр типов расходников
+        /// </summary>
+        [field: SerializeField]
+        [field: Tooltip("Реестр типов расходников")]
+        public InventoryItemTypesRegistry ConsumableTypes { get; private set; }
+
+        // -----------------------------------------------
+        [field: Header("Реестр данных дуэлей"), Space]
+
+        /// <summary>
+        /// Реестр соперников
+        /// </summary>
+        [field: SerializeField]
+        [field: Tooltip("Реестр соперников")]
+        public OpponentsRegistry Opponents { get; private set; }
+
+        /// <summary>
+        /// Реестр штормов
+        /// </summary>
+        [field: SerializeField]
+        [field: Tooltip("Реестр штормов")]
+        public StormsRegistry Storms { get; private set; }
+
+        #region Методы для получения конкретных данных
+
+        public OpponentData GetOpponent(string id) => GetById(Opponents, id);
+
+        public DiceData GetDice(string id) => GetInventoryItem<DiceData>(Dices, id);
+
+        public ConsumableData GetConsumable(string id) => GetInventoryItem<ConsumableData>(Consumables, id);
+
+        public DiceType GetDiceType(string id) => GetInventoryItemType<DiceType>(DiceTypes, id);
+
+        public ConsumableType GetConsumableType(string id) => GetInventoryItemType<ConsumableType>(ConsumableTypes, id);
+
+        public Storm GetStorm(string id) => GetById(Storms, id);
+
+        #endregion
+
+        #region Основные геттеры
+
+        /// <summary>
+        /// Получить данные по id из указанного реестра
+        /// </summary>
+        public TData GetById<TData>(BaseDataRegistry<TData> registry, string id)
+            where TData : BaseData
         {
-            EnsureIndex();
-
-            Type type = typeof(TRegistry);
-
-            if (registryByType == null)
-            {
-                ServiceDebug.LogError("Ошибка получения индекса реестров");
-                return null;
-            }
-
-            if (registryByType.TryGetValue(type, out BaseDataRegistry registry))
-            {
-                return registry as TRegistry;
-            }
-
-            ServiceDebug.LogError($"Реестр типа {type.Name} не найден. Необходимо добавить его в {nameof(GameData)}");
-            return null;
+            TryGetById(registry, id, out TData result);
+            return result;
         }
 
         /// <summary>
-        /// Попытаться получить данные по id из реестра указанного типа
+        /// Попытаться получить данные по id из указанного реестра
         /// </summary>
-        /// <param name="id">Идентификатор</param>
-        /// <param name="result">Полученные данные</param>
-        /// <typeparam name="TRegistry">Тип реестра</typeparam>
-        /// <typeparam name="TData">Тип данных</typeparam>
-        /// <returns>true, если данные найдены</returns>
-        public bool TryGetById<TRegistry, TData>(string id, out TData result)
-            where TRegistry : BaseDataRegistry<TData>
+        public bool TryGetById<TData>(BaseDataRegistry<TData> registry, string id, out TData result)
             where TData : BaseData
         {
             result = null;
@@ -88,9 +105,9 @@ namespace Blackset.Data.Registries
                 return false;
             }
 
-            TRegistry registry = GetRegistry<TRegistry>();
             if (registry == null)
             {
+                ServiceDebug.LogError($"Реестр не задан в {nameof(GameData)}");
                 return false;
             }
 
@@ -98,70 +115,88 @@ namespace Blackset.Data.Registries
             return result != null;
         }
 
-        /// <summary>
-        /// Получить данные по id из реестра указанного типа
-        /// </summary>
-        /// <param name="id">Идентификатор</param>
-        /// <typeparam name="TRegistry">Тип реестра</typeparam>
-        /// <typeparam name="TData">Тип данных</typeparam>
-        /// <returns>Данные или null</returns>
-        public TData GetById<TRegistry, TData>(string id)
-            where TRegistry : BaseDataRegistry<TData>
-            where TData : BaseData
-        {
-            TryGetById<TRegistry, TData>(id, out TData result);
-            return result;
-        }
-        
         #endregion
 
-        #region Internal
-        
-        private void EnsureIndex()
-        {
-            if (registryByType != null)
-            {
-                return;
-            }
+        #region Inventory helpers
 
-            BuildIndex();
+        private TExpected GetInventoryItem<TExpected>(InventoryItemsRegistry registry, string id)
+            where TExpected : InventoryItem
+        {
+            TryGetInventoryItem(registry, id, out TExpected result);
+            return result;
         }
 
-        private void BuildIndex()
+        private bool TryGetInventoryItem<TExpected>(InventoryItemsRegistry registry, string id, out TExpected result)
+            where TExpected : InventoryItem
         {
-            if (registries == null || registries.Count == 0)
+            result = null;
+
+            if (string.IsNullOrEmpty(id))
             {
-                registryByType = null;
-                return;
+                return false;
             }
 
-            if (registryByType == null)
+            if (registry == null)
             {
-                registryByType = new Dictionary<Type, BaseDataRegistry>(registries.Count);
-            }
-            else
-            {
-                registryByType.Clear();
+                ServiceDebug.LogError($"Реестр предметов не задан в {nameof(GameData)}");
+                return false;
             }
 
-            foreach (var registry in registries)
+            InventoryItem item = registry.GetById(id);
+            if (item == null)
             {
-                if (registry == null)
-                {
-                    continue;
-                }
-
-                Type registryType = registry.GetType();
-
-                if (registryByType.ContainsKey(registryType))
-                {
-                    ServiceDebug.LogError($"Дубликат реестра типа {registryType.Name} в DataRegistryHelper. Оставлен последний");
-                }
-
-                registryByType[registryType] = registry;
+                return false;
             }
+
+            result = item as TExpected;
+            if (result == null)
+            {
+                ServiceDebug.LogError($"Несовпадение типа предмета по id='{id}'. Ожидался {typeof(TExpected).Name}, получен {item.GetType().Name}");
+                return false;
+            }
+
+            return true;
         }
-        
+
+        private TExpected GetInventoryItemType<TExpected>(InventoryItemTypesRegistry registry, string id)
+            where TExpected : InventoryItemType
+        {
+            TryGetInventoryItemType(registry, id, out TExpected result);
+            return result;
+        }
+
+        private bool TryGetInventoryItemType<TExpected>(InventoryItemTypesRegistry registry, string id, out TExpected result)
+            where TExpected : InventoryItemType
+        {
+            result = null;
+
+            if (string.IsNullOrEmpty(id))
+            {
+                return false;
+            }
+
+            if (registry == null)
+            {
+                ServiceDebug.LogError($"Реестр типов предметов не задан в {nameof(GameData)}");
+                return false;
+            }
+
+            InventoryItemType type = registry.GetById(id);
+            if (type == null)
+            {
+                return false;
+            }
+
+            result = type as TExpected;
+            if (result == null)
+            {
+                ServiceDebug.LogError($"Несовпадение типа предмета (type) по id='{id}'. Ожидался {typeof(TExpected).Name}, получен {type.GetType().Name}");
+                return false;
+            }
+
+            return true;
+        }
+
         #endregion
     }
 }

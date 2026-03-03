@@ -15,10 +15,6 @@ namespace Blackset.GameDebug
 {
     public class PlayerDataDebugControls : MonoBehaviour
     {
-        [Header("Реестры игровых данных"), Space]
-        [SerializeField]
-        protected DataRegistriesFacade gameDataRegistry;
-        
         [Header("Контейнера данных игрока"), Space]
         [SerializeField]
         protected PlayerDataFacade playerDataFacade;
@@ -31,11 +27,11 @@ namespace Blackset.GameDebug
         [ContextMenu("Add Random Dice")]
         public void AddRandomDice()
         {
-            IReadOnlyList<InventoryItem> diceData = gameDataRegistry.Dices.Data;
+            IReadOnlyList<InventoryItem> allDices = GameData.Instance.Dices.Data;
             List<InventoryCell> dicesInventoryData = playerDataFacade.DicesInventory.Data;
             
-            int randomIndex = Random.Range(0, diceData.Count);
-            InventoryItem randomItem = diceData[randomIndex];
+            int randomIndex = Random.Range(0, allDices.Count);
+            InventoryItem randomItem = allDices[randomIndex];
 
             if (randomItem is not DiceData randomDiceItem) return;
             randomIndex = Random.Range(0, randomDiceItem.AvailableTypes.Count);
@@ -50,15 +46,15 @@ namespace Blackset.GameDebug
         [ContextMenu("Add Random Consumable")]
         public void AddRandomConsumable()
         {
-            IReadOnlyList<InventoryItem> consumablesData = gameDataRegistry.Consumables.Data;
+            IReadOnlyList<InventoryItem> allConsumables = GameData.Instance.Consumables.Data;
             List<InventoryCell> consumabledInventoryData = playerDataFacade.ConsumablesInventory.Data;
             
-            int randomIndex = Random.Range(0, consumablesData.Count);
-            InventoryItem randomItem = consumablesData[randomIndex];
+            int randomIndex = Random.Range(0, allConsumables.Count);
+            InventoryItem randomItem = allConsumables[randomIndex];
 
             if (randomItem is not ConsumableData randomConsumable) return;
-            randomIndex = Random.Range(0, gameDataRegistry.ConsumableTypes.Data.Count);
-            InventoryItemType randomConsumableType = gameDataRegistry.ConsumableTypes.Data[randomIndex];
+            randomIndex = Random.Range(0, GameData.Instance.ConsumableTypes.Data.Count);
+            InventoryItemType randomConsumableType = GameData.Instance.ConsumableTypes.Data[randomIndex];
             
             playerDataFacade.ConsumablesInventory.AddItem(randomConsumable.Id, randomConsumableType.Id, 1);
             
@@ -112,9 +108,9 @@ namespace Blackset.GameDebug
             string dicesInInventory = String.Empty;
             foreach (InventoryCell cell in inventory.Data)
             {
-                InventoryItem diceInCell = GameData.Instance.GetDice(cell.ItemId);
+                InventoryItem diceInCell = cell.GetItemData(GameData.Instance.Dices);
                 if (diceInCell == null) continue;
-                InventoryItemType diceType = GameData.Instance.GetDiceType(cell.ItemId);
+                InventoryItemType diceType = cell.GetTypeData(GameData.Instance.DiceTypes);
                 dicesInInventory += $"\n{prefix}- {diceInCell.DataName}, {diceType.DataName} ({cell.ItemAmount} шт)";
             }
             return dicesInInventory;
@@ -136,9 +132,9 @@ namespace Blackset.GameDebug
             string consumablesInInventory = String.Empty;
             foreach (InventoryCell cell in inventory.Data)
             {
-                InventoryItem consumableInCell = GameData.Instance.GetConsumable(cell.ItemId);
+                InventoryItem consumableInCell = cell.GetItemData(GameData.Instance.Consumables);
                 if (consumableInCell == null) continue;
-                InventoryItemType consumableType = GameData.Instance.GetConsumableType(cell.ItemId);
+                InventoryItemType consumableType = cell.GetTypeData(GameData.Instance.ConsumableTypes);
                 consumablesInInventory += $"\n{prefix}- {consumableInCell.DataName}, {consumableType.DataName} ({cell.ItemAmount} шт)";
             }
             return consumablesInInventory;

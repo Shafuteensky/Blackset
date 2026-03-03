@@ -28,7 +28,7 @@ namespace Features.Duel.Modules
         {
             declaredDice = String.Empty;
             DuelParticipantState bot = context.Participants[context.OpponentId];
-            OpponentData opponent = GameData.Instance.GetById<OpponentsRegistry, OpponentData>(context.Contract.OpponentId);
+            OpponentData opponent = GameData.Instance.GetOpponent(context.Contract.OpponentId);
             //opponent.CunningLevel
             
             

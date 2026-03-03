@@ -13,7 +13,7 @@ namespace Blacklset.ItemGenerators
     /// </summary>
     public class ItemsGenerator
     {
-        protected readonly DataRegistriesFacade gameData;
+        private readonly GameData gameData = GameData.Instance;
         //protected readonly PlayerDataFacade playerData; // TODO данные игрока для определения доступности предметов от стадии прогресса
         
         /// <summary>
@@ -21,11 +21,8 @@ namespace Blacklset.ItemGenerators
         /// </summary>
         /// <param name="gameData">Фасад всех игровых данных</param>
         /// <param name="gameData">Фасад всех данных игрока</param>
-        public ItemsGenerator(DataRegistriesFacade gameData)
+        public ItemsGenerator()
         {
-            if (gameData == null) ServiceDebug.LogError("Ссылки на реестры данных не получены");
-            
-            this.gameData = gameData;
             //this.playerData = playerData;
         }
 

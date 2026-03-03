@@ -10,8 +10,8 @@ namespace Blackset.DuelContracts
     /// Генератор соперников
     /// </summary>
     public class ContractGenerator
-    {   
-        protected readonly OpponentsRegistry opponentsRegistry;
+    {
+        private readonly GameData gameData = GameData.Instance;
         //protected readonly PlayerDataFacade playerData; // TODO данные игрока для определения доступности предметов от стадии прогресса
         
         /// <summary>
@@ -19,11 +19,8 @@ namespace Blackset.DuelContracts
         /// </summary>
         /// <param name="gameData">Фасад всех игровых данных</param>
         /// <param name="gameData">Фасад всех данных игрока</param>
-        public ContractGenerator(DataRegistriesFacade gameDataRegistries)
+        public ContractGenerator()
         {
-            if (gameDataRegistries == null) ServiceDebug.LogError("Ссылка на реестры данных не получена");
-            
-            opponentsRegistry = gameDataRegistries.Opponents;
             //this.playerData = playerData;
         }
         
@@ -32,7 +29,7 @@ namespace Blackset.DuelContracts
         /// </summary>
         public DuelContract GetRandomOpponent()
         {
-            OpponentData randomOpponent = opponentsRegistry.Data[Random.Range(0, opponentsRegistry.Data.Count)];
+            OpponentData randomOpponent = gameData.Opponents.Data[Random.Range(0, gameData.Opponents.Data.Count)];
             DuelContract randomContract = new DuelContract(randomOpponent.Id);
             return randomContract;
         }
@@ -49,19 +46,7 @@ namespace Blackset.DuelContracts
 
             if (number <= 0) return result;
 
-            if (opponentsRegistry == null)
-            {
-                ServiceDebug.LogError("Ссылка на реестр данных не получена");
-                return result;
-            }
-
-            if (opponentsRegistry.Data == null || opponentsRegistry.Data.Count == 0)
-            {
-                ServiceDebug.LogError("Реестр соперников пуст");
-                return result;
-            }
-
-            int opponentsCount = opponentsRegistry.Data.Count;
+            int opponentsCount = gameData.Opponents.Data.Count;
 
             // 1) Сколько можем выдать без повторов
             int uniqueToTake = Mathf.Min(number, opponentsCount);
@@ -79,7 +64,7 @@ namespace Blackset.DuelContracts
 
                 (indices[i], indices[swapIndex]) = (indices[swapIndex], indices[i]);
 
-                OpponentData opponent = opponentsRegistry.Data[indices[i]];
+                OpponentData opponent = gameData.Opponents.Data[indices[i]];
                 result.Add(new DuelContract(opponent.Id));
             }
 
@@ -88,7 +73,7 @@ namespace Blackset.DuelContracts
             {
                 for (int i = uniqueToTake; i < number; i++)
                 {
-                    OpponentData opponent = opponentsRegistry.Data[Random.Range(0, opponentsCount)];
+                    OpponentData opponent = gameData.Opponents.Data[Random.Range(0, opponentsCount)];
                     result.Add(new DuelContract(opponent.Id));
                 }
             }

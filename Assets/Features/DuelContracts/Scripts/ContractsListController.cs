@@ -13,8 +13,6 @@ namespace Blackset.DuelContracts
         [Header("Данные соперников"), Space]
         [SerializeField]
         private ContractListContainer contractList;
-        [SerializeField]
-        private DataRegistriesFacade gameDataRegistries;
         
         [Header("Параметры контрактов"), Space]
         [SerializeField]
@@ -25,11 +23,11 @@ namespace Blackset.DuelContracts
         
         private void OnEnable()
         {
-            Initialize(contractList != null && gameDataRegistries != null);
+            Initialize(contractList != null);
             if (!IsInitialized) return;
             
-            contractGenerator ??= new ContractGenerator(gameDataRegistries);
-            if (IsUpdateNeeded()) UpdateContractList();
+            contractGenerator ??= new ContractGenerator();
+            if (IsUpdateNeeded() || contractList.Data.Count <= 0) UpdateContractList();
         }
 
         private void UpdateContractList()
