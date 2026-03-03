@@ -1,3 +1,4 @@
+using Blackset.Duel.Context;
 using Features.Duel.Data.FightEnd;
 using Features.Duel.Requests;
 
@@ -11,8 +12,8 @@ namespace Features.Duel.Modules
         /// <summary>
         /// Определение победителя в бою
         /// </summary>
-        /// <param name="request">Запрос на завершение боя</param>
+        /// <param name="DuelContext">Данные дуэли</param>
         /// <returns>Результаты боя</returns>
-        public FightEndResult Evaluate(FightEndRequest request);
+        public FightEndResult Evaluate(DuelContext context);
     }
 }

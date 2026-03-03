@@ -11,21 +11,21 @@ namespace Features.Duel.Data.FightEnd
         /// Завершен ли бой 
         /// </summary>
         /// <returns>
-        /// true если выполнены все действия по правилам, false если бой был прерван)
+        /// true если выполнены все действия по правилам, false если бой продолжается)
         /// </returns>
-        public bool IsFightEnded { get; }
+        public bool IsFightEnded { get; set; }
         /// <summary>
         /// Победитель в бою
         /// </summary>
-        public FightWinner Winner { get; }
+        public FightWinner Winner { get; set; }
         /// <summary>
         /// Идентификатор победившего участника
         /// </summary>
-        public string WinnerId { get; }
+        public string WinnerId { get; set; }
         /// <summary>
         /// Причина завершения боя
         /// </summary>
-        public FightEndReason Reason { get; }
+        public FightEndReason Reason { get; set; }
 
         /// <summary>
         /// Данные результата боя
@@ -34,7 +34,7 @@ namespace Features.Duel.Data.FightEnd
         /// <param name="winner">Победитель в бою</param>
         /// <param name="winnerId">Идентификатор победившего участника</param>
         /// <param name="reason">Причина завершения боя</param>
-        public FightEndResult(bool isFightEnded, FightWinner winner, string winnerId, FightEndReason reason)
+        public FightEndResult(bool isFightEnded, string winnerId, FightWinner winner, FightEndReason reason)
         {
             IsFightEnded = isFightEnded;
             Winner = winner;

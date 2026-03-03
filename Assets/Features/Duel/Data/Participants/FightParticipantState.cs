@@ -44,16 +44,16 @@ namespace Blackset.Duel.Participants
         public int Score { get; private set; }
 
         /// <summary>
-        /// Использованные за бой дайсы в порядке применения <id_дайса_в_сборке>
+        /// Использованные за бой дайсы в порядке применения [id_дайса_в_сборке]
         /// </summary>
         public List<string> DicesUsed => dicesUsed;
         /// <summary>
-        /// Использованные за бой расходники в порядке применения <id_расходника_в_сборке>
+        /// Использованные за бой расходники в порядке применения [id_расходника_в_сборке]
         /// </summary>
         public List<string> ConsumablesUsed => consumablesUsed;
 
         /// <summary>
-        /// Результаты бросков дайсов (без эффектов и прочего — "сырые")
+        /// Результаты бросков дайсов (без эффектов и прочего — "сырые") [id_дайса_в_сборке, результат]
         /// </summary>
         public Dictionary<string, int> RawRollResults => rawRollResults;
 

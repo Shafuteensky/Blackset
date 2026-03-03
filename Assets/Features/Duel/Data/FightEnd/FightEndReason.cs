@@ -5,10 +5,12 @@ namespace Features.Duel.Data.FightEnd
     /// </summary>
     public enum FightEndReason
     {
+        None, // Причины нет — битва не завершена
         PlayerWon, // Игроком выполнены условия для победы 
         OpponentWon, // ботом
         PlayerLost, // Игроком выполнены условия для проигрыша 
         OpponentLost, // ботом
-        Other // Иные причины: например ничья по ограничениям правил
+        Draw, // Ничья
+        Other // Иные причины
     }
 }

@@ -15,7 +15,7 @@ namespace Features.Duel.Modules
         {
             TurnSnapshot resolvedSnapshot = new TurnSnapshot();
             
-            //
+            // TODO Завершить по готовности системы эффектов
             
             return resolvedSnapshot;
         }

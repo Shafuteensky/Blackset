@@ -46,6 +46,7 @@ namespace Blackset.Duel.Rules
         /// Политика проигрыша в битве в составе дуэли
         /// </summary>
         public FightLossPolicy FightLossPolicy;
+        
         /// <summary>
         /// Политика броска дайса в течении одной битвы
         /// </summary>

@@ -52,7 +52,7 @@ namespace Features.Duel.Modules
             return randomIntents;
         }
 
-        #region Inner
+        #region Internal
         
         private string TakeRandomUnusedId<TValue>(
             DuelContext context,

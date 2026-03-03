@@ -21,7 +21,7 @@ namespace Features.Duel.Requests
         /// </summary>
         public int ThrowNumber { get; }
         /// <summary>
-        /// Счета игроков [идентификатор_иучастника, счет]
+        /// Счета игроков [идентификатор_участника, счет]
         /// </summary>
         public Dictionary<string, int> ParticipantScores { get; }
         /// <summary>
