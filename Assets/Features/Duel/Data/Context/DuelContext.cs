@@ -117,9 +117,16 @@ namespace Blackset.Duel.Context
             ServiceGuard.NotNull(consumables, nameof(consumables));
             ServiceGuard.IsTrue(dices.Count > 0, "Список дайсов не должен быть пустым");
             ServiceGuard.IsTrue(consumables.Count > 0, "Список расходников не должен быть пустым");
-            if (!isPlayer) ServiceGuard.NotNull(botData, nameof(botData));
-    
-            string newParticipantId = IdGenerator.NewWithPrefix(isPlayer ? "Player" : "AI");
+
+            string newParticipantId;
+            if (!isPlayer)
+            {
+                ServiceGuard.NotNull(botData, nameof(botData));
+                newParticipantId = botData.Id;
+            }
+            else
+                newParticipantId = IdGenerator.NewWithPrefix("Player");
+            
             DuelPoolsContext itemPools = new DuelPoolsContext(dices, consumables);
             DuelParticipantState participantState = new(newParticipantId, isPlayer, itemPools);
             KnowledgeState participantKnowledgeState = new();
