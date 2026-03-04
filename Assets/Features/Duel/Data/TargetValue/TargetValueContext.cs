@@ -30,28 +30,27 @@ namespace Blackset.Duel.TargetValue
                 return targetValue;
             }
         }
-        // TODO public TargetValueMode targetValueMode (смотреть Storm class)
         /// <summary>
         /// Броски-источники результатов, составивших ЦЗ
         /// </summary>
-        public Dictionary<DiceType, int> SourceRolls => sourceRolls;
+        public Dictionary<DiceType, int> SourceRolls { get; private set; } = new();
 
         private int targetValue;
-        private Dictionary<DiceType, int> sourceRolls = new();
-        
+        private bool isFixedValue;
+
         /// <summary>
         /// Установка величины целевого значения
         /// </summary>
         /// <param name="newTargetValue"></param>
-        public void SetTargetValue(int newTargetValue, Dictionary<DiceType, int> rolls = null)
+        public void SetTargetValue(int newTargetValue, bool isFixed, Dictionary<DiceType, int> rolls = null)
         {
             targetValue = newTargetValue;
+            isFixedValue = isFixed;
             onTargetValueSet?.Invoke();
 
-            if (rolls != null)
+            if (!isFixed && rolls != null)
             {
-                sourceRolls = rolls;
-                // targetValueMode = TargetValueMode.????????? // TODO или передавать его параметром сразу? ДА
+                SourceRolls = rolls;
             }
         }
     }

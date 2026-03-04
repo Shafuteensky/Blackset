@@ -24,6 +24,7 @@ namespace Blackset.Duel.Rules
         private const FightLossPolicy DEFAULT_FIGHT_LOSS_POLICY = FightLossPolicy.LessOrBust;
         private const DiceThrowPolicy DEFAULT_DICE_THROW_POLICY = DiceThrowPolicy.Once;
         private const EffectsPolicy DEFAULT_EFFECTS_POLICY = EffectsPolicy.Both;
+        private const TargetValuePolicy DEFAULT_TARGET_VALUE_POLICY = TargetValuePolicy.RandomSet;
         
         #endregion
         
@@ -79,6 +80,11 @@ namespace Blackset.Duel.Rules
         /// Политика применения эффектов
         /// </summary>
         public EffectsPolicy EffectsPolicy;
+        
+        /// <summary>
+        /// Политика генерации целевого значения
+        /// </summary>
+        public TargetValuePolicy TargetValuePolicy;
 
         /// <summary>
         /// Получить дефолтную конфигурацию правил
@@ -102,7 +108,8 @@ namespace Blackset.Duel.Rules
                 FightWinPolicy = DEFAULT_FIGHT_WIN_POLICY,
                 FightLossPolicy = DEFAULT_FIGHT_LOSS_POLICY,
                 DiceThrowPolicy = DEFAULT_DICE_THROW_POLICY,
-                EffectsPolicy = DEFAULT_EFFECTS_POLICY
+                EffectsPolicy = DEFAULT_EFFECTS_POLICY,
+                TargetValuePolicy = DEFAULT_TARGET_VALUE_POLICY
             };
         }
         

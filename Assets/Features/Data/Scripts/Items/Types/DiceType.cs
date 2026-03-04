@@ -11,6 +11,18 @@ namespace Blackset.Data.Items.Types
         fileName = nameof(DiceType))]
     public sealed class DiceType : InventoryItemType
     {
+        private const int MIN_DICE_SIDE_VALUE = 1;
+        
+        /// <summary>
+        /// Минимальное дефолтное значение грани
+        /// </summary>
+        public int MinDiceSideValue => MIN_DICE_SIDE_VALUE;
+        
+        /// <summary>
+        /// Является ли тип ограниченным
+        /// </summary>
+        public bool IsRestricted => isRestricted;
+        
         /// <summary>
         /// Количество граней
         /// </summary>
@@ -23,12 +35,16 @@ namespace Blackset.Data.Items.Types
         [Header("Параметры типа дайса"), Space]
         
         [SerializeField]
+        [Tooltip("Является ли тип ограниченным (только для эффектов, не для генерации наград/лотов)")]
+        private bool isRestricted;
+        
+        [SerializeField]
         [Range(2, 100)]
         [Tooltip("Количество граней")]
         private int sidesNumber;
         
         [SerializeField]
         [Tooltip("Визуальное представление (префаб базовой модели)")]
-        private VisualDice visualDice = default;
+        private VisualDice visualDice;
     }
 }

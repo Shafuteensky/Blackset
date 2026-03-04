@@ -43,6 +43,10 @@ namespace Blackset.Storms
         private RuleOverride<DiceThrowPolicy> diceThrowPolicy;
         [SerializeField]
         private RuleOverride<EffectsPolicy> effectsPolicy;
+
+        [Header("Целево значение"), Space]
+        [SerializeField]
+        private RuleOverride<TargetValuePolicy> targetValuePolicy;
         
         // [Header("Целевое значение"), Space] // TODO модификация ЦЗ
         // [SerializeField]
@@ -68,6 +72,7 @@ namespace Blackset.Storms
             maxThrowsPerFight.Apply(ref config.MaxThrowsPerFight);
             diceThrowPolicy.Apply(ref config.DiceThrowPolicy);
             effectsPolicy.Apply(ref config.EffectsPolicy);
+            targetValuePolicy.Apply(ref config.TargetValuePolicy);
         }
     }
 }
