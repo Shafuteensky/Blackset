@@ -14,6 +14,14 @@ namespace Blackset.Storms
     {
         [Header("Сборки"), Space]
         [SerializeField]
+        private RuleOverride<int> dicesInSet;
+        [SerializeField]
+        private RuleOverride<int> consumablesInSet;
+        [SerializeField]
+        private RuleOverride<DiceSetPolicy> dicesSetPolicy;
+        [SerializeField]
+        private RuleOverride<ConsumableSetPolicy> consumablesSetPolicy;
+        [SerializeField]
         private RuleOverride<int> maxRerolls;
 
         [Header("Дуэль"), Space]
@@ -48,6 +56,10 @@ namespace Blackset.Storms
         /// <param name="config">Конфигурация правил для обновления</param>
         public void Apply(ref DuelRulesConfiguration config)
         {
+            maxRerolls.Apply(ref config.MaxRerolls);
+            dicesInSet.Apply(ref config.DicesInSet);
+            consumablesInSet.Apply(ref config.ConsumablesInSet);
+            consumablesSetPolicy.Apply(ref config.ConsumableSetPolicy);
             maxRerolls.Apply(ref config.MaxRerolls);
             duelWinPolicy.Apply(ref config.DuelWinPolicy);
             maxFightsPerDuel.Apply(ref config.MaxFightsPerDuel);

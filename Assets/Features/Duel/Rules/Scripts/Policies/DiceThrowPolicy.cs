@@ -6,6 +6,6 @@ namespace Blackset.Duel.Rules
     public enum DiceThrowPolicy
     {
         Once, // Каждый дайс можно использовать лишь раз
-        NotLimited // Каждый дай можно кинуть не ограниченное количество раз
+        NotLimited // Каждый дайс можно кинуть не ограниченное количество раз
     }
 }

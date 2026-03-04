@@ -9,6 +9,12 @@ namespace Blackset.Duel.Rules
     {
         #region Стандартные правила игры
         
+        private const int DEFAULT_DICES_IN_SET = 6;
+        private const int DEFAULT_CONSUMABLES_IN_SET = 3;
+        
+        private const DiceSetPolicy DEFAULT_DICES_SET_POLICY = DiceSetPolicy.OneInType;
+        private const ConsumableSetPolicy DEFAULT_CONSUMABLES_SET_POLICY = ConsumableSetPolicy.Random;
+        
         private const int DEFAULT_MAX_REROLLS = 1;
         private const int DEFAULT_MAX_FIGHTS_PER_DUEL = 3;
         private const int DEFAULT_MAX_THROWS_PER_FIGHT = 6;
@@ -20,6 +26,24 @@ namespace Blackset.Duel.Rules
         private const EffectsPolicy DEFAULT_EFFECTS_POLICY = EffectsPolicy.Both;
         
         #endregion
+        
+        /// <summary>
+        /// Количество дайсов в сборке
+        /// </summary>
+        public int DicesInSet;
+        /// <summary>
+        /// Количество расходников в сборке
+        /// </summary>
+        public int ConsumablesInSet;
+        
+        /// <summary>
+        /// Политика составления сборки
+        /// </summary>
+        public DiceSetPolicy DiceSetPolicy;
+        /// <summary>
+        /// Политика составления сборки
+        /// </summary>
+        public ConsumableSetPolicy ConsumableSetPolicy;
         
         /// <summary>
         /// Максимум рероллов на класс предметов (дайсы, расходники)
@@ -64,6 +88,12 @@ namespace Blackset.Duel.Rules
         {
             return new DuelRulesConfiguration
             {
+                DicesInSet = DEFAULT_DICES_IN_SET,
+                ConsumablesInSet = DEFAULT_CONSUMABLES_IN_SET,
+                
+                DiceSetPolicy = DEFAULT_DICES_SET_POLICY,
+                ConsumableSetPolicy = DEFAULT_CONSUMABLES_SET_POLICY,
+                
                 MaxRerolls = DEFAULT_MAX_REROLLS,
                 MaxFightsPerDuel = DEFAULT_MAX_FIGHTS_PER_DUEL,
                 MaxThrowsPerFight = DEFAULT_MAX_THROWS_PER_FIGHT,

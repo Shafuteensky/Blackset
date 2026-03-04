@@ -10,22 +10,18 @@ namespace Blackset.Duel.Requests
     public struct SetGenerationRequest
     {
         /// <summary>
-        /// Идентификатор участника
+        /// Правила дуэли
         /// </summary>
-        public string ParticipantId { get; }
-        /// <summary>
-        /// Пулы предметов
-        /// </summary>
-        public DuelPoolsContext Pools { get; }
-        
+        public DuelRulesConfiguration DuelRules { get; }
         /// <summary>
         /// Сид случайной выборки
         /// </summary>
         public int Seed { get; }
+        
         /// <summary>
-        /// Правила дуэли
+        /// Пулы предметов
         /// </summary>
-        public DuelRulesConfiguration DuelRules { get; }
+        public DuelPoolsContext Pools { get; }
         
         /// <summary>
         /// Используется ли реролл
@@ -39,16 +35,14 @@ namespace Blackset.Duel.Requests
         /// <summary>
         /// Запрос на генерацию сборки участника дуэли
         /// </summary>
-        /// <param name="participantId">Идентификатор участника</param>
-        /// <param name="pools">Пулы предметов</param>
-        /// <param name="seed">Сид случайной выборки</param>
         /// <param name="duelRules">Правила дуэли</param>
+        /// <param name="seed">Сид случайной выборки</param>
+        /// <param name="pools">Пулы предметов</param>
         /// <param name="rerollUsed">Используется ли реролл</param>
         /// <param name="rerollType">Какой дайс рероллится</param>
-        public SetGenerationRequest(string participantId, DuelPoolsContext pools, int seed, DuelRulesConfiguration duelRules, 
+        public SetGenerationRequest(DuelRulesConfiguration duelRules, int seed, DuelPoolsContext pools,
             bool rerollUsed = false, DiceType rerollType = default)
         {
-            ParticipantId = participantId;
             Pools = pools;
             Seed = seed;
             DuelRules = duelRules;
