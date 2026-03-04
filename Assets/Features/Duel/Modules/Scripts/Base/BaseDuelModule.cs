@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Features.Duel.Modules
+namespace Blacklset.Duel.Modules
 {
     /// <summary>
     /// Базовый модуль обработчиков данных дуэли

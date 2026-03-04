@@ -9,7 +9,7 @@ using Blackset.Duel.Sets;
 using Extensions.Log;
 using UnityEngine;
 
-namespace Features.Duel.Modules
+namespace Blacklset.Duel.Modules
 {
     /// <summary>
     /// Генератор сборок участников дуэли (по правилам дуэли)

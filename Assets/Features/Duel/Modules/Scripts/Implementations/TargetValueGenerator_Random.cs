@@ -8,7 +8,7 @@ using Blackset.Duel.TargetValue;
 using Extensions.Log;
 using UnityEngine;
 
-namespace Features.Duel.Modules
+namespace Blacklset.Duel.Modules
 {
     /// <summary>
     /// Случайный генератор целевого значения

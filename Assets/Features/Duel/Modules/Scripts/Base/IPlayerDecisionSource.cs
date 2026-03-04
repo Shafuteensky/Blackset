@@ -3,7 +3,7 @@ using Blackset.Duel.Context;
 using Blackset.Duel.TurnIntents;
 using Cysharp.Threading.Tasks;
 
-namespace Features.Duel.Modules
+namespace Blacklset.Duel.Modules
 {
     /// <summary>
     /// Источник решений игрока
@@ -19,7 +19,7 @@ namespace Features.Duel.Modules
         /// <param name="context">Дунные дуэли</param>
         /// <param name="ct">Токен отмены ожидания</param>
         /// <returns>Задача с ожиданием результата выбора</returns>
-        public UniTask<TurnIntent> GetDeclaration(DuelContext context, CancellationToken ct);
+        public UniTask<string> GetDeclaration(DuelContext context, CancellationToken ct);
         /// <summary>
         /// Запрос на создание данных о намерении игрока
         /// </summary>

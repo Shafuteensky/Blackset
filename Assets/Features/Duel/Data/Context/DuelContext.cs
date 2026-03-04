@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Blacklset.DecisionInput;
 using Blackset.Data;
 using Blackset.Duel.History;
 using Blackset.Duel.Participants;
@@ -18,6 +19,11 @@ namespace Blackset.Duel.Context
     /// </summary>
     public class DuelContext
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        public DuelInputPresenter InputPresenter;
+        
         /// <summary>
         /// Состояния активных эффектов
         /// </summary>
@@ -70,7 +76,7 @@ namespace Blackset.Duel.Context
         /// Подготовка данных для новой дуэли
         /// </summary>
         /// <param name="contract">Активный контракт</param>
-        public DuelContext(DuelContract contract)
+        public DuelContext(DuelContract contract, DuelInputPresenter input)
         {
             Rules = new DuelRulesConfiguration(); // TODO шторма где применять?
             Seed = IdGenerator.NewGuid();
@@ -79,6 +85,8 @@ namespace Blackset.Duel.Context
             Progress = new DuelProgressContext();
             History = new DuelHistory();
                 
+            InputPresenter = input;
+            
             // Регистрация участников
             Contract = contract;
             //RegisterBot(contract.Opponent.GetDicesPool(), contract.Opponent.GetConsumablesPool(), contract.Opponent);

@@ -6,7 +6,7 @@ using Extensions.Log;
 using Features.Duel.Data.FightEnd;
 using UnityEngine;
 
-namespace Features.Duel.Modules
+namespace Blacklset.Duel.Modules
 {
     /// <summary>
     /// Стандартный резолвер окончания битвы дуэли (по правилам дуэли)

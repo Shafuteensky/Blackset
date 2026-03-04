@@ -4,7 +4,7 @@ using Blackset.Duel.Context;
 using Blackset.Duel.Participants;
 using UnityEngine;
 
-namespace Features.Duel.Modules
+namespace Blacklset.Duel.Modules
 {
     /// <summary>
     /// Случайный бросок дайса

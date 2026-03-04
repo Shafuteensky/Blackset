@@ -1,6 +1,6 @@
 using Blackset.Duel.Context;
 
-namespace Features.Duel.Modules
+namespace Blacklset.Duel.Modules
 {
     /// <summary>
     /// Пайплайн броска дайса для получения численного результата

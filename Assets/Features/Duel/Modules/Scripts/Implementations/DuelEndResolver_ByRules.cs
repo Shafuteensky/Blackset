@@ -1,14 +1,12 @@
-using System;
 using Blackset.Duel.Context;
 using Blackset.Duel.Participants;
 using Blackset.Duel.Rules;
 using Extensions.Log;
 using Features.Duel.Context;
 using Features.Duel.Data.FightEnd;
-using Unity.VisualScripting.Antlr3.Runtime.Tree;
 using UnityEngine;
 
-namespace Features.Duel.Modules
+namespace Blacklset.Duel.Modules
 {
     /// <summary>
     /// Стандартный резолвер окончания дуэли (по правилам дуэли)

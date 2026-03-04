@@ -5,7 +5,7 @@ using Blackset.Duel.Requests;
 using Blackset.Opponents;
 using UnityEngine;
 
-namespace Features.Duel.Modules
+namespace Blacklset.Duel.Modules
 {
     /// <summary>
     /// Стандартный билдер награды на дуэль
