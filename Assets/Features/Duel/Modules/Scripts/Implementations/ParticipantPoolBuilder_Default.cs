@@ -14,10 +14,7 @@ namespace Features.Duel.Modules
     {
         public DuelPoolsContext BuildPools(PoolBuildRequest request)
         {
-            DuelPoolsContext poolsContext = default;
-            
-            // poolsContext = new();
-            
+            DuelPoolsContext poolsContext = new(request.DicesPool, request.ConsumablesPool);
             return poolsContext;
         }
     }

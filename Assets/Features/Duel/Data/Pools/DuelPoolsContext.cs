@@ -44,5 +44,18 @@ namespace Blackset.Duel.Pools
                 list.Add(dice);
             }
         }
+        
+        /// <summary>
+        /// Заполнить данные пулов участника
+        /// </summary>
+        /// <param name="dicesForPool">Пулы дайсов</param>
+        /// <param name="consumablesForPool">Список расходников для пула</param>
+        public DuelPoolsContext(
+            Dictionary<DiceType, List<DiceItemContext>> dicesForPool,
+            List<ConsumableItemContext> consumablesForPool)
+        {
+            dicesPool = dicesForPool;
+            consumablesPool = consumablesForPool;
+        }
     }
 }
