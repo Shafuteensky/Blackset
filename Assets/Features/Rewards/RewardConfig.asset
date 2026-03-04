@@ -1,0 +1,50 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b28f37cefdb64211ba46605bb188f868, type: 3}
+  m_Name: RewardConfig
+  m_EditorClassIdentifier: Assembly-CSharp::Blackset.Rewards.RewardConfig
+  baseMoneyReward:
+    participation: 10
+    winBonus: 20
+    loseBonus: 5
+  scoreWeights:
+    opponentWeight: 1
+    difficultyWeight: 1
+    unusedWeight: 1
+  scoreRanges:
+    opponentRawRange: {x: 0, y: 1}
+    difficultyRange: {x: 0, y: 1}
+    unusedRange: {x: 0, y: 10}
+  unusedBonus:
+    unusedDiceMoney: 0
+    unusedConsumableMoney: 0
+    unusedDiceScore: 1
+    unusedConsumableScore: 1
+    totalCap: 999
+  moneySettings:
+    minMultiplier: 0.8
+    maxMultiplier: 1.4
+    moneyCurve01:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+  qualitySettings:
+    minQuality: 0
+    maxQuality: 1
+    qualityCurve01:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4

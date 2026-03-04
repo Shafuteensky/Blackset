@@ -179,7 +179,7 @@ namespace Blackset.Inventories
         /// <param name="autoMerge">Слияние количества, если предметы одинаковые</param>
         /// <param name="targetIndex">Положение по индексу новой ячейки (-1 если в конец или первую пустую/дефолтную ячейку)</param>
         /// <returns>Количество не вместившихся предметов (0 если операция полностью успешна)</returns>
-        public int AddItem(string itemId, string itemTypeId, int amount, bool autoMerge = true, int targetIndex = -1)
+        public int AddItem(string itemId, string itemTypeId, int amount = 1, bool autoMerge = true, int targetIndex = -1)
         {
             if ( !CheckId(itemId) || 
                  !CheckId(itemTypeId) || 

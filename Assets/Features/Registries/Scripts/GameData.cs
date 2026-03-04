@@ -2,6 +2,7 @@ using Blackset.Data.Base;
 using Blackset.Data.Items.Types;
 using Blackset.Inventories.Items;
 using Blackset.Opponents;
+using Blackset.Player;
 using Blackset.Rewards;
 using Blackset.Storms;
 using Extensions.Log;
@@ -31,6 +32,17 @@ namespace Blackset.Data.Registries
         [field: Tooltip("Конфигурация баланса наград за дуэли")]
         public RewardConfig RewardConfig  { get; private set; }
         
+        // ==============================================
+        [field: Header("Постоянные данные игрока"), Space]
+
+        /// <summary>
+        /// Фасад данных игрока
+        /// </summary>
+        [field: SerializeField]
+        [field: Tooltip("Фасад данных игрока")]
+        public PlayerDataFacade PlayerDataFacade { get; private set; }
+        
+        // ==============================================
         [field: Header("Реестры предметов"), Space]
 
         /// <summary>

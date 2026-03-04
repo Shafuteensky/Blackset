@@ -653,6 +653,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Blackset.Data.Registries.GameData
   dontDestroyOnLoad: 1
+  <ProgressionConfig>k__BackingField: {fileID: 11400000, guid: b82e714e4e0cf474da30845cab98dacf, type: 2}
+  <RewardConfig>k__BackingField: {fileID: 11400000, guid: 42bf43b34bf8cf24bbbb6ad3da8dc965, type: 2}
+  <PlayerDataFacade>k__BackingField: {fileID: 11400000, guid: 2c23989d68545684e9ab72265b43e0bc, type: 2}
   <Dices>k__BackingField: {fileID: 11400000, guid: ed018a7561b12ba4f96674954885bfdc, type: 2}
   <Consumables>k__BackingField: {fileID: 11400000, guid: d68c7f8b5e8d57343b1bade366855ab2, type: 2}
   <DiceTypes>k__BackingField: {fileID: 11400000, guid: baff5f3f39c21ed4085b2717f755f0a8, type: 2}
