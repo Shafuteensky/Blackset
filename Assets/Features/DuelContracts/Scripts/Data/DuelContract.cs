@@ -1,8 +1,8 @@
-using System;
 using Blackset.Data.Registries;
 using Blackset.Opponents;
 using Extensions.Data.InMemoryData;
 using Extensions.Log;
+using Newtonsoft.Json;
 
 namespace Blackset.DuelContracts
 {
@@ -36,5 +36,10 @@ namespace Blackset.DuelContracts
             int moneyReward = GameData.Instance.RewardConfig.EvaluateMoney(true, opponent);
             MoneyReward = moneyReward;
         }
+        
+        /// <summary>
+        /// Пустой контракт (для сериализации json)
+        /// </summary>
+        public DuelContract() {}
     }
 }
