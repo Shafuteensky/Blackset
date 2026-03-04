@@ -8,7 +8,6 @@ using Blackset.Duel.Rules;
 using Blackset.Duel.Sets;
 using Extensions.Log;
 using UnityEngine;
-using Random = UnityEngine.Random;
 
 namespace Features.Duel.Modules
 {
@@ -22,10 +21,8 @@ namespace Features.Duel.Modules
     {
         public DuelSetsContext GenerateSets(SetGenerationRequest request)
         {
-            List<DiceItemContext> diceSet = GenerateDiceSets(request.DuelRules.DiceSetPolicy, 
-                request.DuelRules.DicesInSet, request.Pools.DicesPool);
-            List<ConsumableItemContext> consumableSet = GenerateConsumableSets(request.DuelRules.ConsumableSetPolicy, 
-                request.DuelRules.ConsumablesInSet, request.Pools.ConsumablesPool);
+            List<DiceItemContext> diceSet = GenerateDiceSets(request);
+            List<ConsumableItemContext> consumableSet = GenerateConsumableSets(request);
                 
             DuelSetsContext setsContext = new DuelSetsContext(diceSet, consumableSet);
             
@@ -35,16 +32,20 @@ namespace Features.Duel.Modules
         /// <summary>
         /// Составить сборку дайсов согласно правилам
         /// </summary>
-        private List<DiceItemContext> GenerateDiceSets(DiceSetPolicy activeDieSetPolicy, int dicesInSet,
-            Dictionary<DiceType, List<DiceItemContext>> dicesPool)
+        private List<DiceItemContext> GenerateDiceSets(SetGenerationRequest request)
         {
-            switch (activeDieSetPolicy)
+            Dictionary<DiceType, List<DiceItemContext>> dicesPool = request.Pools.DicesPool;
+            int dicesInSet = request.DuelRules.DicesInSet;
+            System.Random random = new(request.Seed);
+            DiceSetPolicy activeDieSetPolicy = request.DuelRules.DiceSetPolicy;
+            
+            switch (request.DuelRules.DiceSetPolicy)
             {
                 case DiceSetPolicy.OneInType:
-                    return GetOneRandomDicePerType(dicesPool, dicesInSet);
+                    return GetOneRandomDicePerType(dicesPool, dicesInSet, random);
         
                 case DiceSetPolicy.Chaos:
-                    return GetRandomDices(dicesPool, dicesInSet);
+                    return GetRandomDices(dicesPool, dicesInSet, random);
 
                 default:
                     ServiceDebug.LogError(
@@ -56,13 +57,17 @@ namespace Features.Duel.Modules
         /// <summary>
         /// Составить сборку расходников согласно правилам
         /// </summary>
-        private List<ConsumableItemContext> GenerateConsumableSets(ConsumableSetPolicy activeConsumableSetPolicy, int consumablesInSet,
-            List<ConsumableItemContext> consumablesPool)
+        private List<ConsumableItemContext> GenerateConsumableSets(SetGenerationRequest request)
         {
+            List<ConsumableItemContext> consumablesPool = request.Pools.ConsumablesPool;
+            int consumablesInSet = request.DuelRules.ConsumablesInSet;
+            System.Random random = new(request.Seed);
+            ConsumableSetPolicy activeConsumableSetPolicy = request.DuelRules.ConsumableSetPolicy;
+            
             switch (activeConsumableSetPolicy)
             {
                 case ConsumableSetPolicy.Random:
-                    return GetRandomConsumables(consumablesPool, consumablesInSet);
+                    return GetRandomConsumables(consumablesPool, consumablesInSet, random);
         
                 case ConsumableSetPolicy.None:
                     return new List<ConsumableItemContext>();
@@ -79,7 +84,7 @@ namespace Features.Duel.Modules
         /// <summary>
         /// Возвращает по одному случайному дайсу на каждый тип из пула, но не более <paramref name="limit"/>
         /// </summary>
-        private List<DiceItemContext> GetOneRandomDicePerType(Dictionary<DiceType, List<DiceItemContext>> dicesPool, int limit)
+        private List<DiceItemContext> GetOneRandomDicePerType(Dictionary<DiceType, List<DiceItemContext>> dicesPool, int limit, System.Random random)
         {
             List<DiceItemContext> diceSet = new();
     
@@ -91,7 +96,7 @@ namespace Features.Duel.Modules
                 if (dicesOfType.Count == 0)
                     continue;
         
-                int randomIndex = Random.Range(0, dicesOfType.Count);
+                int randomIndex = random.Next(0, dicesOfType.Count);
                 diceSet.Add(dicesOfType[randomIndex]);
             }
     
@@ -101,7 +106,7 @@ namespace Features.Duel.Modules
         /// <summary>
         /// Возвращает ровно <paramref name="limit"/> случайных дайсов из общего пула без учёта типов
         /// </summary>
-        private List<DiceItemContext> GetRandomDices(Dictionary<DiceType, List<DiceItemContext>> dicesPool, int limit)
+        private List<DiceItemContext> GetRandomDices(Dictionary<DiceType, List<DiceItemContext>> dicesPool, int limit, System.Random random)
         {
             List<DiceItemContext> diceSet = new();
     
@@ -116,7 +121,7 @@ namespace Features.Duel.Modules
     
             for (int i = 0; i < slotsCount; i++)
             {
-                int randomIndex = Random.Range(0, flatPool.Count);
+                int randomIndex = random.Next(0, flatPool.Count);
                 diceSet.Add(flatPool[randomIndex]);
             }
     
@@ -126,13 +131,13 @@ namespace Features.Duel.Modules
         /// <summary>
         /// Возвращает перемешанную копию пула расходников, но не более <paramref name="limit"/> элементов
         /// </summary>
-        private List<ConsumableItemContext> GetRandomConsumables(List<ConsumableItemContext> consumablesPool, int limit)
+        private List<ConsumableItemContext> GetRandomConsumables(List<ConsumableItemContext> consumablesPool, int limit, System.Random random)
         {
             List<ConsumableItemContext> consumableSet = new(consumablesPool);
     
             for (int i = consumableSet.Count - 1; i > 0; i--)
             {
-                int j = Random.Range(0, i + 1);
+                int j = random.Next(0, i + 1);
                 (consumableSet[i], consumableSet[j]) = (consumableSet[j], consumableSet[i]);
             }
     
