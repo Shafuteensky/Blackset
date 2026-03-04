@@ -2,9 +2,11 @@ using Blackset.Data.Base;
 using Blackset.Data.Items.Types;
 using Blackset.Inventories.Items;
 using Blackset.Opponents;
+using Blackset.Rewards;
 using Blackset.Storms;
 using Extensions.Log;
 using Extensions.Singleton;
+using Features.Progression;
 using UnityEngine;
 
 namespace Blackset.Data.Registries
@@ -14,6 +16,21 @@ namespace Blackset.Data.Registries
     /// </summary>
     public sealed class GameData : MonoBehaviourSingleton<GameData>
     {
+        [field: Header("Конфигурации баланса"), Space]
+
+        /// <summary>
+        /// Конфигурация прогресса (опыта) игрока
+        /// </summary>
+        [field: SerializeField]
+        [field: Tooltip("Конфигурация прогресса игрока (баланса)")]
+        public ProgressionConfig ProgressionConfig { get; private set; }
+        /// <summary>
+        /// Конфигурация баланса наград за дуэли
+        /// </summary>
+        [field: SerializeField]
+        [field: Tooltip("Конфигурация баланса наград за дуэли")]
+        public RewardConfig RewardConfig  { get; private set; }
+        
         [field: Header("Реестры предметов"), Space]
 
         /// <summary>
@@ -117,7 +134,7 @@ namespace Blackset.Data.Registries
 
         #endregion
 
-        #region Inventory helpers
+        #region Хелперы реестров игровых данных (геттеры)
 
         private TExpected GetInventoryItem<TExpected>(InventoryItemsRegistry registry, string id)
             where TExpected : InventoryItem

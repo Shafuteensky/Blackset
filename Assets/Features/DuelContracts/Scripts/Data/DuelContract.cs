@@ -1,4 +1,5 @@
 using System;
+using Blackset.Data.Registries;
 using Blackset.Opponents;
 using Extensions.Data.InMemoryData;
 using Extensions.Log;
@@ -13,23 +14,27 @@ namespace Blackset.DuelContracts
         /// <summary>
         /// Идентификатор данных оппонента
         /// </summary>
-        public string OpponentId => opponentId;
-        
-        private readonly string opponentId;
-        
+        public string OpponentId { get; private set; }
         /// <summary>
-        /// Конструктор записи о сопернике
+        /// Награда в валюте
         /// </summary>
-        /// <param name="opponentId">Идентификатор данных оппонента этого контракта</param>
-        public DuelContract(string opponentId) 
+        public int MoneyReward { get; private set; }
+
+        /// <summary>
+        /// Новый контракт
+        /// </summary>
+        /// <param name="opponent">Данные соперника</param>
+        public DuelContract(OpponentData opponent) 
         {
-            if (String.IsNullOrEmpty(opponentId))
+            if (opponent == null)
             {
-                ServiceDebug.LogError("Невалидный id оппонента или ссылка на реестр при создании контракта");
-                opponentId = String.Empty;
+                ServiceDebug.LogError("Невалидные данные оппонента при создании контракта");
+                return;
             }
             
-            this.opponentId = opponentId;
+            OpponentId = opponent.Id;
+            int moneyReward = GameData.Instance.RewardConfig.EvaluateMoney(true, opponent);
+            MoneyReward = moneyReward;
         }
     }
 }

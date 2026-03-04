@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using Blackset.Data.Registries;
 using Blackset.Opponents;
-using Extensions.Log;
 using UnityEngine;
 
 namespace Blackset.DuelContracts
@@ -11,6 +10,8 @@ namespace Blackset.DuelContracts
     /// </summary>
     public class ContractGenerator
     {
+        private const float DEFAULT_DIFFICULTY = 0.5f;
+        
         private readonly GameData gameData = GameData.Instance;
         //protected readonly PlayerDataFacade playerData; // TODO данные игрока для определения доступности предметов от стадии прогресса
         
@@ -30,7 +31,7 @@ namespace Blackset.DuelContracts
         public DuelContract GetRandomOpponent()
         {
             OpponentData randomOpponent = gameData.Opponents.Data[Random.Range(0, gameData.Opponents.Data.Count)];
-            DuelContract randomContract = new DuelContract(randomOpponent.Id);
+            DuelContract randomContract = new DuelContract(randomOpponent);
             return randomContract;
         }
         
@@ -65,7 +66,7 @@ namespace Blackset.DuelContracts
                 (indices[i], indices[swapIndex]) = (indices[swapIndex], indices[i]);
 
                 OpponentData opponent = gameData.Opponents.Data[indices[i]];
-                result.Add(new DuelContract(opponent.Id));
+                result.Add(new DuelContract(opponent));
             }
 
             // 3) Если нужно больше, чем есть — добираем с повторами
@@ -74,7 +75,7 @@ namespace Blackset.DuelContracts
                 for (int i = uniqueToTake; i < number; i++)
                 {
                     OpponentData opponent = gameData.Opponents.Data[Random.Range(0, opponentsCount)];
-                    result.Add(new DuelContract(opponent.Id));
+                    result.Add(new DuelContract(opponent));
                 }
             }
 

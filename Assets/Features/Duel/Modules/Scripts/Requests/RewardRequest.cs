@@ -1,3 +1,5 @@
+using Blackset.DuelContracts;
+
 namespace Blackset.Duel.Requests
 {
     /// <summary>
@@ -12,17 +14,17 @@ namespace Blackset.Duel.Requests
         /// <summary>
         /// Завершенный контракт
         /// </summary>
-        public string ContractId { get; }
+        public DuelContract Contract { get; }
 
         /// <summary>
         /// Запрос на выдачу награды игроку за дуэль
         /// </summary>
         /// <param name="isWin">Победил ли игрок в дуэли</param>
-        /// <param name="contractId">Идентификатор завершённого контракта</param>
-        public RewardRequest(bool isWin, string contractId)
+        /// <param name="contractId">Завершенный контракт</param>
+        public RewardRequest(bool isWin, DuelContract contract)
         {
             IsWin = isWin;
-            ContractId = contractId;
+            Contract = contract;
         }
     }
 }

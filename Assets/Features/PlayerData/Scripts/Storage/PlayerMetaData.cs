@@ -1,12 +1,12 @@
 using System;
 using System.Collections.Generic;
 using Blackset.Data;
+using Blackset.Data.Registries;
 using UnityEngine;
 using Blackset.Inventories;
 using Blackset.Inventories.Cells;
-using Blackset.Inventories.Items;
 using Extensions.Log;
-using Features.Inventory.Scripts.Items;
+using Features.Progression;
 
 namespace Blackset.Player
 {
@@ -16,20 +16,6 @@ namespace Blackset.Player
     [Serializable]
     public class PlayerMetaData
     {
-        #region Константы
-
-        // Опыт и уровень
-        private const int EXP_A = 50; // Ускорение роста (квадратичная часть) — изменяет “жёсткость лейта”
-        private const int EXP_B = 150; // Базовая линейная “цена уровня” — изменяет “скорость старта”
-
-        // Бюджет дайсов
-        private const int DEFAULT_START_BUDGET = 6; // Дефолтный начальный бюджет
-        private const int BUDGET_PER_LEVEL = 1; // Прибавка бюджета на уровень
-        private const int BUDGET_MILESTONE_LEVEL_STEP = 5; // Интервал уровней для получения бонуса
-        private const int BUDGET_MILESTONE_BONUS = 3; // Размер бонуса
-        
-        #endregion     
-        
         /// <summary>
         /// Количество софт-валюты
         /// </summary>
@@ -54,7 +40,7 @@ namespace Blackset.Player
             if (amount <= 0) return;
             Money += amount;
         }
-        
+
         /// <summary>
         /// Убавить деньги
         /// </summary>
@@ -64,9 +50,9 @@ namespace Blackset.Player
             if (amount <= 0) return;
             Money -= amount;
         }
-        
+
         #endregion
-        
+
         #region Experience
 
         /// <summary>
@@ -88,7 +74,7 @@ namespace Blackset.Player
             if (lvl <= 0) return;
             PlayerLevelCounter = lvl;
         }
-        
+
         /// <summary>
         /// Рассчитать суммарный требуемый опыт на определенный уровень
         /// </summary>
@@ -98,11 +84,14 @@ namespace Blackset.Player
         {
             if (level <= 1) return 0;
 
-            int n = level - 1;
+            ProgressionConfig config = GameData.Instance.ProgressionConfig;
+            if (config == null)
+            {
+                ServiceDebug.LogError("GameData.ProgressionConfig не задан");
+                return 0;
+            }
 
-            // Формула суммарного опыта на уровень:
-            // TotalExp(L) = EXP_A*(L-1)^2 + EXP_B*(L-1)
-            return (EXP_A * n * n) + (EXP_B * n);
+            return config.GetTotalExpForLevel(level);
         }
 
         /// <summary>
@@ -110,19 +99,16 @@ namespace Blackset.Player
         /// </summary>
         public int GetPlayerLvl()
         {
-            if (SumExperience <= 0) return 1;
+            ProgressionConfig config = GameData.Instance.ProgressionConfig;
+            if (config == null)
+            {
+                if (SumExperience <= 0) return 1;
 
-            // Обратная формула к TotalExp(L):
-            // EXP_A*n^2 + EXP_B*n - SumExperience = 0, где n = (L-1)
-            // n = floor( (-EXP_B + sqrt(EXP_B^2 + 4*EXP_A*SumExperience)) / (2*EXP_A) )
-            float disc = (EXP_B * EXP_B) + (4f * EXP_A * SumExperience);
-            float sqrt = Mathf.Sqrt(disc);
+                ServiceDebug.LogError("GameData.ProgressionConfig не задан");
+                return 1;
+            }
 
-            int n = Mathf.FloorToInt((-EXP_B + sqrt) / (2f * EXP_A));
-            int lvl = n + 1;
-
-            if (lvl < 1) lvl = 1;
-            return lvl;
+            return config.GetLevelByTotalExp(SumExperience);
         }
 
         /// <summary>
@@ -131,7 +117,11 @@ namespace Blackset.Player
         public int GetThisLevelExp()
         {
             int lvl = GetPlayerLvl();
-            int start = GetTotalExpForLevel(lvl);
+
+            ProgressionConfig config = GameData.Instance.ProgressionConfig;
+            if (config == null) return 0;
+
+            int start = config.GetTotalExpForLevel(lvl);
             int value = SumExperience - start;
             if (value < 0) value = 0;
             return value;
@@ -143,7 +133,11 @@ namespace Blackset.Player
         public int GetExpToNextLevel()
         {
             int lvl = GetPlayerLvl();
-            int next = GetTotalExpForLevel(lvl + 1);
+
+            ProgressionConfig config = GameData.Instance.ProgressionConfig;
+            if (config == null) return 0;
+
+            int next = config.GetTotalExpForLevel(lvl + 1);
             int value = next - SumExperience;
             if (value < 0) value = 0;
             return value;
@@ -155,8 +149,12 @@ namespace Blackset.Player
         public int GetThisLevelRequiredExp()
         {
             int lvl = GetPlayerLvl();
-            int start = GetTotalExpForLevel(lvl);
-            int next = GetTotalExpForLevel(lvl + 1);
+
+            ProgressionConfig config = GameData.Instance.ProgressionConfig;
+            if (config == null) return 1;
+
+            int start = config.GetTotalExpForLevel(lvl);
+            int next = config.GetTotalExpForLevel(lvl + 1);
             int value = next - start;
             if (value < 1) value = 1;
             return value;
@@ -176,7 +174,7 @@ namespace Blackset.Player
             float v = (float)have / need;
             return Mathf.Clamp01(v);
         }
-        
+
         #endregion
 
         #region Dice Budget
@@ -189,17 +187,14 @@ namespace Blackset.Player
         {
             int lvl = GetPlayerLvl();
 
-            // Формула бюджета:
-            // Budget = DEFAULT_START_BUDGET
-            //        + BUDGET_PER_LEVEL*(L-1)
-            //        + BUDGET_MILESTONE_BONUS*floor((L-1)/BUDGET_MILESTONE_LEVEL_STEP)
-            int perLevel = BUDGET_PER_LEVEL * (lvl - 1);
-            int milestoneBonus = BUDGET_MILESTONE_BONUS * ((lvl - 1) / BUDGET_MILESTONE_LEVEL_STEP);
+            ProgressionConfig config = GameData.Instance.ProgressionConfig;
+            if (config == null)
+            {
+                ServiceDebug.LogError("GameData.ProgressionConfig не задан");
+                return 0;
+            }
 
-            int value = DEFAULT_START_BUDGET + perLevel + milestoneBonus;
-            if (value < 0) value = 0;
-
-            return value;
+            return config.GetMaxDiceBudgetForLevel(lvl);
         }
 
         /// <summary>
@@ -208,18 +203,18 @@ namespace Blackset.Player
         /// <returns>Целочисленное значение максимального бюджета сборки дайсов игрока</returns>
         public int GetTotalUsedDiceBudget(List<Inventory> pools)
         {
-            if (pools == null ||  pools.Count == 0)
+            if (pools == null || pools.Count == 0)
             {
                 ServiceDebug.LogError("Переданы невалидные пулы");
                 return 0;
             }
-            
+
             int totalUsedBudget = 0;
             foreach (Inventory pool in pools)
             {
                 totalUsedBudget += GetUsedDiceBudgetByPool(pool);
             }
-            
+
             return totalUsedBudget;
         }
 
@@ -234,7 +229,7 @@ namespace Blackset.Player
                 ServiceDebug.LogError("Передан невалидный пул");
                 return 0;
             }
-            
+
             int maxBudget = 0;
             foreach (InventoryCell cell in pool.Data)
             {
@@ -244,10 +239,10 @@ namespace Blackset.Player
                     if (diceBudgetPrice > maxBudget) maxBudget = diceBudgetPrice;
                 }
             }
-            
+
             return maxBudget;
         }
-        
+
         #endregion
     }
 }
