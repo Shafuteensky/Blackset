@@ -1023,6 +1023,71 @@ MonoBehaviour:
   root: {fileID: 37828541}
   openedUIWindows: []
   focusedWindow: {fileID: 0}
+--- !u!1 &1327738398
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1327738399}
+  - component: {fileID: 1327738401}
+  - component: {fileID: 1327738400}
+  m_Layer: 0
+  m_Name: DuelController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1327738399
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1327738398}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1936877674}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1327738400
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1327738398}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 57b0bd88c1f745c7a67a405b016ddb47, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Blackset.DecisionInput.DuelInputPresenter
+  declarationPanel: {fileID: 0}
+  confirmDeclarationButton: {fileID: 0}
+  intentPanel: {fileID: 0}
+  confirmIntentButton: {fileID: 0}
+  passButton: {fileID: 0}
+--- !u!114 &1327738401
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1327738398}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3d3aa83aac3f44b9ac8c9d3d3f09729d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Blackset.Duel.Sequence.DuelController
+  modules: {fileID: 11400000, guid: fcbadadaf41e5804d8f4b5826e4b92aa, type: 2}
+  inputPresenter: {fileID: 1327738400}
+  selectedContract: {fileID: 11400000, guid: 453bec2cc2989fd44bcd049e2d00dec9, type: 2}
 --- !u!1 &1383757599
 GameObject:
   m_ObjectHideFlags: 0
@@ -1242,6 +1307,7 @@ Transform:
   - {fileID: 1921198931}
   - {fileID: 397302197}
   - {fileID: 2105554652}
+  - {fileID: 1327738399}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2105554651

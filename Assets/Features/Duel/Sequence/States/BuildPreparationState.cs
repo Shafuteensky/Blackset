@@ -6,7 +6,7 @@ namespace Features.Duel.Sequence.States
     /// <summary>
     /// 
     /// </summary>
-    public class BuildPreparationState : IState<DuelContext>
+    public class BuildPreparationState : BaseDuelState, IState<DuelContext>
     {
         public void Enter(DuelContext context)
         {

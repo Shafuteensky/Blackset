@@ -6,7 +6,7 @@ namespace Features.Duel.Sequence.States
     /// <summary>
     /// 
     /// </summary>
-    public class TargetValueSetupState : IState<DuelContext>
+    public class TargetValueSetupState : BaseDuelState, IState<DuelContext>
     {
         public void Enter(DuelContext context)
         {

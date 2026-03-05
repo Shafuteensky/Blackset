@@ -6,7 +6,7 @@ namespace Features.Duel.Sequence.States
     /// <summary>
     /// 
     /// </summary>
-    public class RewardResolveState : IState<DuelContext>
+    public class RewardResolveState : BaseDuelState, IState<DuelContext>
     {
         public void Enter(DuelContext context)
         {

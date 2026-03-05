@@ -6,7 +6,7 @@ namespace Features.Duel.Sequence.States
     /// <summary>
     /// 
     /// </summary>
-    public class ScoreCommitState : IState<DuelContext>
+    public class ScoreCommitState : BaseDuelState, IState<DuelContext>
     {
         public void Enter(DuelContext context)
         {

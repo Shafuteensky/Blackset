@@ -5,7 +5,8 @@ using Blackset.Duel.Requests;
 using Blackset.Duel.Rules;
 using Blackset.Duel.Snapshots;
 using Blackset.DuelContracts;
-using Extensions.Generics;
+using Extensions.Log;
+using Features.Duel.Sequence.States;
 using UnityEngine;
 
 namespace Blackset.Duel.Sequence
@@ -13,7 +14,7 @@ namespace Blackset.Duel.Sequence
     /// <summary>
     /// Контроллер дуэли
     /// </summary>
-    public sealed class DuelController : InitializableMonoBehaviour
+    public sealed class DuelController : MonoBehaviour
     {
         [Header("Входные данные"), Space]
         [SerializeField]
@@ -30,30 +31,8 @@ namespace Blackset.Duel.Sequence
 
         private void Awake()
         {
-            Initialize(modules != null && inputPresenter != null && selectedContract != null);
-            if (!IsInitialized) return;
-
-            InitializeSequence();
-            
             DuelStartRequest request = new DuelStartRequest(selectedContract.GetSelectedData());
             StartDuel(request);
-        }
-
-        /// <summary>
-        /// Начать дуэль
-        /// </summary>
-        /// <param name="request">Запрос начала дуэли</param>
-        public void StartDuel(DuelStartRequest request)
-        {
-            
-        }
-
-        /// <summary>
-        /// Завершить дуэль
-        /// </summary>
-        public void EndDuel()
-        {
-            
         }
 
         /// <summary>
@@ -63,12 +42,68 @@ namespace Blackset.Duel.Sequence
         /// <typeparam name="TEvent"></typeparam>
         //public void Publish<TEvent>(TEvent evt) where TEvent : Event;
 
+        #region Управление состоянием дуэли
+        
+        /// <summary>
+        /// Начать дуэль
+        /// </summary>
+        /// <param name="request">Запрос начала дуэли</param>
+        public void StartDuel(DuelStartRequest request)
+        {
+            InitializeSequence();
+            stateMachine.Start<DuelInitState>(context);
+        }
+
+        /// <summary>
+        /// Завершить дуэль
+        /// </summary>
+        public void EndDuel()
+        {
+            stateMachine.Stop(context);
+        }
+        
+        #endregion
+
+        #region Инициализация
+        
         private void InitializeSequence()
         {
-            StateRegistry<DuelContext> duelStateRegistry = new();
+            DuelStateRegistry<DuelContext> duelStateRegistry = InitializeStateRegistry();
             stateMachine = new DuelStateMachine(duelStateRegistry);
+
+            ServiceGuard.NotNull(inputPresenter, nameof(inputPresenter));
+            ServiceGuard.NotNull(selectedContract, nameof(selectedContract));
             context = new DuelContext(selectedContract.GetSelectedData(), inputPresenter);
             commiter = new SnapshotCommiter(context);
         }
+
+        private DuelStateRegistry<DuelContext> InitializeStateRegistry()
+        {
+            DuelStateRegistry<DuelContext> duelStateRegistry = new();
+            ServiceGuard.NotNull(modules, nameof(modules));
+            duelStateRegistry.InitializeModules(modules);
+            
+            duelStateRegistry.Add(new DuelInitState());
+            
+            duelStateRegistry.Add(new BuildPreparationState());
+            duelStateRegistry.Add(new BuildResolveState());
+            
+            duelStateRegistry.Add(new TargetValueSetupState());
+            duelStateRegistry.Add(new BattleStartState());
+            
+            duelStateRegistry.Add(new RollPlanningState());
+            duelStateRegistry.Add(new RollResolveState());
+            
+            duelStateRegistry.Add(new ScoreCommitState());
+            duelStateRegistry.Add(new BattleCheckState());
+            
+            duelStateRegistry.Add(new DuelCheckState());
+            duelStateRegistry.Add(new RewardResolveState());
+            duelStateRegistry.Add(new DuelEndState());
+
+            return duelStateRegistry;
+        }
+        
+        #endregion
     }
 }

@@ -1,6 +1,6 @@
 using System;
 using System.Threading;
-using Blacklset.DecisionInput;
+using Blackset.DecisionInput;
 using Blackset.Duel.Context;
 using Blackset.Duel.TurnIntents;
 using Cysharp.Threading.Tasks;
