@@ -1,7 +1,6 @@
-using System;
 using System.Collections.Generic;
-using Blacklset.DecisionInput;
 using Blackset.Data;
+using Blackset.DecisionInput;
 using Blackset.Duel.History;
 using Blackset.Duel.Participants;
 using Blackset.Duel.Pools;
@@ -20,9 +19,9 @@ namespace Blackset.Duel.Context
     public class DuelContext
     {
         /// <summary>
-        /// 
+        /// Контроллер показа UI элементов
         /// </summary>
-        public DuelInputPresenter InputPresenter;
+        public readonly DuelInputPresenter InputPresenter;
         
         /// <summary>
         /// Состояния активных эффектов
@@ -39,29 +38,29 @@ namespace Blackset.Duel.Context
         /// <summary>
         /// Активный контракт
         /// </summary>
-        public DuelContract Contract;
+        public readonly DuelContract Contract;
 
         /// <summary>
         /// Участники <идентификатор, данные>
         /// </summary>
-        public Dictionary<string, DuelParticipantState> Participants = new();
+        public readonly Dictionary<string, DuelParticipantState> Participants = new();
         /// <summary>
         /// Знания об участниках дуэли <идентификатор, знания>
         /// </summary>
-        public Dictionary<string, KnowledgeState> PlayerKnowledge = new();
+        public readonly Dictionary<string, KnowledgeState> PlayerKnowledge = new();
         /// <summary>
         /// Идентификатор игрока
         /// </summary>
-        public string PlayerId = String.Empty;
+        public string PlayerId = string.Empty;
         /// <summary>
         /// Идентификатор соперника-бота
         /// </summary>
-        public string OpponentId = String.Empty;
+        public string OpponentId = string.Empty;
         
         /// <summary>
         /// Денные о целевом значении
         /// </summary>
-        public TargetValueContext TargetValue = new();
+        public readonly TargetValueContext TargetValue = new();
         /// <summary>
         /// Данные о прогрессе дуэли
         /// </summary>
@@ -70,7 +69,7 @@ namespace Blackset.Duel.Context
         /// <summary>
         /// История ходов
         /// </summary>
-        public DuelHistory History;
+        public readonly DuelHistory History;
 
         /// <summary>
         /// Подготовка данных для новой дуэли

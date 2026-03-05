@@ -4,7 +4,7 @@ using Blackset.Duel.TurnIntents;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Blacklset.DecisionInput
+namespace Blackset.DecisionInput
 {
     /// <summary>
     /// Контроллер показа UI-элемента ввода выборов игрока для дуэли
