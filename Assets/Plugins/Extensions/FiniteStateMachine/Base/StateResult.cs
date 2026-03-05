@@ -1,3 +1,5 @@
+using System;
+
 namespace Extensions.FiniteStateMachine
 {
     /// <summary>
@@ -6,44 +8,43 @@ namespace Extensions.FiniteStateMachine
     public readonly struct StateResult
     {
         /// <summary>
-        /// Тип перехода в состояние
+        /// Тип перехода
         /// </summary>
         public StateTransition Transition { get; }
-        /// <summary>
-        /// Идентификатор следующего состояния
-        /// </summary>
-        public string NextStateId { get; }
 
         /// <summary>
-        /// Конструктор результата тика
+        /// Тип следующего состояния
         /// </summary>
-        /// <param name="transition">Тип перехода в состояние</param>
-        /// <param name="nextStateId">Идентификатор следующего состояния</param>
-        private StateResult(StateTransition transition, string nextStateId = null)
+        public Type NextStateType { get; }
+
+        private StateResult(StateTransition transition, Type nextStateType = null)
         {
             Transition = transition;
-            NextStateId = nextStateId;
+            NextStateType = nextStateType;
         }
 
         /// <summary>
         /// Остаться в текущем состоянии
         /// </summary>
-        /// <returns>Результат исполнения тика состояния</returns>
-        public static StateResult StayInState() => new StateResult(StateTransition.Stay);
+        public static StateResult Stay() =>
+            new StateResult(StateTransition.Stay);
+
         /// <summary>
-        /// Переключить состояние на другое
+        /// Переключить состояние (сбрасывает стек)
         /// </summary>
-        /// <returns>Результат исполнения тика состояния</returns>
-        public static StateResult Switch(string nextStateId) => new StateResult(StateTransition.Switch, nextStateId);
+        public static StateResult Switch<TState>() where TState : class =>
+            new StateResult(StateTransition.Switch, typeof(TState));
+
         /// <summary>
-        /// Push состояния
+        /// Положить текущее состояние в стек и перейти в новое
         /// </summary>
-        /// <returns>Результат исполнения тика состояния</returns>
-        public static StateResult Push(string nextStateId) => new StateResult(StateTransition.Push, nextStateId);
+        public static StateResult Push<TState>() where TState : class =>
+            new StateResult(StateTransition.Push, typeof(TState));
+
         /// <summary>
-        /// Pop состояния
+        /// Вернуться к предыдущему состоянию из стека
         /// </summary>
-        /// <returns>Результат исполнения тика состояния</returns>
-        public static StateResult Pop() => new StateResult(StateTransition.Pop);
+        public static StateResult Pop() =>
+            new StateResult(StateTransition.Pop);
     }
 }

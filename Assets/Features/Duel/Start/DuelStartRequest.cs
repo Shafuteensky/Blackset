@@ -13,10 +13,6 @@ namespace Blackset.Duel.Requests
         /// Данные выбранного контракта
         /// </summary>
         public DuelContract Contract;
-        /// <summary>
-        /// Режим дуэли
-        /// </summary>
-        public DuelMode DuelMode;
 
         /// <summary>
         /// Активен ли шторм
@@ -33,11 +29,9 @@ namespace Blackset.Duel.Requests
         /// <param name="contract">Выбранный контракт дуэли</param>
         /// <param name="rulesConfiguration">Конфигурация правил дуэли</param>
         /// <param name="mode"></param>
-        public DuelStartRequest(DuelContract contract, DuelMode mode, Storm storm = null)
+        public DuelStartRequest(DuelContract contract, Storm storm = null)
         {
             Contract = contract;
-            DuelMode = mode;
-            
             Storm = storm;
         }
     }

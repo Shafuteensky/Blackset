@@ -6,16 +6,10 @@ namespace Extensions.FiniteStateMachine
     /// Абстракция состояния ожидания
     /// </summary>
     /// <typeparam name="TContext"></typeparam>
-    public abstract class WaitHandleState<TContext> : BaseState<TContext>
+    public abstract class WaitHandleState<TContext, TNextState> : BaseState<TContext>
+        where TNextState : class, IState<TContext>
     {
         protected IWaitHandle waitHandle;
-        protected readonly string nextStateId;
-
-        protected WaitHandleState(string nextStateId)
-        {
-            if (string.IsNullOrEmpty(nextStateId)) throw new ArgumentException("nextStateId cannot be null or empty");
-            this.nextStateId = nextStateId;
-        }
 
         public override void Enter(TContext context)
         {
@@ -30,17 +24,10 @@ namespace Extensions.FiniteStateMachine
 
         public override StateResult Tick(TContext context)
         {
-            if (waitHandle == null)
-            {
-                return StateResult.Switch(nextStateId);
-            }
+            if (waitHandle == null || waitHandle.IsDone)
+                return StateResult.Switch<TNextState>();
 
-            if (!waitHandle.IsDone)
-            {
-                return StateResult.StayInState();
-            }
-
-            return StateResult.Switch(nextStateId);
+            return StateResult.Stay();
         }
 
         public override void Exit(TContext context)

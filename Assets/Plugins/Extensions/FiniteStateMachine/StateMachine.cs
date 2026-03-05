@@ -9,39 +9,41 @@ namespace Extensions.FiniteStateMachine
     /// </summary>
     /// <remarks>
     /// Особенности стейтов:
-    /// - Pause() — временная остановка без полного “dispose”
+    /// - Pause() — временная остановка без полного "dispose"
     /// - Resume() — возврат после Pause()
     /// - Exit() — гарантированный финальный cleanup, может вызываться из Stop() даже если стейт был paused
     /// </remarks>
     /// <typeparam name="TContext">Входные данные стейт-машины</typeparam>
-    public class StateMachine<TContext>
+    public abstract class StateMachine<TContext>
     {
         /// <summary>
         /// Событие изменения активного состояния машины
         /// </summary>
-        /// <typeparam name="string">Идентификатор предыдущего состояния</typeparam>
-        /// <typeparam name="string">Идентификатор нового состояния</typeparam>
-        public event Action<string, string> onStateChanged;
-        
+        /// <typeparam name="Type">Тип предыдущего состояния</typeparam>
+        /// <typeparam name="Type">Тип нового состояния</typeparam>
+        public event Action<Type, Type> onStateChanged;
+
         /// <summary>
         /// Состояние исполнения машины
         /// </summary>
         public bool IsRunning => currentState != null;
+
         /// <summary>
-        /// Идентификатор текущего исполняемого состояния
+        /// Тип текущего исполняемого состояния
         /// </summary>
-        public string CurrentStateId => currentStateId;
+        public Type CurrentStateType => currentStateType;
 
         protected readonly IStateRegistry<TContext> registry;
 
         protected IState<TContext> currentState;
-        protected string currentStateId;
-        
+        protected Type currentStateType;
+
         protected struct StackEntry
         {
-            public string StateId;
+            public Type StateType;
             public IState<TContext> State;
         }
+
         protected readonly Stack<StackEntry> stack = new Stack<StackEntry>();
 
         /// <summary>
@@ -49,43 +51,43 @@ namespace Extensions.FiniteStateMachine
         /// </summary>
         /// <param name="registry">Реестр состояний</param>
         /// <exception cref="ArgumentNullException">Ошибка реестра</exception>
-        public StateMachine(IStateRegistry<TContext> registry)
+        protected StateMachine(IStateRegistry<TContext> registry)
         {
             this.registry = registry ?? throw new ArgumentNullException(nameof(registry));
         }
-        
+
         #region Манипуляция машиной
 
         /// <summary>
         /// Запуск машины с конкретного состояния
         /// </summary>
-        /// <param name="initialStateId">Входное состояние</param>
-        /// <param name="context"></param>
-        /// <exception cref="ArgumentException">Ошибка входного состояния</exception>
+        /// <typeparam name="TInitialState">Тип входного состояния</typeparam>
+        /// <param name="context">Входные данные стейт-машины</param>
         /// <exception cref="InvalidOperationException">Ошибка запуска машины</exception>
-        public void Start(string initialStateId, TContext context)
+        public void Start<TInitialState>(TContext context)
+            where TInitialState : class, IState<TContext>
         {
-            if (string.IsNullOrEmpty(initialStateId)) throw new ArgumentException("Initial state id is null or empty.", nameof(initialStateId));
-            if (currentState != null) throw new InvalidOperationException("StateMachine is already started.");
+            if (currentState != null) throw new InvalidOperationException("Машина уже запущена");
 
-            currentStateId = initialStateId;
-            currentState = registry.Get(initialStateId);
-            if (currentState == null) throw new InvalidOperationException($"Registry returned null state for id '{initialStateId}'.");
+            currentStateType = typeof(TInitialState);
+            currentState = registry.Get(currentStateType);
+            if (currentState == null) throw new InvalidOperationException($"Реестр вернул невалидное состояние ({currentStateType.Name})");
 
             currentState.Enter(context);
         }
-        
+
         /// <summary>
         /// Перезапуск стейт-машины
         /// </summary>
-        /// <param name="initialStateId">Входное состояние</param>
+        /// <typeparam name="TInitialState">Тип входного состояния</typeparam>
         /// <param name="context">Входные данные стейт-машины</param>
-        public void Restart(string initialStateId, TContext context)
+        public void Restart<TInitialState>(TContext context)
+            where TInitialState : class, IState<TContext>
         {
             Stop(context);
-            Start(initialStateId, context);
+            Start<TInitialState>(context);
         }
-        
+
         /// <summary>
         /// Тик активного состояния машины
         /// </summary>
@@ -96,11 +98,11 @@ namespace Extensions.FiniteStateMachine
             if (!IsRunning)
             {
 #if UNITY_EDITOR || DEVELOPMENT_BUILD
-                ServiceDebug.LogWarning("Tick called but machine is not running.");
+                ServiceDebug.LogWarning("Tick запрошен, но машина не запущена");
 #endif
                 return;
             }
-            
+
             if (currentState == null)
             {
                 return;
@@ -112,21 +114,21 @@ namespace Extensions.FiniteStateMachine
             {
                 case StateTransition.Stay:
                     return;
-                case StateTransition.Switch when string.IsNullOrEmpty(result.NextStateId):
-                    throw new InvalidOperationException("Switch transition requires non-empty NextStateId.");
+                case StateTransition.Switch when result.NextStateType == null:
+                    throw new InvalidOperationException("Switch требует валидный тип состояния для перехода");
                 case StateTransition.Switch:
-                    Switch(result.NextStateId, context);
+                    Switch(result.NextStateType, context);
                     return;
-                case StateTransition.Push when string.IsNullOrEmpty(result.NextStateId):
-                    throw new InvalidOperationException("Push transition requires non-empty NextStateId.");
+                case StateTransition.Push when result.NextStateType == null:
+                    throw new InvalidOperationException("Push требует валидный тип состояния для перехода");
                 case StateTransition.Push:
-                    Push(result.NextStateId, context);
+                    Push(result.NextStateType, context);
                     return;
                 case StateTransition.Pop:
                     Pop(context);
                     return;
                 default:
-                    throw new InvalidOperationException($"Unknown StateTransition value: {result.Transition}");
+                    throw new InvalidOperationException($"Необработанное состояние перехода ({result.Transition})");
             }
         }
 
@@ -147,51 +149,49 @@ namespace Extensions.FiniteStateMachine
                 if (entry.State == null) continue;
                 if (ReferenceEquals(entry.State, currentState)) continue;
 
-                IStackableState<TContext> stackable = entry.State as IStackableState<TContext>;
-                if (stackable != null)
-                    stackable.ForceExit(context); // знает что делать из Paused
+                if (entry.State is IStackableState<TContext> stackable)
+                    stackable.ForceExit(context);
                 else
-                    entry.State.Exit(context);  
+                    entry.State.Exit(context);
             }
 
             stack.Clear();
             currentState = null;
-            currentStateId = null;
+            currentStateType = null;
         }
-        
+
         #endregion
 
         #region Манипуляция состояниями
-        
-        protected void Switch(string nextStateId, TContext context)
+
+        protected void Switch(Type nextStateType, TContext context)
         {
-            string previous = currentStateId;
+            Type previous = currentStateType;
 
             while (stack.Count > 0)
             {
                 StackEntry entry = stack.Pop();
                 entry.State?.Exit(context);
             }
-            
+
             currentState.Exit(context);
 
-            currentStateId = nextStateId;
-            currentState = registry.Get(nextStateId);
-            if (currentState == null) throw new InvalidOperationException($"Registry returned null state for id '{nextStateId}'.");
+            currentStateType = nextStateType;
+            currentState = registry.Get(nextStateType);
+            if (currentState == null) throw new InvalidOperationException($"Реестр состояний вернул невалидное состояние для типа '{nextStateType.Name}'");
 
             currentState.Enter(context);
 
-            onStateChanged?.Invoke(previous, nextStateId);
+            onStateChanged?.Invoke(previous, nextStateType);
         }
 
-        protected void Push(string nextStateId, TContext context)
+        protected void Push(Type nextStateType, TContext context)
         {
-            string previous = currentStateId;
+            Type previous = currentStateType;
 
-            stack.Push(new StackEntry { StateId = currentStateId, State = currentState });
+            stack.Push(new StackEntry { StateType = currentStateType, State = currentState });
 
-            IStackableState<TContext> stackable = currentState as IStackableState<TContext>;
-            if (stackable != null)
+            if (currentState is IStackableState<TContext> stackable)
             {
                 stackable.Pause(context);
             }
@@ -200,34 +200,33 @@ namespace Extensions.FiniteStateMachine
                 currentState.Exit(context);
             }
 
-            currentStateId = nextStateId;
-            currentState = registry.Get(nextStateId);
-            if (currentState == null) throw new InvalidOperationException($"Registry returned null state for id '{nextStateId}'.");
+            currentStateType = nextStateType;
+            currentState = registry.Get(nextStateType);
+            if (currentState == null) throw new InvalidOperationException($"Реестр состояний вернул невалидное состояние для типа '{nextStateType.Name}'");
 
             currentState.Enter(context);
 
-            if (onStateChanged != null) onStateChanged(previous, nextStateId);
+            onStateChanged?.Invoke(previous, nextStateType);
         }
 
         protected void Pop(TContext context)
         {
             if (stack.Count == 0)
             {
-                throw new InvalidOperationException("Pop transition requested, but state stack is empty.");
+                throw new InvalidOperationException("Pop-переход запрошен, но стек состояний пуст");
             }
 
-            string previous = currentStateId;
+            Type previous = currentStateType;
 
             currentState.Exit(context);
 
             StackEntry entry = stack.Pop();
 
-            currentStateId = entry.StateId;
+            currentStateType = entry.StateType;
             currentState = entry.State;
-            if (currentState == null) throw new InvalidOperationException($"Stack contains null state for id '{currentStateId}'.");
+            if (currentState == null) throw new InvalidOperationException($"Стек содержит невалидное состояние для типа '{currentStateType?.Name}'");
 
-            IStackableState<TContext> stackable = currentState as IStackableState<TContext>;
-            if (stackable != null)
+            if (currentState is IStackableState<TContext> stackable)
             {
                 stackable.Resume(context);
             }
@@ -236,9 +235,9 @@ namespace Extensions.FiniteStateMachine
                 currentState.Enter(context);
             }
 
-            if (onStateChanged != null) onStateChanged(previous, currentStateId);
+            onStateChanged?.Invoke(previous, currentStateType);
         }
-        
+
         #endregion
     }
 }

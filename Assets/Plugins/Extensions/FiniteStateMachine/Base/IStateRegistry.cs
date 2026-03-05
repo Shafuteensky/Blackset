@@ -1,3 +1,5 @@
+using System;
+
 namespace Extensions.FiniteStateMachine
 {
     /// <summary>
@@ -7,10 +9,17 @@ namespace Extensions.FiniteStateMachine
     public interface IStateRegistry<TContext>
     {
         /// <summary>
-        /// Получить состояние по известному идентиифкатору
+        /// Добавить состояние в реестр
         /// </summary>
-        /// <param name="stateId">Идентификатор состояния</param>
-        /// <returns>Найденное состояние</returns>
-        IState<TContext> Get(string stateId);
+        /// <typeparam name="TState">Тип состояния</typeparam>
+        /// <param name="state">Экземпляр состояния</param>
+        void Add<TState>(TState state) where TState : class, IState<TContext>;
+
+        /// <summary>
+        /// Получить состояние по типу
+        /// </summary>
+        /// <param name="stateType">Тип состояния</param>
+        /// <returns>Состояние</returns>
+        IState<TContext> Get(Type stateType);
     }
 }

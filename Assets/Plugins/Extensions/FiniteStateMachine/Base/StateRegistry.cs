@@ -1,49 +1,29 @@
 using System;
 using System.Collections.Generic;
+using Extensions.FiniteStateMachine;
 
-namespace Extensions.FiniteStateMachine
+namespace Blackset.Duel.Sequence
 {
     /// <summary>
     /// Реестр всех доступных состояний машины
     /// </summary>
-    public class StateRegistry<TContext> : IStateRegistry<TContext> // TODO заменить хранение по id-ключу на конкретный тип?
+    public sealed class StateRegistry<TContext> : IStateRegistry<TContext>
     {
-        protected readonly Dictionary<string, IState<TContext>> states = new Dictionary<string, IState<TContext>>();
+        private readonly Dictionary<Type, IState<TContext>> states = new();
 
-        /// <summary>
-        /// Добавить состояние в реестр
-        /// </summary>
-        /// <param name="id">Идентификатор состояния</param>
-        /// <param name="state">Конкретное состояние</param>
-        /// <exception cref="ArgumentException">Ошибка идентификации состояния</exception>
-        /// <exception cref="ArgumentNullException">Ошибка состояния</exception>
-        public void Add(string id, IState<TContext> state)
+        public void Add<TState>(TState state) where TState : class, IState<TContext>
         {
-            if (string.IsNullOrEmpty(id)) throw new ArgumentException("State id is null or empty.", nameof(id));
             if (state == null) throw new ArgumentNullException(nameof(state));
-            if (states.ContainsKey(id)) throw new ArgumentException($"State '{id}' is already registered.", nameof(id));
-
-            states[id] = state;
+            states[typeof(TState)] = state;
         }
 
-        /// <summary>
-        /// Получить состояние по идентификатору
-        /// </summary>
-        /// <param name="stateId">Идентификатор состояния</param>
-        /// <returns>Конкретное состояние</returns>
-        /// <exception cref="ArgumentException">Ошибка идентификации состояния</exception>
-        /// <exception cref="KeyNotFoundException">Ошибка поиска в реестре</exception>
-        public IState<TContext> Get(string stateId)
+        public IState<TContext> Get(Type stateType)
         {
-            if (string.IsNullOrEmpty(stateId)) throw new ArgumentException("State id is null or empty.", nameof(stateId));
+            if (states.TryGetValue(stateType, out IState<TContext> state))
+                return state;
 
-            IState<TContext> state;
-            if (!states.TryGetValue(stateId, out state))
-            {
-                throw new KeyNotFoundException($"State '{stateId}' not found in registry. States count = {states.Count}.");
-            }
-
-            return state;
+            throw new InvalidOperationException(
+                $"Состояние '{stateType.Name}' не найдено в реестре. Вызовите Add() при инициализации.");
         }
     }
 }

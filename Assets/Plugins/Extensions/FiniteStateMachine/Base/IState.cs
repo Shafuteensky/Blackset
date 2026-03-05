@@ -10,17 +10,17 @@ namespace Extensions.FiniteStateMachine
         /// Запуск состояния
         /// </summary>
         /// <param name="context">Входные данные стейт-машины</param>
-        void Enter(TContext context);
+        public void Enter(TContext context);
         /// <summary>
         /// Тик состояния
         /// </summary>
         /// <returns>Результат исполнения тика состояния</returns>
         /// <param name="context">Входные данные стейт-машины</param>
-        StateResult Tick(TContext context);
+        public StateResult Tick(TContext context);
         /// <summary>
         /// Выход из состояния
         /// </summary>
         /// <param name="context">Входные данные стейт-машины</param>
-        void Exit(TContext context);
+        public void Exit(TContext context);
     }
 }

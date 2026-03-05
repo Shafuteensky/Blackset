@@ -1,4 +1,5 @@
 using Blackset.Data.Registries;
+using Blackset.Duel.Rules;
 using Blackset.Opponents;
 using Extensions.Data.InMemoryData;
 using Extensions.Log;
@@ -19,12 +20,17 @@ namespace Blackset.DuelContracts
         /// Награда в валюте
         /// </summary>
         public int MoneyReward { get; private set; }
+        
+        /// <summary>
+        /// Режим дуэли
+        /// </summary>
+        public DuelMode Mode { get; private set; }
 
         /// <summary>
         /// Новый контракт
         /// </summary>
         /// <param name="opponent">Данные соперника</param>
-        public DuelContract(OpponentData opponent) 
+        public DuelContract(OpponentData opponent, DuelMode mode = DuelMode.Standard) 
         {
             if (opponent == null)
             {
@@ -35,6 +41,8 @@ namespace Blackset.DuelContracts
             OpponentId = opponent.Id;
             int moneyReward = GameData.Instance.RewardConfig.EvaluateMoney(true, opponent);
             MoneyReward = moneyReward;
+            
+            Mode = mode;
         }
         
         /// <summary>
