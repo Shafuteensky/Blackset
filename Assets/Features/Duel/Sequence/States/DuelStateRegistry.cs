@@ -1,5 +1,6 @@
 using Blackset.Duel.Modules;
 using Blackset.Duel.Sequence;
+using UnityEngine;
 
 namespace Blackset.Duel.Sequence.States
 {
@@ -20,7 +21,6 @@ namespace Blackset.Duel.Sequence.States
         public override void Add<TState>(TState state)
         {
             base.Add(state);
-            
             if (state is BaseDuelState duelState && modules != null) 
                 duelState.Initialize(modules);
         }

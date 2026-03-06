@@ -1089,6 +1089,7 @@ MonoBehaviour:
   inputPresenter: {fileID: 1327738400}
   selectedContract: {fileID: 11400000, guid: 453bec2cc2989fd44bcd049e2d00dec9, type: 2}
   activeStorm: {fileID: 11400000, guid: 0772085f33c31274f95bac69b5e2deba, type: 2}
+  logsEnabled: 1
 --- !u!1 &1383757599
 GameObject:
   m_ObjectHideFlags: 0

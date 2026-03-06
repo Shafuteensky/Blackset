@@ -28,6 +28,10 @@ namespace Blackset.Duel.Sequence
         private SelectedContract selectedContract;
         [SerializeField]
         private ActiveStorm activeStorm;
+
+        [Header("Логи"), Space] 
+        [SerializeField]
+        private bool logsEnabled = false;
         
         private DuelRulesConfiguration rules;
         private DuelStateMachine stateMachine;
@@ -102,6 +106,7 @@ namespace Blackset.Duel.Sequence
         {
             DuelStateRegistry<DuelContext> duelStateRegistry = InitializeStateRegistry();
             stateMachine = new DuelStateMachine(duelStateRegistry);
+            stateMachine.EnableLogs(logsEnabled);
 
             commiter = new SnapshotCommiter(context);
         }

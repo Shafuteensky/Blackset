@@ -16,7 +16,7 @@ namespace Blackset.Duel.Sequence.States
         /// <param name="modules">Реестр модулей обработки данных дуэли</param>
         public void Initialize(DuelModuleRegistry modulesRegistry)
         {
-            ServiceGuard.NotNull(modules, nameof(modules));
+            ServiceGuard.NotNull(modulesRegistry, nameof(modulesRegistry));
             modules = modulesRegistry;
         }
     }

@@ -14,7 +14,8 @@ namespace Blackset.Duel.Sequence.States
     {
         public void Enter(DuelContext context)
         {
-            
+            context.Progress.OnNewFight();
+            // TODO Работа с эффектами
         }
         
         public StateResult Tick(DuelContext context)

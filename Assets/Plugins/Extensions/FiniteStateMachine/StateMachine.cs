@@ -38,6 +38,8 @@ namespace Extensions.FiniteStateMachine
         protected IState<TContext> currentState;
         protected Type currentStateType;
 
+        protected bool logsEnabled = false;
+
         protected struct StackEntry
         {
             public Type StateType;
@@ -74,6 +76,7 @@ namespace Extensions.FiniteStateMachine
             if (currentState == null) throw new InvalidOperationException($"Реестр вернул невалидное состояние ({currentStateType.Name})");
 
             currentState.Enter(context);
+            if (logsEnabled) ServiceDebug.Log($"Запуск успешен");
         }
 
         /// <summary>
@@ -84,6 +87,7 @@ namespace Extensions.FiniteStateMachine
         public void Restart<TInitialState>(TContext context)
             where TInitialState : class, IState<TContext>
         {
+            if (logsEnabled) ServiceDebug.Log($"Перезапуск...");
             Stop(context);
             Start<TInitialState>(context);
         }
@@ -155,6 +159,7 @@ namespace Extensions.FiniteStateMachine
             stack.Clear();
             currentState = null;
             currentStateType = null;
+            if (logsEnabled) ServiceDebug.Log($"Остановка успешна");
         }
 
         #endregion
@@ -180,6 +185,7 @@ namespace Extensions.FiniteStateMachine
             currentState.Enter(context);
 
             onStateChanged?.Invoke(previous, nextStateType);
+            if (logsEnabled) ServiceDebug.Log($"Сменено состояние с <b>{previous.Name}</b> на <b>{currentStateType.Name}</b>");
         }
 
         protected void Push(Type nextStateType, TContext context)
@@ -204,6 +210,7 @@ namespace Extensions.FiniteStateMachine
             currentState.Enter(context);
 
             onStateChanged?.Invoke(previous, nextStateType);
+            if (logsEnabled) ServiceDebug.Log($"Сменено (Push) состояние с <b>{previous.Name}</b> на <b>{currentStateType.Name}</b>");
         }
 
         protected void Pop(TContext context)
@@ -233,8 +240,18 @@ namespace Extensions.FiniteStateMachine
             }
 
             onStateChanged?.Invoke(previous, currentStateType);
+            if (logsEnabled) ServiceDebug.Log($"Сменено (Pop) состояние с <b>{previous.Name}</b> на <b>{currentStateType.Name}</b>");
         }
 
+        #endregion
+
+        #region Логи
+
+        /// <summary>
+        /// Включить/отключить логи
+        /// </summary>
+        public void EnableLogs(bool isEnabled = true) => logsEnabled = isEnabled;
+        
         #endregion
     }
 }
