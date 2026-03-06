@@ -60,9 +60,9 @@ namespace Blacklset.ItemGenerators
             
             var allConsumables = gameData.Consumables.Data;
             if (set != null) allConsumables = GetConsumablesBySet(set);
-            newConsumable.Data = (ConsumableData)allConsumables[Random.Range(0, allConsumables.Count)];
+            newConsumable.Consumable = (ConsumableData)allConsumables[Random.Range(0, allConsumables.Count)];
             
-            var availableDiceTypes = newConsumable.Data.AvailableTypes;
+            var availableDiceTypes = newConsumable.Consumable.AvailableTypes;
             newConsumable.Type = availableDiceTypes[Random.Range(0, availableDiceTypes.Count)] as ConsumableType;
             
             return newConsumable;

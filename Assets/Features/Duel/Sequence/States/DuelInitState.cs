@@ -3,7 +3,7 @@ using Blackset.Duel.Participants;
 using Extensions.FiniteStateMachine;
 using Extensions.Helpers;
 
-namespace Features.Duel.Sequence.States
+namespace Blackset.Duel.Sequence.States
 {
     /// <summary>
     /// 1. Состояние инициализации дуэли

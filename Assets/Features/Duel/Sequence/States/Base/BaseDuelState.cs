@@ -1,23 +1,23 @@
 using Blackset.Duel.Modules;
 using Extensions.Log;
 
-namespace Features.Duel.Sequence.States
+namespace Blackset.Duel.Sequence.States
 {
     /// <summary>
     /// Базовое состояние дуэли со входным параметром
     /// </summary>
     public class BaseDuelState
     {
-        private DuelModuleRegistry duelModules;
+        protected DuelModuleRegistry modules;
         
         /// <summary>
         /// Инициализация данных состояния
         /// </summary>
         /// <param name="modules">Реестр модулей обработки данных дуэли</param>
-        public void Initialize(DuelModuleRegistry modules)
+        public void Initialize(DuelModuleRegistry modulesRegistry)
         {
             ServiceGuard.NotNull(modules, nameof(modules));
-            duelModules = modules;
+            modules = modulesRegistry;
         }
     }
 }

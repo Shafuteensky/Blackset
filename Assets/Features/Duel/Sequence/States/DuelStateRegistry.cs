@@ -1,7 +1,7 @@
 using Blackset.Duel.Modules;
 using Blackset.Duel.Sequence;
 
-namespace Features.Duel.Sequence.States
+namespace Blackset.Duel.Sequence.States
 {
     /// <summary>
     /// Реестр состояний дуэли

@@ -87,7 +87,7 @@ namespace Blackset.Shop
             for (int i = 0; i < amount; i++)
             {
                 var newConsumable = itemsGenerator.GetRandomConsumable();
-                inventory.AddItem(newConsumable.Data.Id, newConsumable.Type.Id, 1, false);
+                inventory.AddItem(newConsumable.Consumable.Id, newConsumable.Type.Id, 1, false);
             }
         }
         

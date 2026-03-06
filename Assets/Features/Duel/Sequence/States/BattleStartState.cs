@@ -1,7 +1,7 @@
 using Blackset.Duel.Context;
 using Extensions.FiniteStateMachine;
 
-namespace Features.Duel.Sequence.States
+namespace Blackset.Duel.Sequence.States
 {
     /// <summary>
     /// 5. Старт боя дуэли (повторяемое состояние)

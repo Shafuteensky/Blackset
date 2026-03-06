@@ -45,7 +45,7 @@ namespace Blackset.Duel.Modules
                 GameData.Instance.PlayerDataFacade.DicesInventory.AddItem(dice.Dice.Id, dice.Type.Id);
 
             foreach (ConsumableItemContext consumable in result.Consumables)
-                GameData.Instance.PlayerDataFacade.ConsumablesInventory.AddItem(consumable.Data.Id, consumable.Type.Id);
+                GameData.Instance.PlayerDataFacade.ConsumablesInventory.AddItem(consumable.Consumable.Id, consumable.Type.Id);
         }
     }
 }

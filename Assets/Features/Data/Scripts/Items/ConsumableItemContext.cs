@@ -8,7 +8,7 @@ namespace Blackset.Data
     /// </summary>
     public struct ConsumableItemContext
     {
-        public ConsumableData Data;
+        public ConsumableData Consumable;
         public ConsumableType Type;
         //public BaseItemRarity Rarity;
     }

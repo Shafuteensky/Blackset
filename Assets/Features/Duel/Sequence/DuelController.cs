@@ -3,11 +3,11 @@ using Blackset.Duel.Context;
 using Blackset.Duel.Modules;
 using Blackset.Duel.Requests;
 using Blackset.Duel.Rules;
+using Blackset.Duel.Sequence.States;
 using Blackset.Duel.Snapshots;
 using Blackset.DuelContracts;
 using Blackset.Storms;
 using Extensions.Log;
-using Features.Duel.Sequence.States;
 using UnityEngine;
 
 namespace Blackset.Duel.Sequence
