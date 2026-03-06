@@ -16,7 +16,7 @@ namespace Blackset.Duel.Requests
         /// <summary>
         /// Сид случайной выборки
         /// </summary>
-        public int Seed { get; }
+        public string Seed { get; }
         
         /// <summary>
         /// Пулы предметов
@@ -40,7 +40,7 @@ namespace Blackset.Duel.Requests
         /// <param name="pools">Пулы предметов</param>
         /// <param name="rerollUsed">Используется ли реролл</param>
         /// <param name="rerollType">Какой дайс рероллится</param>
-        public SetGenerationRequest(DuelRulesConfiguration duelRules, int seed, DuelPoolsContext pools,
+        public SetGenerationRequest(DuelRulesConfiguration duelRules, string seed, DuelPoolsContext pools,
             bool rerollUsed = false, DiceType rerollType = default)
         {
             Pools = pools;

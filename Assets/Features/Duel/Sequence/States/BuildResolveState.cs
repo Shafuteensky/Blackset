@@ -1,4 +1,8 @@
 using Blackset.Duel.Context;
+using Blackset.Duel.Modules;
+using Blackset.Duel.Participants;
+using Blackset.Duel.Requests;
+using Blackset.Duel.Sets;
 using Extensions.FiniteStateMachine;
 
 namespace Blackset.Duel.Sequence.States
@@ -13,12 +17,18 @@ namespace Blackset.Duel.Sequence.States
     {
         public void Enter(DuelContext context)
         {
-            
+            foreach (DuelParticipantState participant in context.Participants.Values)
+            {
+                IParticipantSetGenerator setGenerator = modules.Get<IParticipantSetGenerator>();
+                SetGenerationRequest generationRequest = new SetGenerationRequest(context.Rules, context.Seed, participant.Pools);
+                DuelSetsContext setsContext = setGenerator.GenerateSets(generationRequest);
+                participant.InitializeSets(setsContext);
+            }
         }
         
         public StateResult Tick(DuelContext context)
         {
-            return new StateResult();
+            return StateResult.Switch<TargetValueSetupState>();
         }
         
         public void Exit(DuelContext context)

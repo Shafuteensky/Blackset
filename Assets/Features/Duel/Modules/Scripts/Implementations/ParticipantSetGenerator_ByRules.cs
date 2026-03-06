@@ -36,7 +36,7 @@ namespace Blackset.Duel.Modules
         {
             Dictionary<DiceType, List<DiceItemContext>> dicesPool = request.Pools.DicesPool;
             int dicesInSet = request.DuelRules.DicesInSet;
-            System.Random random = new(request.Seed);
+            System.Random random = new(request.Seed.GetHashCode());
             DiceSetPolicy activeDieSetPolicy = request.DuelRules.DiceSetPolicy;
             
             switch (request.DuelRules.DiceSetPolicy)
@@ -61,7 +61,7 @@ namespace Blackset.Duel.Modules
         {
             List<ConsumableItemContext> consumablesPool = request.Pools.ConsumablesPool;
             int consumablesInSet = request.DuelRules.ConsumablesInSet;
-            System.Random random = new(request.Seed);
+            System.Random random = new(request.Seed.GetHashCode());
             ConsumableSetPolicy activeConsumableSetPolicy = request.DuelRules.ConsumableSetPolicy;
             
             switch (activeConsumableSetPolicy)
