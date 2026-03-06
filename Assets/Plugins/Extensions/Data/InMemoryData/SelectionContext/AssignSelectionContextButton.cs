@@ -1,6 +1,6 @@
-using Extensions.Generics;
 using Extensions.Log;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace Extensions.Data.InMemoryData.SelectionContext
 {
@@ -9,21 +9,20 @@ namespace Extensions.Data.InMemoryData.SelectionContext
     /// </summary>
     /// <typeparam name="TData">Тип данных</typeparam>
     [RequireComponent(typeof(ContextIdHolder))]
-    public abstract class AssignSelectionContextButton<TData> : AbstractButton
+    public abstract class AssignSelectionContextButton<TData> : MonoBehaviour, IPointerDownHandler
         where TData : InMemoryDataEntry
     {
         [SerializeField]
         private SelectionContext<TData> selectionContext;
-        
+
         protected ContextIdHolder idHolder;
-        
-        protected override void Awake()
+
+        protected virtual void Awake()
         {
-            base.Awake();
             idHolder = GetComponent<ContextIdHolder>();
         }
-        
-        public override void OnButtonClick()
+
+        public void OnPointerDown(PointerEventData eventData)
         {
             if (selectionContext == null || !idHolder.IsInitialized)
             {

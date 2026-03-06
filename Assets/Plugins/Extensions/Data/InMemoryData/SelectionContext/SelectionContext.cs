@@ -8,7 +8,6 @@ namespace Extensions.Data.InMemoryData.SelectionContext
     /// Контекст выбора InMemoryData-контейнера
     /// </summary>
     /// <typeparam name="TData">Тип хранимых данных</typeparam>
-    // [CreateAssetMenu(fileName = nameof(SelectionContext), menuName = "Extensions/Data/InMemoryData/" + nameof(SelectionContext))]
     public abstract class SelectionContext<TData> : BaseSelectionContext where TData : InMemoryDataEntry
     {
         /// <summary>
@@ -25,34 +24,33 @@ namespace Extensions.Data.InMemoryData.SelectionContext
         /// <summary>
         /// Идентификатор активной выбранной записи контейнера
         /// </summary>
-        public string SelectedId { get; private set; }
+        public string SelectedId => selectedIdStatic;
 
         public override bool HasSelection => IsContainerInited() && !string.IsNullOrEmpty(SelectedId);
-        
+
+        private static string selectedIdStatic;
+
         /// <summary>
         /// Выбрать данные как активные
         /// </summary>
-        /// <param name="container">Конейнер данных</param>
         /// <param name="dataItemId">Идентификатор</param>
         public void Select(string dataItemId)
         {
-            SelectedId = dataItemId;
-
+            selectedIdStatic = dataItemId;
             onSelectionChanged?.Invoke();
         }
-        
+
         /// <summary>
         /// Очистить выбор
         /// </summary>
         public override void Clear()
         {
-            SelectedId = string.Empty;
-
+            selectedIdStatic = string.Empty;
             onSelectionChanged?.Invoke();
         }
 
         #region Получение данных
-        
+
         /// <summary>
         /// Получить активные данные
         /// </summary>
@@ -60,9 +58,8 @@ namespace Extensions.Data.InMemoryData.SelectionContext
         public TData GetSelectedData()
         {
             if (!HasSelection) return null;
-            
-            Container.GetById(SelectedId, out TData dataItem);
 
+            Container.GetById(SelectedId, out TData dataItem);
             return dataItem;
         }
 
@@ -79,7 +76,7 @@ namespace Extensions.Data.InMemoryData.SelectionContext
 
             return Container.GetById(SelectedId, out dataItem);
         }
-        
+
         #endregion
 
         private bool IsContainerInited()

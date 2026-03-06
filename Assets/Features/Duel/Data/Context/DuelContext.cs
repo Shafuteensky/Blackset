@@ -22,18 +22,7 @@ namespace Blackset.Duel.Context
         /// <summary>
         /// Текущий шторм
         /// </summary>
-        public Storm Storm { get; private set; }
-        /// <summary>
-        /// Состояние активности шторма
-        /// </summary>
-        public bool IsStormActive
-        {
-            get
-            {
-                if (Storm == null) return false;
-                return isStormActive;
-            }
-        }
+        public ActiveStorm Storm { get; private set; }
         /// <summary>
         /// Активный контракт
         /// </summary>
@@ -80,19 +69,15 @@ namespace Blackset.Duel.Context
         /// </summary>
         public readonly DuelHistory History;
 
-        private bool isStormActive;
-        
         /// <summary>
         /// Подготовка данных для новой дуэли
         /// </summary>
         /// <param name="contract">Активный контракт</param>
-        public DuelContext(DuelContract contract, bool stormActive, Storm storm)
+        public DuelContext(DuelContract contract, ActiveStorm storm)
         {
             ServiceGuard.NotNull(contract, nameof(contract));
-            ServiceGuard.NotNull(storm, nameof(storm));
             
             Rules = new DuelRulesConfiguration();
-            isStormActive = stormActive;
             Storm = storm;
             Seed = string.Empty;
             
@@ -150,8 +135,8 @@ namespace Blackset.Duel.Context
 
         public void ApplyActiveStorm()
         {
-            if (!IsStormActive) return;
-            Storm.Apply(ref Rules);
+            if (!Storm.IsActive() || !Storm.TryGet(out Storm activeStorm)) return;
+            activeStorm.Apply(ref Rules);
         }
     }
 }

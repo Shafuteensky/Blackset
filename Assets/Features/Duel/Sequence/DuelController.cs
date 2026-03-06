@@ -94,9 +94,7 @@ namespace Blackset.Duel.Sequence
                 return false;
             }
 
-            bool isStormActive = activeStorm.TryGet(out Storm storm);
-            
-            duelContext = new(selectedContract.GetSelectedData(), isStormActive, storm);
+            duelContext = new(selectedContract.GetSelectedData(), activeStorm);
             return true;
         }
         

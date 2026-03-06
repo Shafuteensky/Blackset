@@ -31,7 +31,7 @@ namespace Blackset.Storms
         {
             ServiceGuard.NotNull(activeStorm, nameof(activeStorm));
 
-            if (!activeStorm.HasSavedState()) UpdateStorm();
+            if (!activeStorm.IsActive()) UpdateStorm();
         }
 
         private void Start()

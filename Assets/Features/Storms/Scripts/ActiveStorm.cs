@@ -17,16 +17,15 @@ namespace Blackset.Storms
         /// <summary>
         /// Проверить, есть ли сохранённое состояние шторма (в том числе явное отсутствие)
         /// </summary>
-        public bool HasSavedState() => JsonSaveLoad.Exists(Id);
-
+        public bool IsActive() => JsonSaveLoad.Exists(Id) && !string.IsNullOrEmpty(Value);
+        
         /// <summary>
         /// Получить активный шторм
         /// </summary>
         public bool TryGet(out Storm storm)
         {
             storm = null;
-            if (!HasSavedState()) return false;
-            if (string.IsNullOrEmpty(Value)) return false;
+            if (!IsActive()) return false;
 
             storm = GameData.Instance.GetStorm(Value);
             return storm != null;

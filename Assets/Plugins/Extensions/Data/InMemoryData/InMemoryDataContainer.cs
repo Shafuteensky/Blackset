@@ -86,7 +86,8 @@ namespace Extensions.Data.InMemoryData
                 return false;
             }
 
-            return IndexById.TryGetValue(entryId, out entry);
+            bool isEntryFound= IndexById.TryGetValue(entryId, out entry);
+            return isEntryFound;
         }
 
         /// <summary>

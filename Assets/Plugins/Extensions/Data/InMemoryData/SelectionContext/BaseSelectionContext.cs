@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Extensions.Data.InMemoryData.SelectionContext
 {
-    /// <summary>
+    /// <summary>String
     /// Базовый вспомогательный класс контекста выбора InMemoryData-контейнера
     /// </summary>
     public abstract class BaseSelectionContext : ScriptableObject
