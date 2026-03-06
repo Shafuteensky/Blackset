@@ -1,5 +1,6 @@
 using System;
 using System.Runtime.CompilerServices;
+using UnityEngine;
 
 namespace Extensions.Log
 {
@@ -11,6 +12,7 @@ namespace Extensions.Log
         /// <summary>
         /// Бросает <see cref="ArgumentNullException"/> если значение null
         /// </summary>
+        [HideInCallstack]
         public static void NotNull<T>(
             T value,
             string paramName,
@@ -24,6 +26,7 @@ namespace Extensions.Log
         /// <summary>
         /// Бросает <see cref="ArgumentException"/> если строка null или пустая
         /// </summary>
+        [HideInCallstack]
         public static void NotNullOrEmpty(
             string value,
             string paramName,
@@ -38,6 +41,7 @@ namespace Extensions.Log
         /// Бросает <see cref="InvalidOperationException"/> если условие ложно.
         /// Используется для проверки состояния объекта, а не аргументов.
         /// </summary>
+        [HideInCallstack]
         public static void IsTrue(
             bool condition,
             string message,
@@ -51,6 +55,7 @@ namespace Extensions.Log
         /// <summary>
         /// Бросает <see cref="ArgumentOutOfRangeException"/> если значение вне диапазона [min, max]
         /// </summary>
+        [HideInCallstack]
         public static void InRange(
             float value,
             float min,
@@ -63,6 +68,7 @@ namespace Extensions.Log
             Throw(new ArgumentOutOfRangeException(paramName, value, $"'{paramName}' = {value} вне диапазона [{min}, {max}]."), filePath, memberName);
         }
 
+        [HideInCallstack]
         private static void Throw(Exception exception, string filePath, string memberName)
         {
             string className = System.IO.Path.GetFileNameWithoutExtension(filePath);

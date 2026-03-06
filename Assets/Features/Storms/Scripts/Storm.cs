@@ -8,7 +8,7 @@ namespace Blackset.Storms
     /// Шторм — модификатор правил конфигурации правил дуэли 
     /// </summary>
     [CreateAssetMenu(
-        menuName = "Blackset/Duel/" + nameof(Storm),
+        menuName = "Blackset/Storm/" + nameof(Storm),
         fileName = nameof(Storm))]
     public sealed class Storm : BaseData, IDuelRulesModifier
     {
@@ -60,9 +60,9 @@ namespace Blackset.Storms
         /// <param name="config">Конфигурация правил для обновления</param>
         public void Apply(ref DuelRulesConfiguration config)
         {
-            maxRerolls.Apply(ref config.MaxRerolls);
             dicesInSet.Apply(ref config.DicesInSet);
             consumablesInSet.Apply(ref config.ConsumablesInSet);
+            dicesSetPolicy.Apply(ref config.DiceSetPolicy);
             consumablesSetPolicy.Apply(ref config.ConsumableSetPolicy);
             maxRerolls.Apply(ref config.MaxRerolls);
             duelWinPolicy.Apply(ref config.DuelWinPolicy);

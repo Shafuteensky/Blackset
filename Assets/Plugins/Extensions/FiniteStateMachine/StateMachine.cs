@@ -103,10 +103,7 @@ namespace Extensions.FiniteStateMachine
                 return;
             }
 
-            if (currentState == null)
-            {
-                return;
-            }
+            if (currentState == null) return;
 
             StateResult result = currentState.Tick(context);
 

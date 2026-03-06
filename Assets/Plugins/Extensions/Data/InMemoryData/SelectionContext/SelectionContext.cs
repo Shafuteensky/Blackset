@@ -59,7 +59,7 @@ namespace Extensions.Data.InMemoryData.SelectionContext
         /// <returns>Выбранные контекстом данные</returns>
         public TData GetSelectedData()
         {
-            if (!HasSelection || !IsContainerInited()) return null;
+            if (!HasSelection) return null;
             
             Container.GetById(SelectedId, out TData dataItem);
 
