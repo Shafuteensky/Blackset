@@ -30,7 +30,7 @@ namespace Blackset.Duel.Modules
                 // Бросок стандартного набора дайсов
                 case TargetValuePolicy.RandomSet:
                 {
-                    Dictionary<DiceType, int> setRolls = ThrowSet(request.Seed);
+                    Dictionary<DiceType, int> setRolls = ThrowSet(request.Seed.GetHashCode());
                     int newValue = GetValueFromSet(setRolls);
                     targetValue.SetTargetValue(newValue, false, setRolls);
                     break;
@@ -40,7 +40,7 @@ namespace Blackset.Duel.Modules
                 case TargetValuePolicy.RandomSetByDicesInSet:
                 {
                     int dicesToRoll = request.DuelRules.MaxThrowsPerFight;
-                    Dictionary<DiceType, int> setRolls = ThrowSet(request.Seed, dicesToRoll);
+                    Dictionary<DiceType, int> setRolls = ThrowSet(request.Seed.GetHashCode(), dicesToRoll);
                     int newValue = GetValueFromSet(setRolls);
                     targetValue.SetTargetValue(newValue, false, setRolls);
                     break;

@@ -10,7 +10,7 @@ namespace Blackset.Duel.Requests
         /// <summary>
         /// Сид случайной генерации
         /// </summary>
-        public int Seed { get; }
+        public string Seed { get; }
         /// <summary>
         /// Правила дуэли
         /// </summary>
@@ -26,7 +26,7 @@ namespace Blackset.Duel.Requests
         /// <param name="seed">Сид случайной генерации</param>
         /// <param name="duelRules">Правила дуэли</param>
         /// <param name="duelMode">Режим дуэли</param>
-        public TargetValueRequest(int seed, DuelRulesConfiguration duelRules, DuelMode duelMode)
+        public TargetValueRequest(string seed, DuelRulesConfiguration duelRules, DuelMode duelMode)
         {
             Seed = seed;
             DuelRules = duelRules;

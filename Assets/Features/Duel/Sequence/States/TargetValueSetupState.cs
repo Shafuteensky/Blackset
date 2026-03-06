@@ -1,4 +1,7 @@
 using Blackset.Duel.Context;
+using Blackset.Duel.Modules;
+using Blackset.Duel.Requests;
+using Blackset.Duel.TargetValue;
 using Extensions.FiniteStateMachine;
 
 namespace Blackset.Duel.Sequence.States
@@ -14,7 +17,10 @@ namespace Blackset.Duel.Sequence.States
     {
         public void Enter(DuelContext context)
         {
-            
+            ITargetValueGenerator tvGenerator = modules.Get<ITargetValueGenerator>();
+            TargetValueRequest request = new TargetValueRequest(context.Seed, context.Rules, context.Contract.Mode);
+            TargetValueContext tvContext = tvGenerator.Generate(request);
+            context.TargetValue = tvContext;
         }
         
         public StateResult Tick(DuelContext context)

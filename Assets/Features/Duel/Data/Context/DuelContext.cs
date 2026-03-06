@@ -58,7 +58,7 @@ namespace Blackset.Duel.Context
         /// <summary>
         /// Денные о целевом значении
         /// </summary>
-        public readonly TargetValueContext TargetValue = new();
+        public TargetValueContext TargetValue = new();
         /// <summary>
         /// Данные о прогрессе дуэли
         /// </summary>
