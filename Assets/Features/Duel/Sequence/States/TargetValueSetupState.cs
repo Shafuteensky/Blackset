@@ -4,8 +4,12 @@ using Extensions.FiniteStateMachine;
 namespace Features.Duel.Sequence.States
 {
     /// <summary>
-    /// 
+    /// 4. Определение цели битв дуэли
     /// </summary>
+    /// <remarks>
+    /// - Определяется целевое значение
+    /// - Публикуются условия боя
+    /// </remarks>
     public class TargetValueSetupState : BaseDuelState, IState<DuelContext>
     {
         public void Enter(DuelContext context)

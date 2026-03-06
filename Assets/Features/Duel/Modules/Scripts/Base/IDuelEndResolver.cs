@@ -1,7 +1,7 @@
 using Blackset.Duel.Context;
 using Features.Duel.Context;
 
-namespace Blacklset.Duel.Modules
+namespace Blackset.Duel.Modules
 {
     /// <summary>
     /// Резолвер окончания дуэли

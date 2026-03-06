@@ -1,4 +1,3 @@
-using System;
 using System.Threading;
 using Blackset.DecisionInput;
 using Blackset.Duel.Context;
@@ -7,7 +6,7 @@ using Cysharp.Threading.Tasks;
 using Extensions.Log;
 using UnityEngine;
 
-namespace Blacklset.Duel.Modules
+namespace Blackset.Duel.Modules
 {
     /// <summary>
     /// Получение намерений игрока через ввод с UI с ожиданием
@@ -17,10 +16,18 @@ namespace Blacklset.Duel.Modules
         menuName = "Blackset/Duel/Modules/" + nameof(PlayerDecisionSource_Input))]
     public class PlayerDecisionSource_Input : BaseDuelModule, IPlayerDecisionSource
     {
+        private DuelInputPresenter presenter;
+
+        public void Initialize(DuelInputPresenter newPresenter)
+        {
+            presenter = newPresenter;
+            isInitialized = true;
+        }
+        
         public UniTask<string> GetDeclaration(DuelContext context, CancellationToken ct)
         {
             ServiceGuard.NotNull(context, nameof(context));
-            DuelInputPresenter presenter = ResolvePresenter(context);
+            ServiceGuard.NotNull(presenter, nameof(presenter));
 
             var tcs = new UniTaskCompletionSource<string>();
 
@@ -44,7 +51,7 @@ namespace Blacklset.Duel.Modules
         public UniTask<TurnIntent> GetTurnIntent(DuelContext context, CancellationToken ct)
         {
             ServiceGuard.NotNull(context, nameof(context));
-            DuelInputPresenter presenter = ResolvePresenter(context);
+            ServiceGuard.NotNull(presenter, nameof(presenter));
 
             var tcs = new UniTaskCompletionSource<TurnIntent>();
 
@@ -62,18 +69,6 @@ namespace Blacklset.Duel.Modules
             });
 
             return tcs.Task;
-        }
-
-        private DuelInputPresenter ResolvePresenter(DuelContext context)
-        {
-            if (context.InputPresenter == null)
-            {
-                throw new NullReferenceException(
-                    $"{nameof(DuelContext)}.{nameof(DuelContext.InputPresenter)} is null. " +
-                    $"Assign presenter before requesting input.");
-            }
-
-            return context.InputPresenter;
         }
     }
 }

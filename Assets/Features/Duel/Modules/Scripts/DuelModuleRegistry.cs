@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using Extensions.Log;
-using Blacklset.Duel.Modules;
 using UnityEngine;
 
 namespace Blackset.Duel.Modules

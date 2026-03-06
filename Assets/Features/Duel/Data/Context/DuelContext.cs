@@ -1,13 +1,10 @@
 using System.Collections.Generic;
-using Blackset.Data;
-using Blackset.DecisionInput;
 using Blackset.Duel.History;
 using Blackset.Duel.Participants;
-using Blackset.Duel.Pools;
 using Blackset.Duel.Rules;
 using Blackset.Duel.TargetValue;
 using Blackset.DuelContracts;
-using Blackset.Opponents;
+using Blackset.Storms;
 using Extensions.Helpers;
 using Extensions.Log;
 
@@ -19,26 +16,38 @@ namespace Blackset.Duel.Context
     public class DuelContext
     {
         /// <summary>
-        /// Контроллер показа UI элементов
+        /// Правила дуэли
         /// </summary>
-        public readonly DuelInputPresenter InputPresenter;
+        public DuelRulesConfiguration Rules;
+        /// <summary>
+        /// Текущий шторм
+        /// </summary>
+        public Storm Storm { get; private set; }
+        /// <summary>
+        /// Состояние активности шторма
+        /// </summary>
+        public bool IsStormActive
+        {
+            get
+            {
+                if (Storm == null) return false;
+                return isStormActive;
+            }
+        }
+        /// <summary>
+        /// Активный контракт
+        /// </summary>
+        public DuelContract Contract { get; private set; }
         
+        // TODO Состояния активных эффектов
         /// <summary>
         /// Состояния активных эффектов
         /// </summary>
         // public EffectsStateContext effectsState;
         /// <summary>
-        /// Правила дуэли
-        /// </summary>
-        public DuelRulesConfiguration Rules;
-        /// <summary>
         /// Сид дуэли
         /// </summary>
         public string Seed;
-        /// <summary>
-        /// Активный контракт
-        /// </summary>
-        public readonly DuelContract Contract;
 
         /// <summary>
         /// Участники <идентификатор, данные>
@@ -47,7 +56,7 @@ namespace Blackset.Duel.Context
         /// <summary>
         /// Знания об участниках дуэли <идентификатор, знания>
         /// </summary>
-        public readonly Dictionary<string, KnowledgeState> PlayerKnowledge = new();
+        public readonly Dictionary<string, KnowledgeState> Knowledge = new();
         /// <summary>
         /// Идентификатор игрока
         /// </summary>
@@ -71,25 +80,27 @@ namespace Blackset.Duel.Context
         /// </summary>
         public readonly DuelHistory History;
 
+        private bool isStormActive;
+        
         /// <summary>
         /// Подготовка данных для новой дуэли
         /// </summary>
         /// <param name="contract">Активный контракт</param>
-        public DuelContext(DuelContract contract, DuelInputPresenter input)
+        public DuelContext(DuelContract contract, bool stormActive, Storm storm)
         {
-            Rules = new DuelRulesConfiguration(); // TODO шторма где применять?
-            Seed = IdGenerator.NewGuid();
+            ServiceGuard.NotNull(contract, nameof(contract));
+            ServiceGuard.NotNull(storm, nameof(storm));
+            
+            Rules = new DuelRulesConfiguration();
+            isStormActive = stormActive;
+            Storm = storm;
+            Seed = string.Empty;
             
             TargetValue = new TargetValueContext();
             Progress = new DuelProgressContext();
             History = new DuelHistory();
                 
-            InputPresenter = input;
-            
-            // Регистрация участников
             Contract = contract;
-            //RegisterBot(contract.Opponent.GetDicesPool(), contract.Opponent.GetConsumablesPool(), contract.Opponent);
-            // TODO на каком этапе регистрировать игрока?
         }
 
         #region Регистрация участников дуэли
@@ -100,9 +111,9 @@ namespace Blackset.Duel.Context
         /// <param name="dices">Дайсы в пуле участника</param>
         /// <param name="consumables">Расходники в пуле участника</param>
         /// <returns>Идентификатор зарегестрированного участника</returns>
-        public string RegisterPlayer(List<DiceItemContext> dices, List<ConsumableItemContext> consumables)
+        public string RegisterPlayer()
         {
-            PlayerId = RegisterParticipant(true, dices, consumables);
+            PlayerId = RegisterParticipant(true);
             return PlayerId;
         }
 
@@ -112,38 +123,35 @@ namespace Blackset.Duel.Context
         /// <param name="dices">Дайсы в пуле участника</param>
         /// <param name="consumables">Расходники в пуле участника</param>
         /// <returns>Идентификатор зарегестрированного участника</returns>
-        public string RegisterBot(List<DiceItemContext> dices, List<ConsumableItemContext> consumables, OpponentData botData)
+        public string RegisterBot(DuelContract contract)
         {
-            OpponentId = RegisterParticipant(false, dices, consumables, botData);
+            OpponentId = RegisterParticipant(false, contract);
             return OpponentId;
         }
         
-        private string RegisterParticipant(bool isPlayer, List<DiceItemContext> dices, List<ConsumableItemContext> consumables, OpponentData botData = null)
+        private string RegisterParticipant(bool isPlayer, DuelContract contract = null)
         {
-            ServiceGuard.NotNull(dices, nameof(dices));
-            ServiceGuard.NotNull(consumables, nameof(consumables));
-            ServiceGuard.IsTrue(dices.Count > 0, "Список дайсов не должен быть пустым");
-            ServiceGuard.IsTrue(consumables.Count > 0, "Список расходников не должен быть пустым");
-
             string newParticipantId;
             if (!isPlayer)
             {
-                ServiceGuard.NotNull(botData, nameof(botData));
-                newParticipantId = botData.Id;
+                ServiceGuard.NotNull(contract, nameof(contract));
+                newParticipantId = contract.OpponentId;
             }
             else
                 newParticipantId = IdGenerator.NewWithPrefix("Player");
             
-            DuelPoolsContext itemPools = new DuelPoolsContext(dices, consumables);
-            DuelParticipantState participantState = new(newParticipantId, isPlayer, itemPools);
-            KnowledgeState participantKnowledgeState = new();
-    
+            DuelParticipantState participantState = new(newParticipantId, isPlayer);
             Participants.Add(newParticipantId, participantState);
-            PlayerKnowledge.Add(newParticipantId, participantKnowledgeState);
     
             return newParticipantId;
         }
         
         #endregion
+
+        public void ApplyActiveStorm()
+        {
+            if (!IsStormActive) return;
+            Storm.Apply(ref Rules);
+        }
     }
 }

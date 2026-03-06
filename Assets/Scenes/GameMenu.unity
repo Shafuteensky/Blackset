@@ -619,6 +619,55 @@ Transform:
   m_Children: []
   m_Father: {fileID: 680425935}
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
+--- !u!1 &113410037
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 113410038}
+  - component: {fileID: 113410039}
+  m_Layer: 0
+  m_Name: StormController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &113410038
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 113410037}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1936877674}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &113410039
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 113410037}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c9e87cabce3e4c54843f3179f49beba1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Blackset.Storms.StormController
+  saveKey: StormController
+  playerData: {fileID: 11400000, guid: 2c23989d68545684e9ab72265b43e0bc, type: 2}
+  stormSaveKey: ActiveStorm
+  stormChance: 0.5
+  activeStorm: {fileID: 11400000, guid: 0772085f33c31274f95bac69b5e2deba, type: 2}
 --- !u!1 &154413058
 GameObject:
   m_ObjectHideFlags: 0
@@ -2751,9 +2800,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9ec933f9c59443db3dd6f6d3ab70f1c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Features.Shop.ShopController
-  identifier: {fileID: 11400000, guid: 9a367d35845259046b1ec5acbdf090ac, type: 2}
+  saveKey: ShopListController
   playerData: {fileID: 11400000, guid: 2c23989d68545684e9ab72265b43e0bc, type: 2}
-  gameData: {fileID: 11400000, guid: 601338559ca9def4c9bb4a1b24686c63, type: 2}
   dicesToSell: 2
   consumablesToSell: 2
   dicesPacksToSell: 2
@@ -4880,10 +4928,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5be8f83d30b64e82af7a06c66c9a54ed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Blackset.Opponents.ContractListController
-  identifier: {fileID: 11400000, guid: c9720e780706db14a81e0bec9519509f, type: 2}
+  saveKey: ContractsListController
   playerData: {fileID: 11400000, guid: 2c23989d68545684e9ab72265b43e0bc, type: 2}
   contractList: {fileID: 11400000, guid: 2701bc2e283ae024f9feadaf1bba8a0d, type: 2}
-  gameDataRegistries: {fileID: 11400000, guid: 601338559ca9def4c9bb4a1b24686c63, type: 2}
   contractsToGenerate: 3
 --- !u!1 &1350734916
 GameObject:
@@ -5435,7 +5482,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 149cb5d951d3488492e8acbcb6f21a65, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Blackset.Player.PlayerDataTest
-  gameDataRegistry: {fileID: 11400000, guid: 601338559ca9def4c9bb4a1b24686c63, type: 2}
   playerDataFacade: {fileID: 11400000, guid: 2c23989d68545684e9ab72265b43e0bc, type: 2}
   money: 1
 --- !u!1001 &1525455325
@@ -6741,6 +6787,7 @@ Transform:
   - {fileID: 600649234}
   - {fileID: 956555615}
   - {fileID: 2136209336}
+  - {fileID: 113410038}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1959217870

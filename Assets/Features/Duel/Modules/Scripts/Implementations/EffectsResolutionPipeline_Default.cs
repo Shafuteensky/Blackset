@@ -1,7 +1,7 @@
 using Blackset.Duel.Snapshots;
 using UnityEngine;
 
-namespace Blacklset.Duel.Modules
+namespace Blackset.Duel.Modules
 {
     /// <summary>
     /// Стандартный резолвер эффектов

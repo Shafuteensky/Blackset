@@ -21,6 +21,10 @@ namespace Blackset.Duel.Participants
         /// </summary>
         public bool IsPlayer { get; }
         /// <summary>
+        /// Состояние готовности пулов
+        /// </summary>
+        public bool IsPoolsInited => Pools != null;
+        /// <summary>
         /// Состояние готовности сборок
         /// </summary>
         public bool IsSetsInited => Sets != null;
@@ -59,12 +63,11 @@ namespace Blackset.Duel.Participants
         /// <param name="isPlayer">Является ли игроком</param>
         /// <param name="pools">Пулы дайсов и расходников</param>
         /// <param name="sets">Сборки дайсов и расходников</param>
-        public DuelParticipantState(string participantId, bool isPlayer, DuelPoolsContext pools)
+        public DuelParticipantState(string participantId, bool isPlayer)
         {
             ParticipantId = participantId;
             IsPlayer = isPlayer;
             
-            Pools = pools;
             Sets = null;
             
             FightsWon = 0;
@@ -76,6 +79,16 @@ namespace Blackset.Duel.Participants
         }
 
         #region Инициализация данных
+        
+        /// <summary>
+        /// Инициализация пулов
+        /// </summary>
+        /// <param name="sets">Сборки дайсов и расходников</param>
+        public void InitializePools(DuelPoolsContext pools)
+        {
+            if (IsPoolsInited) return;
+            Pools = pools;
+        }
         
         /// <summary>
         /// Инициализация сборок

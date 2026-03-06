@@ -5,6 +5,7 @@ using Blackset.Duel.Requests;
 using Blackset.Duel.Rules;
 using Blackset.Duel.Snapshots;
 using Blackset.DuelContracts;
+using Blackset.Storms;
 using Extensions.Log;
 using Features.Duel.Sequence.States;
 using UnityEngine;
@@ -16,13 +17,17 @@ namespace Blackset.Duel.Sequence
     /// </summary>
     public sealed class DuelController : MonoBehaviour
     {
-        [Header("Входные данные"), Space]
+        [Header("Модули"), Space]
         [SerializeField]
         private DuelModuleRegistry modules;
         [SerializeField]
         private DuelInputPresenter inputPresenter;
+        
+        [Header("Входные данные"), Space]
         [SerializeField]
         private SelectedContract selectedContract;
+        [SerializeField]
+        private ActiveStorm activeStorm;
         
         private DuelRulesConfiguration rules;
         private DuelStateMachine stateMachine;
@@ -31,10 +36,19 @@ namespace Blackset.Duel.Sequence
 
         private void Awake()
         {
+            ServiceGuard.NotNull(modules, nameof(modules));
+            ServiceGuard.NotNull(selectedContract, nameof(selectedContract));
+            
             DuelStartRequest request = new DuelStartRequest(selectedContract.GetSelectedData());
             StartDuel(request);
         }
 
+        private void Update()
+        {
+            stateMachine?.Tick(context);
+        }
+
+        // TODO Публикация событий состояний машины
         /// <summary>
         /// Публикация событий состояний машины
         /// </summary>
@@ -50,7 +64,8 @@ namespace Blackset.Duel.Sequence
         /// <param name="request">Запрос начала дуэли</param>
         public void StartDuel(DuelStartRequest request)
         {
-            InitializeSequence();
+            if (!TryInitializeContext(out context)) return;
+            InitializeSequence(context);
             stateMachine.Start<DuelInitState>(context);
         }
 
@@ -65,15 +80,31 @@ namespace Blackset.Duel.Sequence
         #endregion
 
         #region Инициализация
+
+        private bool TryInitializeContext(out DuelContext duelContext)
+        {
+            ServiceGuard.NotNull(selectedContract, nameof(selectedContract));
+            ServiceGuard.NotNull(activeStorm, nameof(activeStorm));
+            duelContext = null;
+            
+            DuelContract activeContract = selectedContract.GetSelectedData();
+            if (activeContract == null)
+            {
+                ServiceDebug.LogError("Активный контракт невалиден, дуэль не начата");
+                return false;
+            }
+
+            bool isStormActive = activeStorm.TryGet(out Storm storm);
+            
+            duelContext = new(selectedContract.GetSelectedData(), isStormActive, storm);
+            return true;
+        }
         
-        private void InitializeSequence()
+        private void InitializeSequence(DuelContext context)
         {
             DuelStateRegistry<DuelContext> duelStateRegistry = InitializeStateRegistry();
             stateMachine = new DuelStateMachine(duelStateRegistry);
 
-            ServiceGuard.NotNull(inputPresenter, nameof(inputPresenter));
-            ServiceGuard.NotNull(selectedContract, nameof(selectedContract));
-            context = new DuelContext(selectedContract.GetSelectedData(), inputPresenter);
             commiter = new SnapshotCommiter(context);
         }
 
@@ -91,6 +122,7 @@ namespace Blackset.Duel.Sequence
             duelStateRegistry.Add(new TargetValueSetupState());
             duelStateRegistry.Add(new BattleStartState());
             
+            // ServiceGuard.NotNull(inputPresenter, nameof(inputPresenter));
             duelStateRegistry.Add(new RollPlanningState());
             duelStateRegistry.Add(new RollResolveState());
             

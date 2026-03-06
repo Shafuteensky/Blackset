@@ -1,7 +1,7 @@
 using Blackset.Duel.Context;
 using Features.Duel.Data.FightEnd;
 
-namespace Blacklset.Duel.Modules
+namespace Blackset.Duel.Modules
 {
     /// <summary>
     /// Резолвер окончания боя

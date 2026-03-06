@@ -4,8 +4,11 @@ using Extensions.FiniteStateMachine;
 namespace Features.Duel.Sequence.States
 {
     /// <summary>
-    /// 
+    /// 3. Фиксация сборок участников
     /// </summary>
+    /// <remarks>
+    /// - Генерируются сборки участников согласно правилам
+    /// </remarks>
     public class BuildResolveState : BaseDuelState, IState<DuelContext>
     {
         public void Enter(DuelContext context)

@@ -1,6 +1,6 @@
 using Blackset.Duel.Snapshots;
 
-namespace Blacklset.Duel.Modules
+namespace Blackset.Duel.Modules
 {
     /// <summary>
     /// Пайплайн применения эффектов дайсов и расходников

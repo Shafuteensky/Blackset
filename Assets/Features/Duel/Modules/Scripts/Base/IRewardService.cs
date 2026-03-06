@@ -1,6 +1,6 @@
 using Blackset.Duel.Requests;
 
-namespace Blacklset.Duel.Modules
+namespace Blackset.Duel.Modules
 {
     /// <summary>
     /// Сервис поулчения игроком награды за дуэль

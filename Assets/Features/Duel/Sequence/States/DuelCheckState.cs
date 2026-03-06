@@ -4,8 +4,12 @@ using Extensions.FiniteStateMachine;
 namespace Features.Duel.Sequence.States
 {
     /// <summary>
-    /// 
+    /// 10. Проверка завершения дуэли (повторяемое состояние)
     /// </summary>
+    /// <remarks>
+    /// - Завершенеи дуэли если есть победивший по правилам
+    /// - Начало нового боя если дуэль не завершена
+    /// </remarks>
     public class DuelCheckState : BaseDuelState, IState<DuelContext>
     {
         public void Enter(DuelContext context)

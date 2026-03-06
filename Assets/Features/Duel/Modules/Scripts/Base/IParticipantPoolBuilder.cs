@@ -1,7 +1,7 @@
 using Blackset.Duel.Pools;
 using Blackset.Duel.Requests;
 
-namespace Blacklset.Duel.Modules
+namespace Blackset.Duel.Modules
 {
     /// <summary>
     /// Билдер пулов участников

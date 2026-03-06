@@ -117,7 +117,7 @@ namespace Blackset.Data.Registries
         public TData GetById<TData>(BaseDataRegistry<TData> registry, string id)
             where TData : BaseData
         {
-            TryGetById(registry, id, out TData result);
+            if (!TryGetById(registry, id, out TData result)) ServiceDebug.LogError($"Данные с id «{id}» не найдены в реестре {registry.name}");
             return result;
         }
 

@@ -3,7 +3,7 @@ using Blackset.Duel.Context;
 using Blackset.Duel.TurnIntents;
 using Cysharp.Threading.Tasks;
 
-namespace Blacklset.Duel.Modules
+namespace Blackset.Duel.Modules
 {
     /// <summary>
     /// Источник решений игрока

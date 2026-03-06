@@ -1,7 +1,7 @@
 using Blackset.Duel.Requests;
 using Blackset.Duel.Sets;
 
-namespace Blacklset.Duel.Modules
+namespace Blackset.Duel.Modules
 {
     /// <summary>
     /// Генератор сборок участника дуэли

@@ -1,7 +1,7 @@
 using Blackset.Duel.Requests;
 using Blackset.Duel.TargetValue;
 
-namespace Blacklset.Duel.Modules
+namespace Blackset.Duel.Modules
 {
     /// <summary>
     /// Генератор целевого значения

@@ -1,4 +1,4 @@
-namespace Blacklset.Duel.Modules
+namespace Blackset.Duel.Modules
 {
     /// <summary>
     /// Базовый интерфейс модуля реестра обработчиков данных дуэли

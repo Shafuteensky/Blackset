@@ -109,7 +109,7 @@ namespace Blackset.Duel.Snapshots
         {
             foreach (KeyValuePair<string, KnowledgeState> pair in snapshot.PlayerKnowledge)
             {
-                if (!context.PlayerKnowledge.TryGetValue(pair.Key, out KnowledgeState knowledge))
+                if (!context.Knowledge.TryGetValue(pair.Key, out KnowledgeState knowledge))
                 {
                     ServiceDebug.LogError($"KnowledgeState для '{pair.Key}' не найден, пропущен");
                     continue;

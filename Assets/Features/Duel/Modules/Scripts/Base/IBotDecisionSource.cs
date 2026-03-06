@@ -1,7 +1,7 @@
 using Blackset.Duel.Context;
 using Blackset.Duel.TurnIntents;
 
-namespace Blacklset.Duel.Modules
+namespace Blackset.Duel.Modules
 {
     /// <summary>
     /// Источник построения намерений бота

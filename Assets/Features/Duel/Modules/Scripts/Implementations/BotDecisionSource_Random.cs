@@ -8,7 +8,7 @@ using Blackset.Opponents;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-namespace Blacklset.Duel.Modules
+namespace Blackset.Duel.Modules
 {
     /// <summary>
     /// Случайные решения бота (Источник построения намерений бота)

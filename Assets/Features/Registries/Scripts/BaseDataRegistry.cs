@@ -52,6 +52,20 @@ namespace Blackset.Data.Registries
             return null;
         }
         
+        /// <summary>
+        /// Получить случайную запись из реестра
+        /// </summary>
+        public virtual T GetRandom()
+        {
+            if (data == null || data.Count == 0)
+            {
+                ServiceDebug.LogError($"Реестр {name} пуст, случайная запись не получена");
+                return null;
+            }
+
+            return data[UnityEngine.Random.Range(0, data.Count)];
+        }
+        
         protected override void OnValidate()
         {
             base.OnValidate();

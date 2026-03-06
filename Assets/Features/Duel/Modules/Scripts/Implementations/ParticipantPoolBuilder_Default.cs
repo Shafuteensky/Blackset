@@ -2,7 +2,7 @@ using Blackset.Duel.Pools;
 using Blackset.Duel.Requests;
 using UnityEngine;
 
-namespace Blacklset.Duel.Modules
+namespace Blackset.Duel.Modules
 {
     /// <summary>
     /// Стандартный билдер пулов участников дуэли
