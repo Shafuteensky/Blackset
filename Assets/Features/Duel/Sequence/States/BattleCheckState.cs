@@ -9,6 +9,7 @@ namespace Blackset.Duel.Sequence.States
     /// <remarks>
     /// - Обновление данных о потенциальных победителе и проигравшем
     /// - Завершение боя при окончании боя по правилам или авто-победе/поражении
+    /// - Новый ход при продолжении боя
     /// </remarks>
     public class BattleCheckState : BaseDuelState, IState<DuelContext>
     {
@@ -19,7 +20,10 @@ namespace Blackset.Duel.Sequence.States
         
         public StateResult Tick(DuelContext context)
         {
-            return new StateResult();
+            if (true)
+                return StateResult.Switch<DuelCheckState>();
+            else
+                return StateResult.Switch<RollPlanningState>();
         }
         
         public void Exit(DuelContext context)

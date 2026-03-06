@@ -19,7 +19,7 @@ namespace Blackset.Duel.Sequence.States
         
         public StateResult Tick(DuelContext context)
         {
-            return new StateResult();
+            return StateResult.Switch<BattleStartState>();
         }
         
         public void Exit(DuelContext context)

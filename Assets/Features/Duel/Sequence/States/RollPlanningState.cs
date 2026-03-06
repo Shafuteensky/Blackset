@@ -20,7 +20,7 @@ namespace Blackset.Duel.Sequence.States
         
         public StateResult Tick(DuelContext context)
         {
-            return new StateResult();
+            return StateResult.Switch<RollResolveState>();
         }
         
         public void Exit(DuelContext context)
