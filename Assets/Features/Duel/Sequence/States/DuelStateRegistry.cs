@@ -1,6 +1,5 @@
+using Blackset.DecisionInput;
 using Blackset.Duel.Modules;
-using Blackset.Duel.Sequence;
-using UnityEngine;
 
 namespace Blackset.Duel.Sequence.States
 {
@@ -11,18 +10,23 @@ namespace Blackset.Duel.Sequence.States
     public class DuelStateRegistry<TContext> : StateRegistry<TContext>
     {
         private DuelModuleRegistry modules;
+        private DuelInputPresenter presenter;
         
         /// <summary>
         /// Инициализация реестра модулей для состояний
         /// </summary>
         /// <param name="newModules">Реестр модулей</param>
-        public void InitializeModules(DuelModuleRegistry newModules) => modules = newModules;
+        public void InitializeModules(DuelModuleRegistry newModules, DuelInputPresenter inputPresenter)
+        {
+            modules = newModules;
+            presenter = inputPresenter;
+        }
         
         public override void Add<TState>(TState state)
         {
             base.Add(state);
             if (state is BaseDuelState duelState && modules != null) 
-                duelState.Initialize(modules);
+                duelState.Initialize(modules, presenter);
         }
     }
 }

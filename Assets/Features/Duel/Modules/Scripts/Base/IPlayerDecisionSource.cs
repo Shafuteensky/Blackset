@@ -1,4 +1,5 @@
 using System.Threading;
+using Blackset.DecisionInput;
 using Blackset.Duel.Context;
 using Blackset.Duel.Participants;
 using Cysharp.Threading.Tasks;
@@ -30,6 +31,12 @@ namespace Blackset.Duel.Modules
         /// <param name="ct">Токен отмены ожидания</param>
         /// <returns>Состояние намерений бота на ход</returns>
         public UniTask<TurnParticipantState> GetIntentState(DuelContext context, CancellationToken ct);
-       
+
+        /// <summary>
+        /// Инициализация элементов источника
+        /// </summary>
+        /// <param name="newPresenter">UI-презентер</param>
+        public void Initialize(DuelInputPresenter newPresenter);
+
     }
 }

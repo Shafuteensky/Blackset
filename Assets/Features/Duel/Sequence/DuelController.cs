@@ -112,7 +112,7 @@ namespace Blackset.Duel.Sequence
         {
             DuelStateRegistry<DuelContext> duelStateRegistry = new();
             ServiceGuard.NotNull(modules, nameof(modules));
-            duelStateRegistry.InitializeModules(modules);
+            duelStateRegistry.InitializeModules(modules, inputPresenter);
             
             duelStateRegistry.Add(new DuelInitState());
             

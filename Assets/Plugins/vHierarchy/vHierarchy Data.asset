@@ -268,6 +268,7 @@ MonoBehaviour:
         - globalObjectIdString: GlobalObjectId_V1-2-390fefee3cc4eec42a522b61edd78188-1383757599-0
         - globalObjectIdString: GlobalObjectId_V1-2-390fefee3cc4eec42a522b61edd78188-1921198930-0
         - globalObjectIdString: GlobalObjectId_V1-2-390fefee3cc4eec42a522b61edd78188-1312721233-0
+        - globalObjectIdString: GlobalObjectId_V1-2-390fefee3cc4eec42a522b61edd78188-687979681-0
         values:
         - colorIndex: 0
           iconNameOrGuid: StandaloneInputModule Icon
@@ -299,6 +300,10 @@ MonoBehaviour:
           isColorRecursive: 0
         - colorIndex: 0
           iconNameOrGuid: Canvas Icon
+          isIconRecursive: 0
+          isColorRecursive: 0
+        - colorIndex: 0
+          iconNameOrGuid: DebuggerEnabled
           isIconRecursive: 0
           isColorRecursive: 0
     - goDatas_byGlobalId:
