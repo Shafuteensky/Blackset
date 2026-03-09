@@ -1,9 +1,10 @@
+using Blacklset.ItemGenerators;
+using Blackset.Data;
 using Blackset.Data.Registries;
 using Blackset.Duel.Rules;
 using Blackset.Opponents;
 using Extensions.Data.InMemoryData;
 using Extensions.Log;
-using Newtonsoft.Json;
 
 namespace Blackset.DuelContracts
 {
@@ -20,6 +21,10 @@ namespace Blackset.DuelContracts
         /// Награда в валюте
         /// </summary>
         public int MoneyReward { get; private set; }
+        /// <summary>
+        /// Наградной дайс
+        /// </summary>
+        public DiceItemContext DiceReward { get; private set; }
         
         /// <summary>
         /// Режим дуэли
@@ -41,6 +46,8 @@ namespace Blackset.DuelContracts
             OpponentId = opponent.Id;
             int moneyReward = GameData.Instance.RewardConfig.EvaluateMoney(true, opponent);
             MoneyReward = moneyReward;
+
+            DiceReward = new ItemsGenerator().GetRandomDice(); // TODO Параметризированная генерация дайса (от данных оппонента и контракта)
             
             Mode = mode;
         }
