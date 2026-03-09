@@ -38,10 +38,10 @@ namespace Blackset.Duel.Requests
             DicesPool = new Dictionary<DiceType, List<DiceItemContext>>();
             foreach (DiceItemContext dice in dices)
             {
-                if (!DicesPool.TryGetValue(dice.Type, out List<DiceItemContext> list))
+                if (!DicesPool.TryGetValue(dice.GetDiceType(), out List<DiceItemContext> list))
                 {
                     list = new List<DiceItemContext>();
-                    DicesPool[dice.Type] = list;
+                    DicesPool[dice.GetDiceType()] = list;
                 }
                 list.Add(dice);
             }

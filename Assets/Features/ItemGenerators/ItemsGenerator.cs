@@ -39,10 +39,10 @@ namespace Blacklset.ItemGenerators
             
             var allDices = gameData.Dices.Data;
             if (set != null) allDices = GetDicesBySet(set);
-            newDice.Dice = (DiceData)allDices[Random.Range(0, allDices.Count)];
+            newDice.Dice = allDices[Random.Range(0, allDices.Count)].Id;
             
-            var availableDiceTypes = newDice.Dice.AvailableTypes;
-            newDice.Type = availableDiceTypes[Random.Range(0, availableDiceTypes.Count)] as DiceType;
+            var availableDiceTypes = newDice.GetDice().AvailableTypes;
+            newDice.Type = availableDiceTypes[Random.Range(0, availableDiceTypes.Count)].Id;
             
             return newDice;
         }

@@ -19,7 +19,7 @@ namespace Blackset.Duel.Modules
             DuelParticipantState participantState = context.Participants[participantId];
             DiceItemContext diceToRoll = participantState.Sets.DicesSet[diceId];
             
-            int sidesNumber = GameData.Instance.GetDiceType(diceToRoll.Type.Id).SidesNumber;
+            int sidesNumber = GameData.Instance.GetDiceType(diceToRoll.GetDiceType().Id).SidesNumber;
             int rollResult = Random.Range(1, sidesNumber);
             
             return rollResult;

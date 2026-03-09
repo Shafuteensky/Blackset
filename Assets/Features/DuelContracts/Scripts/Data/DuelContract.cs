@@ -30,7 +30,7 @@ namespace Blackset.DuelContracts
         /// Режим дуэли
         /// </summary>
         public DuelMode Mode { get; private set; }
-
+        
         /// <summary>
         /// Новый контракт
         /// </summary>

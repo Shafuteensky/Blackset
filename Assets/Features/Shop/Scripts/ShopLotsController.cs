@@ -76,7 +76,7 @@ namespace Blackset.Shop
             for (int i = 0; i < amount; i++)
             {
                 var newDice = itemsGenerator.GetRandomDice();
-                inventory.AddItem(newDice.Dice.Id, newDice.Type.Id, 1, false);
+                inventory.AddItem(newDice.GetDice().Id, newDice.GetDiceType().Id, 1, false);
             }
         }
 

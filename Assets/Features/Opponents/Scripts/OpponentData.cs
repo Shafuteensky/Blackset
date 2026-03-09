@@ -62,8 +62,8 @@ namespace Blackset.Opponents
                 foreach (DiceData diceInPool in pool.dices)
                 {
                     DiceItemContext diceItem = new DiceItemContext();
-                    diceItem.Dice = diceInPool;
-                    diceItem.Type = diceType;
+                    diceItem.Dice = diceInPool.Id;
+                    diceItem.Type = diceType.Id;
                     dicesInPool.Add(diceItem);
                 }
             }

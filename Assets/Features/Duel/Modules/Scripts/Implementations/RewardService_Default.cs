@@ -26,9 +26,8 @@ namespace Blackset.Duel.Modules
             int earnedCurrency = gameData.RewardConfig.EvaluateMoney(request.IsWin, contractOpponent);
             
             // Предметы
-            // TODO Генерация нагрдного предмета? Случайный набор? Заранее подготовленная награда контракта?
-            List<DiceItemContext> earnedDices = new List<DiceItemContext>(); 
-            List<ConsumableItemContext> earnedConsumables = new List<ConsumableItemContext>();
+            List<DiceItemContext> earnedDices = new List<DiceItemContext> { request.Contract.DiceReward };
+            List<ConsumableItemContext> earnedConsumables = new List<ConsumableItemContext>(); // TODO Расходник в раграду
             
             DuelRewards result = new(earnedExperience, earnedCurrency, earnedDices, earnedConsumables);
             
@@ -42,7 +41,7 @@ namespace Blackset.Duel.Modules
             GameData.Instance.PlayerDataFacade.MetaData.AddMoney(result.CurrencyDelta);
             
             foreach (DiceItemContext dice in result.Dices)
-                GameData.Instance.PlayerDataFacade.DicesInventory.AddItem(dice.Dice.Id, dice.Type.Id);
+                GameData.Instance.PlayerDataFacade.DicesInventory.AddItem(dice.GetDice().Id, dice.GetDiceType().Id);
 
             foreach (ConsumableItemContext consumable in result.Consumables)
                 GameData.Instance.PlayerDataFacade.ConsumablesInventory.AddItem(consumable.Consumable.Id, consumable.Type.Id);

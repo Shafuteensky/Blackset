@@ -1,4 +1,5 @@
 using Blackset.Data.Items.Types;
+using Blackset.Data.Registries;
 
 namespace Blackset.Data
 {
@@ -10,11 +11,15 @@ namespace Blackset.Data
         /// <summary>
         /// Игровые данные особого дайса
         /// </summary>
-        public DiceData Dice;
+        public string Dice;
         /// <summary>
         /// Тип дайса
         /// </summary>
-        public DiceType Type;
+        public string Type;
         // TODO редкость: public BaseItemRarity Rarity;
+        
+        public DiceData GetDice() => GameData.Instance.GetDice(Dice);
+        
+        public DiceType GetDiceType() => GameData.Instance.GetDiceType(Type);
     }
 }

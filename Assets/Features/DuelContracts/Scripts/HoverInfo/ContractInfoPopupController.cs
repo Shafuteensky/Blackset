@@ -34,11 +34,11 @@ namespace Blackset.DuelContracts.HoverInfo
             if (descriptionText != null) descriptionText.text = contracts.GetOpponentData(contractId).DataDescription;
             if (moneyText != null) moneyText.text = contracts.GetById(contractId).MoneyReward.ToString();
             if (dicePanel != null) dicePanel.SetActive(true);
-            if (diceImage != null) diceImage.sprite = contracts.GetById(contractId).DiceReward.Type.Icon;
+            if (diceImage != null) diceImage.sprite = contracts.GetById(contractId).DiceReward.GetDiceType().Icon;
             if (diceText != null) 
             {
                 DiceItemContext dice = contracts.GetById(contractId).DiceReward;
-                diceText.text = $"{dice.Dice.DataName}";
+                diceText.text = $"{dice.GetDice().DataName}";
             }
         }
 

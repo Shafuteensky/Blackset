@@ -20,9 +20,9 @@ namespace Blackset.Inventories.Helpers
             {
                 DiceItemContext context = new();
                 if (gameData.Dices.GetById(cell.ItemId) is not DiceData dice) continue;
-                context.Dice = dice;
+                context.Dice = dice.Id;
                 if (gameData.DiceTypes.GetById(cell.ItemTypeId) is not DiceType type) continue;
-                context.Type = type;
+                context.Type = type.Id;
                 dices.Add(context);
             }
             

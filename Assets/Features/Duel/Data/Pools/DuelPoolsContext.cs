@@ -35,10 +35,10 @@ namespace Blackset.Duel.Pools
 
             foreach (DiceItemContext dice in dicesForPool)
             {
-                if (!dicesPool.TryGetValue(dice.Type, out var list))
+                if (!dicesPool.TryGetValue(dice.GetDiceType(), out var list))
                 {
                     list = new List<DiceItemContext>();
-                    dicesPool[dice.Type] = list;
+                    dicesPool[dice.GetDiceType()] = list;
                 }
 
                 list.Add(dice);

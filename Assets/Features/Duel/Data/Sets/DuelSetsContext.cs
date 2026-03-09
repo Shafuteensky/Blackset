@@ -65,7 +65,7 @@ namespace Blackset.Duel.Sets
         {
             foreach (DiceItemContext dice in dicesSet.Values)
             {
-                if (dice.Type != diceType) continue;
+                if (dice.GetDiceType() != diceType) continue;
                 foundDice = dice;
                 return true;
             }

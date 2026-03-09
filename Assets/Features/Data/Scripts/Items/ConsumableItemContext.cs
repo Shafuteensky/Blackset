@@ -1,4 +1,3 @@
-using Blackset.Data;
 using Blackset.Data.Items.Types;
 
 namespace Blackset.Data
