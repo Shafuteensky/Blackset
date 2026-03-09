@@ -36,5 +36,17 @@ namespace Blackset.Duel.Participants
         /// <param name="dice">Идентификатор дайса</param>
         /// <returns>True, если дайс раскрыт</returns>
         public bool IsDiceRevealed(string dice) => revealedDices.Contains(dice);
+        
+        /// <summary>
+        /// Создание копии
+        /// </summary>
+        /// <returns></returns>
+        public KnowledgeState Clone()
+        {
+            KnowledgeState clone = new KnowledgeState();
+            foreach (string dice in revealedDices)
+                clone.revealedDices.Add(dice);
+            return clone;
+        }
     }
 }

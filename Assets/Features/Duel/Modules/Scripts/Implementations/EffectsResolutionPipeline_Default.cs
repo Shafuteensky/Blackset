@@ -13,7 +13,7 @@ namespace Blackset.Duel.Modules
     {
         public TurnSnapshot Resolve(TurnSnapshot snapshot)
         {
-            TurnSnapshot resolvedSnapshot = new TurnSnapshot();
+            TurnSnapshot resolvedSnapshot = snapshot;
             
             // TODO Завершить по готовности системы эффектов
             

@@ -1,6 +1,7 @@
 using System;
 using Blackset.Duel.Context;
-using Blackset.Duel.TurnIntents;
+using Blackset.Duel.Participants;
+using Blackset.Duel.Targets;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -31,7 +32,7 @@ namespace Blackset.DecisionInput
         private Button passButton;
 
         private string selectedDiceId;
-        private TurnIntent currentIntent;
+        private TurnParticipantState currentIntent;
 
         /// <summary>
         /// Показать панель объявления дайса
@@ -55,7 +56,7 @@ namespace Blackset.DecisionInput
         /// </summary>
         /// <param name="context"></param>
         /// <param name="onConfirm"></param>
-        public void ShowTurnIntentUI(DuelContext context, Action<TurnIntent> onConfirm)
+        public void ShowTurnIntentUI(DuelContext context, Action<TurnParticipantState> onConfirm)
         {
             intentPanel.SetActive(true);
 
@@ -69,10 +70,8 @@ namespace Blackset.DecisionInput
             passButton.onClick.RemoveAllListeners();
             passButton.onClick.AddListener(() =>
             {
-                var passIntent = new TurnIntent
-                {
-                    IsPass = true
-                };
+                var passIntent = new TurnParticipantState();
+                passIntent.ResetForNewTurn();
 
                 onConfirm?.Invoke(passIntent);
                 Hide();
@@ -93,14 +92,12 @@ namespace Blackset.DecisionInput
         public void SelectDice(string diceId)
         {
             selectedDiceId = diceId;
-            currentIntent.ChosenDice = diceId;
+            currentIntent.ChoseDice(diceId);
         }
 
-        public void SelectConsumable(string id, ConsumableTarget target)
+        public void SelectConsumable(string consumableId, ApplyTarget target)
         {
-            currentIntent.ConsumableChosen = true;
-            currentIntent.ChosenConsumable = id;
-            currentIntent.ConsumableTarget = target;
+            currentIntent.ChoseConsumable(consumableId, target);
         }
     }
 }

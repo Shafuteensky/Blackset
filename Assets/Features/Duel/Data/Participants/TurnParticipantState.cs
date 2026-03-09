@@ -1,4 +1,5 @@
 using System;
+using Blackset.Duel.Targets;
 using Extensions.Log;
 
 namespace Blackset.Duel.Participants
@@ -9,10 +10,6 @@ namespace Blackset.Duel.Participants
     public struct TurnParticipantState
     {
         /// <summary>
-        /// Спасовал
-        /// </summary>
-        public bool HasPassed { get; private set; }
-        /// <summary>
         /// Может действовать
         /// </summary>
         public bool CanAct => !HasPassed && !AllActionsDone;
@@ -22,35 +19,45 @@ namespace Blackset.Duel.Participants
         public bool AllActionsDone =>
             !String.IsNullOrEmpty(DeclaredDice)
             && !String.IsNullOrEmpty(ChosenDice)
-            && ConsumableChosen;
+            && IsConsumableChosen;
         
+        /// <summary>
+        /// Спасовал
+        /// </summary>
+        public bool HasPassed { get; private set; }
+        
+        /// <summary>
+        /// Объявлен ли дайс в этот ход
+        /// </summary>
+        public bool IsDiceDeclared { get; private set; }
         /// <summary>
         /// Объявленный в этом ходу дайс
         /// </summary>
         public string DeclaredDice { get; private set; }
+        
         /// <summary>
-        /// Объявлен ли дайс в этот ход
+        /// Использован ли дайс в этот ход
         /// </summary>
-        public bool DiceDeclared { get; private set; }
+        public bool IsDiceChosen { get; private set; }
         /// <summary>
         /// Выбранный для броска в этом ходу дайс
         /// </summary>
         public string ChosenDice { get; private set; }
-        /// <summary>
-        /// Использован ли дайс в этот ход
-        /// </summary>
-        public bool DiceChosen { get; private set; }
         
         /// <summary>
         /// Использован ли расходник в этот ход
         /// </summary>
-        public bool ConsumableChosen { get; private set; }
+        public bool IsConsumableChosen { get; private set; }
         /// <summary>
         /// Выбранный для использования в этом ходу расходник
         /// </summary>
         public string ChosenConsumable { get; private set; }
+        /// <summary>
+        /// Цель применения расходника
+        /// </summary>
+        public ApplyTarget ConsumableTarget { get; private set; }
 
-        #region Сброс данных
+        #region Применение данных
         
         /// <summary>
         /// Сброс данных до изначальных для нового хода (броска дайса)
@@ -60,13 +67,34 @@ namespace Blackset.Duel.Participants
         {
             HasPassed = false;
 
+            IsDiceDeclared = false;
             DeclaredDice = String.Empty;
-            DiceDeclared = false;
+            
+            IsDiceChosen = false;
             ChosenDice = String.Empty;
-            DiceChosen = false;
                 
+            IsConsumableChosen = false;
             ChosenConsumable = String.Empty;
-            ConsumableChosen = false;
+            ConsumableTarget = ApplyTarget.None;
+        }
+        
+        /// <summary>
+        /// Применить намерение на действие в ходе
+        /// </summary>
+        /// <param name="intentState">Состояние намерения</param>
+        public void ApplyState(TurnParticipantState intentState)
+        {
+            HasPassed = intentState.HasPassed;
+            
+            IsDiceDeclared = intentState.IsDiceDeclared;
+            DeclaredDice = intentState.DeclaredDice;
+            
+            IsDiceChosen = intentState.IsDiceChosen;
+            ChosenDice = intentState.ChosenDice;
+            
+            IsConsumableChosen = intentState.IsConsumableChosen;
+            ChosenConsumable = intentState.ChosenConsumable;
+            ConsumableTarget = intentState.ConsumableTarget;
         }
         
         #endregion
@@ -90,7 +118,7 @@ namespace Blackset.Duel.Participants
             ServiceGuard.NotNullOrEmpty(diceId, nameof(diceId));
             
             DeclaredDice = diceId;
-            DiceDeclared = true;
+            IsDiceDeclared = true;
         }
 
         /// <summary>
@@ -102,19 +130,20 @@ namespace Blackset.Duel.Participants
             ServiceGuard.NotNullOrEmpty(diceId, nameof(diceId));
             
             ChosenDice = diceId;
-            DiceChosen = true;
+            IsDiceChosen = true;
         }
 
         /// <summary>
         /// Отметка выбранного расходника
         /// </summary>
         /// <param name="consumableId">Идентификатор расходника</param>
-        public void ChoseConsumable(string consumableId)
+        public void ChoseConsumable(string consumableId, ApplyTarget target = ApplyTarget.Self)
         {
             ServiceGuard.NotNullOrEmpty(consumableId, nameof(consumableId));
             
+            ConsumableTarget = target;
             ChosenConsumable = consumableId;
-            ConsumableChosen = true;
+            IsConsumableChosen = true;
         }
 
         #endregion

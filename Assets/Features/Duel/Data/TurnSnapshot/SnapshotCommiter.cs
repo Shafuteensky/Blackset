@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using Blackset.Duel.Context;
 using Blackset.Duel.History;
 using Blackset.Duel.Participants;
-using Blackset.Duel.TurnIntents;
 using Extensions.Helpers;
 using Extensions.Log;
 
@@ -75,10 +74,10 @@ namespace Blackset.Duel.Snapshots
         // TODO Должен ли отмечать на основе намерений? Или на основе обработанных в FSM фактов (добавить доп. поля в резолвер)?
         private void ApplyUsage(TurnSnapshot snapshot)
         {
-            foreach (KeyValuePair<string, TurnIntent> pair in snapshot.ParticipantIntents)
+            foreach (var pair in snapshot.ParticipantStates)
             {
                 string participantId = pair.Key;
-                TurnIntent intent = pair.Value;
+                TurnParticipantState participantState = pair.Value;
 
                 if (!context.Participants.TryGetValue(participantId, out DuelParticipantState participant))
                 {
@@ -87,18 +86,18 @@ namespace Blackset.Duel.Snapshots
                 }
 
                 // Участник спасовал — ресурсы не тратились
-                if (intent.IsPass)
+                if (participantState.HasPassed)
                     continue;
 
                 FightParticipantState fightState = participant.FightState;
 
                 fightState.MarkThrow();
 
-                if (!string.IsNullOrEmpty(intent.ChosenDice))
-                    fightState.MarkDiceUsed(intent.ChosenDice);
+                if (!string.IsNullOrEmpty(participantState.ChosenDice))
+                    fightState.MarkDiceUsed(participantState.ChosenDice);
 
-                if (intent.ConsumableChosen && !string.IsNullOrEmpty(intent.ChosenConsumable))
-                    fightState.MarkConsumableUsed(intent.ChosenConsumable);
+                if (participantState.IsConsumableChosen && !string.IsNullOrEmpty(participantState.ChosenConsumable))
+                    fightState.MarkConsumableUsed(participantState.ChosenConsumable);
             }
         }
 

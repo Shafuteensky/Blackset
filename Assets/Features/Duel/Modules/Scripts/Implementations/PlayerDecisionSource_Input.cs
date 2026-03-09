@@ -1,7 +1,7 @@
 using System.Threading;
 using Blackset.DecisionInput;
 using Blackset.Duel.Context;
-using Blackset.Duel.TurnIntents;
+using Blackset.Duel.Participants;
 using Cysharp.Threading.Tasks;
 using Extensions.Log;
 using UnityEngine;
@@ -48,12 +48,12 @@ namespace Blackset.Duel.Modules
         }
 
         // TODO Использование в FSM: var intent = await decisionSource.GetTurnIntent(context, ct);
-        public UniTask<TurnIntent> GetTurnIntent(DuelContext context, CancellationToken ct)
+        public UniTask<TurnParticipantState> GetIntentState(DuelContext context, CancellationToken ct)
         {
             ServiceGuard.NotNull(context, nameof(context));
             ServiceGuard.NotNull(presenter, nameof(presenter));
 
-            var tcs = new UniTaskCompletionSource<TurnIntent>();
+            var tcs = new UniTaskCompletionSource<TurnParticipantState>();
 
             var reg = ct.Register(() =>
             {

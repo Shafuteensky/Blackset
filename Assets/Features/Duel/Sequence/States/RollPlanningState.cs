@@ -3,7 +3,6 @@ using System.Threading;
 using Blackset.Duel.Context;
 using Blackset.Duel.Modules;
 using Blackset.Duel.Participants;
-using Blackset.Duel.TurnIntents;
 using Cysharp.Threading.Tasks;
 using Extensions.FiniteStateMachine;
 
@@ -84,15 +83,11 @@ namespace Blackset.Duel.Sequence.States
 
                 // Намерения 
                 
-                TurnIntent playerIntent = await playerDecisionSource.GetTurnIntent(context, cancellationToken);
-                context.Participants[context.PlayerId].FightState.TurnState.ChoseDice(playerIntent.ChosenDice);
-                if (string.IsNullOrEmpty(playerIntent.ChosenConsumable))
-                    context.Participants[context.PlayerId].FightState.TurnState.ChoseConsumable(playerIntent.ChosenConsumable);
+                TurnParticipantState playerIntent = await playerDecisionSource.GetIntentState(context, cancellationToken);
+                context.Participants[context.PlayerId].FightState.TurnState.ApplyState(playerIntent);
 
-                TurnIntent botIntent = botDecisionSource.BuildTurnIntent(context);
-                context.Participants[context.OpponentId].FightState.TurnState.ChoseDice(botIntent.ChosenDice);
-                if (string.IsNullOrEmpty(botIntent.ChosenConsumable))
-                    context.Participants[context.OpponentId].FightState.TurnState.ChoseConsumable(botIntent.ChosenConsumable);
+                TurnParticipantState botIntent = botDecisionSource.BuildIntentState(context);
+                context.Participants[context.OpponentId].FightState.TurnState.ApplyState(botIntent);
 
                 planningCompleted = true;
             }

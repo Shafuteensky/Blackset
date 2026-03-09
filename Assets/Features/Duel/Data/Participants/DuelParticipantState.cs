@@ -15,11 +15,11 @@ namespace Blackset.Duel.Participants
         /// <summary>
         /// Идентификатор участника
         /// </summary>
-        public string ParticipantId { get; }
+        public string ParticipantId { get; private set; }
         /// <summary>
         /// Является ли участник игроком (иначе считается ботом)
         /// </summary>
-        public bool IsPlayer { get; }
+        public bool IsPlayer { get; private set; }
         /// <summary>
         /// Состояние готовности пулов
         /// </summary>
@@ -32,20 +32,20 @@ namespace Blackset.Duel.Participants
         /// <summary>
         /// Пулы участника
         /// </summary>
-        public DuelPoolsContext Pools;
+        public DuelPoolsContext Pools { get; private set; }
         /// <summary>
         /// Сборки участника
         /// </summary>
-        public DuelSetsContext Sets;
+        public DuelSetsContext Sets { get; private set; }
         
         /// <summary>
         /// Количество победных боев
         /// </summary>
-        public int FightsWon;
+        public int FightsWon { get; private set; }
         /// <summary>
         /// Состояние на текущий бой
         /// </summary>
-        public FightParticipantState FightState { get; }
+        public FightParticipantState FightState { get; private set; }
         
         /// <summary>
         /// Уровень доверия бота (от 0 до 1)
@@ -76,6 +76,14 @@ namespace Blackset.Duel.Participants
 
             TrustLevel = DEFAULT_BOT_TRUST_LEVEL;
             PanicLevel = 0;
+        }
+
+        /// <summary>
+        /// Отметка о победе в битве
+        /// </summary>
+        public void WinFight()
+        {
+            FightsWon++;
         }
 
         #region Инициализация данных

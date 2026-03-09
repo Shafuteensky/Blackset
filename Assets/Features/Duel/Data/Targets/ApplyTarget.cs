@@ -1,9 +1,9 @@
-namespace Blackset.Duel.TurnIntents
+namespace Blackset.Duel.Targets
 {
     /// <summary>
     /// Цель применения расходника
     /// </summary>
-    public enum ConsumableTarget
+    public enum ApplyTarget
     {
         None, // Без цели (расходник не применялся)
         Self, // На себя

@@ -1,6 +1,6 @@
 using System.Threading;
 using Blackset.Duel.Context;
-using Blackset.Duel.TurnIntents;
+using Blackset.Duel.Participants;
 using Cysharp.Threading.Tasks;
 
 namespace Blackset.Duel.Modules
@@ -28,8 +28,8 @@ namespace Blackset.Duel.Modules
         /// </remarks>
         /// <param name="context">Дунные дуэли</param>
         /// <param name="ct">Токен отмены ожидания</param>
-        /// <returns>Задача с ожиданием результата выбора</returns>
-        public UniTask<TurnIntent> GetTurnIntent(DuelContext context, CancellationToken ct);
+        /// <returns>Состояние намерений бота на ход</returns>
+        public UniTask<TurnParticipantState> GetIntentState(DuelContext context, CancellationToken ct);
        
     }
 }

@@ -36,7 +36,6 @@ namespace Blackset.Duel.Sequence
         private DuelRulesConfiguration rules;
         private DuelStateMachine stateMachine;
         private DuelContext context;
-        private SnapshotCommiter commiter;
 
         private void Awake()
         {
@@ -107,8 +106,6 @@ namespace Blackset.Duel.Sequence
             DuelStateRegistry<DuelContext> duelStateRegistry = InitializeStateRegistry();
             stateMachine = new DuelStateMachine(duelStateRegistry);
             stateMachine.EnableLogs(logsEnabled);
-
-            commiter = new SnapshotCommiter(context);
         }
 
         private DuelStateRegistry<DuelContext> InitializeStateRegistry()

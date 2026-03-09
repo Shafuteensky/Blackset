@@ -1,5 +1,5 @@
 using Blackset.Duel.Context;
-using Blackset.Duel.TurnIntents;
+using Blackset.Duel.Participants;
 
 namespace Blackset.Duel.Modules
 {
@@ -18,7 +18,7 @@ namespace Blackset.Duel.Modules
         /// Создать намерение бота
         /// </summary>
         /// <param name="context">Данные дуэли</param>
-        /// <returns>Намерение бота</returns>
-        public TurnIntent BuildTurnIntent(DuelContext context);
+        /// <returns>Состояние намерений бота на ход</returns>
+        public TurnParticipantState BuildIntentState(DuelContext context);
     }
 }

@@ -88,6 +88,15 @@ namespace Blackset.Duel.Context
             Contract = contract;
         }
 
+        /// <summary>
+        /// Применить правила активного шторма
+        /// </summary>
+        public void ApplyActiveStorm()
+        {
+            if (!Storm.IsActive() || !Storm.TryGet(out Storm activeStorm)) return;
+            activeStorm.Apply(ref Rules);
+        }
+            
         #region Регистрация участников дуэли
         
         /// <summary>
@@ -132,11 +141,5 @@ namespace Blackset.Duel.Context
         }
         
         #endregion
-
-        public void ApplyActiveStorm()
-        {
-            if (!Storm.IsActive() || !Storm.TryGet(out Storm activeStorm)) return;
-            activeStorm.Apply(ref Rules);
-        }
     }
 }

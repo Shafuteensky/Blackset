@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Blackset.Data.Registries;
 using Blackset.Duel.Context;
 using Blackset.Duel.Participants;
-using Blackset.Duel.TurnIntents;
+using Blackset.Duel.Targets;
 using Blackset.Opponents;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -33,23 +33,28 @@ namespace Blackset.Duel.Modules
             return declaredDice;
         }
         
-        public TurnIntent BuildTurnIntent(DuelContext context)
+        public TurnParticipantState BuildIntentState(DuelContext context)
         {
-            TurnIntent randomIntents = new TurnIntent();
+            TurnParticipantState intentState = new TurnParticipantState();
+            intentState.ResetForNewTurn();
             DuelParticipantState bot = context.Participants[context.OpponentId];
             
             // Если хитрый - кидает другой дайс (не который объявил)
             OpponentData opponent = GameData.Instance.GetOpponent(context.Contract.OpponentId);
             if (Random.value < opponent.CunningLevel)
-                randomIntents.ChosenDice = TakeRandomUnusedId(context, bot.Sets.DicesSet, bot.FightState.DicesUsed);
+                intentState.ChoseDice(TakeRandomUnusedId(context, bot.Sets.DicesSet, bot.FightState.DicesUsed));
             else
-                randomIntents.ChosenDice = declaredDice; 
+                intentState.ChoseDice(declaredDice); 
             
-            randomIntents.ConsumableChosen = Random.value <= CONSUMABLE_USE_CHANCE;
-            randomIntents.ChosenConsumable = TakeRandomUnusedId(context, bot.Sets.ConsumablesSet, bot.FightState.ConsumablesUsed);
-            randomIntents.ConsumableTarget = (ConsumableTarget)Random.Range(1, Enum.GetValues(typeof(ConsumableTarget)).Length);
+            // Случайный расходник на себя
+            bool consumableChosen = Random.value <= CONSUMABLE_USE_CHANCE;
+            if (consumableChosen)
+            {
+                intentState.ChoseConsumable(TakeRandomUnusedId(context, 
+                    bot.Sets.ConsumablesSet, bot.FightState.ConsumablesUsed), ApplyTarget.Self);
+            }
             
-            return randomIntents;
+            return intentState;
         }
 
         #region Internal
