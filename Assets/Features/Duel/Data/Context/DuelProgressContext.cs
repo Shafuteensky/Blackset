@@ -1,3 +1,5 @@
+using Features.Duel.Context;
+
 namespace Blackset.Duel.Context
 {
     /// <summary>
@@ -17,6 +19,10 @@ namespace Blackset.Duel.Context
         /// Состояние дуэли
         /// </summary>
         public bool IsDuelFinished { get; private set; }
+        /// <summary>
+        /// Результат окончания дуэли
+        /// </summary>
+        public DuelEndResult DuelResult { get; private set; }
 
         #region Обновление прогресса дуэли
         
@@ -40,8 +46,9 @@ namespace Blackset.Duel.Context
         /// <summary>
         /// Завершение дуэли
         /// </summary>
-        public void OnDuelFinished()
+        public void OnDuelFinished(DuelEndResult duelResult)
         {
+            DuelResult = duelResult;
             IsDuelFinished = true;
         }
         

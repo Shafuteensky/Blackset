@@ -1,5 +1,7 @@
 using Blackset.Duel.Context;
+using Blackset.Duel.Modules;
 using Extensions.FiniteStateMachine;
+using Features.Duel.Context;
 
 namespace Blackset.Duel.Sequence.States
 {
@@ -12,16 +14,19 @@ namespace Blackset.Duel.Sequence.States
     /// </remarks>
     public class DuelCheckState : BaseDuelState, IState<DuelContext>
     {
+        private DuelEndResult duelEndResult;
+        
         public void Enter(DuelContext context)
         {
-            
+            IDuelEndResolver duelEndResolver = modules.Get<IDuelEndResolver>();
+            duelEndResult = duelEndResolver.Evaluate(context);
         }
         
         public StateResult Tick(DuelContext context)
         {
-            if (true)
+            if (duelEndResult.IsDuelEnded)
             {
-                context.Progress.OnDuelFinished();
+                context.Progress.OnDuelFinished(duelEndResult);
                 return StateResult.Switch<RewardResolveState>();
             }
             else

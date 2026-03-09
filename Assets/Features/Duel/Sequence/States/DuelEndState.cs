@@ -13,7 +13,7 @@ namespace Blackset.Duel.Sequence.States
     {
         public void Enter(DuelContext context)
         {
-            
+            // TODO Вызов события для показа окна окончания дуэли
         }
         
         public StateResult Tick(DuelContext context)

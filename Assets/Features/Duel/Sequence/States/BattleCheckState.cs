@@ -1,5 +1,7 @@
 using Blackset.Duel.Context;
+using Blackset.Duel.Modules;
 using Extensions.FiniteStateMachine;
+using Features.Duel.Data.FightEnd;
 
 namespace Blackset.Duel.Sequence.States
 {
@@ -13,14 +15,17 @@ namespace Blackset.Duel.Sequence.States
     /// </remarks>
     public class BattleCheckState : BaseDuelState, IState<DuelContext>
     {
+        private FightEndResult fightEndResult;
+        
         public void Enter(DuelContext context)
         {
-            
+            IFightEndResolver fightEndResolver = modules.Get<IFightEndResolver>();
+            fightEndResult = fightEndResolver.Evaluate(context);
         }
         
         public StateResult Tick(DuelContext context)
         {
-            if (true)
+            if (fightEndResult.IsFightEnded)
                 return StateResult.Switch<DuelCheckState>();
             else
                 return StateResult.Switch<RollPlanningState>();

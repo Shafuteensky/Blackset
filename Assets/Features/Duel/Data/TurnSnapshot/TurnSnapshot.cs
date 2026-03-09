@@ -22,7 +22,11 @@ namespace Blackset.Duel.Snapshots
         /// Знания об участниках дуэли [идентификатор, знания]
         /// </summary>
         public Dictionary<string, KnowledgeState> PlayerKnowledge { get; }
-
+        /// <summary>
+        /// Результаты бросков дайсов (без эффектов и прочего — "сырые") [id_дайса_в_сборке, результат]
+        /// </summary>
+        public Dictionary<string, int> RawRollResults { get; }
+        
         /// <summary>
         /// Новый снапшот
         /// </summary>
@@ -32,12 +36,14 @@ namespace Blackset.Duel.Snapshots
             ParticipantScores = new Dictionary<string, int>();
             ParticipantStates = new Dictionary<string, TurnParticipantState>();
             PlayerKnowledge = new Dictionary<string, KnowledgeState>();
+            RawRollResults = new Dictionary<string, int>();
             
             foreach (var participant in context.Participants)
             {
                 ParticipantScores.Add(participant.Key, participant.Value.FightState.Score);
                 ParticipantStates.Add(participant.Key, participant.Value.FightState.TurnState);
                 PlayerKnowledge.Add(participant.Key, context.Knowledge[participant.Key].Clone());
+                RawRollResults = context.Participants[participant.Key].FightState.RawRollResults;
             }
         }
     }

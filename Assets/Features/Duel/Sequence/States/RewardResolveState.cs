@@ -1,5 +1,9 @@
 using Blackset.Duel.Context;
+using Blackset.Duel.Modules;
+using Blackset.Duel.Requests;
 using Extensions.FiniteStateMachine;
+using Features.Duel.Context;
+using Features.Duel.Data.FightEnd;
 
 namespace Blackset.Duel.Sequence.States
 {
@@ -14,7 +18,14 @@ namespace Blackset.Duel.Sequence.States
     {
         public void Enter(DuelContext context)
         {
+            DuelEndResult duelEndState = context.Progress.DuelResult;
+            bool isPlayerWon = duelEndState.Winner == FightWinner.Player;
             
+            RewardRequest rewardRequest = new RewardRequest(isPlayerWon, context.Contract);
+            IRewardService rewardService = modules.Get<IRewardService>();
+            
+            DuelRewards duelRewards = rewardService.BuildReward(rewardRequest);
+            rewardService.ApplyResult(duelRewards);
         }
         
         public StateResult Tick(DuelContext context)

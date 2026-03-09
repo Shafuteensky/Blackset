@@ -20,7 +20,7 @@ namespace Blackset.Duel.Sequence.States
             {
                 participant.FightState.ResetForNewFight();
             }
-            // TODO Работа с эффектами
+            // TODO Работа с эффектами (сброс протухших, учет активных)
         }
         
         public StateResult Tick(DuelContext context)
