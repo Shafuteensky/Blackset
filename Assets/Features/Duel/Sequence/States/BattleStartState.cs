@@ -1,4 +1,5 @@
 using Blackset.Duel.Context;
+using Blackset.Duel.Participants;
 using Extensions.FiniteStateMachine;
 
 namespace Blackset.Duel.Sequence.States
@@ -15,6 +16,10 @@ namespace Blackset.Duel.Sequence.States
         public void Enter(DuelContext context)
         {
             context.Progress.OnNewFight();
+            foreach (DuelParticipantState participant in context.Participants.Values)
+            {
+                participant.FightState.ResetForNewFight();
+            }
             // TODO Работа с эффектами
         }
         
