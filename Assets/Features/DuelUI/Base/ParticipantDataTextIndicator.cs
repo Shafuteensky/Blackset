@@ -10,20 +10,18 @@ namespace Blackset.DuelUI
     /// <summary>
     public abstract class ParticipantDataTextIndicator : DuelDataTextIndicator
     {
-        protected DuelContext duelContext;
-        
         protected override void OnDuelInited(DuelInitedEvent handler)
         {
-            duelContext = DuelController.Instance?.DuelContext;
+            DuelContext duelContext = DuelController.Instance?.DuelContext;
             if (duelContext == null)
             {
                 ServiceDebug.LogError("Данные дуэли отсутствуют, индикатор неактивен");
                 return;
             }
             
-            OnDataInited(handler);
+            OnDataInited(handler, duelContext);
         }
 
-        protected abstract void OnDataInited(DuelInitedEvent handler);
+        protected abstract void OnDataInited(DuelInitedEvent handler, DuelContext duelContext);
     }
 }

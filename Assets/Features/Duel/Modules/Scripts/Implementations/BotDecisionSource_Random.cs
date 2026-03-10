@@ -27,8 +27,9 @@ namespace Blackset.Duel.Modules
         {
             declaredDice = String.Empty;
             DuelParticipantState bot = context.Participants[context.OpponentId];
-            
-            declaredDice = TakeRandomUnusedId(context, bot.Sets.DicesSet, bot.FightState.DicesUsed);
+
+            TryGetRandomUnused(bot.Sets.DicesSet, bot.FightState.DicesUsed, out string unusedDiceId);
+            declaredDice = unusedDiceId;
             
             return declaredDice;
         }
@@ -41,33 +42,26 @@ namespace Blackset.Duel.Modules
             
             // Если хитрый - кидает другой дайс (не который объявил)
             OpponentData opponent = GameData.Instance.GetOpponent(context.Contract.OpponentId);
-            if (Random.value < opponent.CunningLevel)
-                intentState.ChoseDice(TakeRandomUnusedId(context, bot.Sets.DicesSet, bot.FightState.DicesUsed));
+            if (Random.value < opponent.CunningLevel && 
+                TryGetRandomUnused(bot.Sets.DicesSet, bot.FightState.DicesUsed, out string unusedDiceId))
+            {
+                intentState.ChoseDice(unusedDiceId);
+            }
             else
                 intentState.ChoseDice(declaredDice); 
             
             // Случайный расходник на себя
             bool consumableChosen = Random.value <= CONSUMABLE_USE_CHANCE;
-            if (consumableChosen)
+            if (consumableChosen && 
+                TryGetRandomUnused(bot.Sets.ConsumablesSet, bot.FightState.ConsumablesUsed, out string unusedConsId))
             {
-                intentState.ChoseConsumable(TakeRandomUnusedId(context, 
-                    bot.Sets.ConsumablesSet, bot.FightState.ConsumablesUsed), ApplyTarget.Self);
+                intentState.ChoseConsumable(unusedConsId, ApplyTarget.Self);
             }
             
             return intentState;
         }
 
         #region Internal
-        
-        private string TakeRandomUnusedId<TValue>(
-            DuelContext context,
-            Dictionary<string, TValue> registry,
-            List<string> used)
-        {
-            bool hasUnused = TryGetRandomUnused(registry, used, out string randomId);
-            if (!hasUnused) return string.Empty;
-            return randomId;
-        }
         
         private bool TryGetRandomUnused<TKey, TItem>(
             Dictionary<TKey, TItem> registry,
@@ -85,7 +79,7 @@ namespace Blackset.Duel.Modules
 
             if (availableKeys.Count == 0) return false;
 
-            int randomIndex = UnityEngine.Random.Range(0, availableKeys.Count);
+            int randomIndex = Random.Range(0, availableKeys.Count);
             resultKey = availableKeys[randomIndex];
 
             return true;

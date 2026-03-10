@@ -24,7 +24,6 @@ namespace Blackset.Duel.Sequence.States
             modules = newModules;
             presenter = inputPresenter;
             eventHub = duelEventHub;
-            Debug.Log(eventHub);
         }
         
         public override void Add<TState>(TState state)

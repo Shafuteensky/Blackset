@@ -4,12 +4,14 @@ using Blackset.Duel.History;
 using Blackset.Duel.Participants;
 using Extensions.Helpers;
 using Extensions.Log;
+using UnityEngine;
 
 namespace Blackset.Duel.Snapshots
 {
     /// <summary>
     /// Перенос финально рассчитанных данных хода из снапшота в "истину" дуэли
     /// </summary>
+    // TODO Сделать модулем реестра
     public class SnapshotCommiter 
     {
         private readonly DuelContext context;
@@ -62,7 +64,7 @@ namespace Blackset.Duel.Snapshots
                     ServiceDebug.LogError($"Счет участника '{pair.Key}' отсутствует в снапшоте, пропущен");
                     continue;
                 }
-
+                
                 pair.Value.FightState.UpdateScore(snapshotScore);
             }
         }

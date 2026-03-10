@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Blackset.Duel.Modules
 {
     /// <summary>
-    /// Стандартный резолвер эффектов
+    /// Стандартный резолвер эффектов и роллов
     /// </summary>
     [CreateAssetMenu(
         fileName = nameof(EffectsResolutionPipeline_Default),
@@ -13,9 +13,20 @@ namespace Blackset.Duel.Modules
     {
         public TurnSnapshot Resolve(TurnSnapshot snapshot)
         {
-            TurnSnapshot resolvedSnapshot = snapshot;
+            // TODO Применение snapshot.RawRolls к счетам:
+            
+            // foreach (var participant in resolvedSnapshot.ParticipantStates)
+            // {
+            //     participant.Value.
+            // }
+            // foreach (int rollResult in pair.Value.FightState.RawRollResults.Values)
+            // {
+            //     snapshotScore += rollResult;
+            // }
             
             // TODO Завершить по готовности системы эффектов
+            
+            TurnSnapshot resolvedSnapshot = snapshot;
             
             return resolvedSnapshot;
         }

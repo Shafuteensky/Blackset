@@ -2,6 +2,7 @@ using Blackset.Duel.Context;
 using Blackset.Duel.Modules;
 using Blackset.DuelEvents.EventTypes;
 using Extensions.FiniteStateMachine;
+using UnityEngine;
 
 namespace Blackset.Duel.Sequence.States
 {
@@ -21,6 +22,7 @@ namespace Blackset.Duel.Sequence.States
             {
                 string chosenDiceId = context.Participants[participantId].FightState.TurnState.ChosenDice.Value;
                 int rollResult = diceRoller.RollDice(context, participantId, chosenDiceId);
+                Debug.Log(participantId+" - "+rollResult);
                 context.Participants[participantId].FightState.RegisterRawRollResult(chosenDiceId, rollResult); 
             }
             

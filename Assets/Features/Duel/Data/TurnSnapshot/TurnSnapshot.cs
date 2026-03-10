@@ -14,6 +14,7 @@ namespace Blackset.Duel.Snapshots
         /// </summary>
         public Dictionary<string, int> ParticipantScores { get; }
         
+        // TODO FightState для RawRolls
         /// <summary>
         /// Намерения участников дуэли [идентификатор, намерение]
         /// </summary>
