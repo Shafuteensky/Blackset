@@ -80,7 +80,6 @@ namespace Blackset.Duel.Sequence.States
                 // Объявление дайса
                 
                 string declaredDiceId = await playerDecisionSource.GetDeclaration(context, cancellationToken);
-                Debug.Log(context.Participants[context.PlayerId].Sets.DicesSet.Count.ToString());
                 // TODO Заменить на реальный выбор
                 declaredDiceId = context.Participants[context.PlayerId].Sets.DicesSet.Keys.ElementAt
                     (Random.Range(0, context.Participants[context.PlayerId].Sets.DicesSet.Count));

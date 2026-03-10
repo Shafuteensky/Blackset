@@ -47,7 +47,6 @@ namespace Blackset.DecisionInput
             confirmDeclarationButton.onClick.AddListener(() =>
             {
                 onConfirm?.Invoke(selectedDiceId);
-                Hide();
             });
         }
 
@@ -64,7 +63,6 @@ namespace Blackset.DecisionInput
             confirmIntentButton.onClick.AddListener(() =>
             {
                 onConfirm?.Invoke(currentIntent);
-                Hide();
             });
 
             passButton.onClick.RemoveAllListeners();
@@ -74,7 +72,6 @@ namespace Blackset.DecisionInput
                 passIntent.ResetForNewTurn();
 
                 onConfirm?.Invoke(passIntent);
-                Hide();
             });
         }
 
