@@ -18,7 +18,7 @@ namespace Blackset.Duel.Sequence.States
             IDiceRollPipeline diceRoller = modules.Get<IDiceRollPipeline>();
             foreach (string participantId in context.Participants.Keys)
             {
-                string chosenDiceId = context.Participants[participantId].FightState.TurnState.ChosenDice;
+                string chosenDiceId = context.Participants[participantId].FightState.TurnState.ChosenDice.Value;
                 int rollResult = diceRoller.RollDice(context, participantId, chosenDiceId);
                 context.Participants[participantId].FightState.RegisterRawRollResult(chosenDiceId, rollResult); 
             }

@@ -24,8 +24,10 @@ namespace Extensions.Reactive
 
             isDisposed = true;
 
-            disposeAction?.Invoke();
+            Action action = disposeAction;
             disposeAction = null;
+
+            action?.Invoke();
         }
     }
 }

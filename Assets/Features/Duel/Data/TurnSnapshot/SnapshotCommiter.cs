@@ -86,18 +86,18 @@ namespace Blackset.Duel.Snapshots
                 }
 
                 // Участник спасовал — ресурсы не тратились
-                if (participantState.HasPassed)
+                if (participantState.HasPassed.Value)
                     continue;
 
                 FightParticipantState fightState = participant.FightState;
 
                 fightState.MarkThrow();
 
-                if (!string.IsNullOrEmpty(participantState.ChosenDice))
-                    fightState.MarkDiceUsed(participantState.ChosenDice);
+                if (!string.IsNullOrEmpty(participantState.ChosenDice.Value))
+                    fightState.MarkDiceUsed(participantState.ChosenDice.Value);
 
-                if (participantState.IsConsumableChosen && !string.IsNullOrEmpty(participantState.ChosenConsumable))
-                    fightState.MarkConsumableUsed(participantState.ChosenConsumable);
+                if (participantState.IsConsumableChosen.Value && !string.IsNullOrEmpty(participantState.ChosenConsumable.Value))
+                    fightState.MarkConsumableUsed(participantState.ChosenConsumable.Value);
             }
         }
 
