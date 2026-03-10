@@ -2,73 +2,128 @@ using System.Threading;
 using Blackset.DecisionInput;
 using Blackset.Duel.Context;
 using Blackset.Duel.Participants;
+using Blackset.Duel.Targets;
 using Cysharp.Threading.Tasks;
 using Extensions.Log;
-using UnityEngine;
 
 namespace Blackset.Duel.Modules
 {
     /// <summary>
-    /// Получение намерений игрока через ввод с UI с ожиданием
+    /// Получение намерений игрока через ввод с UI.
+    /// Владеет игровым состоянием текущего выбора.
     /// </summary>
-    [CreateAssetMenu(
+    [UnityEngine.CreateAssetMenu(
         fileName = nameof(PlayerDecisionSource_Input),
         menuName = "Blackset/Duel/Modules/" + nameof(PlayerDecisionSource_Input))]
     public class PlayerDecisionSource_Input : BaseDuelModule, IPlayerDecisionSource
     {
         private DuelInputPresenter presenter;
 
+        private string selectedDiceId;
+        private TurnParticipantState currentIntent;
+
+        private UniTaskCompletionSource<string> declarationTcs;
+        private UniTaskCompletionSource<TurnParticipantState> intentTcs;
+
+        /// <summary>
+        /// Инициализация зависимостей
+        /// </summary>
         public void Initialize(DuelInputPresenter newPresenter)
         {
             presenter = newPresenter;
             isInitialized = true;
+
+            presenter.SetItemCallbacks(HandleDiceSelected, HandleConsumableSelected);
         }
-        
+
+        /// <summary>
+        /// Получить объявление дайса от игрока
+        /// </summary>
         public UniTask<string> GetDeclaration(DuelContext context, CancellationToken ct)
         {
             ServiceGuard.NotNull(context, nameof(context));
             ServiceGuard.NotNull(presenter, nameof(presenter));
 
-            var tcs = new UniTaskCompletionSource<string>();
+            selectedDiceId = string.Empty;
+            declarationTcs = new UniTaskCompletionSource<string>();
 
-            var reg = ct.Register(() =>
-            {
-                presenter.Hide();
-                tcs.TrySetCanceled();
-            });
+            ct.Register(CancelDeclaration);
 
-            presenter.ShowDeclarationUI(context, intent =>
-            {
-                reg.Dispose();
-                presenter.Hide();
-                tcs.TrySetResult(intent);
-            });
-            
-            return tcs.Task;
+            presenter.ShowDeclarationUI(onConfirm: ConfirmDeclaration);
+
+            return declarationTcs.Task;
         }
 
-        // TODO Использование в FSM: var intent = await decisionSource.GetTurnIntent(context, ct);
+        /// <summary>
+        /// Получить намерения игрока на ход
+        /// </summary>
         public UniTask<TurnParticipantState> GetIntentState(DuelContext context, CancellationToken ct)
         {
             ServiceGuard.NotNull(context, nameof(context));
             ServiceGuard.NotNull(presenter, nameof(presenter));
 
-            var tcs = new UniTaskCompletionSource<TurnParticipantState>();
+            currentIntent = new TurnParticipantState();
+            currentIntent.ResetForNewTurn();
+            intentTcs = new UniTaskCompletionSource<TurnParticipantState>();
 
-            var reg = ct.Register(() =>
-            {
-                presenter.Hide();
-                tcs.TrySetCanceled();
-            });
+            ct.Register(CancelIntent);
 
-            presenter.ShowTurnIntentUI(context, intent =>
-            {
-                reg.Dispose();
-                presenter.Hide();
-                tcs.TrySetResult(intent);
-            });
+            presenter.ShowTurnIntentUI(onConfirm: ConfirmIntent, onPass: PassIntent);
 
-            return tcs.Task;
+            return intentTcs.Task;
         }
+
+        #region Обработка выбора предметов
+
+        private void HandleDiceSelected(string diceId)
+        {
+            selectedDiceId = diceId;
+            currentIntent?.ChoseDice(diceId);
+        }
+
+        private void HandleConsumableSelected(string consumableId, ApplyTarget target)
+        {
+            currentIntent?.ChoseConsumable(consumableId, target);
+        }
+
+        #endregion
+
+        #region Обработка подтверждений и отмен
+
+        private void ConfirmDeclaration()
+        {
+            presenter.Hide();
+            declarationTcs.TrySetResult(selectedDiceId);
+        }
+
+        private void CancelDeclaration()
+        {
+            presenter.Hide();
+            declarationTcs.TrySetCanceled();
+        }
+
+        private void ConfirmIntent()
+        {
+            presenter.Hide();
+            intentTcs.TrySetResult(currentIntent);
+        }
+
+        private void PassIntent()
+        {
+            TurnParticipantState passIntent = new TurnParticipantState();
+            passIntent.ResetForNewTurn();
+            passIntent.MarkPassed();
+
+            presenter.Hide();
+            intentTcs.TrySetResult(passIntent);
+        }
+
+        private void CancelIntent()
+        {
+            presenter.Hide();
+            intentTcs.TrySetCanceled();
+        }
+
+        #endregion
     }
 }

@@ -1,6 +1,4 @@
 using System;
-using Blackset.Duel.Context;
-using Blackset.Duel.Participants;
 using Blackset.Duel.Targets;
 using UnityEngine;
 using UnityEngine.UI;
@@ -8,93 +6,69 @@ using UnityEngine.UI;
 namespace Blackset.DecisionInput
 {
     /// <summary>
-    /// Контроллер показа UI-элемента ввода выборов игрока для дуэли
+    /// Отображение UI-панелей ввода выборов игрока.
+    /// Не хранит игровое состояние — только показывает панели и сообщает о действиях игрока через колбэки.
     /// </summary>
-    // TODO Заменить панели и кнопки на подписки динамических кнопок задания выборов:
-    // заспавленные фабрикой держатели id предметов, по клику оптравляют события 
-    // (или просто запоминают выбор, а событие о готовности выбора по подтверждению)
     public class DuelInputPresenter : MonoBehaviour
     {
-        [Header("Объявление дайса (блеф)"), Space] 
-        
-        [SerializeField]
-        private GameObject declarationPanel;
-        [SerializeField] 
-        private Button confirmDeclarationButton;
+        [Header("Объявление дайса (блеф)"), Space]
+        [SerializeField] private GameObject declarationPanel;
+        [SerializeField] private Button confirmDeclarationButton;
 
-        [Header("Выбор фактических действий"), Space] 
-        
-        [SerializeField]
-        private GameObject intentPanel;
-        [SerializeField] 
-        private Button confirmIntentButton;
-        [SerializeField] 
-        private Button passButton;
+        [Header("Выбор фактических действий"), Space]
+        [SerializeField] private GameObject intentPanel;
+        [SerializeField] private Button confirmIntentButton;
+        [SerializeField] private Button passButton;
 
-        private string selectedDiceId;
-        private TurnParticipantState currentIntent = new TurnParticipantState();
+        private Action<string> onDiceSelected;
+        private Action<string, ApplyTarget> onConsumableSelected;
 
         /// <summary>
-        /// Показать панель объявления дайса
+        /// Зарегистрировать колбэки выбора предметов.
+        /// Вызывается один раз при инициализации источника решений.
         /// </summary>
-        /// <param name="context"></param>
-        /// <param name="onConfirm"></param>
-        public void ShowDeclarationUI(DuelContext context, Action<string> onConfirm)
+        public void SetItemCallbacks(Action<string> onDice, Action<string, ApplyTarget> onConsumable)
+        {
+            onDiceSelected = onDice;
+            onConsumableSelected = onConsumable;
+        }
+
+        /// <summary> Показать панель объявления дайса </summary>
+        /// <param name="onConfirm">Игрок подтвердил объявление</param>
+        public void ShowDeclarationUI(Action onConfirm)
         {
             declarationPanel.SetActive(true);
 
             confirmDeclarationButton.onClick.RemoveAllListeners();
-            confirmDeclarationButton.onClick.AddListener(() =>
-            {
-                onConfirm?.Invoke(selectedDiceId);
-            });
+            confirmDeclarationButton.onClick.AddListener(() => onConfirm?.Invoke());
         }
 
-        /// <summary>
-        /// Показать панель выбора действий
-        /// </summary>
-        /// <param name="context"></param>
-        /// <param name="onConfirm"></param>
-        public void ShowTurnIntentUI(DuelContext context, Action<TurnParticipantState> onConfirm)
+        /// <summary> Показать панель выбора действий </summary>
+        /// <param name="onConfirm">Игрок подтвердил намерения</param>
+        /// <param name="onPass">Игрок спасовал</param>
+        public void ShowTurnIntentUI(Action onConfirm, Action onPass)
         {
             intentPanel.SetActive(true);
 
             confirmIntentButton.onClick.RemoveAllListeners();
-            confirmIntentButton.onClick.AddListener(() =>
-            {
-                onConfirm?.Invoke(currentIntent);
-            });
+            confirmIntentButton.onClick.AddListener(() => onConfirm?.Invoke());
 
             passButton.onClick.RemoveAllListeners();
-            passButton.onClick.AddListener(() =>
-            {
-                var passIntent = new TurnParticipantState();
-                passIntent.ResetForNewTurn();
-
-                onConfirm?.Invoke(passIntent);
-            });
+            passButton.onClick.AddListener(() => onPass?.Invoke());
         }
 
-        /// <summary>
-        /// Закрыть активные панели ввода
-        /// </summary>
+        /// <summary> Закрыть активные панели ввода </summary>
         public void Hide()
         {
             declarationPanel.SetActive(false);
             intentPanel.SetActive(false);
         }
 
-        // TODO Эти методы вызываются кнопками выбора дайса/расходника — заменить на статические события
-        
-        public void SelectDice(string diceId)
-        {
-            selectedDiceId = diceId;
-            currentIntent.ChoseDice(diceId);
-        }
+        // Вызываются кнопками выбора дайса/расходника (спавнятся фабрикой)
 
-        public void SelectConsumable(string consumableId, ApplyTarget target)
-        {
-            currentIntent.ChoseConsumable(consumableId, target);
-        }
+        public void NotifyDiceSelected(string diceId) => onDiceSelected?.Invoke(diceId);
+
+        public void NotifyConsumableSelected(string consumableId, ApplyTarget target) =>
+            onConsumableSelected?.Invoke(consumableId, target);
     }
 }
