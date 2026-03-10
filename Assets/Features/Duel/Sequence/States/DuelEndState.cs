@@ -1,4 +1,5 @@
 using Blackset.Duel.Context;
+using Blackset.DuelEvents.EventTypes;
 using Extensions.FiniteStateMachine;
 
 namespace Blackset.Duel.Sequence.States
@@ -13,6 +14,7 @@ namespace Blackset.Duel.Sequence.States
     {
         public void Enter(DuelContext context)
         {
+            eventHub.Publish(new DuelEndEvent());
             // TODO Вызов события для показа окна окончания дуэли
         }
         

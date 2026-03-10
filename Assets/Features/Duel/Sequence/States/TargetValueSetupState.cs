@@ -2,6 +2,7 @@ using Blackset.Duel.Context;
 using Blackset.Duel.Modules;
 using Blackset.Duel.Requests;
 using Blackset.Duel.TargetValue;
+using Blackset.DuelEvents.EventTypes;
 using Extensions.FiniteStateMachine;
 
 namespace Blackset.Duel.Sequence.States
@@ -21,6 +22,8 @@ namespace Blackset.Duel.Sequence.States
             TargetValueRequest request = new TargetValueRequest(context.Seed, context.Rules, context.Contract.Mode);
             TargetValueContext tvContext = tvGenerator.Generate(request);
             context.TargetValue = tvContext;
+            
+            eventHub.Publish(new TargetValueSetEvent());
         }
         
         public StateResult Tick(DuelContext context)

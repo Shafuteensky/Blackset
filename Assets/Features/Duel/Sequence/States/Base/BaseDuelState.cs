@@ -18,15 +18,15 @@ namespace Blackset.Duel.Sequence.States
         /// Инициализация данных состояния
         /// </summary>
         /// <param name="modules">Реестр модулей обработки данных дуэли</param>
-        public void Initialize(DuelModuleRegistry modulesRegistry,  DuelInputPresenter inputPresenter,  EventHub eventHub)
+        public void Initialize(DuelModuleRegistry modulesRegistry,  DuelInputPresenter inputPresenter,  EventHub duelEventHub)
         {
             ServiceGuard.NotNull(modulesRegistry, nameof(modulesRegistry));
             ServiceGuard.NotNull(inputPresenter, nameof(inputPresenter));
-            ServiceGuard.NotNull(eventHub, nameof(eventHub));
+            ServiceGuard.NotNull(duelEventHub, nameof(duelEventHub));
             
             modules = modulesRegistry;
             presenter = inputPresenter;
-            this.eventHub = eventHub;
+            eventHub = duelEventHub;
         }
     }
 }

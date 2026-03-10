@@ -82,7 +82,7 @@ namespace Blackset.Duel.Context
             Seed = string.Empty;
             
             TargetValue = new TargetValueContext();
-            Progress = new DuelProgressContext();
+            Progress = DuelProgressContext.Default();
             History = new DuelHistory();
                 
             Contract = contract;

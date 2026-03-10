@@ -1,5 +1,6 @@
 using Blackset.Duel.Context;
 using Blackset.Duel.Modules;
+using Blackset.DuelEvents.EventTypes;
 using Extensions.FiniteStateMachine;
 
 namespace Blackset.Duel.Sequence.States
@@ -22,6 +23,8 @@ namespace Blackset.Duel.Sequence.States
                 int rollResult = diceRoller.RollDice(context, participantId, chosenDiceId);
                 context.Participants[participantId].FightState.RegisterRawRollResult(chosenDiceId, rollResult); 
             }
+            
+            eventHub.Publish(new DicesRolledEvent());
         }
         
         public StateResult Tick(DuelContext context)

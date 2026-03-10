@@ -11,7 +11,6 @@ namespace Blackset.Duel.Context
         /// <summary>
         /// Номер активной битвы
         /// </summary>
-            
         public ReactiveProperty<int> FightNumber { get; private set; }
         /// <summary>
         /// Номер текущего броска в этой битве
@@ -26,6 +25,19 @@ namespace Blackset.Duel.Context
         /// </summary>
         public DuelEndResult DuelResult { get; private set; }
 
+        /// <summary>
+        /// Новая запись прогресса дуэли
+        /// </summary>
+        public static DuelProgressContext Default()
+        {
+            return new DuelProgressContext
+            {
+                FightNumber = new ReactiveProperty<int>(0),
+                ThrowNumber = new ReactiveProperty<int>(0),
+                IsDuelFinished = new ReactiveProperty<bool>(false)
+            };
+        }
+        
         #region Обновление прогресса дуэли
         
         /// <summary>

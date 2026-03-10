@@ -6,8 +6,10 @@ using Blackset.Duel.Rules;
 using Blackset.Duel.Sequence.States;
 using Blackset.DuelContracts;
 using Blackset.DuelEvents;
+using Blackset.DuelEvents.EventTypes;
 using Blackset.Storms;
 using Extensions.Log;
+using Extensions.Singleton;
 using UnityEngine;
 
 namespace Blackset.Duel.Sequence
@@ -15,7 +17,7 @@ namespace Blackset.Duel.Sequence
     /// <summary>
     /// Контроллер дуэли
     /// </summary>
-    public sealed class DuelController : MonoBehaviour
+    public sealed class DuelController : MonoBehaviourSingleton<DuelController>
     {
         /// <summary>
         /// Данные дуэли
@@ -24,7 +26,7 @@ namespace Blackset.Duel.Sequence
         /// <summary>
         /// Хаб событий дуэли
         /// </summary>
-        public EventHub EventHub => _eventHub;
+        public EventHub EventHub => eventHub;
         
         [Header("Модули"), Space]
         [SerializeField]
@@ -46,10 +48,12 @@ namespace Blackset.Duel.Sequence
         private DuelStateMachine stateMachine;
         private DuelContext context;
         
-        private EventHub _eventHub;
+        private readonly EventHub eventHub = new();
 
-        private void Awake()
+        protected override void Awake()
         {
+            base.Awake();
+            
             ServiceGuard.NotNull(modules, nameof(modules));
             ServiceGuard.NotNull(selectedContract, nameof(selectedContract));
             
@@ -121,11 +125,9 @@ namespace Blackset.Duel.Sequence
 
         private DuelStateRegistry<DuelContext> InitializeStateRegistry()
         {
-            _eventHub = new EventHub();
-            
             DuelStateRegistry<DuelContext> duelStateRegistry = new();
             ServiceGuard.NotNull(modules, nameof(modules));
-            duelStateRegistry.InitializeModules(modules, inputPresenter, _eventHub);
+            duelStateRegistry.InitializeModules(modules, inputPresenter, eventHub);
             
             duelStateRegistry.Add(new DuelInitState());
             

@@ -4,6 +4,7 @@ using System.Threading;
 using Blackset.Duel.Context;
 using Blackset.Duel.Modules;
 using Blackset.Duel.Participants;
+using Blackset.DuelEvents.EventTypes;
 using Cysharp.Threading.Tasks;
 using Extensions.FiniteStateMachine;
 using UnityEngine;
@@ -78,6 +79,7 @@ namespace Blackset.Duel.Sequence.States
                 IBotDecisionSource botDecisionSource = modules.Get<IBotDecisionSource>();
 
                 // Объявление дайса
+                eventHub.Publish(new DeclarationStartedEvent());
                 
                 string declaredDiceId = await playerDecisionSource.GetDeclaration(context, cancellationToken);
                 // TODO Заменить на реальный выбор
@@ -89,6 +91,7 @@ namespace Blackset.Duel.Sequence.States
                 context.Participants[context.OpponentId].FightState.TurnState.DeclareDice(botDeclaredDiceId);
 
                 // Намерения 
+                eventHub.Publish(new PlanningStartedEvent());
                 
                 TurnParticipantState playerIntent = await playerDecisionSource.GetIntentState(context, cancellationToken);
                 context.Participants[context.PlayerId].FightState.TurnState.ApplyState(playerIntent);
@@ -101,6 +104,7 @@ namespace Blackset.Duel.Sequence.States
                 context.Participants[context.OpponentId].FightState.TurnState.ApplyState(botIntent);
 
                 planningCompleted = true;
+                eventHub.Publish(new PlanningCompletedEvent());
             }
             catch (OperationCanceledException)
             {

@@ -6,6 +6,7 @@ using Blackset.Duel.Modules;
 using Blackset.Duel.Participants;
 using Blackset.Duel.Pools;
 using Blackset.Duel.Requests;
+using Blackset.DuelEvents.EventTypes;
 using Blackset.Inventories;
 using Blackset.Inventories.Helpers;
 using Blackset.Opponents;
@@ -58,6 +59,8 @@ namespace Blackset.Duel.Sequence.States
                 DuelPoolsContext newPools = poolBuilder.BuildPools(buildRequest);
                 participant.InitializePools(newPools);
             }
+            
+            eventHub.Publish(new BuildPreparedEvent());
         }
         
         public StateResult Tick(DuelContext context)

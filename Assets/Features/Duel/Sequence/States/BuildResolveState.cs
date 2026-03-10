@@ -3,6 +3,7 @@ using Blackset.Duel.Modules;
 using Blackset.Duel.Participants;
 using Blackset.Duel.Requests;
 using Blackset.Duel.Sets;
+using Blackset.DuelEvents.EventTypes;
 using Extensions.FiniteStateMachine;
 
 namespace Blackset.Duel.Sequence.States
@@ -24,6 +25,8 @@ namespace Blackset.Duel.Sequence.States
                 DuelSetsContext setsContext = setGenerator.GenerateSets(generationRequest);
                 participant.InitializeSets(setsContext);
             }
+            
+            eventHub.Publish(new SetReadyEvent());
         }
         
         public StateResult Tick(DuelContext context)

@@ -1,6 +1,7 @@
 using Blackset.Duel.Context;
 using Blackset.Duel.Modules;
 using Blackset.Duel.Requests;
+using Blackset.DuelEvents.EventTypes;
 using Extensions.FiniteStateMachine;
 using Features.Duel.Context;
 using Features.Duel.Data.FightEnd;
@@ -26,6 +27,8 @@ namespace Blackset.Duel.Sequence.States
             
             DuelRewards duelRewards = rewardService.BuildReward(rewardRequest);
             rewardService.ApplyResult(duelRewards);
+            
+            eventHub.Publish(new PlayerRewardedEvent(duelRewards));
         }
         
         public StateResult Tick(DuelContext context)

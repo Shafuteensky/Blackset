@@ -1,5 +1,6 @@
 using Blackset.Duel.Context;
 using Blackset.Duel.Participants;
+using Blackset.DuelEvents.EventTypes;
 using Extensions.FiniteStateMachine;
 
 namespace Blackset.Duel.Sequence.States
@@ -21,6 +22,8 @@ namespace Blackset.Duel.Sequence.States
                 participant.FightState.ResetForNewFight();
             }
             // TODO Работа с эффектами (сброс протухших, учет активных)
+            
+            eventHub.Publish(new BattleStartEvent());
         }
         
         public StateResult Tick(DuelContext context)

@@ -1,5 +1,6 @@
 using Blackset.Duel.Context;
 using Blackset.Duel.Participants;
+using Blackset.DuelEvents.EventTypes;
 using Extensions.FiniteStateMachine;
 using Extensions.Helpers;
 
@@ -24,6 +25,8 @@ namespace Blackset.Duel.Sequence.States
             context.Knowledge.Add(playerId, new KnowledgeState());
             string botId = context.RegisterBot(context.Contract);
             context.Knowledge.Add(botId, new KnowledgeState());
+            
+            eventHub.Publish(new DuelInitedEvent());
         }
         
         public StateResult Tick(DuelContext context)
