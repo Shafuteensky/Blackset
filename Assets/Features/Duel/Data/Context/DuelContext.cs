@@ -77,7 +77,7 @@ namespace Blackset.Duel.Context
         {
             ServiceGuard.NotNull(contract, nameof(contract));
             
-            Rules = new DuelRulesConfiguration();
+            Rules = DuelRulesConfiguration.Default();
             Storm = storm;
             Seed = string.Empty;
             
