@@ -1,5 +1,6 @@
 using Blackset.DecisionInput;
 using Blackset.Duel.Modules;
+using Blackset.DuelEvents;
 using Extensions.Log;
 
 namespace Blackset.Duel.Sequence.States
@@ -11,18 +12,21 @@ namespace Blackset.Duel.Sequence.States
     {
         protected DuelModuleRegistry modules;
         protected DuelInputPresenter presenter;
+        protected EventHub eventHub;
         
         /// <summary>
         /// Инициализация данных состояния
         /// </summary>
         /// <param name="modules">Реестр модулей обработки данных дуэли</param>
-        public void Initialize(DuelModuleRegistry modulesRegistry,  DuelInputPresenter inputPresenter)
+        public void Initialize(DuelModuleRegistry modulesRegistry,  DuelInputPresenter inputPresenter,  EventHub eventHub)
         {
             ServiceGuard.NotNull(modulesRegistry, nameof(modulesRegistry));
             ServiceGuard.NotNull(inputPresenter, nameof(inputPresenter));
+            ServiceGuard.NotNull(eventHub, nameof(eventHub));
             
             modules = modulesRegistry;
             presenter = inputPresenter;
+            this.eventHub = eventHub;
         }
     }
 }
