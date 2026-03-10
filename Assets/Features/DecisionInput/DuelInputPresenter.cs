@@ -32,7 +32,7 @@ namespace Blackset.DecisionInput
         private Button passButton;
 
         private string selectedDiceId;
-        private TurnParticipantState currentIntent;
+        private TurnParticipantState currentIntent = new TurnParticipantState();
 
         /// <summary>
         /// Показать панель объявления дайса

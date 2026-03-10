@@ -64,7 +64,6 @@ namespace Blackset.Duel.Modules
             Dictionary<string, TValue> registry,
             List<string> used)
         {
-            DuelParticipantState bot = context.Participants[context.OpponentId];
             bool hasUnused = TryGetRandomUnused(registry, used, out string randomId);
             if (!hasUnused) return string.Empty;
             return randomId;

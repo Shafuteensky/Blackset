@@ -66,7 +66,7 @@ namespace Blackset.Duel.Participants
         private readonly List<string> consumablesUsed = new();
         
         private readonly Dictionary<string, int> rawRollResults = new();
-        private TurnParticipantState turnState = new();
+        private readonly TurnParticipantState turnState = new();
 
         /// <summary>
         /// Создание хранилища данных о состоянии участника дуэли во время битвы

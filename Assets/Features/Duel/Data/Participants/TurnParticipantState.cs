@@ -7,7 +7,7 @@ namespace Blackset.Duel.Participants
     /// <summary>
     /// Состояние участника дуэли на текущий ход
     /// </summary>
-    public struct TurnParticipantState
+    public class TurnParticipantState
     {
         /// <summary>
         /// Может действовать
@@ -95,6 +95,16 @@ namespace Blackset.Duel.Participants
             IsConsumableChosen = intentState.IsConsumableChosen;
             ChosenConsumable = intentState.ChosenConsumable;
             ConsumableTarget = intentState.ConsumableTarget;
+        }
+        
+        /// <summary>
+        /// Создание копии инстанса
+        /// </summary>
+        public TurnParticipantState Clone()
+        {
+            var clone = new TurnParticipantState();
+            clone.ApplyState(this);
+            return clone;
         }
         
         #endregion
