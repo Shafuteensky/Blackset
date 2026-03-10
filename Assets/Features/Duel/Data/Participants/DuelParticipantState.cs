@@ -1,6 +1,7 @@
 using Blackset.Duel.Pools;
 using Blackset.Duel.Sets;
 using Blackset.Opponents;
+using Extensions.Reactive;
 
 namespace Blackset.Duel.Participants
 {
@@ -40,7 +41,7 @@ namespace Blackset.Duel.Participants
         /// <summary>
         /// Количество победных боев
         /// </summary>
-        public int FightsWon { get; private set; }
+        public ReactiveProperty<int> FightsWon { get; private set; } = new(0);
         /// <summary>
         /// Состояние на текущий бой
         /// </summary>
@@ -49,11 +50,11 @@ namespace Blackset.Duel.Participants
         /// <summary>
         /// Уровень доверия бота (от 0 до 1)
         /// </summary>
-        public float TrustLevel;
+        public readonly ReactiveProperty<float> TrustLevel = new();
         /// <summary>
         /// Уровень паники бота (от 0 до 1)
         /// </summary>
-        public float PanicLevel;
+        public readonly ReactiveProperty<float> PanicLevel = new();
 
         /// <summary>
         /// Данные об участнике дуэли
@@ -69,12 +70,12 @@ namespace Blackset.Duel.Participants
             
             Sets = null;
             
-            FightsWon = 0;
+            FightsWon.Value = 0;
             FightState = new FightParticipantState();
             FightState.ResetForNewFight();
 
-            TrustLevel = DEFAULT_BOT_TRUST_LEVEL;
-            PanicLevel = 0;
+            TrustLevel.Value = DEFAULT_BOT_TRUST_LEVEL;
+            PanicLevel.Value = 0;
         }
 
         /// <summary>
@@ -82,7 +83,7 @@ namespace Blackset.Duel.Participants
         /// </summary>
         public void WinFight()
         {
-            FightsWon++;
+            FightsWon.Value++;
         }
 
         #region Инициализация данных
@@ -113,7 +114,7 @@ namespace Blackset.Duel.Participants
         /// <param name="contractOpponents"></param>
         public void InitializeBotDuelState(OpponentData contractOpponents)
         {
-            TrustLevel = contractOpponents.CunningLevel; // TODO обновить функцию расчета (брать от данных соперника?)
+            TrustLevel.Value = contractOpponents.CunningLevel; // TODO обновить функцию расчета (брать от данных соперника?)
         }
         
         #endregion

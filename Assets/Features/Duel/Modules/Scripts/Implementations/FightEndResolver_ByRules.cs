@@ -70,7 +70,7 @@ namespace Blackset.Duel.Modules
         /// Максимум возможных по правилам ходов завершены
         /// </summary>
         private bool IsLastTurnDone(DuelContext context) =>
-            context.Progress.ThrowNumber == context.Rules.MaxThrowsPerFight;
+            context.Progress.ThrowNumber.Value == context.Rules.MaxThrowsPerFight;
 
         /// <summary>
         /// Проверяет участника на победу.
@@ -88,8 +88,8 @@ namespace Blackset.Duel.Modules
         {
             FightWinPolicy activeFightWinPolicy = context.Rules.FightWinPolicy;
 
-            int score = participant.FightState.Score;
-            int target = context.TargetValue.TargetValue;
+            int score = participant.FightState.Score.Value;
+            int target = context.TargetValue.TargetValue.Value;
 
             switch (activeFightWinPolicy)
             {
@@ -166,8 +166,8 @@ namespace Blackset.Duel.Modules
             FightLossPolicy activeFightLossPolicy = context.Rules.FightLossPolicy;
             loserId = string.Empty;
 
-            int score = participant.FightState.Score;
-            int target = context.TargetValue.TargetValue;
+            int score = participant.FightState.Score.Value;
+            int target = context.TargetValue.TargetValue.Value;
 
             switch (activeFightLossPolicy)
             {

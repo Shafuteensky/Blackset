@@ -50,16 +50,16 @@ namespace Blackset.Duel.Modules
             // Есть победитель
             if (!string.IsNullOrEmpty(result.WinnerId))
             {
-                result.IsDuelEnded = true;
+                result.IsDuelEnded.Value = true;
                 bool IsWinnerPlayer = context.Participants[result.WinnerId].IsPlayer;
-                result.Winner = IsWinnerPlayer ? FightWinner.Player : FightWinner.Opponent;
+                result.Winner.Value = IsWinnerPlayer ? FightWinner.Player : FightWinner.Opponent;
                 return result;
             }
             // Победителя нет — ничья
             if (IsLastFightDone(context))
             {
-                result.IsDuelEnded = true;
-                result.Winner = FightWinner.None;
+                result.IsDuelEnded.Value = true;
+                result.Winner.Value = FightWinner.None;
                 result.WinnerId = string.Empty;
             }
 
@@ -77,7 +77,7 @@ namespace Blackset.Duel.Modules
             
             foreach (DuelParticipantState participant in context.Participants.Values)
             {
-                if (IsMoreThanHalfWon(context, participant.FightsWon))
+                if (IsMoreThanHalfWon(context, participant.FightsWon.Value))
                 {
                     winnerId = participant.ParticipantId;
                     return true;
@@ -101,7 +101,7 @@ namespace Blackset.Duel.Modules
         /// <summary>
         /// Максимум возможных по правилам боев завершены
         /// </summary>
-        private bool IsLastFightDone(DuelContext context) => context.Progress.FightNumber == context.Rules.MaxFightsPerDuel;
+        private bool IsLastFightDone(DuelContext context) => context.Progress.FightNumber.Value == context.Rules.MaxFightsPerDuel;
         
         #endregion
     }

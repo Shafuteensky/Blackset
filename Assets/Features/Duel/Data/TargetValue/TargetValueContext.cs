@@ -1,7 +1,6 @@
-using System;
 using System.Collections.Generic;
 using Blackset.Data.Items.Types;
-using Extensions.Log;
+using Extensions.Reactive;
 
 namespace Blackset.Duel.TargetValue
 {
@@ -10,33 +9,18 @@ namespace Blackset.Duel.TargetValue
     /// </summary>
     public class TargetValueContext
     {
-        #region События
-        
-        /// <summary>
-        /// Установка величины целевого значения
-        /// </summary>
-        public event Action onTargetValueSet; 
-        
-        #endregion
-
         /// <summary>
         /// Целевое значение
         /// </summary>
-        public int TargetValue  
-        {
-            get
-            {
-                if (targetValue == 0) ServiceDebug.LogWarning($"Целевое значение равно нулю, возможно не был вызван {nameof(SetTargetValue)}");
-                return targetValue;
-            }
-        }
+        public ReactiveProperty<int> TargetValue = new(0);
         /// <summary>
         /// Броски-источники результатов, составивших ЦЗ
         /// </summary>
         public Dictionary<DiceType, int> SourceRolls { get; private set; } = new();
-
-        private int targetValue;
-        private bool isFixedValue;
+        /// <summary>
+        /// Фиксировано ли ЦЗ либо случайно
+        /// </summary>
+        public bool IsFixedValue { get; private set; }
 
         /// <summary>
         /// Установка величины целевого значения
@@ -44,9 +28,8 @@ namespace Blackset.Duel.TargetValue
         /// <param name="newTargetValue"></param>
         public void SetTargetValue(int newTargetValue, bool isFixed, Dictionary<DiceType, int> rolls = null)
         {
-            targetValue = newTargetValue;
-            isFixedValue = isFixed;
-            onTargetValueSet?.Invoke();
+            TargetValue.Value = newTargetValue;
+            IsFixedValue = isFixed;
 
             if (!isFixed && rolls != null)
             {

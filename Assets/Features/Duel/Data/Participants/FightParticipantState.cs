@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Extensions.Reactive;
 
 namespace Blackset.Duel.Participants
 {
@@ -10,14 +11,6 @@ namespace Blackset.Duel.Participants
     {
         #region События
 
-        /// <summary>
-        /// Участник сдался в текущем бою
-        /// </summary>
-        public event Action onGiveUp; 
-        /// <summary>
-        /// Игровой счет текущего боя обновился
-        /// </summary>
-        public event Action onScoreUpdate; 
         /// <summary>
         /// Дайс из сборки использован в текущем бою
         /// </summary>
@@ -32,16 +25,16 @@ namespace Blackset.Duel.Participants
         /// <summary>
         /// Сдался в текущем бою
         /// </summary>
-        public bool HasGivenUp { get; private set; }
+        public ReactiveProperty<bool> HasGivenUp { get; private set; } = new(false);
         
         /// <summary>
         /// Количество совершенных бросков
         /// </summary>
-        public int Throws { get; private set; }
+        public ReactiveProperty<int> Throws { get; private set; } = new(0);
         /// <summary>
         /// Счет боя 
         /// </summary>
-        public int Score { get; private set; }
+        public ReactiveProperty<int> Score { get; private set; } = new(0);
 
         /// <summary>
         /// Использованные за бой дайсы в порядке применения [id_дайса_в_сборке]
@@ -84,10 +77,10 @@ namespace Blackset.Duel.Participants
         /// <param name="maxThrows"></param>
         public void ResetForNewFight()
         {
-            HasGivenUp = false;
+            HasGivenUp.Value = false;
 
-            Throws = 0;
-            Score = 0;
+            Throws.Value = 0;
+            Score.Value = 0;
 
             dicesUsed.Clear();
             consumablesUsed.Clear();
@@ -106,26 +99,7 @@ namespace Blackset.Duel.Participants
         /// </summary>
         public void MarkThrow()
         {
-            Throws += 1;
-        }
-
-        /// <summary>
-        /// Обновить счет участника
-        /// </summary>
-        /// <param name="newScore">Новое значение счета</param>
-        public void UpdateScore(int newScore)
-        {
-            Score = newScore;
-            onScoreUpdate?.Invoke();
-        }
-        
-        /// <summary>
-        /// Отметить участника как сдавшегося в этом бою
-        /// </summary>
-        public void MarkGivenUp()
-        {
-            HasGivenUp = true;
-            onGiveUp?.Invoke();
+            Throws.Value += 1;
         }
 
         /// <summary>
@@ -159,5 +133,14 @@ namespace Blackset.Duel.Participants
         }
         
         #endregion
+
+        /// <summary>
+        /// Обновление счета
+        /// </summary>
+        /// <param name="snapshotScore">Новое значение счета</param>
+        public void UpdateScore(int snapshotScore)
+        {
+            Score.Value = snapshotScore;
+        }
     }
 }

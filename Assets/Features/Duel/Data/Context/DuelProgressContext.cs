@@ -1,3 +1,4 @@
+using Extensions.Reactive;
 using Features.Duel.Context;
 
 namespace Blackset.Duel.Context
@@ -10,15 +11,16 @@ namespace Blackset.Duel.Context
         /// <summary>
         /// Номер активной битвы
         /// </summary>
-        public int FightNumber { get; private set; }
+            
+        public ReactiveProperty<int> FightNumber { get; private set; }
         /// <summary>
         /// Номер текущего броска в этой битве
         /// </summary>
-        public int ThrowNumber { get; private set; }
+        public ReactiveProperty<int> ThrowNumber { get; private set; }
         /// <summary>
         /// Состояние дуэли
         /// </summary>
-        public bool IsDuelFinished { get; private set; }
+        public ReactiveProperty<bool> IsDuelFinished { get; private set; }
         /// <summary>
         /// Результат окончания дуэли
         /// </summary>
@@ -31,8 +33,8 @@ namespace Blackset.Duel.Context
         /// </summary>
         public void OnNewFight()
         {
-            FightNumber++;
-            ThrowNumber = 0;
+            FightNumber.Value++;
+            ThrowNumber.Value = 0;
         }
 
         /// <summary>
@@ -40,7 +42,7 @@ namespace Blackset.Duel.Context
         /// </summary>
         public void OnNewThrow()
         {
-            ThrowNumber++;
+            ThrowNumber.Value++;
         }
 
         /// <summary>
@@ -49,7 +51,7 @@ namespace Blackset.Duel.Context
         public void OnDuelFinished(DuelEndResult duelResult)
         {
             DuelResult = duelResult;
-            IsDuelFinished = true;
+            IsDuelFinished.Value = true;
         }
         
         #endregion

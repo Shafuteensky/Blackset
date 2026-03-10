@@ -19,7 +19,7 @@ namespace Blackset.Duel.Sequence.States
         public void Enter(DuelContext context)
         {
             DuelEndResult duelEndState = context.Progress.DuelResult;
-            bool isPlayerWon = duelEndState.Winner == FightWinner.Player;
+            bool isPlayerWon = duelEndState.Winner.Value == FightWinner.Player;
             
             RewardRequest rewardRequest = new RewardRequest(isPlayerWon, context.Contract);
             IRewardService rewardService = modules.Get<IRewardService>();

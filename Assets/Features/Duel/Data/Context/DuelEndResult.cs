@@ -1,3 +1,4 @@
+using Extensions.Reactive;
 using Features.Duel.Data.FightEnd;
 
 namespace Features.Duel.Context
@@ -13,11 +14,11 @@ namespace Features.Duel.Context
         /// <returns>
         /// true если выполнены все действия по правилам, false если бой дуэль продолжается)
         /// </returns>
-        public bool IsDuelEnded { get; set; }
+        public ReactiveProperty<bool> IsDuelEnded { get; set; }
         /// <summary>
         /// Победитель в бою
         /// </summary>
-        public FightWinner Winner { get; set; }
+        public ReactiveProperty<FightWinner> Winner { get; set; }
         /// <summary>
         /// Идентификатор победившего участника
         /// </summary>
@@ -31,8 +32,14 @@ namespace Features.Duel.Context
         /// <param name="winnerId">Идентификатор победившего участника</param>
         public DuelEndResult(bool isFightEnded, string winnerId, FightWinner winner)
         {
-            IsDuelEnded = isFightEnded;
-            Winner = winner;
+            IsDuelEnded = new ReactiveProperty<bool>(isFightEnded)
+            {
+                Value = isFightEnded
+            };
+            Winner = new ReactiveProperty<FightWinner>(winner)
+            {
+                Value = winner
+            };
             WinnerId = winnerId;
         }
     }

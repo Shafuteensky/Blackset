@@ -21,42 +21,42 @@ namespace Blackset.Duel.Participants
             !String.IsNullOrEmpty(DeclaredDice.Value)
             && !String.IsNullOrEmpty(ChosenDice.Value)
             && IsConsumableChosen.Value;
-        
+
         /// <summary>
         /// Спасовал
         /// </summary>
-        public ReactiveProperty<bool> HasPassed { get; private set; }
+        public ReactiveProperty<bool> HasPassed { get; private set; } = new(false);
         
         /// <summary>
         /// Объявлен ли дайс в этот ход
         /// </summary>
-        public ReactiveProperty<bool> IsDiceDeclared { get; private set; }
+        public ReactiveProperty<bool> IsDiceDeclared { get; private set; } = new(false);
         /// <summary>
         /// Объявленный в этом ходу дайс
         /// </summary>
-        public ReactiveProperty<string> DeclaredDice { get; private set; }
+        public ReactiveProperty<string> DeclaredDice { get; private set; } = new(string.Empty);
         
         /// <summary>
         /// Использован ли дайс в этот ход
         /// </summary>
-        public ReactiveProperty<bool> IsDiceChosen { get; private set; }
+        public ReactiveProperty<bool> IsDiceChosen { get; private set; } = new(false);
         /// <summary>
         /// Выбранный для броска в этом ходу дайс
         /// </summary>
-        public ReactiveProperty<string> ChosenDice { get; private set; }
+        public ReactiveProperty<string> ChosenDice { get; private set; } = new(string.Empty);
         
         /// <summary>
         /// Использован ли расходник в этот ход
         /// </summary>
-        public ReactiveProperty<bool> IsConsumableChosen { get; private set; }
+        public ReactiveProperty<bool> IsConsumableChosen { get; private set; } = new(false);
         /// <summary>
         /// Выбранный для использования в этом ходу расходник
         /// </summary>
-        public ReactiveProperty<string> ChosenConsumable { get; private set; }
+        public ReactiveProperty<string> ChosenConsumable { get; private set; } = new(string.Empty);
         /// <summary>
         /// Цель применения расходника
         /// </summary>
-        public ReactiveProperty<ApplyTarget> ConsumableTarget { get; private set; }
+        public ReactiveProperty<ApplyTarget> ConsumableTarget { get; private set; } = new(ApplyTarget.None);
 
         #region Применение данных
         

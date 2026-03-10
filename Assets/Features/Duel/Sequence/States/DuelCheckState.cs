@@ -24,7 +24,7 @@ namespace Blackset.Duel.Sequence.States
         
         public StateResult Tick(DuelContext context)
         {
-            if (duelEndResult.IsDuelEnded)
+            if (duelEndResult.IsDuelEnded.Value)
             {
                 context.Progress.OnDuelFinished(duelEndResult);
                 return StateResult.Switch<RewardResolveState>();
