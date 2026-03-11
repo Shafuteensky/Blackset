@@ -52,7 +52,7 @@ namespace Blackset.GameDebug
         private void LogGeneral(DuelContext context)
         {
             var sb = new StringBuilder();
-            sb.AppendLine($"Общие данные");
+            sb.AppendLine($"Общие данные —————————————————");
             sb.AppendLine($"  Сид:         {(string.IsNullOrEmpty(context.Seed) ? "—" : context.Seed)}");
             sb.AppendLine($"  Игрок id:    {(string.IsNullOrEmpty(context.PlayerId) ? "—" : context.PlayerId)}");
             sb.AppendLine($"  Оппонент id: {(string.IsNullOrEmpty(context.OpponentId) ? "—" : context.OpponentId)}");
