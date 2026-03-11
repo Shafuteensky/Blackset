@@ -9,6 +9,8 @@ namespace Extensions.Log
     /// </summary>
     public static class ServiceDebug
     {
+        private const string MESSAGE_POSTFIX = "\n";
+        
         public static bool EnableInfo = true;
         public static bool EnableWarnings = true;
         public static bool EnableErrors = true;
@@ -28,7 +30,7 @@ namespace Extensions.Log
         public static void Log<T>(string message)
         {
             if (!EnableInfo) return;
-            Debug.Log(Format(typeof(T).Name, message, ColorInfo));
+            Debug.Log(Format(typeof(T).Name, message + MESSAGE_POSTFIX, ColorInfo));
         }
 
         /// <summary>
@@ -40,7 +42,7 @@ namespace Extensions.Log
         public static void LogWarning<T>(string message)
         {
             if (!EnableWarnings) return;
-            Debug.LogWarning(Format(typeof(T).Name, message, ColorWarning));
+            Debug.LogWarning(Format(typeof(T).Name, message + MESSAGE_POSTFIX, ColorWarning));
         }
         
         /// <summary>
@@ -52,7 +54,7 @@ namespace Extensions.Log
         public static void LogError<T>(string message)
         {
             if (!EnableErrors) return;
-            Debug.LogError(Format(typeof(T).Name, message, ColorError));
+            Debug.LogError(Format(typeof(T).Name, message + MESSAGE_POSTFIX, ColorError));
         }
         
         #endregion
@@ -68,7 +70,7 @@ namespace Extensions.Log
         public static void Log(Object obj, string message)
         {
             if (!EnableInfo) return;
-            Debug.Log(Format(obj ? obj.name : "NULL", message, ColorInfo), obj);
+            Debug.Log(Format(obj ? obj.name : "NULL", message + MESSAGE_POSTFIX, ColorInfo), obj);
         }
 
         /// <summary>
@@ -80,7 +82,7 @@ namespace Extensions.Log
         public static void LogWarning(Object obj, string message)
         {
             if (!EnableWarnings) return;
-            Debug.LogWarning(Format(obj ? obj.name : "NULL", message, ColorWarning), obj);
+            Debug.LogWarning(Format(obj ? obj.name : "NULL", message + MESSAGE_POSTFIX, ColorWarning), obj);
         }
 
         /// <summary>
@@ -92,7 +94,7 @@ namespace Extensions.Log
         public static void LogError(Object obj, string message)
         {
             if (!EnableErrors) return;
-            Debug.LogError(Format(obj ? obj.name : "NULL", message, ColorError), obj);
+            Debug.LogError(Format(obj ? obj.name : "NULL", message + MESSAGE_POSTFIX, ColorError), obj);
         }
         
         #endregion
@@ -108,7 +110,7 @@ namespace Extensions.Log
         public static void Log(string message, [CallerFilePath] string filePath = "")
         {
             if (!EnableInfo) return;
-            Debug.Log(Format(GetClassName(filePath), message));
+            Debug.Log(Format(GetClassName(filePath), message + MESSAGE_POSTFIX));
         }
 
         /// <summary>
@@ -120,7 +122,7 @@ namespace Extensions.Log
         public static void LogWarning(string message, [CallerFilePath] string filePath = "")
         {
             if (!EnableWarnings) return;
-            Debug.LogWarning(Format(GetClassName(filePath), message));
+            Debug.LogWarning(Format(GetClassName(filePath), message + MESSAGE_POSTFIX));
         }
 
         /// <summary>
@@ -132,7 +134,7 @@ namespace Extensions.Log
         public static void LogError(string message, [CallerFilePath] string filePath = "")
         {
             if (!EnableErrors) return;
-            Debug.LogError(Format(GetClassName(filePath), message));
+            Debug.LogError(Format(GetClassName(filePath), message + MESSAGE_POSTFIX));
         }
 
         private static string GetClassName(string filePath) => Path.GetFileNameWithoutExtension(filePath);
