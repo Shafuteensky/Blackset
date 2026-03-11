@@ -22,7 +22,7 @@ namespace Blackset.Duel.Sequence.States
             {
                 string chosenDiceId = context.Participants[participantId].FightState.TurnState.ChosenDice.Value;
                 int rollResult = diceRoller.RollDice(context, participantId, chosenDiceId);
-                Debug.Log(participantId+" - "+rollResult);
+                Debug.Log(participantId+" - "+rollResult); ///////////////////////////////////////
                 context.Participants[participantId].FightState.RegisterRawRollResult(chosenDiceId, rollResult); 
             }
             

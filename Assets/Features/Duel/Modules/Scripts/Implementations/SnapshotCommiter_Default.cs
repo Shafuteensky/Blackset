@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Blackset.Duel.Context;
 using Blackset.Duel.History;
+using Blackset.Duel.Modules;
 using Blackset.Duel.Participants;
 using Extensions.Helpers;
 using Extensions.Log;
@@ -11,26 +12,17 @@ namespace Blackset.Duel.Snapshots
     /// <summary>
     /// Перенос финально рассчитанных данных хода из снапшота в "истину" дуэли
     /// </summary>
-    // TODO Сделать модулем реестра
-    public class SnapshotCommiter 
+    [CreateAssetMenu(
+        fileName = nameof(SnapshotCommiter_Default),
+        menuName = "Blackset/Duel/Modules/" + nameof(SnapshotCommiter_Default))]
+    public class SnapshotCommiter_Default : BaseDuelModule, ISnapshotCommiter
     {
-        private readonly DuelContext context;
-
-        /// <summary>
-        /// Новый коммитер расчитанной информации дуэли
-        /// </summary>
-        /// <param name="context">Данные дуэли</param>
-        public SnapshotCommiter(DuelContext context)
-        {
-            this.context = context;
-        }
-        
         /// <summary>
         /// Коммит снапшота
         /// </summary>
         /// <param name="context">Данные дуэли</param>
         /// <param name="resolvedSnapshot">Данные зарезолвенного снапшота</param>
-        public void Commit(TurnSnapshot resolvedSnapshot)
+        public void Commit(TurnSnapshot resolvedSnapshot, DuelContext context)
         {
             if (context.Participants.Count == 0)
             {
@@ -39,13 +31,13 @@ namespace Blackset.Duel.Snapshots
             }
             
             // 1) Применение результатов к счетам/статусам участников
-            ApplyScores(resolvedSnapshot);
+            ApplyScores(resolvedSnapshot, context);
             // 2) Отметка использования ресурсов (кубы/расходники/пасы)
-            ApplyUsage(resolvedSnapshot);
+            ApplyUsage(resolvedSnapshot, context);
             // 3) Обновление knowledge (раскрытие кубов/расходников при первом использовании)
-            ApplyKnowledge(resolvedSnapshot);
+            ApplyKnowledge(resolvedSnapshot, context);
             // 4) Запись истории хода (для UI/логов/повторов)
-            AppendHistory(resolvedSnapshot);
+            AppendHistory(resolvedSnapshot, context);
             // 5) Прочие фиксации (если у тебя есть: длительные эффекты, таймеры, стаки и т.д.)
             ApplyOngoing(resolvedSnapshot);
         }
@@ -55,7 +47,7 @@ namespace Blackset.Duel.Snapshots
         /// <summary>
         /// Применяет финальные счета участников из снапшота
         /// </summary>
-        private void ApplyScores(TurnSnapshot snapshot)
+        private void ApplyScores(TurnSnapshot snapshot, DuelContext context)
         {
             foreach (KeyValuePair<string, DuelParticipantState> pair in context.Participants)
             {
@@ -74,7 +66,7 @@ namespace Blackset.Duel.Snapshots
         /// на основе намерений участников из снапшота
         /// </summary>
         // TODO Должен ли отмечать на основе намерений? Или на основе обработанных в FSM фактов (добавить доп. поля в резолвер)?
-        private void ApplyUsage(TurnSnapshot snapshot)
+        private void ApplyUsage(TurnSnapshot snapshot, DuelContext context)
         {
             foreach (var pair in snapshot.ParticipantStates)
             {
@@ -106,7 +98,7 @@ namespace Blackset.Duel.Snapshots
         /// <summary>
         /// Раскрывает дайсы участников, использованные в этот ход
         /// </summary>
-        private void ApplyKnowledge(TurnSnapshot snapshot)
+        private void ApplyKnowledge(TurnSnapshot snapshot, DuelContext context)
         {
             foreach (KeyValuePair<string, KnowledgeState> pair in snapshot.PlayerKnowledge)
             {
@@ -126,7 +118,7 @@ namespace Blackset.Duel.Snapshots
         /// Добавляет <see cref="TurnHistoryEntry"/> в текущий <see cref="FightHistoryEntry"/>.
         /// Если запись текущего боя отсутствует — создаёт новую.
         /// </summary>
-        private void AppendHistory(TurnSnapshot snapshot)
+        private void AppendHistory(TurnSnapshot snapshot, DuelContext context)
         {
             if (!context.History.TryGetLastEntry(out FightHistoryEntry currentFightEntry))
             {

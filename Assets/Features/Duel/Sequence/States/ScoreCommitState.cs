@@ -24,8 +24,8 @@ namespace Blackset.Duel.Sequence.States
             TurnSnapshot resolvedSnapshot = effectsResolver.Resolve(snapshot);
             
             // Актуализация фактических данных дуэли
-            SnapshotCommiter commiter = new SnapshotCommiter(context);
-            commiter.Commit(resolvedSnapshot);
+            ISnapshotCommiter commiterDefault = modules.Get<ISnapshotCommiter>();
+            commiterDefault.Commit(resolvedSnapshot, context);
         }
         
         public StateResult Tick(DuelContext context)
