@@ -32,6 +32,9 @@ namespace Blackset.Duel.Modules
             string candidateWinnerId = string.Empty;
             bool isCandidateTie = false;
 
+            // Кандидат проигравшего — актуален только при сравнительных политиках, без автопроигрыша
+            string candidateLoserId = string.Empty;
+
             int bestAbsDelta = int.MaxValue;
             int bestUnderTargetScore = int.MinValue;
             int minScore = int.MaxValue;
@@ -39,7 +42,7 @@ namespace Blackset.Duel.Modules
             foreach (DuelParticipantState participant in context.Participants.Values)
             {
                 // Автопроигрышь — немедленно завершаем бой, победитель — противоположная сторона
-                if (IsSomeoneLostByRules(context, participant, ref minScore, out string currentLoserId))
+                if (IsSomeoneLostByRules(context, participant, ref minScore, ref candidateLoserId, out string currentLoserId))
                     return ResolveByLoser(context, result, currentLoserId);
 
                 // Автопобеда — немедленно завершаем бой
@@ -53,6 +56,9 @@ namespace Blackset.Duel.Modules
                 return result;
 
             // Последний ход сыгран — определяем итог по кандидатам
+            if (!string.IsNullOrEmpty(candidateLoserId))
+                return ResolveByLoser(context, result, candidateLoserId);
+
             if (!string.IsNullOrEmpty(candidateWinnerId) && !isCandidateTie)
                 return ResolveByWinner(context, result, candidateWinnerId);
 
@@ -161,6 +167,7 @@ namespace Blackset.Duel.Modules
             DuelContext context,
             DuelParticipantState participant,
             ref int minScore,
+            ref string candidateLoserId,
             out string loserId)
         {
             FightLossPolicy activeFightLossPolicy = context.Rules.FightLossPolicy;
@@ -180,11 +187,11 @@ namespace Blackset.Duel.Modules
                         return true;
                     }
 
-                    // Участник слабее по счёту — обновляем минимум
+                    // Участник слабее по счёту — обновляем кандидата
                     if (score < minScore)
                     {
                         minScore = score;
-                        loserId = participant.ParticipantId;
+                        candidateLoserId = participant.ParticipantId;
                     }
 
                     break;
@@ -192,11 +199,11 @@ namespace Blackset.Duel.Modules
                 
                 case FightLossPolicy.Less:
                 {
-                    // Участник слабее по счёту — обновляем минимум
+                    // Участник слабее по счёту — обновляем кандидата
                     if (score < minScore)
                     {
                         minScore = score;
-                        loserId = participant.ParticipantId;
+                        candidateLoserId = participant.ParticipantId;
                     }
 
                     break;

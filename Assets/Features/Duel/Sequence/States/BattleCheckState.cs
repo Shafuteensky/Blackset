@@ -26,7 +26,16 @@ namespace Blackset.Duel.Sequence.States
         public StateResult Tick(DuelContext context)
         {
             if (fightEndResult.IsFightEnded)
+            {
+                // Зачет победы выигравшему
+                foreach (var participant in context.Participants)
+                {
+                    if (participant.Key == fightEndResult.WinnerId)
+                        participant.Value.WinFight();
+                }
+                
                 return StateResult.Switch<DuelCheckState>();
+            }
             else
                 return StateResult.Switch<RollPlanningState>();
         }
