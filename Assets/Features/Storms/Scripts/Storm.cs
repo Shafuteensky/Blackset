@@ -44,7 +44,7 @@ namespace Blackset.Storms
         [SerializeField]
         private RuleOverride<EffectsPolicy> effectsPolicy;
 
-        [Header("Целево значение"), Space]
+        [Header("Целевое значение"), Space]
         [SerializeField]
         private RuleOverride<TargetValuePolicy> targetValuePolicy;
         

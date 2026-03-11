@@ -1,0 +1,56 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f8694b7dca564d968aaa080d3867c618, type: 3}
+  m_Name: Blackjack
+  m_EditorClassIdentifier: Assembly-CSharp::Blackset.Storms.Storm
+  id: 28abc0f0b25948ce8c14a7a189354613
+  dataName: Blackjack
+  dataDescription: 'Target value fixed: 21.'
+  dicesInSet:
+    enabled: 0
+    value: 0
+  consumablesInSet:
+    enabled: 0
+    value: 0
+  dicesSetPolicy:
+    enabled: 0
+    value: 0
+  consumablesSetPolicy:
+    enabled: 0
+    value: 0
+  maxRerolls:
+    enabled: 0
+    value: 0
+  duelWinPolicy:
+    enabled: 0
+    value: 0
+  maxFightsPerDuel:
+    enabled: 0
+    value: 0
+  fightWinPolicy:
+    enabled: 0
+    value: 0
+  fightLossPolicy:
+    enabled: 0
+    value: 0
+  maxThrowsPerFight:
+    enabled: 0
+    value: 0
+  diceThrowPolicy:
+    enabled: 0
+    value: 0
+  effectsPolicy:
+    enabled: 0
+    value: 0
+  targetValuePolicy:
+    enabled: 1
+    value: 2
