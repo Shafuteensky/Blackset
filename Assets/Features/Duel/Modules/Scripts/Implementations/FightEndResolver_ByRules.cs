@@ -30,7 +30,6 @@ namespace Blackset.Duel.Modules
         {
             // Кандидат победителя — актуален только при сравнительных политиках, без автопобеды
             string candidateWinnerId = string.Empty;
-            bool isCandidateTie = false;
 
             // Кандидат проигравшего — актуален только при сравнительных политиках, без автопроигрыша
             string candidateLoserId = string.Empty;
@@ -42,12 +41,12 @@ namespace Blackset.Duel.Modules
             foreach (DuelParticipantState participant in context.Participants.Values)
             {
                 // Автопроигрышь — немедленно завершаем бой, победитель — противоположная сторона
-                if (IsSomeoneLostByRules(context, participant, ref minScore, ref candidateLoserId, out string currentLoserId))
+                if (IsParticipantLostByRules(context, participant, ref minScore, ref candidateLoserId, out string currentLoserId))
                     return ResolveByLoser(context, result, currentLoserId);
 
                 // Автопобеда — немедленно завершаем бой
-                if (IsSomeoneWonByRules(context, participant, ref bestAbsDelta, ref bestUnderTargetScore,
-                        ref candidateWinnerId, ref isCandidateTie))
+                if (IsParticipantWonByRules(context, participant, ref bestAbsDelta, ref bestUnderTargetScore,
+                        ref candidateWinnerId))
                     return ResolveByWinner(context, result, candidateWinnerId);
             }
 
@@ -58,8 +57,8 @@ namespace Blackset.Duel.Modules
             // Последний ход сыгран — определяем итог по кандидатам
             if (!string.IsNullOrEmpty(candidateLoserId))
                 return ResolveByLoser(context, result, candidateLoserId);
-
-            if (!string.IsNullOrEmpty(candidateWinnerId) && !isCandidateTie)
+            
+            if (!string.IsNullOrEmpty(candidateWinnerId))
                 return ResolveByWinner(context, result, candidateWinnerId);
 
             // Ничья: нет кандидата или ничья по дельте
@@ -81,16 +80,15 @@ namespace Blackset.Duel.Modules
         /// <summary>
         /// Проверяет участника на победу.
         /// Возвращает true только при автопобеде (exact / bust) — бой нужно завершить немедленно.
-        /// При сравнительных политиках обновляет candidateWinnerId и isCandidateTie,
+        /// При сравнительных политиках обновляет candidateWinnerId,
         /// но возвращает false — бой продолжается до конца ходов.
         /// </summary>
-        private bool IsSomeoneWonByRules(
+        private bool IsParticipantWonByRules(
             DuelContext context,
             DuelParticipantState participant,
             ref int bestAbsDelta,
             ref int bestUnderTargetScore,
-            ref string candidateWinnerId,
-            ref bool isCandidateTie)
+            ref string candidateWinnerId)
         {
             FightWinPolicy activeFightWinPolicy = context.Rules.FightWinPolicy;
 
@@ -113,7 +111,11 @@ namespace Blackset.Duel.Modules
                     {
                         bestUnderTargetScore = score;
                         candidateWinnerId = participant.ParticipantId;
-                        isCandidateTie = false;
+                    }
+                    // Ничья при равном счёте снизу
+                    else if (score == bestUnderTargetScore) 
+                    {
+                        candidateWinnerId = string.Empty;
                     }
 
                     break;
@@ -128,12 +130,10 @@ namespace Blackset.Duel.Modules
                     {
                         bestAbsDelta = absDelta;
                         candidateWinnerId = participant.ParticipantId;
-                        isCandidateTie = false;
                     }
                     else if (absDelta == bestAbsDelta)
                     {
                         // Два участника одинаково близко к ЦЗ — ничья
-                        isCandidateTie = true;
                         candidateWinnerId = string.Empty;
                     }
 
@@ -163,7 +163,13 @@ namespace Blackset.Duel.Modules
             return false; // Не автопобеда
         }
 
-        private bool IsSomeoneLostByRules(
+        /// <summary>
+        /// Проверяет участника на поражение.
+        /// Возвращает true только при автопроигрыше (например пробитие ЦЗ) — бой нужно завершить немедленно.
+        /// При сравнительных политиках обновляет candidateLoserId,
+        /// но возвращает false — бой продолжается до конца ходов.
+        /// </summary>
+        private bool IsParticipantLostByRules(
             DuelContext context,
             DuelParticipantState participant,
             ref int minScore,
@@ -193,6 +199,11 @@ namespace Blackset.Duel.Modules
                         minScore = score;
                         candidateLoserId = participant.ParticipantId;
                     }
+                    // Оба одинаково слабы, нет однозначного проигравшего
+                    else if (score == minScore)
+                    {
+                        candidateLoserId = string.Empty; 
+                    }
 
                     break;
                 }
@@ -204,6 +215,11 @@ namespace Blackset.Duel.Modules
                     {
                         minScore = score;
                         candidateLoserId = participant.ParticipantId;
+                    }
+                    // Оба одинаково слабы, нет однозначного проигравшего
+                    else if (score == minScore)
+                    {
+                        candidateLoserId = string.Empty; 
                     }
 
                     break;
@@ -217,7 +233,7 @@ namespace Blackset.Duel.Modules
                 }
             }
 
-            return false;
+            return false; // Не автопроигрышь
         }
 
         #endregion
