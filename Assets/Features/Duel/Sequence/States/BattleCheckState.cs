@@ -35,13 +35,13 @@ namespace Blackset.Duel.Sequence.States
                         participant.Value.WinFight();
                 }
                 
-                eventHub.Publish(new BattleEndEvent(context));
+                eventHub.Publish(new BattleEndEvent(context, fightEndResult));
                 
                 return StateResult.Switch<DuelCheckState>();
             }
             else
             {
-                eventHub.Publish(new BattleEndEvent(context));
+                eventHub.Publish(new BattleEndEvent(context, fightEndResult));
                 
                 return StateResult.Switch<RollPlanningState>();
             }

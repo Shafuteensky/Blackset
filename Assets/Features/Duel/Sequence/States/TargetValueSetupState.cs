@@ -23,7 +23,7 @@ namespace Blackset.Duel.Sequence.States
             TargetValueContext tvContext = tvGenerator.Generate(request);
             context.TargetValue = tvContext;
             
-            eventHub.Publish(new TargetValueSetEvent());
+            eventHub.Publish(new TargetValueSetEvent(context.TargetValue.TargetValue.Value));
         }
         
         public StateResult Tick(DuelContext context)
