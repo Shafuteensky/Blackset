@@ -444,7 +444,7 @@ GameObject:
   - component: {fileID: 7875064420772969097}
   - component: {fileID: 7045035117144537617}
   m_Layer: 0
-  m_Name: Results Popup
+  m_Name: Results Popup (Win)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -760,6 +760,10 @@ PrefabInstance:
     - target: {fileID: 7832653202750547814, guid: ef58cc00ff4104c4fbb5766090f18e29, type: 3}
       propertyPath: m_Name
       value: UiInventoryItem
+      objectReference: {fileID: 0}
+    - target: {fileID: 8254885460256315274, guid: ef58cc00ff4104c4fbb5766090f18e29, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

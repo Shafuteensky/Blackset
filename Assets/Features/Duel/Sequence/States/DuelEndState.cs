@@ -14,7 +14,7 @@ namespace Blackset.Duel.Sequence.States
     {
         public void Enter(DuelContext context)
         {
-            eventHub.Publish(new DuelEndEvent());
+            eventHub.Publish(new DuelEndEvent(context.Progress.DuelResult));
             // TODO Вызов события для показа окна окончания дуэли
         }
         

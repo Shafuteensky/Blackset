@@ -6,7 +6,6 @@ using Blackset.Duel.Rules;
 using Blackset.Duel.Sequence.States;
 using Blackset.DuelContracts;
 using Blackset.DuelEvents;
-using Blackset.DuelEvents.EventTypes;
 using Blackset.Storms;
 using Extensions.Log;
 using Extensions.Singleton;

@@ -6,6 +6,7 @@ namespace Blackset.Player
     /// <summary>
     /// Увеличитель сыгранных дуэлей (при открытии окна результатов)
     /// </summary>
+    // TODO Сделать не при открытии окна, а по подписке duelController.EventHub.Subscribe<DuelEndEvent>(...);
     public class DuelPlayedCounter : InitializableMonoBehaviour
     {
         [SerializeField]

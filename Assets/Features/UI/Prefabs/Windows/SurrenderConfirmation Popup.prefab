@@ -270,4 +270,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp-firstpass::Extensions.UIWindows.ButtonOpenUIWindow
   needToCloseFocused: 1
-  UIWindowToOpen: {fileID: 11400000, guid: ebd6da16658b9954585082a52a685bae, type: 2}
+  UIWindowToOpen: {fileID: 11400000, guid: fa794211371191a42a74c650d2e61f1e, type: 2}
