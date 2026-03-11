@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f8694b7dca564d968aaa080d3867c618, type: 3}
   m_Name: QuickPlay
   m_EditorClassIdentifier: Assembly-CSharp::Blackset.Storms.Storm
-  id: c55993e4dad94b4590279c5523bad9a3
-  dataName: Long play
-  dataDescription: Maximum fights number increased to 5.
+  id: ba0a50b15f694cc985133c406f33edcf
+  dataName: Quick play
+  dataDescription: Maximum fights number decreased to 1.
   dicesInSet:
     enabled: 0
     value: 0
@@ -35,7 +35,7 @@ MonoBehaviour:
     value: 0
   maxFightsPerDuel:
     enabled: 1
-    value: 5
+    value: 1
   fightWinPolicy:
     enabled: 0
     value: 0
