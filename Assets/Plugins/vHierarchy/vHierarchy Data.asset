@@ -280,6 +280,14 @@ MonoBehaviour:
         - globalObjectIdString: GlobalObjectId_V1-2-390fefee3cc4eec42a522b61edd78188-1312721233-0
         - globalObjectIdString: GlobalObjectId_V1-2-390fefee3cc4eec42a522b61edd78188-687979681-0
         - globalObjectIdString: GlobalObjectId_V1-2-390fefee3cc4eec42a522b61edd78188-1085225380-0
+        - globalObjectIdString: GlobalObjectId_V1-2-390fefee3cc4eec42a522b61edd78188-1810346915-0
+        - globalObjectIdString: GlobalObjectId_V1-2-390fefee3cc4eec42a522b61edd78188-1668229867-0
+        - globalObjectIdString: GlobalObjectId_V1-2-390fefee3cc4eec42a522b61edd78188-1028731382-0
+        - globalObjectIdString: GlobalObjectId_V1-2-390fefee3cc4eec42a522b61edd78188-1543869743-0
+        - globalObjectIdString: GlobalObjectId_V1-2-390fefee3cc4eec42a522b61edd78188-1750342625-0
+        - globalObjectIdString: GlobalObjectId_V1-2-390fefee3cc4eec42a522b61edd78188-1209704251-0
+        - globalObjectIdString: GlobalObjectId_V1-2-390fefee3cc4eec42a522b61edd78188-654613663-0
+        - globalObjectIdString: GlobalObjectId_V1-2-390fefee3cc4eec42a522b61edd78188-2075282001-0
         values:
         - colorIndex: 0
           iconNameOrGuid: StandaloneInputModule Icon
@@ -319,6 +327,38 @@ MonoBehaviour:
           isColorRecursive: 0
         - colorIndex: 1
           iconNameOrGuid: DebuggerEnabled
+          isIconRecursive: 0
+          isColorRecursive: 0
+        - colorIndex: 1
+          iconNameOrGuid: Terrain On Icon
+          isIconRecursive: 0
+          isColorRecursive: 0
+        - colorIndex: 0
+          iconNameOrGuid: ReflectionProbe Icon
+          isIconRecursive: 0
+          isColorRecursive: 0
+        - colorIndex: 0
+          iconNameOrGuid: LightmapParameters Icon
+          isIconRecursive: 0
+          isColorRecursive: 0
+        - colorIndex: 0
+          iconNameOrGuid: Light Icon
+          isIconRecursive: 0
+          isColorRecursive: 0
+        - colorIndex: 0
+          iconNameOrGuid: Folder Icon
+          isIconRecursive: 0
+          isColorRecursive: 0
+        - colorIndex: 0
+          iconNameOrGuid: Folder Icon
+          isIconRecursive: 0
+          isColorRecursive: 0
+        - colorIndex: 0
+          iconNameOrGuid: Camera Icon
+          isIconRecursive: 0
+          isColorRecursive: 0
+        - colorIndex: 0
+          iconNameOrGuid: AvatarPivot
           isIconRecursive: 0
           isColorRecursive: 0
     - goDatas_byGlobalId:

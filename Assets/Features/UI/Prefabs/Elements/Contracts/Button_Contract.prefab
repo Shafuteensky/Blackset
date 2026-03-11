@@ -259,3 +259,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Blackset.DuelContracts.HoverInfo.ContractHoverInfoEmitter
   dtatSourceElement: {fileID: 8171616465663320379}
   holdSeconds: {fileID: 11400000, guid: 6ba349697ef68fd45b4bcf67ff561b62, type: 2}
+  positionSource: 1

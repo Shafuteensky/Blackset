@@ -12,6 +12,10 @@ namespace Blackset.UI.HoverInfo
         where TEntry : InMemoryDataEntry
         where TElement : ContextIdHolder<TContainer, TEntry>
     {
+        private const float DEFAULT_SCREEN_OFFSET = 16f;
+        private const float DEFAULT_CURSOR_OFFSET_X = 12f;
+        private const float DEFAULT_CURSOR_OFFSET_Y = -22f;
+        
         [Header("Ховер-панель"), Space]
         [SerializeField]
         protected CanvasGroup canvasGroup;
@@ -20,7 +24,12 @@ namespace Blackset.UI.HoverInfo
         
         [Header("Положение панели"), Space]
         [SerializeField]
-        protected Vector2 screenOffset = new(16f, -16f);
+        protected Vector2 screenOffset = new(DEFAULT_SCREEN_OFFSET, DEFAULT_SCREEN_OFFSET);
+        [SerializeField]
+        [Tooltip("Дополнительный отступ от курсора чтобы панель не перекрывала указатель.\n" +
+                 "X — отступ по горизонтали, Y — по вертикали.\n" +
+                 "Направление автоматически инвертируется в зависимости от точки привязки.")]
+        protected Vector2 cursorOffset = new(DEFAULT_CURSOR_OFFSET_X, DEFAULT_CURSOR_OFFSET_Y);
         
         protected Vector2 screenPosition;
 
@@ -35,6 +44,7 @@ namespace Blackset.UI.HoverInfo
         {
             BaseHoverInfoEmitter<TContainer, TEntry, TElement>.onShowRequested += OnShowRequested;
             BaseHoverInfoEmitter<TContainer, TEntry, TElement>.onHideRequested += OnHideRequested;
+            BaseHoverInfoEmitter<TContainer, TEntry, TElement>.onPositionUpdated += OnPositionUpdated;
             OnResetElements();
             OnHideRequested();
         }
@@ -43,6 +53,7 @@ namespace Blackset.UI.HoverInfo
         {
             BaseHoverInfoEmitter<TContainer, TEntry, TElement>.onShowRequested -= OnShowRequested;
             BaseHoverInfoEmitter<TContainer, TEntry, TElement>.onHideRequested -= OnHideRequested;
+            BaseHoverInfoEmitter<TContainer, TEntry, TElement>.onPositionUpdated -= OnPositionUpdated;
         }
 
         #region Показ ховер-панели
@@ -74,6 +85,12 @@ namespace Blackset.UI.HoverInfo
         #endregion
         
         #region Положение ховер-панели
+        
+        private void OnPositionUpdated(Vector2 position)
+        {
+            screenPosition = position;
+            UpdateHoverPanelPosition();
+        }
         
         protected void UpdateHoverPanelPosition()
         {
@@ -115,7 +132,12 @@ namespace Blackset.UI.HoverInfo
             float ox = pivot.x < 0.5f ? screenOffset.x : -screenOffset.x;
             float oy = pivot.y > 0.5f ? screenOffset.y : -screenOffset.y;
 
-            return new Vector2(ox, oy);
+            // Смещение от курсора только когда панель открывается вправо-вниз (pivot = 0, 1)
+            bool isRightDown = pivot.x < 0.5f && pivot.y > 0.5f;
+            float cx = isRightDown ? cursorOffset.x : 0f;
+            float cy = isRightDown ? cursorOffset.y : 0f;
+
+            return new Vector2(ox + cx, oy + cy);
         }
 
         protected Vector2 GetPopupSizeInScreenPixels()
