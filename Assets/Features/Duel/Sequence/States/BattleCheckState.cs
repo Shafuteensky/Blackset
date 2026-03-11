@@ -1,5 +1,6 @@
 using Blackset.Duel.Context;
 using Blackset.Duel.Modules;
+using Blackset.DuelEvents.EventTypes;
 using Extensions.FiniteStateMachine;
 using Features.Duel.Data.FightEnd;
 
@@ -34,10 +35,16 @@ namespace Blackset.Duel.Sequence.States
                         participant.Value.WinFight();
                 }
                 
+                eventHub.Publish(new BattleEndEvent(context));
+                
                 return StateResult.Switch<DuelCheckState>();
             }
             else
+            {
+                eventHub.Publish(new BattleEndEvent(context));
+                
                 return StateResult.Switch<RollPlanningState>();
+            }
         }
         
         public void Exit(DuelContext context)
