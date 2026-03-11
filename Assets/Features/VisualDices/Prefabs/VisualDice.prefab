@@ -260,6 +260,22 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
+  - eventID: 4
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 2450761945600554478}
+          m_TargetAssemblyTypeName: DG.Tweening.DOTweenAnimation, Assembly-CSharp-firstpass
+          m_MethodName: DORestart
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!114 &1120473354266294168
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -273,7 +289,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp-firstpass::Extensions.Audio.PointerSoundsPlayer
   model: 3
-  spatialPreset: {fileID: 11400000, guid: b10f41c08c193e348a4d9399e7a45926, type: 2}
+  spatialPreset: {fileID: 11400000, guid: 1cbc6afd28091a94ca3a2da12561c161, type: 2}
   enterSound: {fileID: 8300000, guid: 064603422268a384ebc77b58b918508f, type: 3}
   downSound: {fileID: 8300000, guid: a2be68f1550330d44b83185e27edffff, type: 3}
 --- !u!114 &4351025924490762769
@@ -311,6 +327,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Blackset.UI.Inventory.InventoryItemHoverInfoEmitter
   dtatSourceElement: {fileID: 4351025924490762769}
   holdSeconds: {fileID: 11400000, guid: c0a36e4a3850b154594fa82a285983c9, type: 2}
+  positionSource: 0
 --- !u!1001 &1750870341908362463
 PrefabInstance:
   m_ObjectHideFlags: 0
