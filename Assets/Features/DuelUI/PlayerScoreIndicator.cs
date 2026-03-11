@@ -10,7 +10,7 @@ namespace Blackset.DuelUI
     {
         protected override void OnDataInited(DuelInitedEvent handler, DuelContext duelContext)
         {
-            duelContext.Participants[duelContext.OpponentId].FightState.Score.Subscribe(
+            duelContext.Participants[duelContext.PlayerId].FightState.Score.Subscribe(
                 value => UpdateText(value.ToString()), true);
         }
     }

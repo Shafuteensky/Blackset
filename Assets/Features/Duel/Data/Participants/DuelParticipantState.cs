@@ -1,3 +1,4 @@
+using System;
 using Blackset.Duel.Pools;
 using Blackset.Duel.Sets;
 using Blackset.Opponents;
@@ -114,7 +115,7 @@ namespace Blackset.Duel.Participants
         /// <param name="contractOpponents"></param>
         public void InitializeBotDuelState(OpponentData contractOpponents)
         {
-            TrustLevel.Value = contractOpponents.CunningLevel; // TODO обновить функцию расчета (брать от данных соперника?)
+            TrustLevel.Value = DEFAULT_BOT_TRUST_LEVEL; // TODO обновить функцию расчета (брать от данных соперника?)
         }
         
         #endregion

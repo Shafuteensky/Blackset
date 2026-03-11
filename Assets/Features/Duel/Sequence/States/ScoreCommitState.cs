@@ -17,10 +17,9 @@ namespace Blackset.Duel.Sequence.States
     {
         public void Enter(DuelContext context)
         {
-            // Применение эффектов
-            // TODO Применение эффектов
+            // Применение результатов бросков и эффектов
             TurnSnapshot snapshot = new TurnSnapshot(context);
-            IEffectsResolutionPipeline effectsResolver = modules.Get<IEffectsResolutionPipeline>();
+            IScoreUpdatePipeline effectsResolver = modules.Get<IScoreUpdatePipeline>();
             TurnSnapshot resolvedSnapshot = effectsResolver.Resolve(snapshot);
             
             // Актуализация фактических данных дуэли

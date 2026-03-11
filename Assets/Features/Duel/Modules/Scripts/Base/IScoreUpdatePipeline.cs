@@ -3,9 +3,9 @@ using Blackset.Duel.Snapshots;
 namespace Blackset.Duel.Modules
 {
     /// <summary>
-    /// Пайплайн применения эффектов дайсов и расходников
+    /// Резолвер роллов и эффектов дайсов/расходников (пайпалайн обновления счетов)
     /// </summary>
-    public interface IEffectsResolutionPipeline : IDuelModuleInterface
+    public interface IScoreUpdatePipeline : IDuelModuleInterface
     {
         /// <summary>
         /// Применить эффекты

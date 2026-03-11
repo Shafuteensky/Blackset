@@ -100,7 +100,7 @@ namespace Blackset.Duel.Snapshots
         /// </summary>
         private void ApplyKnowledge(TurnSnapshot snapshot, DuelContext context)
         {
-            foreach (KeyValuePair<string, KnowledgeState> pair in snapshot.PlayerKnowledge)
+            foreach (KeyValuePair<string, KnowledgeState> pair in snapshot.ParticipantKnowledge)
             {
                 if (!context.Knowledge.TryGetValue(pair.Key, out KnowledgeState knowledge))
                 {
@@ -130,8 +130,7 @@ namespace Blackset.Duel.Snapshots
 
             TurnHistoryEntry newTurnEntry = new TurnHistoryEntry(
                 snapshot,
-                context.Progress,
-                participantStatesCopy
+                context.Progress
             );
 
             currentFightEntry.AddEntry(newTurnEntry);

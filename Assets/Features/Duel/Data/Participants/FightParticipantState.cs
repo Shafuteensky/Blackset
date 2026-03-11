@@ -22,20 +22,6 @@ namespace Blackset.Duel.Participants
         public event Action onConsumableUsed; 
         
         #endregion
-        
-        /// <summary>
-        /// Сдался в текущем бою
-        /// </summary>
-        public ReactiveProperty<bool> HasGivenUp { get; private set; } = new(false);
-        
-        /// <summary>
-        /// Количество совершенных бросков
-        /// </summary>
-        public ReactiveProperty<int> Throws { get; private set; } = new(0);
-        /// <summary>
-        /// Счет боя 
-        /// </summary>
-        public ReactiveProperty<int> Score { get; private set; } = new(0);
 
         /// <summary>
         /// Использованные за бой дайсы в порядке применения [id_дайса_в_сборке]
@@ -55,6 +41,20 @@ namespace Blackset.Duel.Participants
         /// Состояние на текущий ход
         /// </summary>
         public TurnParticipantState TurnState => turnState;
+        
+        /// <summary>
+        /// Сдался в текущем бою
+        /// </summary>
+        public ReactiveProperty<bool> HasGivenUp { get; private set; } = new(false);
+        
+        /// <summary>
+        /// Количество совершенных бросков
+        /// </summary>
+        public ReactiveProperty<int> Throws { get; private set; } = new(0);
+        /// <summary>
+        /// Счет боя 
+        /// </summary>
+        public ReactiveProperty<int> Score { get; private set; } = new(0);
 
         private readonly List<string> dicesUsed = new();
         private readonly List<string> consumablesUsed = new();

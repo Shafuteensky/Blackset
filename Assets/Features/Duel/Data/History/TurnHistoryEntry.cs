@@ -1,6 +1,4 @@
-using System.Collections.Generic;
 using Blackset.Duel.Context;
-using Blackset.Duel.Participants;
 using Blackset.Duel.Snapshots;
 
 namespace Blackset.Duel.History
@@ -8,7 +6,7 @@ namespace Blackset.Duel.History
     /// <summary>
     /// Запись истории дуэли за ход (исторические данные хода)
     /// </summary>
-    public struct TurnHistoryEntry
+    public class TurnHistoryEntry
     {
         /// <summary>
         /// Снапшот хода дуэли
@@ -18,10 +16,6 @@ namespace Blackset.Duel.History
         /// Прогресс дуэли
         /// </summary>
         public DuelProgressContext DuelProgress { get; }
-        /// <summary>
-        /// Состояния участников <идентификатор, состояние>
-        /// </summary>
-        public Dictionary<string, DuelParticipantState> ParticipantStates { get; }
 
         /// <summary>
         /// Создание новой исторической записи хода
@@ -29,11 +23,10 @@ namespace Blackset.Duel.History
         /// <param name="snapshot">Снапшот данных хода</param>
         /// <param name="duelProgress">Прогресс дуэли на текущий ход</param>
         /// <param name="participantStates">Состояния участников в текущем ходу</param>
-        public TurnHistoryEntry(TurnSnapshot snapshot, DuelProgressContext duelProgress, Dictionary<string, DuelParticipantState> participantStates)
+        public TurnHistoryEntry(TurnSnapshot snapshot, DuelProgressContext duelProgress)
         {
-            Snapshot = snapshot;
+            Snapshot = snapshot.CloneDeep();
             DuelProgress = duelProgress;
-            ParticipantStates = participantStates;
         }
     }
 }
