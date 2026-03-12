@@ -3,8 +3,11 @@ using Blackset.DuelEvents.EventTypes;
 using UnityEngine;
 using System.Linq;
 using System.Text;
+using Blackset.Data.Items.Types;
 using Blackset.Duel.Context;
 using Blackset.Duel.Participants;
+using Blackset.Inventories.Cells;
+using Blackset.Inventories.Items;
 using Extensions.Log;
 
 namespace Blackset.GameDebug
@@ -17,18 +20,32 @@ namespace Blackset.GameDebug
         [SerializeField] private bool enableLogs = true;
         [SerializeField] DuelController duelController;
 
-        public void OnEnable() => duelController.EventHub.Subscribe<BattleEndEvent>(Log);
+        public void OnEnable()
+        {
+            duelController.EventHub.Subscribe<BattleStartEvent>(Log);
+            duelController.EventHub.Subscribe<BattleEndEvent>(Log);
+        }
 
-        public void OnDisable() => duelController.EventHub.Unsubscribe<BattleEndEvent>(Log);
+        public void OnDisable()
+        {
+            duelController.EventHub.Unsubscribe<BattleStartEvent>(Log);
+            duelController.EventHub.Unsubscribe<BattleEndEvent>(Log);
+        }
 
+        public void Log(BattleStartEvent handle)
+        {
+            if (handle.DuelContext.Progress.FightNumber.Value == 1)
+                Log(handle.DuelContext);
+        }
+        public void Log(BattleEndEvent handle) => Log(handle.DuelContext);
+        
         /// <summary>
         /// Полный дамп состояния дуэли — вызывай по колбеку когда нужно
         /// </summary>
-        public void Log(BattleEndEvent handler)
+        public void Log(DuelContext context)
         {
             if (!enableLogs) return;
             
-            DuelContext context = handler.DuelContext;
             if (context == null)
             {
                 ServiceDebug.LogError("DuelContext is null — нечего выводить");
@@ -135,7 +152,25 @@ namespace Blackset.GameDebug
                 sb.AppendLine($"    Уровень доверия: {participant.TrustLevel.Value:F2}");
                 sb.AppendLine($"    Уровень паники:  {participant.PanicLevel.Value:F2}");
             }
-
+            
+            sb.AppendLine($"  [Дайсы в сборке]");
+            foreach (InventoryCell cell in participant.Sets.DiceSetInventory.Data)
+            {
+                InventoryItem item = participant.Sets.DiceSetInventory.GetCellItemData(cell);
+                InventoryItemType itemType = participant.Sets.DiceSetInventory.GetCellTypeData(cell);
+                if (item == null) continue;
+                sb.AppendLine($"    {item.DataName}, {itemType.DataName}");
+            }
+            
+            sb.AppendLine($"  [Расходники в сборке]");
+            foreach (InventoryCell cell in participant.Sets.ConsumableSetInventory.Data)
+            {
+                InventoryItem item = participant.Sets.DiceSetInventory.GetCellItemData(cell);
+                InventoryItemType itemType = participant.Sets.DiceSetInventory.GetCellTypeData(cell);
+                if (item == null) continue;
+                sb.AppendLine($"    {item.DataName}, {itemType.DataName}");
+            }
+            
             // --- Текущий бой ---
             sb.AppendLine($"  [Бой]");
             sb.AppendLine($"    Счёт:           {fight.Score.Value}");
