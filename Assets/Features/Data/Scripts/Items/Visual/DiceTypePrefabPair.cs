@@ -14,16 +14,20 @@ namespace Blackset.Data.Items.Visual
         /// Тип дайса
         /// </summary>
         public DiceType Type => type;
-
         /// <summary>
         /// Материал для визуализации
         /// </summary>
         public Material Material => material;
+        /// <summary>
+        /// Визуальный объект (меш)
+        /// </summary>
+        public Mesh Body => body;
 
         [SerializeField]
-        private DiceType type = default;
-
+        private DiceType type;
         [SerializeField]
-        private Material material = default;
+        private Material material;
+        [SerializeField]
+        private Mesh body;
     }
 }

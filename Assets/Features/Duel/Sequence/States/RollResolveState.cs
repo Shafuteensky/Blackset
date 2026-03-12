@@ -24,9 +24,9 @@ namespace Blackset.Duel.Sequence.States
                 int rollResult = diceRoller.RollDice(context, participantId, chosenDiceId);
 
                 context.Participants[participantId].FightState.RegisterRawRollResult(chosenDiceId, rollResult); 
+                
+                eventHub.Publish(new DiceRolledEvent(participantId, chosenDiceId, rollResult));
             }
-            
-            eventHub.Publish(new DicesRolledEvent());
         }
         
         public StateResult Tick(DuelContext context)

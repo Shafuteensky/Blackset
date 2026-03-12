@@ -14,7 +14,7 @@ namespace Blackset.Duel.Modules
         public TurnSnapshot Resolve(TurnSnapshot snapshot)
         {
             // Сырые результаты бросков в счета
-            // TODO Обновить под применение эффектов
+            // TODO Обновить под применение ЭФФЕКТОВ: добавить FinalRollResults в FightState участника
             foreach (var participantResults in snapshot.ParticipantRawRollResults)
             {
                 int score = 0;

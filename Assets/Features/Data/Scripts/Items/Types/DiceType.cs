@@ -28,7 +28,7 @@ namespace Blackset.Data.Items.Types
         /// </summary>
         public int SidesNumber => sidesNumber;
         /// <summary>
-        /// Визуальный префаб дайса
+        /// Визуальное представление (префаб базовой модели)
         /// </summary>
         public VisualDice VisualDice => visualDice;
 

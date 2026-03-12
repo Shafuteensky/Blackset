@@ -15,11 +15,11 @@ namespace Blackset.Duel.Participants
         /// <summary>
         /// Дайс из сборки использован в текущем бою
         /// </summary>
-        public event Action onDiceUsed; 
+        public event Action<string> onDiceUsed; 
         /// <summary>
         /// Расходник из сборки использован в текущем бою
         /// </summary>
-        public event Action onConsumableUsed; 
+        public event Action<string> onConsumableUsed; 
         
         #endregion
 
@@ -110,7 +110,7 @@ namespace Blackset.Duel.Participants
         public void MarkDiceUsed(string dice)
         {
             dicesUsed.Add(dice);
-            onDiceUsed?.Invoke();
+            onDiceUsed?.Invoke(dice);
         }
 
         /// <summary>
@@ -120,7 +120,7 @@ namespace Blackset.Duel.Participants
         public void MarkConsumableUsed(string consumable)
         {
             consumablesUsed.Add(consumable);
-            onConsumableUsed?.Invoke();
+            onConsumableUsed?.Invoke(consumable);
         }
 
         /// <summary>

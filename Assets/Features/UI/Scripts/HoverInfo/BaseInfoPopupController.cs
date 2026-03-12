@@ -86,6 +86,7 @@ namespace Blackset.UI.HoverInfo
         
         #region Положение ховер-панели
         
+        // TODO Сделать обнволение положения на LateUpdate
         private void OnPositionUpdated(Vector2 position)
         {
             screenPosition = position;

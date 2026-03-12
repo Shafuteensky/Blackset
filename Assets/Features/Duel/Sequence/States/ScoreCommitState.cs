@@ -1,6 +1,7 @@
 using Blackset.Duel.Context;
 using Blackset.Duel.Modules;
 using Blackset.Duel.Snapshots;
+using Blackset.DuelEvents.EventTypes;
 using Extensions.FiniteStateMachine;
 
 namespace Blackset.Duel.Sequence.States
@@ -25,6 +26,8 @@ namespace Blackset.Duel.Sequence.States
             // Актуализация фактических данных дуэли
             ISnapshotCommiter commiterDefault = modules.Get<ISnapshotCommiter>();
             commiterDefault.Commit(resolvedSnapshot, context);
+            
+            eventHub.Publish(new EffectsResolvedEvent(context));
         }
         
         public StateResult Tick(DuelContext context)

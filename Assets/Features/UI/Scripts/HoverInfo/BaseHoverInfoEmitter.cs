@@ -37,9 +37,6 @@ namespace Blackset.UI.HoverInfo
         
         [Header("Параметры ховера"), Space]
         [SerializeField]
-        [Tooltip("UI-элемент, откуда передаются данные")]
-        private TElement dtatSourceElement;
-        [SerializeField]
         [Tooltip("Время удержания курсора над элементом до отправки запроса на вывод информации")]
         private FloatValue holdSeconds;
         [SerializeField]
@@ -50,7 +47,13 @@ namespace Blackset.UI.HoverInfo
         private bool isPopupVisible;
         private CoroutineTask holdTask;
 
-        private void Awake() => holdTask = new CoroutineTask(this);
+        private TElement dataElement;
+
+        private void Awake()
+        {
+            dataElement = gameObject.GetComponent<TElement>();
+            holdTask = new CoroutineTask(this);
+        }
         private void OnDisable() => HideInfo();
 
         public void OnPointerEnter(PointerEventData eventData) => ScheduleShow();
@@ -67,14 +70,14 @@ namespace Blackset.UI.HoverInfo
             isPointerInside = false;
             isPopupVisible = false;
             holdTask.Stop();
-            if (dtatSourceElement != null) onHideRequested?.Invoke();
+            if (dataElement != null) onHideRequested?.Invoke();
         }
 
         private void ScheduleShow()
         {
             isPointerInside = true;
             isPopupVisible = false;
-            if (dtatSourceElement == null) return;
+            if (dataElement == null) return;
             holdTask.Start(HoldRoutine());
         }
 
@@ -94,7 +97,7 @@ namespace Blackset.UI.HoverInfo
 
             if ( !isPointerInside || 
                  !isActiveAndEnabled || 
-                 dtatSourceElement == null ) 
+                 dataElement == null ) 
                 yield break;
             
             // Точка вывода панели
@@ -110,23 +113,23 @@ namespace Blackset.UI.HoverInfo
             
             // Запрос на вывод в нужной точке
             onShowRequested?.Invoke(
-                dtatSourceElement.DataContainer, 
-                dtatSourceElement.EntryId, 
+                dataElement.DataContainer, 
+                dataElement.EntryId, 
                 popupPos);
         }
         
         private Vector2 GetScreenPosition()
         {
-            if (dtatSourceElement.transform is RectTransform rectTransform)
+            if (dataElement.transform is RectTransform rectTransform)
             {
-                Canvas canvas = dtatSourceElement.GetComponentInParent<Canvas>();
+                Canvas canvas = dataElement.GetComponentInParent<Canvas>();
                 Camera cam = canvas != null && canvas.renderMode != RenderMode.ScreenSpaceOverlay
                     ? canvas.worldCamera
                     : null;
                 return RectTransformUtility.WorldToScreenPoint(cam, rectTransform.position);
             }
 
-            if (Camera.main != null) return Camera.main.WorldToScreenPoint(dtatSourceElement.transform.position);
+            if (Camera.main != null) return Camera.main.WorldToScreenPoint(dataElement.transform.position);
             else return Vector2.zero;
         }
     }

@@ -14,16 +14,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Blackset.Data.Items.Visual.DiceStyle
   id: 3e64faccaee74e19aa8204e938971c99
   dataName: Basic Dice Style
+  dataDescription: 
   typePrefabs:
   - type: {fileID: 11400000, guid: fbd3a5ad0b3ef2940a4f73d042a419d7, type: 2}
     material: {fileID: 2100000, guid: 38ae1378bed3fcc41ac7622eba8e413c, type: 2}
+    body: {fileID: 7404990225185272561, guid: 5f31b47128e80684899e80f13131f79e, type: 3}
   - type: {fileID: 11400000, guid: 471cbfaa75a8b904fb3c95d36db6426f, type: 2}
     material: {fileID: 2100000, guid: 38ae1378bed3fcc41ac7622eba8e413c, type: 2}
+    body: {fileID: 720215935240494960, guid: 071b74414f54855488874a413fd0565d, type: 3}
   - type: {fileID: 11400000, guid: 7b2c54bf4725d1a4db115c84e52f3363, type: 2}
     material: {fileID: 2100000, guid: 38ae1378bed3fcc41ac7622eba8e413c, type: 2}
+    body: {fileID: -453462146055170119, guid: ff0660c4a28ac27458861dd0cc201f26, type: 3}
   - type: {fileID: 11400000, guid: 0ae8218b9522594459de916a9dc1bdfb, type: 2}
     material: {fileID: 2100000, guid: 38ae1378bed3fcc41ac7622eba8e413c, type: 2}
+    body: {fileID: 445738003285735496, guid: c8105f6229f026e47a5615fe73b7118c, type: 3}
   - type: {fileID: 11400000, guid: 62af0b23df6100641ba60be783e31f76, type: 2}
     material: {fileID: 2100000, guid: 38ae1378bed3fcc41ac7622eba8e413c, type: 2}
+    body: {fileID: -2070773142097289610, guid: 5fd3a6a9a02a7054982a6cb077bad0b9, type: 3}
   - type: {fileID: 11400000, guid: 98144d8369c0fd649a1a4aa9083c6aff, type: 2}
     material: {fileID: 2100000, guid: 38ae1378bed3fcc41ac7622eba8e413c, type: 2}
+    body: {fileID: -3771196232624968418, guid: 2d6090bbda13b0241ba5ab3d57513235, type: 3}
