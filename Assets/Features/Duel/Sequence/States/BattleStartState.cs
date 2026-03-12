@@ -23,7 +23,7 @@ namespace Blackset.Duel.Sequence.States
             }
             // TODO Работа с эффектами (сброс протухших, учет активных)
             
-            eventHub.Publish(new BattleStartEvent(context.Progress.FightNumber.Value));
+            eventHub.Publish(new BattleStartEvent(context));
         }
         
         public StateResult Tick(DuelContext context)

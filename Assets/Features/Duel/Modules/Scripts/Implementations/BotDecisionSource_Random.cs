@@ -4,6 +4,7 @@ using Blackset.Data.Registries;
 using Blackset.Duel.Context;
 using Blackset.Duel.Participants;
 using Blackset.Duel.Targets;
+using Blackset.Inventories;
 using Blackset.Opponents;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -28,7 +29,7 @@ namespace Blackset.Duel.Modules
             declaredDice = String.Empty;
             DuelParticipantState bot = context.Participants[context.OpponentId];
 
-            TryGetRandomUnused(bot.Sets.DicesSet, bot.FightState.DicesUsed, out string unusedDiceId);
+            TryGetRandomUnused(bot.Sets.DiceSetInventory, bot.FightState.DicesUsed, out string unusedDiceId);
             declaredDice = unusedDiceId;
             
             return declaredDice;
@@ -43,7 +44,7 @@ namespace Blackset.Duel.Modules
             // Если хитрый - кидает другой дайс (не который объявил)
             OpponentData opponent = GameData.Instance.GetOpponent(context.Contract.OpponentId);
             if (Random.value < opponent.CunningLevel && 
-                TryGetRandomUnused(bot.Sets.DicesSet, bot.FightState.DicesUsed, out string unusedDiceId))
+                TryGetRandomUnused(bot.Sets.DiceSetInventory, bot.FightState.DicesUsed, out string unusedDiceId))
             {
                 intentState.ChoseDice(unusedDiceId);
             }
@@ -53,7 +54,7 @@ namespace Blackset.Duel.Modules
             // Случайный расходник на себя
             bool consumableChosen = Random.value <= CONSUMABLE_USE_CHANCE;
             if (consumableChosen && 
-                TryGetRandomUnused(bot.Sets.ConsumablesSet, bot.FightState.ConsumablesUsed, out string unusedConsId))
+                TryGetRandomUnused(bot.Sets.ConsumableSetInventory, bot.FightState.ConsumablesUsed, out string unusedConsId))
             {
                 intentState.ChoseConsumable(unusedConsId, ApplyTarget.Self);
             }
@@ -63,18 +64,18 @@ namespace Blackset.Duel.Modules
 
         #region Internal
         
-        private bool TryGetRandomUnused<TKey, TItem>(
-            Dictionary<TKey, TItem> registry,
-            List<TKey> usedKeys,
-            out TKey resultKey)
+        private bool TryGetRandomUnused(
+            Inventory registry,
+            List<string> usedKeys,
+            out string resultKey)
         {
             resultKey = default;
-            if (registry.Count == 0) return false;
-            var availableKeys = new List<TKey>(registry.Count);
+            if (registry.Data.Count == 0) return false;
+            var availableKeys = new List<string>(registry.Data.Count);
 
-            foreach (var key in registry.Keys)
+            foreach (var inventoryCell in registry.Data)
             {
-                if (usedKeys.Contains(key) == false) availableKeys.Add(key);
+                if (usedKeys.Contains(inventoryCell.Id) == false) availableKeys.Add(inventoryCell.Id);
             }
 
             if (availableKeys.Count == 0) return false;

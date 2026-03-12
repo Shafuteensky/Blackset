@@ -48,7 +48,7 @@ namespace Blackset.Data.Registries
             
             if (dataById.TryGetValue(id, out T result)) return result;
             
-            ServiceDebug.LogError($"Данные с Id {id} не найдены в реестре записей");
+            ServiceDebug.LogError($"Данные с Id {id} не найдены в реестре записей {name}");
             return null;
         }
         

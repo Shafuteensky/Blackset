@@ -6,6 +6,7 @@ using Blackset.Duel.Rules;
 using Blackset.Duel.Sequence.States;
 using Blackset.DuelContracts;
 using Blackset.DuelEvents;
+using Blackset.Inventories;
 using Blackset.Storms;
 using Extensions.Log;
 using Extensions.Singleton;
@@ -28,20 +29,25 @@ namespace Blackset.Duel.Sequence
         public EventHub EventHub => eventHub;
         
         [Header("Модули"), Space]
-        [SerializeField]
-        private DuelModuleRegistry modules;
-        [SerializeField]
-        private DuelInputPresenter inputPresenter;
+        [SerializeField] private DuelModuleRegistry modules;
+        [SerializeField] private DuelInputPresenter inputPresenter;
         
         [Header("Входные данные"), Space]
-        [SerializeField]
-        private SelectedContract selectedContract;
-        [SerializeField]
-        private ActiveStorm activeStorm;
+        [SerializeField] private SelectedContract selectedContract;
+        [SerializeField] private ActiveStorm activeStorm;
 
+        [Header("Хранение данных на время дуэли"), Space]
+        [Tooltip("Инвентарь для временного хранения сборки дайсов игрока")]
+        [SerializeField] private Inventory playerDiceSetInventory;
+        [Tooltip("Инвентарь для временного сборки дайсов бота")]
+        [SerializeField] private Inventory opponentDiceSetInventory;
+        [Tooltip("Инвентарь для временного хранения сборки расходников игрока")]
+        [SerializeField] private Inventory playerConsumableSetInventory;
+        [Tooltip("Инвентарь для временного сборки расходников бота")]
+        [SerializeField] private Inventory opponentConsumableSetInventory;
+        
         [Header("Логи"), Space] 
-        [SerializeField]
-        private bool logsEnabled = false;
+        [SerializeField] private bool logsEnabled = false;
         
         private DuelRulesConfiguration rules;
         private DuelStateMachine stateMachine;
@@ -111,7 +117,9 @@ namespace Blackset.Duel.Sequence
                 return false;
             }
 
-            duelContext = new(selectedContract.GetSelectedData(), activeStorm);
+            duelContext = new(selectedContract.GetSelectedData(), activeStorm, 
+                playerDiceSetInventory, opponentDiceSetInventory,
+                playerConsumableSetInventory, opponentConsumableSetInventory);
             return true;
         }
         

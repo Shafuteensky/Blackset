@@ -14,7 +14,7 @@ namespace Blackset.Inventories.Items
         
         [Header("Принадлежность"), Space]
         [SerializeField]
-        protected ItemClass itemClass =  ItemClass.Any;
+        protected ItemClass itemClass = ItemClass.Any;
         
         [Header("Ценники")]
         [SerializeField]

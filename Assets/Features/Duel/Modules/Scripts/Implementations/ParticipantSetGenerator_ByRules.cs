@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using Blackset.Data;
 using Blackset.Data.Items.Types;
-using Blackset.Duel.Requests;
+using Blackset.Duel.Context;
 using Blackset.Duel.Rules;
 using Blackset.Duel.Sets;
+using Blackset.Inventories;
 using Extensions.Log;
 using UnityEngine;
 
@@ -19,12 +20,27 @@ namespace Blackset.Duel.Modules
         menuName = "Blackset/Duel/Modules/" + nameof(ParticipantSetGenerator_ByRules))]
     public class ParticipantSetGenerator_ByRules : BaseDuelModule, IParticipantSetGenerator
     {
-        public DuelSetsContext GenerateSets(SetGenerationRequest request)
+        public DuelSetsContext GenerateSets(DuelContext context, string participantId)
         {
-            List<DiceItemContext> diceSet = GenerateDiceSets(request);
-            List<ConsumableItemContext> consumableSet = GenerateConsumableSets(request);
-                
-            DuelSetsContext setsContext = new DuelSetsContext(diceSet, consumableSet);
+            List<DiceItemContext> dicesInSet = GenerateDiceSets(context, participantId);
+            List<ConsumableItemContext> consumablesInSet = GenerateConsumableSets(context, participantId);
+
+            Inventory diceSetInventory;
+            Inventory consumableSetInventory;
+            if (context.PlayerId == participantId)
+            {
+                diceSetInventory = context.PlayerDiceSetInventory;
+                consumableSetInventory = context.PlayerConsumableSetInventory;
+            }
+            else
+            {
+                diceSetInventory = context.OpponentDiceSetInventory;
+                consumableSetInventory = context.OpponentConsumableSetInventory;
+            }
+            
+            DuelSetsContext setsContext = new DuelSetsContext(
+                diceSetInventory, consumableSetInventory, 
+                dicesInSet, consumablesInSet);
             
             return setsContext;
         }
@@ -32,14 +48,15 @@ namespace Blackset.Duel.Modules
         /// <summary>
         /// Составить сборку дайсов согласно правилам
         /// </summary>
-        private List<DiceItemContext> GenerateDiceSets(SetGenerationRequest request)
+        private List<DiceItemContext> GenerateDiceSets(DuelContext context, string participantId)
         {
-            Dictionary<DiceType, List<DiceItemContext>> dicesPool = request.Pools.DicesPool;
-            int dicesInSet = request.DuelRules.DicesInSet;
-            System.Random random = new(request.Seed.GetHashCode());
-            DiceSetPolicy activeDieSetPolicy = request.DuelRules.DiceSetPolicy;
+            int dicesInSet = context.Rules.DicesInSet;
+            DiceSetPolicy activeDieSetPolicy = context.Rules.DiceSetPolicy;
+            System.Random random = new(HashCode.Combine(context.Seed, participantId));
             
-            switch (request.DuelRules.DiceSetPolicy)
+            Dictionary<DiceType, List<DiceItemContext>> dicesPool = context.Participants[participantId].Pools.DicesPool;
+            
+            switch (context.Rules.DiceSetPolicy)
             {
                 case DiceSetPolicy.OneInType:
                     return GetOneRandomDicePerType(dicesPool, dicesInSet, random);
@@ -57,12 +74,13 @@ namespace Blackset.Duel.Modules
         /// <summary>
         /// Составить сборку расходников согласно правилам
         /// </summary>
-        private List<ConsumableItemContext> GenerateConsumableSets(SetGenerationRequest request)
+        private List<ConsumableItemContext> GenerateConsumableSets(DuelContext context, string participantId)
         {
-            List<ConsumableItemContext> consumablesPool = request.Pools.ConsumablesPool;
-            int consumablesInSet = request.DuelRules.ConsumablesInSet;
-            System.Random random = new(request.Seed.GetHashCode());
-            ConsumableSetPolicy activeConsumableSetPolicy = request.DuelRules.ConsumableSetPolicy;
+            int consumablesInSet = context.Rules.ConsumablesInSet;
+            System.Random random = new(HashCode.Combine(context.Seed, participantId));
+            
+            List<ConsumableItemContext> consumablesPool = context.Participants[participantId].Pools.ConsumablesPool;
+            ConsumableSetPolicy activeConsumableSetPolicy = context.Rules.ConsumableSetPolicy;
             
             switch (activeConsumableSetPolicy)
             {
@@ -123,6 +141,7 @@ namespace Blackset.Duel.Modules
             {
                 int randomIndex = random.Next(0, flatPool.Count);
                 diceSet.Add(flatPool[randomIndex]);
+                flatPool.RemoveAt(randomIndex);
             }
     
             return diceSet;

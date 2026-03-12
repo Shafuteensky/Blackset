@@ -53,7 +53,7 @@ namespace Features.DuelUI
         {
             if (newFightPanel == null || fightNumberText == null) return;
 
-            fightNumberText.text = handler.BattleNumber.ToString();
+            fightNumberText.text = handler.DuelContext.Progress.FightNumber.Value.ToString();
             newFightPanel.SetActive(true);
             CoroutineDelay.Run(this, showDuration, () => newFightPanel.SetActive(false));
         }

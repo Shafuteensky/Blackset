@@ -1,3 +1,5 @@
+using Blackset.Duel.Context;
+
 namespace Blackset.DuelEvents.EventTypes
 {
     /// <summary>
@@ -5,11 +7,11 @@ namespace Blackset.DuelEvents.EventTypes
     /// </summary>
     public struct BattleStartEvent
     {
-        public readonly int BattleNumber;
+        public readonly DuelContext DuelContext;
 
-        public BattleStartEvent(int battleNumber)
+        public BattleStartEvent(DuelContext duelContext)
         {
-            BattleNumber = battleNumber;
+            DuelContext = duelContext;
         }
     }
 }

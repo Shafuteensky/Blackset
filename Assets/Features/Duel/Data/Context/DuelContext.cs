@@ -4,6 +4,7 @@ using Blackset.Duel.Participants;
 using Blackset.Duel.Rules;
 using Blackset.Duel.TargetValue;
 using Blackset.DuelContracts;
+using Blackset.Inventories;
 using Blackset.Storms;
 using Extensions.Helpers;
 using Extensions.Log;
@@ -70,12 +71,35 @@ namespace Blackset.Duel.Context
         public readonly DuelHistory History;
 
         /// <summary>
+        /// Инвентарь для временного хранения сборки дайсов игрока
+        /// </summary>
+        public readonly Inventory PlayerDiceSetInventory;
+        /// <summary>
+        /// Инвентарь для временного сборки дайсов бота
+        /// </summary>
+        public readonly Inventory OpponentDiceSetInventory;
+        /// <summary>
+        /// Инвентарь для временного хранения сборки расходников игрока
+        /// </summary>
+        public readonly Inventory PlayerConsumableSetInventory;
+        /// <summary>
+        /// Инвентарь для временного сборки расходников бота
+        /// </summary>
+        public readonly Inventory OpponentConsumableSetInventory;
+
+        /// <summary>
         /// Подготовка данных для новой дуэли
         /// </summary>
         /// <param name="contract">Активный контракт</param>
-        public DuelContext(DuelContract contract, ActiveStorm storm)
+        public DuelContext(DuelContract contract, ActiveStorm storm, 
+            Inventory playerDiceSetInventory, Inventory opponentDiceSetInventory,
+            Inventory playerConsumableSetInventory, Inventory opponentConsumableSetInventory)
         {
             ServiceGuard.NotNull(contract, nameof(contract));
+            ServiceGuard.NotNull(playerDiceSetInventory, nameof(playerDiceSetInventory));
+            ServiceGuard.NotNull(opponentDiceSetInventory, nameof(opponentDiceSetInventory));
+            ServiceGuard.NotNull(playerConsumableSetInventory, nameof(playerConsumableSetInventory));
+            ServiceGuard.NotNull(opponentConsumableSetInventory, nameof(opponentConsumableSetInventory));
             
             Rules = DuelRulesConfiguration.Default();
             Storm = storm;
@@ -86,6 +110,11 @@ namespace Blackset.Duel.Context
             History = new DuelHistory();
                 
             Contract = contract;
+            
+            PlayerDiceSetInventory = playerDiceSetInventory;
+            OpponentDiceSetInventory = opponentDiceSetInventory;
+            PlayerConsumableSetInventory = playerConsumableSetInventory;
+            OpponentConsumableSetInventory = opponentConsumableSetInventory;
         }
 
         /// <summary>
@@ -129,7 +158,7 @@ namespace Blackset.Duel.Context
             if (!isPlayer)
             {
                 ServiceGuard.NotNull(contract, nameof(contract));
-                newParticipantId = contract.OpponentId;
+                newParticipantId = contract != null ? contract.OpponentId : "";
             }
             else
                 newParticipantId = IdGenerator.NewWithPrefix("Player");

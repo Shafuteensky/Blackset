@@ -1,4 +1,3 @@
-using Blackset.Data;
 using Blackset.Data.Registries;
 using Blackset.Duel.Context;
 using Blackset.Duel.Participants;
@@ -17,9 +16,9 @@ namespace Blackset.Duel.Modules
         public int RollDice(DuelContext context, string participantId, string diceId)
         {
             DuelParticipantState participantState = context.Participants[participantId];
-            DiceItemContext diceToRoll = participantState.Sets.DicesSet[diceId];
+            string diceTypeToRoll = participantState.Sets.DiceSetInventory.GetById(diceId).ItemTypeId;
             
-            int sidesNumber = GameData.Instance.GetDiceType(diceToRoll.GetDiceType().Id).SidesNumber;
+            int sidesNumber = GameData.Instance.GetDiceType(diceTypeToRoll).SidesNumber;
             int rollResult = Random.Range(1, sidesNumber);
             
             return rollResult;

@@ -1,7 +1,6 @@
 using Blackset.Duel.Context;
 using Blackset.Duel.Modules;
 using Blackset.Duel.Participants;
-using Blackset.Duel.Requests;
 using Blackset.Duel.Sets;
 using Blackset.DuelEvents.EventTypes;
 using Extensions.FiniteStateMachine;
@@ -21,8 +20,7 @@ namespace Blackset.Duel.Sequence.States
             foreach (DuelParticipantState participant in context.Participants.Values)
             {
                 IParticipantSetGenerator setGenerator = modules.Get<IParticipantSetGenerator>();
-                SetGenerationRequest generationRequest = new SetGenerationRequest(context.Rules, context.Seed, participant.Pools);
-                DuelSetsContext setsContext = setGenerator.GenerateSets(generationRequest);
+                DuelSetsContext setsContext = setGenerator.GenerateSets(context, participant.ParticipantId);
                 participant.InitializeSets(setsContext);
             }
             
