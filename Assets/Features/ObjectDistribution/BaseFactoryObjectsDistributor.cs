@@ -92,7 +92,6 @@ namespace Blackset.ObjectDistribution
 
         protected void Place(TPrefab element)
         {
-            Debug.Log($"Place вызван: {element.name}, nextPointIndex={nextPointIndex}, caller={new System.Diagnostics.StackTrace()}");
             if (element == null)
             {
                 ServiceDebug.LogError("Элемент невалиден, объект не распределен");
