@@ -6,18 +6,16 @@ using UnityEngine;
 namespace Extensions.Data.InMemoryData
 {
     /// <summary>
-    /// Базовая UI фабрика
+    /// Абстракция UI фабрики
     /// </summary>
-    public abstract class BaseInMemoryDataFactory<TPrefab, TEntry, TContainer> : MonoBehaviour  
+     /// <typeparam name="TPrefab">Тип префаба для спавна</typeparam>
+     /// <typeparam name="TEntry">Единица данных, для которой спавнится префаб</typeparam>
+     /// <typeparam name="TContainer">Контейнер единиц данных</typeparam>
+    public abstract class BaseInMemoryDataFactory<TPrefab, TEntry, TContainer> : BaseInMemoryDataFactory<TPrefab>  
         where TPrefab : MonoBehaviour
         where TEntry : InMemoryDataEntry
         where TContainer : InMemoryDataContainer<TEntry>
     {
-        /// <summary>
-        /// Событие спавна объекта фабрики
-        /// </summary>
-        public event Action<TPrefab> onObjectInstantiated;
-        
         [Header("Данные"), Space]
         [SerializeField]
         protected TContainer dataContainer;
@@ -111,8 +109,8 @@ namespace Extensions.Data.InMemoryData
                 if (OnValidateItem(item)) continue;
 
                 TPrefab instance = Instantiate(itemElementPrefab, elementsRoot);
-                if (instance != null) OnInstanceInitialization(instance, item);
-                onObjectInstantiated?.Invoke(instance);
+                if (instance != null) OnInstanceInitialization(instance, item, dataContainer);
+                OnObjectInstantiatedEvent(instance);
             }
         }
         
@@ -132,8 +130,24 @@ namespace Extensions.Data.InMemoryData
         /// </summary>
         /// <param name="instance">Созданный инстанс</param>
         /// <param name="item">Запись контейнера</param>
-        protected virtual void OnInstanceInitialization(TPrefab instance, TEntry item) { }
+        /// <param name="container">Контейнер</param>
+        protected virtual void OnInstanceInitialization(TPrefab instance, TEntry item, TContainer container) { }
         
         #endregion
+    }
+
+    /// <summary>
+    /// Базовая UI фабрика
+    /// </summary>
+    /// <typeparam name="TPrefab">Тип префаба для спавна</typeparam>
+    public class BaseInMemoryDataFactory<TPrefab> : MonoBehaviour
+        where TPrefab : MonoBehaviour
+    {
+        /// <summary>
+        /// Событие спавна объекта фабрики
+        /// </summary>
+        public event Action<TPrefab> onObjectInstantiated;
+        
+        protected void OnObjectInstantiatedEvent(TPrefab instance) => onObjectInstantiated?.Invoke(instance);
     }
 }

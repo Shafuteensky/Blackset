@@ -20,6 +20,7 @@ MonoBehaviour:
     - 568a2a48eba674047ae86d637bdc43fb
     - 390fefee3cc4eec42a522b61edd78188
     - a25983c86a7143442905ee760d526aca
+    - 5f80835addf1ae546b7526a156656d47
     values:
     - goDatas_byGlobalId:
         keys:
@@ -288,6 +289,7 @@ MonoBehaviour:
         - globalObjectIdString: GlobalObjectId_V1-2-390fefee3cc4eec42a522b61edd78188-1209704251-0
         - globalObjectIdString: GlobalObjectId_V1-2-390fefee3cc4eec42a522b61edd78188-654613663-0
         - globalObjectIdString: GlobalObjectId_V1-2-390fefee3cc4eec42a522b61edd78188-2075282001-0
+        - globalObjectIdString: GlobalObjectId_V1-2-390fefee3cc4eec42a522b61edd78188-1004408824-0
         values:
         - colorIndex: 0
           iconNameOrGuid: StandaloneInputModule Icon
@@ -361,8 +363,45 @@ MonoBehaviour:
           iconNameOrGuid: AvatarPivot
           isIconRecursive: 0
           isColorRecursive: 0
+        - colorIndex: 0
+          iconNameOrGuid: Folder Icon
+          isIconRecursive: 0
+          isColorRecursive: 0
     - goDatas_byGlobalId:
         keys: []
         values: []
+    - goDatas_byGlobalId:
+        keys:
+        - globalObjectIdString: GlobalObjectId_V1-1-5f80835addf1ae546b7526a156656d47-3348738038456021106-0
+        - globalObjectIdString: GlobalObjectId_V1-1-5f80835addf1ae546b7526a156656d47-5033110020700989660-0
+        - globalObjectIdString: GlobalObjectId_V1-1-5f80835addf1ae546b7526a156656d47-2577297206629727824-0
+        - globalObjectIdString: GlobalObjectId_V1-1-5f80835addf1ae546b7526a156656d47-1239674129194372706-0
+        - globalObjectIdString: GlobalObjectId_V1-1-5f80835addf1ae546b7526a156656d47-0-0
+        - globalObjectIdString: GlobalObjectId_V1-1-5f80835addf1ae546b7526a156656d47-6514086578382982986-0
+        values:
+        - colorIndex: 0
+          iconNameOrGuid: Settings Icon
+          isIconRecursive: 0
+          isColorRecursive: 0
+        - colorIndex: 0
+          iconNameOrGuid: PreMatCube
+          isIconRecursive: 0
+          isColorRecursive: 0
+        - colorIndex: 0
+          iconNameOrGuid: Canvas Icon
+          isIconRecursive: 0
+          isColorRecursive: 0
+        - colorIndex: 0
+          iconNameOrGuid: BoxCollider Icon
+          isIconRecursive: 0
+          isColorRecursive: 0
+        - colorIndex: 0
+          iconNameOrGuid: BoxCollider Icon
+          isIconRecursive: 0
+          isColorRecursive: 0
+        - colorIndex: 0
+          iconNameOrGuid: BoxCollider Icon
+          isIconRecursive: 0
+          isColorRecursive: 0
   bookmarks: []
   bookmarkedScenePaths: []

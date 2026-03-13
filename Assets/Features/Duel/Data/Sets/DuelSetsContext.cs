@@ -64,6 +64,9 @@ namespace Blackset.Duel.Sets
         /// <summary>
         /// Получить дайс по идентификатору
         /// </summary>
+        /// <param name="id">Идентификатор дайса в сборке (ячейки инвентаря)</param>
+        /// <param name="dice">Выходные данные о найденном дайсе</param>
+        /// <returns>true если дайс найден, иначе false</returns>
         public bool TryGetDice(string id, out DiceItemContext dice)
         {
             ServiceGuard.NotNullOrEmpty(id, nameof(id));

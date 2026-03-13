@@ -32,7 +32,7 @@ namespace Blackset.UI.InventoryManagement
             return isItemFiltered;
         }
 
-        protected override void OnInstanceInitialization(InventoryItemElement instance, InventoryCell item)
+        protected override void OnInstanceInitialization(InventoryItemElement instance, InventoryCell item, Inventory container)
         {
             instance.Initialize(dataContainer, item.Id);
         }

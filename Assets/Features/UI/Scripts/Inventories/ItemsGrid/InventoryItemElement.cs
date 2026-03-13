@@ -90,6 +90,7 @@ namespace Blackset.UI.InventoryManagement
         /// <summary>
         /// Инициализация элемента
         /// </summary>
+        /// <param name="newContainer">Хранилище данных</param>
         /// <param name="newItemCellId">Идентификатор хранимых данных</param>
         public override void Initialize(Inventory newContainer, string newItemCellId)
         {
@@ -153,11 +154,14 @@ namespace Blackset.UI.InventoryManagement
 
         private void SetIcon(InventoryCell cell, InventoryItem item, InventoryItemType itemType)
         {
-            itemIconImage.sprite = itemType.Icon;
+            if (itemIconImage != null) 
+                itemIconImage.sprite = itemType.Icon;
         }
 
         private void SetIconColor(InventoryCell cell, EffectingItem item)
         {
+            if (itemIconImage == null) return;
+            
             if (cell.IsDefault)
             {
                 Color newColor = item.Color;

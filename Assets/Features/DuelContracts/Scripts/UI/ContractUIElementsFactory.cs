@@ -8,7 +8,7 @@ namespace Blackset.DuelContracts
     /// </summary>
     public class ContractUIElementsFactory : BaseInMemoryDataFactory<ContractEntryUIElement, DuelContract, ContractListContainer>
     {
-        protected override void OnInstanceInitialization(ContractEntryUIElement instance, DuelContract item)
+        protected override void OnInstanceInitialization(ContractEntryUIElement instance, DuelContract item, ContractListContainer container)
         {
             instance.Initialize(dataContainer, item.Id);
         }

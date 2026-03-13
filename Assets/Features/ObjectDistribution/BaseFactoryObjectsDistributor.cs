@@ -1,25 +1,27 @@
 using System.Collections.Generic;
-using Blackset.DuelContracts;
 using Blackset.DuelContracts.HoverInfo;
+using Extensions.Data.InMemoryData;
 using Extensions.Log;
 using UnityEngine;
 
 namespace Blackset.ObjectDistribution
 {
     /// <summary>
-    /// Распределяет инстанцированные элементы по точкам
+    /// Абстракция распределителя инстанцированных элементов по точкам
     /// </summary>
-    public class FactoryObjectsDistributor : MonoBehaviour
+    /// <typeparam name="TPrefab">Тип префаба для спавна</typeparam>
+    /// <typeparam name="TFactory">Тип фабрики</typeparam>
+    public abstract class BaseFactoryObjectsDistributor<TPrefab, TFactory> : MonoBehaviour
+        where TPrefab : MonoBehaviour
+        where TFactory : BaseInMemoryDataFactory<TPrefab>  
     {
         [Header("Фабрика"), Space]
-        [SerializeField]
-        protected ContractViewElementsFactory factory;
-        [SerializeField]
-        protected Transform factoryRoot;
+        [SerializeField] protected TFactory factory;
+        [SerializeField] protected Transform factoryRoot;
+        [SerializeField] protected bool clearOnEnable = true;
 
         [Header("Точки распределения"), Space]
-        [SerializeField]
-        protected List<Transform> points = new();
+        [SerializeField] protected List<Transform> points = new();
 
         protected int nextPointIndex;
         protected bool isWrapWarningLogged;
@@ -45,19 +47,40 @@ namespace Blackset.ObjectDistribution
                 return;
             }
 
-            factory.onObjectInstantiated += Place;
+            // Очистка существующих
+            if (clearOnEnable)
+            {
+                foreach (Transform child in factoryRoot)
+                    Destroy(child.gameObject);
+            }
 
             // Детерминированно готовим shuffle по текущему списку EntryId
             BuildDeterministicShuffleFromRoot();
             nextPointIndex = 0;
             isWrapWarningLogged = false;
-
+            
+            factory.onObjectInstantiated += Place;
+            
             // Раскладываем уже существующие элементы под root
+            if (!clearOnEnable) DistributeToPoint();
+        }
+        
+        protected virtual void OnDisable()
+        {
+            if (factory == null) return;
+            factory.onObjectInstantiated -= Place;
+        }
+
+        /// <summary>
+        /// Распределить объекты в корне по заданным случайным координатам
+        /// </summary>
+        public void DistributeToPoint()
+        {
             foreach (Transform child in factoryRoot)
             {
                 if (child == null) continue;
 
-                ContractEntryVisualElement element = child.GetComponent<ContractEntryVisualElement>();
+                TPrefab element = child.GetComponent<TPrefab>();
                 if (element == null)
                 {
                     continue;
@@ -67,14 +90,9 @@ namespace Blackset.ObjectDistribution
             }
         }
 
-        protected virtual void OnDisable()
+        protected void Place(TPrefab element)
         {
-            if (factory == null) return;
-            factory.onObjectInstantiated -= Place;
-        }
-
-        protected void Place(ContractEntryVisualElement element)
-        {
+            Debug.Log($"Place вызван: {element.name}, nextPointIndex={nextPointIndex}, caller={new System.Diagnostics.StackTrace()}");
             if (element == null)
             {
                 ServiceDebug.LogError("Элемент невалиден, объект не распределен");
@@ -151,9 +169,9 @@ namespace Blackset.ObjectDistribution
 
                     string id = element.DataContainer.GetOpponentData(element.EntryId).Id ?? string.Empty;
 
-                    for (int c = 0; c < id.Length; c++)
+                    foreach (var t in id)
                     {
-                        hash ^= id[c];
+                        hash ^= t;
                         hash *= prime;
                     }
 
