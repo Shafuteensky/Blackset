@@ -1,5 +1,6 @@
 using Blackset.Duel.Sequence;
 using Blackset.DuelEvents.EventTypes;
+using DG.Tweening;
 using UnityEngine;
 
 namespace Blackset.Data.Items.Visual.Modules
@@ -15,6 +16,9 @@ namespace Blackset.Data.Items.Visual.Modules
         
         private DuelController duelController;
         private string ownerParticipantId;
+        
+        private readonly Vector3 moveDirLocal = new(-1, 0, 0);
+        private readonly float moveDist = 7f;
         
         private void Start() => initialPosition = diceTransform.position;
         
@@ -44,14 +48,18 @@ namespace Blackset.Data.Items.Visual.Modules
 
         private void OnDiceUsed(string diceId)
         {
-            // TODO: Заменить на фейк-ролл (?)
-            if (diceId == itemId)
-                diceTransform.position += new Vector3(0, 0, 5);
+            if (diceId != itemId) return;
+
+            // Переводим направление из локального пространства родителя в мировое
+            Vector3 worldDir = diceTransform.parent.TransformDirection(moveDirLocal);
+            Vector3 target = diceTransform.position + worldDir * moveDist;
+
+            diceTransform.DOMove(target, 0.5f).SetEase(Ease.OutCubic);
         }
 
-        private void OnBattleStart(BattleStartEvent e)
+        private void OnBattleStart(BattleStartEvent _)
         {
-            diceTransform.position = initialPosition;
+            diceTransform.DOMove(initialPosition, 0.5f).SetEase(Ease.OutCubic);
         }
     }
 }
