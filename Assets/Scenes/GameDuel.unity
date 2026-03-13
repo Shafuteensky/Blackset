@@ -3888,6 +3888,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Blackset.ObjectDistribution.InventoryViewFactoryObjectsDistributor
   factory: {fileID: 1261500485}
   factoryRoot: {fileID: 1237952222}
+  clearOnEnable: 1
   points:
   - {fileID: 1615906011}
   - {fileID: 1706716235}
@@ -3898,7 +3899,6 @@ MonoBehaviour:
   - {fileID: 99169393}
   - {fileID: 992351739}
   - {fileID: 1321040705}
-  clearOnEnable: 1
 --- !u!1 &1306506836
 GameObject:
   m_ObjectHideFlags: 0
@@ -5043,6 +5043,53 @@ Transform:
   m_Children: []
   m_Father: {fileID: 141018699}
   m_LocalEulerAnglesHint: {x: 0, y: 180.9, z: 0}
+--- !u!1 &1677291256
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1677291257}
+  - component: {fileID: 1677291258}
+  m_Layer: 0
+  m_Name: Sound FX
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1677291257
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1677291256}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1936877674}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1677291258
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1677291256}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: af296da5d8dc43439732b57484c73852, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Blackset.Data.Items.Visual.Sounds.DiceRollAudioPlayer
+  model: 3
+  spatialPreset: {fileID: 11400000, guid: b10f41c08c193e348a4d9399e7a45926, type: 2}
+  rollSounds: {fileID: 6418180475301049370, guid: 37cdb32f4c0386140952a9a7249310eb, type: 2}
 --- !u!1 &1706716234
 GameObject:
   m_ObjectHideFlags: 0
@@ -5960,6 +6007,7 @@ Transform:
   m_Children:
   - {fileID: 1312721234}
   - {fileID: 1921198931}
+  - {fileID: 1677291257}
   - {fileID: 397302197}
   - {fileID: 2105554652}
   - {fileID: 1327738399}
@@ -6267,6 +6315,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Blackset.ObjectDistribution.InventoryViewFactoryObjectsDistributor
   factory: {fileID: 2066669993}
   factoryRoot: {fileID: 2013615162}
+  clearOnEnable: 1
   points:
   - {fileID: 1306506837}
   - {fileID: 1898313295}
@@ -6277,7 +6326,6 @@ MonoBehaviour:
   - {fileID: 1655005620}
   - {fileID: 1846185478}
   - {fileID: 589463608}
-  clearOnEnable: 1
 --- !u!114 &2066669993
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -6108,8 +6108,8 @@ MonoBehaviour:
   dataContainer: {fileID: 11400000, guid: 2701bc2e283ae024f9feadaf1bba8a0d, type: 2}
   itemElementPrefab: {fileID: -6899927804688748346, guid: ddd0fa3004100f046b2b3a0d0509ee50, type: 3}
   elementsRoot: {fileID: 310828442}
-  rebuildOnStart: 0
-  rebuildOnEnable: 1
+  rebuildOnStart: 1
+  rebuildOnEnable: 0
   rebuildOnInventoryDataUpdated: 1
 --- !u!114 &1682569778
 MonoBehaviour:
@@ -6125,6 +6125,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Blackset.ObjectDistribution.FactoryObjectsDistributor
   factory: {fileID: 1682569777}
   factoryRoot: {fileID: 310828442}
+  clearOnEnable: 1
   points:
   - {fileID: 2060286780}
   - {fileID: 155343133}

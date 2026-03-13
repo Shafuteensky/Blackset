@@ -290,6 +290,7 @@ MonoBehaviour:
         - globalObjectIdString: GlobalObjectId_V1-2-390fefee3cc4eec42a522b61edd78188-654613663-0
         - globalObjectIdString: GlobalObjectId_V1-2-390fefee3cc4eec42a522b61edd78188-2075282001-0
         - globalObjectIdString: GlobalObjectId_V1-2-390fefee3cc4eec42a522b61edd78188-1004408824-0
+        - globalObjectIdString: GlobalObjectId_V1-2-390fefee3cc4eec42a522b61edd78188-1677291256-0
         values:
         - colorIndex: 0
           iconNameOrGuid: StandaloneInputModule Icon
@@ -365,6 +366,10 @@ MonoBehaviour:
           isColorRecursive: 0
         - colorIndex: 0
           iconNameOrGuid: Folder Icon
+          isIconRecursive: 0
+          isColorRecursive: 0
+        - colorIndex: 0
+          iconNameOrGuid: AudioClip Icon
           isIconRecursive: 0
           isColorRecursive: 0
     - goDatas_byGlobalId:
