@@ -22,8 +22,8 @@ MonoBehaviour:
     milestoneLevelStep: 5
     milestoneBonus: 3
   experienceRewards:
-    participation: 10
-    winBonus: 20
+    participation: 50
+    winBonus: 100
     loseBonus: 0
   rewardsMultipliers:
     difficultyMultiplier: 1

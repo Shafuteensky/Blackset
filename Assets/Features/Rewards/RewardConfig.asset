@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: RewardConfig
   m_EditorClassIdentifier: Assembly-CSharp::Blackset.Rewards.RewardConfig
   baseMoneyReward:
-    participation: 10
-    winBonus: 20
-    loseBonus: 5
+    participation: 3
+    winBonus: 9
+    loseBonus: 0
   scoreWeights:
     opponentWeight: 1
     difficultyWeight: 1
