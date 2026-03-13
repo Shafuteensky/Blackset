@@ -6109,7 +6109,7 @@ MonoBehaviour:
   itemElementPrefab: {fileID: -6899927804688748346, guid: ddd0fa3004100f046b2b3a0d0509ee50, type: 3}
   elementsRoot: {fileID: 310828442}
   rebuildOnStart: 1
-  rebuildOnEnable: 0
+  rebuildOnEnable: 1
   rebuildOnInventoryDataUpdated: 1
 --- !u!114 &1682569778
 MonoBehaviour:

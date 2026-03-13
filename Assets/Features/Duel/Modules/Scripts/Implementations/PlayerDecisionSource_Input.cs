@@ -5,12 +5,12 @@ using Blackset.Duel.Participants;
 using Blackset.Duel.Targets;
 using Cysharp.Threading.Tasks;
 using Extensions.Log;
+using UnityEngine;
 
 namespace Blackset.Duel.Modules
 {
     /// <summary>
-    /// Получение намерений игрока через ввод с UI.
-    /// Владеет игровым состоянием текущего выбора.
+    /// Получение намерений игрока через ввод с UI
     /// </summary>
     [UnityEngine.CreateAssetMenu(
         fileName = nameof(PlayerDecisionSource_Input),
@@ -25,6 +25,9 @@ namespace Blackset.Duel.Modules
         private UniTaskCompletionSource<string> declarationTcs;
         private UniTaskCompletionSource<TurnParticipantState> intentTcs;
 
+        private bool declarationAwaiting;
+        private bool intentAwaiting;
+
         /// <summary>
         /// Инициализация зависимостей
         /// </summary>
@@ -33,7 +36,10 @@ namespace Blackset.Duel.Modules
             presenter = newPresenter;
             isInitialized = true;
 
-            presenter.SetItemCallbacks(HandleDiceSelected, HandleConsumableSelected);
+            presenter.SetItemCallbacks(
+                HandleDiceSelected,
+                HandleConsumableSelected,
+                HandlePassRequested);
         }
 
         /// <summary>
@@ -45,11 +51,12 @@ namespace Blackset.Duel.Modules
             ServiceGuard.NotNull(presenter, nameof(presenter));
 
             selectedDiceId = string.Empty;
+            declarationAwaiting = true;
             declarationTcs = new UniTaskCompletionSource<string>();
 
             ct.Register(CancelDeclaration);
 
-            presenter.ShowDeclarationUI(onConfirm: ConfirmDeclaration);
+            presenter.BeginDeclaration(context.PlayerId);
 
             return declarationTcs.Task;
         }
@@ -64,66 +71,86 @@ namespace Blackset.Duel.Modules
 
             currentIntent = new TurnParticipantState();
             currentIntent.ResetForNewTurn();
+
+            intentAwaiting = true;
             intentTcs = new UniTaskCompletionSource<TurnParticipantState>();
 
             ct.Register(CancelIntent);
 
-            presenter.ShowTurnIntentUI(onConfirm: ConfirmIntent, onPass: PassIntent);
+            presenter.BeginIntentSelection(context.PlayerId);
 
             return intentTcs.Task;
         }
 
-        #region Обработка выбора предметов
-
         private void HandleDiceSelected(string diceId)
         {
-            selectedDiceId = diceId;
-            currentIntent?.ChoseDice(diceId);
+            
+            if (declarationAwaiting)
+            {
+                selectedDiceId = diceId;
+                CompleteDeclaration();
+                return;
+            }
+
+            if (intentAwaiting)
+            {
+                currentIntent?.ChoseDice(diceId);
+                CompleteIntent();
+            }
         }
 
         private void HandleConsumableSelected(string consumableId, ApplyTarget target)
         {
+            if (!intentAwaiting)
+            {
+                return;
+            }
+
             currentIntent?.ChoseConsumable(consumableId, target);
         }
 
-        #endregion
-
-        #region Обработка подтверждений и отмен
-
-        private void ConfirmDeclaration()
+        private void HandlePassRequested()
         {
-            presenter.Hide();
+            if (!intentAwaiting)
+            {
+                return;
+            }
+
+            TurnParticipantState passIntent = new TurnParticipantState();
+            passIntent.ResetForNewTurn();
+            passIntent.MarkPassed();
+
+            intentAwaiting = false;
+            presenter.EndInput();
+            intentTcs.TrySetResult(passIntent);
+        }
+
+        private void CompleteDeclaration()
+        {
+            declarationAwaiting = false;
+            presenter.EndInput();
             declarationTcs.TrySetResult(selectedDiceId);
         }
 
         private void CancelDeclaration()
         {
-            presenter.Hide();
+            declarationAwaiting = false;
+            presenter.EndInput();
             declarationTcs.TrySetCanceled();
         }
 
-        private void ConfirmIntent()
+        private void CompleteIntent()
         {
-            presenter.Hide();
+            intentAwaiting = false;
+            presenter.EndInput();
             intentTcs.TrySetResult(currentIntent);
-        }
-
-        private void PassIntent()
-        {
-            TurnParticipantState passIntent = new TurnParticipantState();
-            passIntent.ResetForNewTurn();
-            passIntent.MarkPassed();
-
-            presenter.Hide();
-            intentTcs.TrySetResult(passIntent);
         }
 
         private void CancelIntent()
         {
-            presenter.Hide();
+            intentAwaiting = false;
+            presenter.EndInput();
             intentTcs.TrySetCanceled();
         }
-
-        #endregion
     }
 }

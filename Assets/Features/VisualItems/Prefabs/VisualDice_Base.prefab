@@ -100,7 +100,7 @@ MonoBehaviour:
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
   m_PresetInfoIsWorld: 1
---- !u!1 &3348738038456021106
+--- !u!1 &5033110020700989660
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -108,82 +108,38 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 3190797880127111925}
-  - component: {fileID: 5095197159422838612}
-  - component: {fileID: 6425610477822662817}
-  - component: {fileID: 238128182391678859}
-  - component: {fileID: 8624286928875271493}
+  - component: {fileID: 556607301348089336}
+  - component: {fileID: 6678793320894963788}
   m_Layer: 0
-  m_Name: Controllers
+  m_Name: Visual
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &3190797880127111925
+--- !u!4 &556607301348089336
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3348738038456021106}
+  m_GameObject: {fileID: 5033110020700989660}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 6302433794120098834}
+  - {fileID: 6024152470842704095}
   m_Father: {fileID: 4868997670459332151}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5095197159422838612
+--- !u!114 &6678793320894963788
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3348738038456021106}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0dc46353b4974e6884ddce478f272568, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Blackset.Data.Items.Visual.Modules.DiceResultView
-  billboard: {fileID: 2577297206629727824}
-  resultText: {fileID: 7128401925305540120}
-  sideNumbers: []
---- !u!114 &6425610477822662817
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3348738038456021106}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 435450c8ab5e48f897f0702867f7f971, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Blackset.Data.Items.Visual.Modules.DicePositionController
---- !u!114 &238128182391678859
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3348738038456021106}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 05e92fc5f078421fa1936993d9cb39ab, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Blackset.Data.Items.Visual.Modules.ItemViewRepresentation
-  meshFilter: {fileID: 143385941071507232}
-  meshRenderer: {fileID: 8103387039947668669}
---- !u!114 &8624286928875271493
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3348738038456021106}
+  m_GameObject: {fileID: 5033110020700989660}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4d0390bd8b8ffd640b34fe25065ff1df, type: 3}
@@ -219,8 +175,8 @@ MonoBehaviour:
   onRewind:
     m_PersistentCalls:
       m_Calls: []
-  targetIsSelf: 0
-  targetGO: {fileID: 5033110020700989660}
+  targetIsSelf: 1
+  targetGO: {fileID: 0}
   tweenTargetIsTargetGO: 1
   delay: 0
   duration: 1
@@ -279,44 +235,12 @@ MonoBehaviour:
   endValueTransform: {fileID: 0}
   optionalBool0: 0
   optionalBool1: 0
-  optionalFloat0: 1
+  optionalFloat0: 0.403
   optionalInt0: 9
   optionalRotationMode: 0
   optionalScrambleMode: 0
   optionalShakeRandomnessMode: 0
   optionalString: 
---- !u!1 &5033110020700989660
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 556607301348089336}
-  m_Layer: 0
-  m_Name: Visual
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &556607301348089336
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5033110020700989660}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 6024152470842704095}
-  m_Father: {fileID: 4868997670459332151}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5036757616722752098
 GameObject:
   m_ObjectHideFlags: 0
@@ -327,8 +251,17 @@ GameObject:
   m_Component:
   - component: {fileID: 4868997670459332151}
   - component: {fileID: 4264946706804566838}
+  - component: {fileID: 6741705545251219199}
   - component: {fileID: 4351025924490762769}
+  - component: {fileID: 5804505142746478482}
+  - component: {fileID: 4720389858177352104}
+  - component: {fileID: 5170476083873890199}
+  - component: {fileID: 5344105797481517764}
+  - component: {fileID: 6536461567142214127}
   - component: {fileID: 7488319753299089846}
+  - component: {fileID: 9164477678001014071}
+  - component: {fileID: 7965724094143004067}
+  - component: {fileID: 833500053564347737}
   m_Layer: 0
   m_Name: VisualDice_Base
   m_TagString: Untagged
@@ -349,7 +282,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 3190797880127111925}
   - {fileID: 6481986492651576200}
   - {fileID: 556607301348089336}
   m_Father: {fileID: 0}
@@ -366,10 +298,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 73fc830e3e6e40e19af9654fa4890d8b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Blackset.Data.Items.Visual.VisualDice
-  positionController: {fileID: 6425610477822662817}
-  resultView: {fileID: 5095197159422838612}
-  interactionBlocker: {fileID: 5560706042351253420}
-  viewRepresentation: {fileID: 238128182391678859}
+  positionController: {fileID: 4720389858177352104}
+  resultView: {fileID: 5170476083873890199}
+  interactionBlocker: {fileID: 6536461567142214127}
+  viewRepresentation: {fileID: 5804505142746478482}
+--- !u!114 &6741705545251219199
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5036757616722752098}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5646fca486fe4a52a5815024642ad943, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Blackset.DecisionInput.DuelChoiceSelectable
+  choiceType: 1
 --- !u!114 &4351025924490762769
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -391,7 +336,7 @@ MonoBehaviour:
   canvasGroup: {fileID: 0}
   canDrag: 0
   canDrop: 0
---- !u!114 &7488319753299089846
+--- !u!114 &5804505142746478482
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -400,53 +345,45 @@ MonoBehaviour:
   m_GameObject: {fileID: 5036757616722752098}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0ba87b11d293466a8d08acfe3d76ce66, type: 3}
+  m_Script: {fileID: 11500000, guid: 05e92fc5f078421fa1936993d9cb39ab, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Blackset.UI.Inventory.InventoryItemHoverInfoEmitter
-  holdSeconds: {fileID: 11400000, guid: c0a36e4a3850b154594fa82a285983c9, type: 2}
-  positionSource: 0
---- !u!1 &6514086578382982986
-GameObject:
+  m_EditorClassIdentifier: Assembly-CSharp::Blackset.Data.Items.Visual.Modules.ItemViewRepresentation
+  meshFilter: {fileID: 143385941071507232}
+  meshRenderer: {fileID: 8103387039947668669}
+--- !u!114 &4720389858177352104
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 6302433794120098834}
-  - component: {fileID: 3531490102768211196}
-  - component: {fileID: 2408051844805396417}
-  - component: {fileID: 5560706042351253420}
-  - component: {fileID: 7071679517018014293}
-  m_Layer: 0
-  m_Name: Collider
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &6302433794120098834
-Transform:
+  m_GameObject: {fileID: 5036757616722752098}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 435450c8ab5e48f897f0702867f7f971, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Blackset.Data.Items.Visual.Modules.DicePositionController
+--- !u!114 &5170476083873890199
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6514086578382982986}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 3190797880127111925}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &3531490102768211196
+  m_GameObject: {fileID: 5036757616722752098}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0dc46353b4974e6884ddce478f272568, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Blackset.Data.Items.Visual.Modules.DiceResultView
+  billboard: {fileID: 2577297206629727824}
+  resultText: {fileID: 7128401925305540120}
+  sideNumbers: []
+--- !u!65 &5344105797481517764
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6514086578382982986}
+  m_GameObject: {fileID: 5036757616722752098}
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -461,70 +398,39 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &2408051844805396417
+--- !u!114 &6536461567142214127
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6514086578382982986}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.EventSystems.EventTrigger
-  m_Delegates:
-  - eventID: 0
-    callback:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 8624286928875271493}
-          m_TargetAssemblyTypeName: DG.Tweening.DOTweenAnimation, Assembly-CSharp-firstpass
-          m_MethodName: DORestart
-          m_Mode: 1
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
-  - eventID: 4
-    callback:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 8624286928875271493}
-          m_TargetAssemblyTypeName: DG.Tweening.DOTweenAnimation, Assembly-CSharp-firstpass
-          m_MethodName: DORestart
-          m_Mode: 1
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
---- !u!114 &5560706042351253420
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6514086578382982986}
+  m_GameObject: {fileID: 5036757616722752098}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ccb257f1b2414bc1b3f957d1b324b1da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Blackset.Data.Items.Visual.Modules.VisualItemInteractionBlocker
---- !u!114 &7071679517018014293
+--- !u!114 &7488319753299089846
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6514086578382982986}
+  m_GameObject: {fileID: 5036757616722752098}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0ba87b11d293466a8d08acfe3d76ce66, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Blackset.UI.Inventory.InventoryItemHoverInfoEmitter
+  holdSeconds: {fileID: 11400000, guid: c0a36e4a3850b154594fa82a285983c9, type: 2}
+  positionSource: 0
+--- !u!114 &9164477678001014071
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5036757616722752098}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7011a51033254833ab61f25b49b20a35, type: 3}
@@ -534,6 +440,36 @@ MonoBehaviour:
   spatialPreset: {fileID: 11400000, guid: 1cbc6afd28091a94ca3a2da12561c161, type: 2}
   enterSound: {fileID: 8300000, guid: 064603422268a384ebc77b58b918508f, type: 3}
   downSound: {fileID: 8300000, guid: a2be68f1550330d44b83185e27edffff, type: 3}
+--- !u!114 &7965724094143004067
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5036757616722752098}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 77244bd6a06c4815813738e69c3acb79, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp-firstpass::Extensions.Helpers.DoTween.PlayTweenOnClick
+  trigger: 0
+  tweener: {fileID: 6678793320894963788}
+  backwards: 0
+--- !u!114 &833500053564347737
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5036757616722752098}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 77244bd6a06c4815813738e69c3acb79, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp-firstpass::Extensions.Helpers.DoTween.PlayTweenOnClick
+  trigger: 1
+  tweener: {fileID: 6678793320894963788}
+  backwards: 0
 --- !u!1 &8752520162000992973
 GameObject:
   m_ObjectHideFlags: 0

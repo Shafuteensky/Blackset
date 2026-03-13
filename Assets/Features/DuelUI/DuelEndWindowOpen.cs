@@ -1,4 +1,3 @@
-using System;
 using Blackset.Duel.Sequence;
 using Blackset.DuelEvents.EventTypes;
 using Extensions.Log;
@@ -6,7 +5,7 @@ using Extensions.UIWindows;
 using Features.Duel.Data.FightEnd;
 using UnityEngine;
 
-namespace Features.DuelUI
+namespace Blackset.DuelUI
 {
     /// <summary>
     /// Контроллер открытия окон по завершению дуэли

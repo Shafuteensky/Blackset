@@ -1,74 +1,108 @@
 using System;
 using Blackset.Duel.Targets;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace Blackset.DecisionInput
 {
     /// <summary>
-    /// Отображение UI-панелей ввода выборов игрока.
-    /// Не хранит игровое состояние — только показывает панели и сообщает о действиях игрока через колбэки.
+    /// Управляет доступностью ввода в фазах дуэли.
+    /// Сам UI не показывает, только принимает или игнорирует выборы.
     /// </summary>
     public class DuelInputPresenter : MonoBehaviour
     {
-        [Header("Объявление дайса (блеф)"), Space]
-        [SerializeField] private GameObject declarationPanel;
-        [SerializeField] private Button confirmDeclarationButton;
-
-        [Header("Выбор фактических действий"), Space]
-        [SerializeField] private GameObject intentPanel;
-        [SerializeField] private Button confirmIntentButton;
-        [SerializeField] private Button passButton;
-
         private Action<string> onDiceSelected;
         private Action<string, ApplyTarget> onConsumableSelected;
+        private Action onPassRequested;
+
+        private InputMode currentMode;
+        private string activeParticipantId;
+
+        protected virtual void OnEnable()
+        {
+            DuelSelectionBus.DiceSelected += HandleDiceSelected;
+            DuelSelectionBus.ConsumableSelected += HandleConsumableSelected;
+        }
+
+        protected virtual void OnDisable()
+        {
+            DuelSelectionBus.DiceSelected -= HandleDiceSelected;
+            DuelSelectionBus.ConsumableSelected -= HandleConsumableSelected;
+        }
 
         /// <summary>
-        /// Зарегистрировать колбэки выбора предметов.
-        /// Вызывается один раз при инициализации источника решений.
+        /// Зарегистрировать обработчики выбора
         /// </summary>
-        public void SetItemCallbacks(Action<string> onDice, Action<string, ApplyTarget> onConsumable)
+        public void SetItemCallbacks(
+            Action<string> newOnDiceSelected,
+            Action<string, ApplyTarget> newOnConsumableSelected,
+            Action newOnPassRequested)
         {
-            onDiceSelected = onDice;
-            onConsumableSelected = onConsumable;
+            onDiceSelected = newOnDiceSelected;
+            onConsumableSelected = newOnConsumableSelected;
+            onPassRequested = newOnPassRequested;
         }
 
-        /// <summary> Показать панель объявления дайса </summary>
-        /// <param name="onConfirm">Игрок подтвердил объявление</param>
-        public void ShowDeclarationUI(Action onConfirm)
+        #region Фазы ввода
+        
+        /// <summary>
+        /// Разрешить объявление дайса
+        /// </summary>
+        public void BeginDeclaration(string participantId)
         {
-            declarationPanel.SetActive(true);
-
-            confirmDeclarationButton.onClick.RemoveAllListeners();
-            confirmDeclarationButton.onClick.AddListener(() => onConfirm?.Invoke());
+            activeParticipantId = participantId;
+            currentMode = InputMode.Declaration;
         }
 
-        /// <summary> Показать панель выбора действий </summary>
-        /// <param name="onConfirm">Игрок подтвердил намерения</param>
-        /// <param name="onPass">Игрок спасовал</param>
-        public void ShowTurnIntentUI(Action onConfirm, Action onPass)
+        /// <summary>
+        /// Разрешить выбор фактического действия
+        /// </summary>
+        public void BeginIntentSelection(string participantId)
         {
-            intentPanel.SetActive(true);
+            activeParticipantId = participantId;
+            currentMode = InputMode.Intent;
+        }
+        
+        #endregion
 
-            confirmIntentButton.onClick.RemoveAllListeners();
-            confirmIntentButton.onClick.AddListener(() => onConfirm?.Invoke());
-
-            passButton.onClick.RemoveAllListeners();
-            passButton.onClick.AddListener(() => onPass?.Invoke());
+        /// <summary>
+        /// Запретить ввод
+        /// </summary>
+        public void EndInput()
+        {
+            activeParticipantId = string.Empty;
+            currentMode = InputMode.None;
         }
 
-        /// <summary> Закрыть активные панели ввода </summary>
-        public void Hide()
+        /// <summary>
+        /// Явный запрос паса извне
+        /// </summary>
+        public void RequestPass()
         {
-            declarationPanel.SetActive(false);
-            intentPanel.SetActive(false);
+            if (currentMode == InputMode.Intent) onPassRequested?.Invoke();
         }
 
-        // Вызываются кнопками выбора дайса/расходника (спавнятся фабрикой)
+        #region Отправка запросов
+        
+        private void HandleDiceSelected(string ownerParticipantId, string diceId)
+        {
+            if (CanAccept(ownerParticipantId)) onDiceSelected?.Invoke(diceId);
+        }
 
-        public void NotifyDiceSelected(string diceId) => onDiceSelected?.Invoke(diceId);
-
-        public void NotifyConsumableSelected(string consumableId, ApplyTarget target) =>
+        private void HandleConsumableSelected(
+            string ownerParticipantId,
+            string consumableId,
+            ApplyTarget target)
+        {
+            if (!CanAccept(ownerParticipantId) || currentMode != InputMode.Intent) return;
             onConsumableSelected?.Invoke(consumableId, target);
+        }
+        
+        #endregion
+
+        private bool CanAccept(string ownerParticipantId)
+        {
+            if (currentMode == InputMode.None || string.IsNullOrEmpty(activeParticipantId)) return false;
+            return activeParticipantId == ownerParticipantId;
+        }
     }
 }

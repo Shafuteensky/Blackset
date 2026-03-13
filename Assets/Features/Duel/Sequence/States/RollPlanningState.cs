@@ -82,9 +82,6 @@ namespace Blackset.Duel.Sequence.States
                 eventHub.Publish(new DeclarationStartedEvent());
                 
                 string declaredDiceId = await playerDecisionSource.GetDeclaration(context, cancellationToken);
-                // TODO Заменить на реальный выбор
-                declaredDiceId = context.Participants[context.PlayerId].Sets.DiceSetInventory.Data.ElementAt
-                    (Random.Range(0, context.Participants[context.PlayerId].Sets.DiceSetInventory.Data.Count)).Id;
                 context.Participants[context.PlayerId].FightState.TurnState.DeclareDice(declaredDiceId);
 
                 string botDeclaredDiceId = botDecisionSource.BuildDeclaration(context);
@@ -95,10 +92,6 @@ namespace Blackset.Duel.Sequence.States
                 
                 TurnParticipantState playerIntent = await playerDecisionSource.GetIntentState(context, cancellationToken);
                 context.Participants[context.PlayerId].FightState.TurnState.ApplyState(playerIntent);
-                // TODO Заменить на реальный выбор
-                context.Participants[context.PlayerId].FightState.TurnState.ChoseDice
-                    (context.Participants[context.PlayerId].Sets.DiceSetInventory.Data.ElementAt
-                        (Random.Range(0, context.Participants[context.PlayerId].Sets.DiceSetInventory.Data.Count)).Id);
 
                 TurnParticipantState botIntent = botDecisionSource.BuildIntentState(context);
                 context.Participants[context.OpponentId].FightState.TurnState.ApplyState(botIntent);

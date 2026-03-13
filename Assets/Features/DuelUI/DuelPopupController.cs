@@ -5,7 +5,7 @@ using Features.Duel.Data.FightEnd;
 using TMPro;
 using UnityEngine;
 
-namespace Features.DuelUI
+namespace Blackset.DuelUI
 {
     /// <summary>
     /// Контроллер попап-уведомлений дуэли
