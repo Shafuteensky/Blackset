@@ -85,19 +85,23 @@ namespace Blackset.Duel.Sequence.States
                 
                 eventHub.Publish(new DeclarationStartedEvent());
                 
+                string botDeclaredDiceId = botDecisionSource.BuildDeclaration(context);
+                opponentState.DeclareDice(botDeclaredDiceId);
+                eventHub.Publish(new DeclaredDiceEvent(botDeclaredDiceId, context.OpponentId));
+                
                 string declaredDiceId = await playerDecisionSource.GetDeclaration(context, cancellationToken);
-
                 if (!playerState.HasPassed.Value)
                 {
                     playerState.DeclareDice(declaredDiceId);
+                    eventHub.Publish(new DeclaredDiceEvent(declaredDiceId, context.PlayerId));
                 }
-
-                string botDeclaredDiceId = botDecisionSource.BuildDeclaration(context);
-                opponentState.DeclareDice(botDeclaredDiceId);
 
                 // Намерения 
                 
                 eventHub.Publish(new PlanningStartedEvent());
+
+                TurnParticipantState botIntent = botDecisionSource.BuildIntentState(context);
+                opponentState.ApplyState(botIntent);
                 
                 TurnParticipantState playerIntent;
                 if (!playerState.HasPassed.Value)
@@ -106,9 +110,6 @@ namespace Blackset.Duel.Sequence.States
                 }
                 else playerIntent = playerState;
                 playerState.ApplyState(playerIntent);
-
-                TurnParticipantState botIntent = botDecisionSource.BuildIntentState(context);
-                opponentState.ApplyState(botIntent);
 
                 planningCompleted = true;
                 eventHub.Publish(new PlanningCompletedEvent());
