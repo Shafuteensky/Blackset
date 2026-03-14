@@ -15,6 +15,8 @@ namespace Blackset.Duel.Modules
     {
         public int RollDice(DuelContext context, string participantId, string diceId)
         {
+            if (string.IsNullOrEmpty(diceId)) return 0;
+            
             DuelParticipantState participantState = context.Participants[participantId];
             string diceTypeToRoll = participantState.Sets.DiceSetInventory.GetById(diceId).ItemTypeId;
             

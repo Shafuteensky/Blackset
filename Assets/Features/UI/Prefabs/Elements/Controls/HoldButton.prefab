@@ -278,6 +278,9 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 8135783320175998242}
     m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4100400362722513085, guid: 5756bfce9e19bfe458725eda32eaa84a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2418915173129267294}
     - targetCorrespondingSourceObject: {fileID: 453053082969518102, guid: 5756bfce9e19bfe458725eda32eaa84a, type: 3}
       insertIndex: -1
       addedObject: {fileID: 6652049215456437047}
@@ -300,6 +303,27 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Mask
   m_ShowMaskGraphic: 1
+--- !u!1 &3759911328242118469 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4100400362722513085, guid: 5756bfce9e19bfe458725eda32eaa84a, type: 3}
+  m_PrefabInstance: {fileID: 921671158500425720}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &2418915173129267294
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3759911328242118469}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0e8f0ecdafc04019b741c8a400b25a17, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp-firstpass::Extensions.Audio.HoldButtonSoundsPlayer
+  model: 3
+  spatialPreset: {fileID: 11400000, guid: b10f41c08c193e348a4d9399e7a45926, type: 2}
+  onHoldCompleteSound: {fileID: 8300000, guid: a2be68f1550330d44b83185e27edffff, type: 3}
+  holdButton: {fileID: 0}
 --- !u!224 &8180378421801446804 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 9028844087462924908, guid: 5756bfce9e19bfe458725eda32eaa84a, type: 3}

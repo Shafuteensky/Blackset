@@ -60,7 +60,7 @@ namespace Extensions.Generics
             holdTask = new CoroutineTask(this);
         }
 
-        protected void OnEnable()
+        protected virtual void OnEnable()
         {
             holdDuration = holdDurationValue == null ? DEFAULT_HOLD_DURATION : holdDurationValue.Value;
             if (holdDuration < 0f) holdDuration = 0f;

@@ -11021,9 +11021,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 1247463062730923052, guid: 2e4e1ef76b060d4448a5ed1acacc01ee, type: 3}
       insertIndex: -1
       addedObject: {fileID: 6039299398792506637}
-    - targetCorrespondingSourceObject: {fileID: 1247463062730923052, guid: 2e4e1ef76b060d4448a5ed1acacc01ee, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 3219184671273241791}
     - targetCorrespondingSourceObject: {fileID: 3077983905606922931, guid: 2e4e1ef76b060d4448a5ed1acacc01ee, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2398908233513241333}
@@ -11124,24 +11121,6 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
---- !u!114 &3219184671273241791
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4885185430003813371}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a6ae32c5c42c4b8295a0f092cb13ed0c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Blackset.Opponents.ContractButtonsFactory
-  dataContainer: {fileID: 11400000, guid: 2701bc2e283ae024f9feadaf1bba8a0d, type: 2}
-  itemElementPrefab: {fileID: 8171616465663320379, guid: 070b6ccb353facc458180f734fe0726e, type: 3}
-  elementsRoot: {fileID: 6952445470737039083}
-  rebuildOnStart: 0
-  rebuildOnEnable: 1
-  rebuildOnInventoryDataUpdated: 1
 --- !u!224 &6129064175134805510 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 543392026231462353, guid: 2e4e1ef76b060d4448a5ed1acacc01ee, type: 3}

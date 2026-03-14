@@ -130,6 +130,7 @@ namespace Blackset.Duel.Participants
         /// <param name="rawResult">Сырой результат броска</param>
         public void RegisterRawRollResult(string dice, int rawResult)
         {
+            if (rawResult == 0) return;
             rawRollResults[dice] = rawResult;
         }
         

@@ -78,23 +78,37 @@ namespace Blackset.Duel.Sequence.States
                 playerDecisionSource.Initialize(presenter);
                 IBotDecisionSource botDecisionSource = modules.Get<IBotDecisionSource>();
 
+                TurnParticipantState playerState = context.Participants[context.PlayerId].FightState.TurnState;
+                TurnParticipantState opponentState = context.Participants[context.OpponentId].FightState.TurnState;
+                
                 // Объявление дайса
+                
                 eventHub.Publish(new DeclarationStartedEvent());
                 
                 string declaredDiceId = await playerDecisionSource.GetDeclaration(context, cancellationToken);
-                context.Participants[context.PlayerId].FightState.TurnState.DeclareDice(declaredDiceId);
+
+                if (!playerState.HasPassed.Value)
+                {
+                    playerState.DeclareDice(declaredDiceId);
+                }
 
                 string botDeclaredDiceId = botDecisionSource.BuildDeclaration(context);
-                context.Participants[context.OpponentId].FightState.TurnState.DeclareDice(botDeclaredDiceId);
+                opponentState.DeclareDice(botDeclaredDiceId);
 
                 // Намерения 
+                
                 eventHub.Publish(new PlanningStartedEvent());
                 
-                TurnParticipantState playerIntent = await playerDecisionSource.GetIntentState(context, cancellationToken);
-                context.Participants[context.PlayerId].FightState.TurnState.ApplyState(playerIntent);
+                TurnParticipantState playerIntent;
+                if (!playerState.HasPassed.Value)
+                {
+                    playerIntent = await playerDecisionSource.GetIntentState(context, cancellationToken);
+                }
+                else playerIntent = playerState;
+                playerState.ApplyState(playerIntent);
 
                 TurnParticipantState botIntent = botDecisionSource.BuildIntentState(context);
-                context.Participants[context.OpponentId].FightState.TurnState.ApplyState(botIntent);
+                opponentState.ApplyState(botIntent);
 
                 planningCompleted = true;
                 eventHub.Publish(new PlanningCompletedEvent());

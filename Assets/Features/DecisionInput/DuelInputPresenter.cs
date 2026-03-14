@@ -21,12 +21,14 @@ namespace Blackset.DecisionInput
         {
             DuelSelectionBus.DiceSelected += HandleDiceSelected;
             DuelSelectionBus.ConsumableSelected += HandleConsumableSelected;
+            DuelSelectionBus.PassRequested += HandlePassRequested;
         }
 
         protected virtual void OnDisable()
         {
             DuelSelectionBus.DiceSelected -= HandleDiceSelected;
             DuelSelectionBus.ConsumableSelected -= HandleConsumableSelected;
+            DuelSelectionBus.PassRequested -= HandlePassRequested;
         }
 
         /// <summary>
@@ -78,7 +80,7 @@ namespace Blackset.DecisionInput
         /// </summary>
         public void RequestPass()
         {
-            if (currentMode == InputMode.Intent) onPassRequested?.Invoke();
+            if (currentMode != InputMode.Intent) onPassRequested?.Invoke();
         }
 
         #region Отправка запросов
@@ -95,6 +97,11 @@ namespace Blackset.DecisionInput
         {
             if (!CanAccept(ownerParticipantId) || currentMode != InputMode.Intent) return;
             onConsumableSelected?.Invoke(consumableId, target);
+        }
+        
+        private void HandlePassRequested()
+        {
+            if (currentMode != InputMode.None) onPassRequested?.Invoke();
         }
         
         #endregion

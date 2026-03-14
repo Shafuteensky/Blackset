@@ -126,7 +126,7 @@ namespace Blackset.Duel.Participants
         /// <param name="diceId">Идентификатор дайса</param>
         public void DeclareDice(string diceId)
         {
-            ServiceGuard.NotNullOrEmpty(diceId, nameof(diceId));
+            if (string.IsNullOrEmpty(diceId)) return;
             
             DeclaredDice.Value = diceId;
             IsDiceDeclared.Value = true;
@@ -138,7 +138,7 @@ namespace Blackset.Duel.Participants
         /// <param name="diceId">Идентификатор дайса</param>
         public void ChoseDice(string diceId)
         {
-            ServiceGuard.NotNullOrEmpty(diceId, nameof(diceId));
+            if (string.IsNullOrEmpty(diceId)) return;
             
             ChosenDice.Value = diceId;
             IsDiceChosen.Value = true;

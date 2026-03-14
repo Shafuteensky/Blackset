@@ -96,6 +96,10 @@ PrefabInstance:
       propertyPath: m_Colors.m_SelectedColor.g
       value: 0.62352943
       objectReference: {fileID: 0}
+    - target: {fileID: 2418915173129267294, guid: 3665a06125009f44ea825be2e4e33ba7, type: 3}
+      propertyPath: holdButton
+      value: 
+      objectReference: {fileID: 235497979193186072}
     - target: {fileID: 3759911328242118469, guid: 3665a06125009f44ea825be2e4e33ba7, type: 3}
       propertyPath: m_Name
       value: Button_Contract
@@ -113,14 +117,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 3759911328242118469, guid: 3665a06125009f44ea825be2e4e33ba7, type: 3}
-      insertIndex: -1
+      insertIndex: 5
       addedObject: {fileID: 235497979193186072}
     - targetCorrespondingSourceObject: {fileID: 3759911328242118469, guid: 3665a06125009f44ea825be2e4e33ba7, type: 3}
-      insertIndex: -1
+      insertIndex: 6
       addedObject: {fileID: -1984379066966115446}
-    - targetCorrespondingSourceObject: {fileID: 3759911328242118469, guid: 3665a06125009f44ea825be2e4e33ba7, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 9165566596306653947}
     - targetCorrespondingSourceObject: {fileID: 3759911328242118469, guid: 3665a06125009f44ea825be2e4e33ba7, type: 3}
       insertIndex: -1
       addedObject: {fileID: 8171616465663320379}
@@ -190,22 +191,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Extensions.Generics.HoldButtonFillIndicator
   fillImage: {fileID: 3775995702214263909}
---- !u!114 &9165566596306653947
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7678346698542929376}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0e8f0ecdafc04019b741c8a400b25a17, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp-firstpass::Extensions.Audio.HoldButtonSoundsPlayer
-  model: 3
-  spatialPreset: {fileID: 11400000, guid: b10f41c08c193e348a4d9399e7a45926, type: 2}
-  onHoldCompleteSound: {fileID: 8300000, guid: a2be68f1550330d44b83185e27edffff, type: 3}
-  holdButton: {fileID: 235497979193186072}
 --- !u!114 &8171616465663320379
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -257,6 +242,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 039deda69d0b43408e296c4f8422f8d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Blackset.DuelContracts.HoverInfo.ContractHoverInfoEmitter
-  dtatSourceElement: {fileID: 8171616465663320379}
   holdSeconds: {fileID: 11400000, guid: 6ba349697ef68fd45b4bcf67ff561b62, type: 2}
   positionSource: 1

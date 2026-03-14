@@ -12,7 +12,7 @@ namespace Blackset.Duel.Modules
     /// <summary>
     /// Получение намерений игрока через ввод с UI
     /// </summary>
-    [UnityEngine.CreateAssetMenu(
+    [CreateAssetMenu(
         fileName = nameof(PlayerDecisionSource_Input),
         menuName = "Blackset/Duel/Modules/" + nameof(PlayerDecisionSource_Input))]
     public class PlayerDecisionSource_Input : BaseDuelModule, IPlayerDecisionSource
@@ -27,6 +27,8 @@ namespace Blackset.Duel.Modules
 
         private bool declarationAwaiting;
         private bool intentAwaiting;
+
+        private DuelContext duelContext;
 
         /// <summary>
         /// Инициализация зависимостей
@@ -49,7 +51,9 @@ namespace Blackset.Duel.Modules
         {
             ServiceGuard.NotNull(context, nameof(context));
             ServiceGuard.NotNull(presenter, nameof(presenter));
-
+            
+            duelContext = context;
+                
             selectedDiceId = string.Empty;
             declarationAwaiting = true;
             declarationTcs = new UniTaskCompletionSource<string>();
@@ -69,6 +73,8 @@ namespace Blackset.Duel.Modules
             ServiceGuard.NotNull(context, nameof(context));
             ServiceGuard.NotNull(presenter, nameof(presenter));
 
+            duelContext = context;
+            
             currentIntent = new TurnParticipantState();
             currentIntent.ResetForNewTurn();
 
@@ -82,9 +88,10 @@ namespace Blackset.Duel.Modules
             return intentTcs.Task;
         }
 
+        #region Обработка
+        
         private void HandleDiceSelected(string diceId)
         {
-            
             if (declarationAwaiting)
             {
                 selectedDiceId = diceId;
@@ -92,37 +99,29 @@ namespace Blackset.Duel.Modules
                 return;
             }
 
-            if (intentAwaiting)
-            {
-                currentIntent?.ChoseDice(diceId);
-                CompleteIntent();
-            }
+            if (!intentAwaiting) return;
+
+            currentIntent.ChoseDice(diceId);
+            CompleteIntent();
         }
 
         private void HandleConsumableSelected(string consumableId, ApplyTarget target)
         {
-            if (!intentAwaiting)
-            {
-                return;
-            }
-
-            currentIntent?.ChoseConsumable(consumableId, target);
+            if (!intentAwaiting) return;
+            currentIntent.ChoseConsumable(consumableId, target);
         }
 
         private void HandlePassRequested()
         {
-            if (!intentAwaiting)
+            duelContext.Participants[duelContext.PlayerId].FightState.TurnState.MarkPassed();
+            
+            if (declarationAwaiting)
             {
+                CompleteDeclarationPass();
                 return;
             }
 
-            TurnParticipantState passIntent = new TurnParticipantState();
-            passIntent.ResetForNewTurn();
-            passIntent.MarkPassed();
-
-            intentAwaiting = false;
-            presenter.EndInput();
-            intentTcs.TrySetResult(passIntent);
+            if (intentAwaiting) CompleteIntentPass();
         }
 
         private void CompleteDeclaration()
@@ -130,6 +129,13 @@ namespace Blackset.Duel.Modules
             declarationAwaiting = false;
             presenter.EndInput();
             declarationTcs.TrySetResult(selectedDiceId);
+        }
+
+        private void CompleteDeclarationPass()
+        {
+            declarationAwaiting = false;
+            presenter.EndInput();
+            declarationTcs.TrySetResult(string.Empty);
         }
 
         private void CancelDeclaration()
@@ -146,11 +152,24 @@ namespace Blackset.Duel.Modules
             intentTcs.TrySetResult(currentIntent);
         }
 
+        private void CompleteIntentPass()
+        {
+            TurnParticipantState passIntent = new TurnParticipantState();
+            passIntent.ResetForNewTurn();
+            passIntent.MarkPassed();
+
+            intentAwaiting = false;
+            presenter.EndInput();
+            intentTcs.TrySetResult(passIntent);
+        }
+
         private void CancelIntent()
         {
             intentAwaiting = false;
             presenter.EndInput();
             intentTcs.TrySetCanceled();
         }
+        
+        #endregion
     }
 }
