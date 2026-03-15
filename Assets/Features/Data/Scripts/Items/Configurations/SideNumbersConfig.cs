@@ -17,7 +17,8 @@ namespace Blackset.Data.Configurations
         [Header("Правила заполнения граней"), Space]
         [SerializeField]
         private List<SideNumberRule> sideNumbersRules = new();
-
+        
+#if UNITY_EDITOR
         protected override void OnValidate()
         {
             base.OnValidate();
@@ -28,6 +29,7 @@ namespace Blackset.Data.Configurations
                 sideNumbersRules.Add(new SideNumberRule(SideNumbersRules.Default));
             }
         }
+#endif
 
         /// <summary>
         /// Получить финальные значения граней

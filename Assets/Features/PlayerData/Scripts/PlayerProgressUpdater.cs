@@ -26,10 +26,12 @@ namespace Blackset.Player
         
         private int cachedDuelsPlayed;
 
+#if UNITY_EDITOR
         protected virtual void OnValidate()
         {
             if (string.IsNullOrEmpty(saveKey)) saveKey = IdGenerator.NewGuid();
         }
+#endif
 
         /// <summary>
         /// Состояние сигнала об обновлении

@@ -66,6 +66,7 @@ namespace Blackset.Data.Registries
             return data[UnityEngine.Random.Range(0, data.Count)];
         }
         
+#if UNITY_EDITOR
         protected override void OnValidate()
         {
             base.OnValidate();
@@ -74,7 +75,6 @@ namespace Blackset.Data.Registries
             dataById = null;
 
             // Проверка на дубликаты идентификаторов и прочие editor-ошибки
-#if UNITY_EDITOR
             if (data == null || data.Count == 0) return;
 
             HashSet<string> ids = null;
@@ -102,8 +102,8 @@ namespace Blackset.Data.Registries
                     ServiceDebug.LogError($"[{name}] Дубликат Id '{entryId}' (index {i}). Реестр должен содержать уникальные Id");
                 }
             }
-#endif
         }
+#endif
 
         private void EnsureIndex()
         {

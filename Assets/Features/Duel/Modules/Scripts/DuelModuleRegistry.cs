@@ -25,11 +25,13 @@ namespace Blackset.Duel.Modules
             InvalidateCache();
         }
 
+#if UNITY_EDITOR
         private void OnValidate()
         {
             ValidateRegistry();
             InvalidateCache();
         }
+#endif
 
         #region Получение модулей
         
