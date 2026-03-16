@@ -87,5 +87,16 @@ namespace Blackset.Opponents
 
             return consumablesInPool;
         }
+
+        public float DifficultyLevel()
+        {
+            float raw = 0f;
+            raw += buildValue;
+            raw += masteryLevel;
+            raw += cunningLevel;
+
+            float average = raw / 3f;
+            return average;
+        }
     }
 }
