@@ -72,7 +72,7 @@ namespace Blackset.Duel.Modules
             if (!isCrit) return;
             
             int score = 0;
-            score += duelScoreConfig.Declaration.honestDeclarationScore;
+            score += duelScoreConfig.Precision.diceCriticalScore;
 
             participant.DuelScore.Value += Mathf.Max(0, score);
         }
