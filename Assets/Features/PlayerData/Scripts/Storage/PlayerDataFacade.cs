@@ -3,6 +3,7 @@ using Blackset.Data.Items.Types;
 using Blackset.Inventories;
 using Extensions.Log;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Blackset.Player
 {
@@ -28,19 +29,14 @@ namespace Blackset.Player
         [field: Tooltip("Контейнер данных прогресса")]
         public PlayerProgressDataContainer ProgressData { get; private set; }
         
+        [field: FormerlySerializedAs("<DicesInventory>k__BackingField")]
         [field: Header("Инвентари"), Space]
         /// <summary>
         /// Инвентарь дайсов
         /// </summary>
         [field:SerializeField]
-        [field: Tooltip("Инвентарь дайсов")]
-        public Inventory DicesInventory { get; private set; }
-        /// <summary>
-        /// Инвентарь расходников
-        /// </summary>
-        [field:SerializeField]
-        [field: Tooltip("Инвентарь расходников")]
-        public Inventory ConsumablesInventory { get; private set; }
+        [field: Tooltip("Инвентарь предметов")]
+        public Inventory Inventory { get; private set; }
         
         [field: Header("Пулы"), Space]
         /// <summary>

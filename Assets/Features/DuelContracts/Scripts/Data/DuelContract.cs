@@ -1,10 +1,13 @@
-using Blacklset.ItemGenerators;
-using Blackset.Data;
+using Blackset.ItemGenerators;
 using Blackset.Data.Registries;
 using Blackset.Duel.Rules;
+using Blackset.Inventories.Cells;
+using Blackset.Inventories.Scripts.Items;
+using Blackset.ItemsRestrictions;
 using Blackset.Opponents;
 using Extensions.Data.InMemoryData;
 using Extensions.Log;
+using UnityEngine;
 
 namespace Blackset.DuelContracts
 {
@@ -17,14 +20,16 @@ namespace Blackset.DuelContracts
         /// Идентификатор данных оппонента
         /// </summary>
         public string OpponentId { get; private set; }
+        
         /// <summary>
         /// Награда в валюте
         /// </summary>
-        public int MoneyReward { get; private set; }
+        public int MoneyReward => GameData.Instance.RewardConfig.EvaluateMoney(true, GameData.Instance.GetOpponent(OpponentId));
+        
         /// <summary>
-        /// Наградной дайс
+        /// Наградной предмет
         /// </summary>
-        public DiceItemContext DiceReward { get; private set; }
+        public ItemContext ItemReward { get; private set; }
         
         /// <summary>
         /// Режим дуэли
@@ -44,17 +49,41 @@ namespace Blackset.DuelContracts
             }
             
             OpponentId = opponent.Id;
-            int moneyReward = GameData.Instance.RewardConfig.EvaluateMoney(true, opponent);
-            MoneyReward = moneyReward;
-
-            DiceReward = new ItemsGenerator().GetRandomDice(); // TODO Параметризированная генерация дайса (от данных оппонента и контракта)
-            
             Mode = mode;
+
+            ItemsGenerator itemsGenerator = new ItemsGenerator();
+            ItemClass rewardItemClass = GetRandomRewardItemClass();
+
+            ItemReward = itemsGenerator.GetRandomItem(rewardItemClass, ItemAvailability.Reward);
+
+            if (string.IsNullOrEmpty(ItemReward.ItemId))
+            {
+                ItemClass fallbackItemClass = rewardItemClass == ItemClass.Dice
+                    ? ItemClass.Consumable
+                    : ItemClass.Dice;
+
+                ItemReward = itemsGenerator.GetRandomItem(fallbackItemClass, ItemAvailability.Reward);
+
+                if (string.IsNullOrEmpty(ItemReward.ItemId))
+                {
+                    ServiceDebug.LogError("Не удалось подобрать наградной предмет для контракта");
+                }
+            }
         }
         
         /// <summary>
         /// Пустой контракт (для сериализации json)
         /// </summary>
-        public DuelContract() {}
+        public DuelContract() { }
+
+        /// <summary>
+        /// Получить случайный класс наградного предмета
+        /// </summary>
+        protected ItemClass GetRandomRewardItemClass()
+        {
+            return Random.value < 0.5f
+                ? ItemClass.Dice
+                : ItemClass.Consumable;
+        }
     }
 }

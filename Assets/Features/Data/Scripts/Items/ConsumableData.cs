@@ -17,8 +17,7 @@ namespace Blackset.Data
         /// </summary>
         public VisualConsumable VisualConsumable => visualConsumable;
 
-        [Header("Визуал")]
-        [SerializeField]
-        private VisualConsumable visualConsumable;
+        [Header("Визуал"), Space]
+        [SerializeField] private VisualConsumable visualConsumable;
     }
 }

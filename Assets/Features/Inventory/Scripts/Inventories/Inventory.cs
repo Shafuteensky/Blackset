@@ -6,7 +6,7 @@ using Blackset.Data.Items.Types;
 using Blackset.Inventories.Cells;
 using Blackset.Inventories.Items;
 using Extensions.Log;
-using Features.Inventory.Scripts.Items;
+using Blackset.Inventories.Scripts.Items;
 using Extensions.Data.InMemoryData;
 
 namespace Blackset.Inventories
@@ -33,7 +33,7 @@ namespace Blackset.Inventories
         /// Событие добавления новой ячейки
         /// </summary>
         /// <param name="string">Идентификатор добавленной ячейки</param>
-        public event Action<string> onCellAdded;
+        public event Action<InventoryCell> onCellAdded;
         /// <summary>
         /// Событие удаления ячейки
         /// </summary>
@@ -66,10 +66,6 @@ namespace Blackset.Inventories
         #endregion
         
         /// <summary>
-        /// Реестр данных предметов для разрешения itemId -> данные
-        /// </summary>
-        public InventoryItemTypesRegistry TypeRegistry => typeRegistry;
-        /// <summary>
         /// Максимум предметов в ячейке инвентаря
         /// </summary>
         public int MaxCellAmount => maxCellAmount;
@@ -77,9 +73,6 @@ namespace Blackset.Inventories
         /// Разрешенный тип предметов (оставить пустым, если без ограничений)
         /// </summary>
         public InventoryItemType AllowedItemType => allowedItemType;
-
-        [SerializeField]
-        protected InventoryItemTypesRegistry typeRegistry;
 
         [Header("Ограничения"), Space]
         [SerializeField] 
@@ -234,7 +227,7 @@ namespace Blackset.Inventories
                 if (targetIndex == -1) targetIndex = vacantCellIndex;
                 Add(newCell, targetIndex); // MarkDirty происходит внутри
                 remaining -= chunk;
-                onCellAdded?.Invoke(newCell.Id);
+                onCellAdded?.Invoke(newCell);
             }
 
             FillDefaultSlotsIfNeeded();
@@ -779,7 +772,7 @@ namespace Blackset.Inventories
 
                 targetInventory.Data[targetCellIndex] = newCell;
                 targetInventory.onCellRemoved?.Invoke(targetCellIndex);
-                targetInventory.onCellAdded?.Invoke(newCell.Id);
+                targetInventory.onCellAdded?.Invoke(newCell);
                 targetInventory.MarkDirty();
 
                 int remaining = thisCell.ItemAmount - movedToTarget;
@@ -840,7 +833,7 @@ namespace Blackset.Inventories
 
             targetInventory.Data[targetCellIndex] = newTargetCell;
             targetInventory.onCellRemoved?.Invoke(targetCellIndex);
-            targetInventory.onCellAdded?.Invoke(newTargetCell.Id);
+            targetInventory.onCellAdded?.Invoke(newTargetCell);
             targetInventory.MarkDirty();
 
             int displacedRemaining = AddItem(displacedCell.Item, displacedCell.ItemAmount);
@@ -848,7 +841,7 @@ namespace Blackset.Inventories
             {
                 targetInventory.Data[targetCellIndex] = displacedCell;
                 targetInventory.onCellRemoved?.Invoke(targetCellIndex);
-                targetInventory.onCellAdded?.Invoke(displacedCell.Id);
+                targetInventory.onCellAdded?.Invoke(displacedCell);
                 targetInventory.MarkDirty();
                 return thisCell.ItemAmount;
             }
@@ -976,7 +969,7 @@ namespace Blackset.Inventories
             }
 
             Add(newCell, index);
-            onCellAdded?.Invoke(newCell.Id);
+            onCellAdded?.Invoke(newCell);
             return true;
         }
 

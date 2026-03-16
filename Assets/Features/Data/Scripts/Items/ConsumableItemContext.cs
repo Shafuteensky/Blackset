@@ -1,6 +1,6 @@
 using Blackset.Data.Items.Types;
 using Blackset.Inventories.Cells;
-using Features.Inventory.Scripts.Items;
+using Blackset.Inventories.Scripts.Items;
 
 namespace Blackset.Data
 {

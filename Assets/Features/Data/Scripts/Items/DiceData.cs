@@ -27,16 +27,14 @@ namespace Blackset.Data
         /// </summary>
         public SideNumbersConfig NumbersConfig => numbersConfig;
 
-        [SerializeField]
+        [Tooltip("Стоимость бюджета сборки"), Space]
         [Range(1, 10)]
-        [Tooltip("Стоимость бюджета сборки")]
-        private int budgetPrice = 1;
+        [SerializeField] private int budgetPrice = 1;
         
-        [Header("Стиль")]
-        [SerializeField]
-        private DiceStyle style;
-        [Header("Грани")]
-        [SerializeField]
-        private SideNumbersConfig numbersConfig;
+        [Header("Стиль"), Space]
+        [SerializeField] private DiceStyle style;
+        
+        [Header("Грани"), Space]
+        [SerializeField] private SideNumbersConfig numbersConfig;
     }
 }

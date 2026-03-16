@@ -10,15 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6623fd50c9874f108445f49990016da6, type: 3}
-  m_Name: Player_ConsumablesInventory
-  m_EditorClassIdentifier: Assembly-CSharp::Blackset.Inventory.Inventories.ConsumablesInventory
-  id: e5eacacd81bd48b383845ac37dfc2e2b
+  m_Name: NewItemsPresenterInventory
+  m_EditorClassIdentifier: Assembly-CSharp::Blackset.Inventory.Inventories.DicesInventory
+  id: 8972784f52ee40b6bd7705df82640226
   autoSave: 1
-  dataRegistry: {fileID: 11400000, guid: d68c7f8b5e8d57343b1bade366855ab2, type: 2}
-  typeRegistry: {fileID: 11400000, guid: cc58f8da688b0ba4591b5b872639060e, type: 2}
   maxCellAmount: 99
   slotsCount: 0
-  allowedItemClass: 2
+  allowedItemClass: 0
   allowedItemType: {fileID: 0}
   fillCellsWithDefaults: 0
   defaultItems: []

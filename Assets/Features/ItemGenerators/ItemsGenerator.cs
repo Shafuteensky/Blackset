@@ -1,12 +1,14 @@
 using System.Collections.Generic;
 using Blackset.Data;
-using Blackset.Data.Items.Types;
 using Blackset.Data.Registries;
-using Blackset.Effects;
+using Blackset.Inventories.Cells;
+using Blackset.Inventories.Items;
+using Blackset.Inventories.Scripts.Items;
+using Blackset.ItemsRestrictions;
 using Extensions.Log;
 using UnityEngine;
 
-namespace Blacklset.ItemGenerators
+namespace Blackset.ItemGenerators
 {
     /// <summary>
     /// Базовый генератор предметов
@@ -14,92 +16,173 @@ namespace Blacklset.ItemGenerators
     public class ItemsGenerator
     {
         private readonly GameData gameData = GameData.Instance;
-        //protected readonly PlayerDataFacade playerData; // TODO данные игрока для определения доступности предметов от стадии прогресса
-        
+
         /// <summary>
         /// Конструктор генератора предметов
         /// </summary>
-        /// <param name="gameData">Фасад всех игровых данных</param>
-        /// <param name="gameData">Фасад всех данных игрока</param>
-        public ItemsGenerator()
-        {
-            //this.playerData = playerData;
-        }
+        public ItemsGenerator() { }
 
         /// <summary>
-        /// Получить новый случайный дайс
+        /// Получить новый случайный предмет указанного класса и доступности
         /// </summary>
-        /// <param name="set">Набор, к которому должен принадлежать дайс (по-умолчанию любой набор)</param>
-        /// <returns>Дайс определенного типа и редкости</returns>
-        public DiceItemContext GetRandomDice(DiceSet set = null)
+        /// <param name="itemClass">Класс предмета</param>
+        /// <param name="availability">Требуемая доступность предмета</param>
+        /// <param name="set">Набор, к которому должен принадлежать предмет (по-умолчанию любой набор)</param>
+        /// <returns>Контекст случайного предмета</returns>
+        public ItemContext GetRandomItem(ItemClass itemClass, ItemAvailability availability, BaseSet set = null)
         {
-            if (gameData == null || gameData.Dices == null || gameData.Dices.Data == null) return new();
-            
-            DiceItemContext newDice = new();
-            
-            var allDices = gameData.Dices.Data;
-            if (set != null) allDices = GetDicesBySet(set);
-            newDice.Dice = allDices[Random.Range(0, allDices.Count)].Id;
-            
-            var availableDiceTypes = newDice.GetDice().AvailableTypes;
-            newDice.Type = availableDiceTypes[Random.Range(0, availableDiceTypes.Count)].Id;
-            
-            return newDice;
-        }
+            List<InventoryItem> availableItems = GetAvailableItems(itemClass, availability, set);
+            if (availableItems == null || availableItems.Count == 0)
+            {
+                ServiceDebug.Log($"Не найдено предметов класса {itemClass} с доступностью {availability}");
+                return new();
+            }
 
-        /// <summary>
-        /// Получить новый случайный расходник
-        /// </summary>
-        /// <param name="set">Набор, к которому должен принадлежать расходник (по-умолчанию любой набор)</param>
-        /// <returns>Расходник определенного типа и редкости</returns>
-        public ConsumableItemContext GetRandomConsumable(ConsumableSet set = null)
-        {
-            if (gameData == null || gameData.Consumables == null || gameData.Consumables.Data == null) return new();
-            
-            ConsumableItemContext newConsumable = new();
-            
-            var allConsumables = gameData.Consumables.Data;
-            if (set != null) allConsumables = GetConsumablesBySet(set);
-            newConsumable.Consumable = (ConsumableData)allConsumables[Random.Range(0, allConsumables.Count)];
-            
-            var availableDiceTypes = newConsumable.Consumable.AvailableTypes;
-            newConsumable.Type = availableDiceTypes[Random.Range(0, availableDiceTypes.Count)] as ConsumableType;
-            
-            return newConsumable;
+            InventoryItem itemData = availableItems[Random.Range(0, availableItems.Count)];
+            string itemTypeId = GetRandomItemTypeId(itemData);
+
+            if (string.IsNullOrEmpty(itemTypeId))
+            {
+                ServiceDebug.Log($"Не найден доступный тип для предмета {itemData.Id}");
+                return new();
+            }
+
+            return new ItemContext(itemData.Id, itemTypeId, itemClass);
         }
 
         #region Internal
-        
-        protected List<EffectingItem> GetDicesBySet(DiceSet set)
+
+        protected List<InventoryItem> GetAvailableItems(ItemClass itemClass, ItemAvailability availability, BaseSet set = null)
         {
-            if (gameData == null || gameData.Dices == null || gameData.Dices.Data == null) return null;
-            
-            var allDices = gameData.Dices.Data;
-            List<EffectingItem> dicesBySet = new();
-            
-            foreach (var item in allDices)
+            List<InventoryItem> sourceItems = GetItemsByClass(itemClass);
+            if (sourceItems == null || sourceItems.Count == 0) return null;
+
+            List<InventoryItem> result = new();
+
+            foreach (InventoryItem item in sourceItems)
             {
-                if (item is DiceData dice && dice.Set == set) dicesBySet.Add(dice);
+                if (item == null) continue;
+
+                if (set != null && IsItemInSet(item, set) == false) continue;
+
+                if (HasRequiredAvailability(item, availability) == false) continue;
+
+                result.Add(item);
             }
 
-            return dicesBySet;
+            return result;
         }
 
-        protected List<EffectingItem> GetConsumablesBySet(ConsumableSet set)
+        protected List<InventoryItem> GetItemsByClass(ItemClass itemClass)
         {
-            if (gameData == null || gameData.Consumables == null || gameData.Consumables.Data == null) return null;
-            
-            var allConsumables = gameData.Consumables.Data;
-            List<EffectingItem> consumablesBySet = new();
-            
-            foreach (var item in allConsumables)
-            {
-                if (item is ConsumableData consumable && consumable.Set == set) consumablesBySet.Add(consumable);
-            }
+            if (gameData == null) return null;
 
-            return consumablesBySet;
+            switch (itemClass)
+            {
+                case ItemClass.Dice:
+                {
+                    if (gameData.Dices == null || gameData.Dices.Data == null) return null;
+
+                    List<InventoryItem> result = new();
+                    foreach (var item in gameData.Dices.Data)
+                    {
+                        result.Add(item);
+                    }
+
+                    return result;
+                }
+                case ItemClass.Consumable:
+                {
+                    if (gameData.Consumables == null || gameData.Consumables.Data == null) return null;
+
+                    List<InventoryItem> result = new();
+                    foreach (var item in gameData.Consumables.Data)
+                    { 
+                        result.Add(item);
+                    }
+
+                    return result;
+                }
+                default:
+                {
+                    ServiceDebug.LogError($"Необработанный класс предмета: {itemClass}");
+                    return null;
+                }
+            }
         }
-        
+
+        protected bool HasRequiredAvailability(InventoryItem item, ItemAvailability availability)
+        {
+            if (item == null) return false;
+
+            if (availability == ItemAvailability.None) return true;
+
+            ItemAvailability itemAvailability = item.GetAvailability();
+            return (itemAvailability & availability) == availability;
+        }
+
+        protected bool IsItemInSet(InventoryItem item, BaseSet set)
+        {
+            if (item == null || set == null) return false;
+
+            switch (item.ItemClass)
+            {
+                case ItemClass.Dice:
+                {
+                    if (item is DiceData dice == false) return false;
+
+                    return dice.Set == set;
+                }
+                case ItemClass.Consumable:
+                {
+                    if (item is ConsumableData consumable == false) return false;
+
+                    return consumable.Set == set;
+                }
+                default:
+                {
+                    ServiceDebug.LogError($"Необработанный класс предмета: {item.ItemClass}");
+                    return false;
+                }
+            }
+        }
+
+        protected string GetRandomItemTypeId(InventoryItem item)
+        {
+            if (item == null) return string.Empty;
+
+            switch (item.ItemClass)
+            {
+                case ItemClass.Dice:
+                {
+                    if (item is DiceData dice == false || 
+                        dice.AvailableTypes == null || 
+                        dice.AvailableTypes.Count == 0)
+                    {
+                        return string.Empty;
+                    }
+
+                    return dice.AvailableTypes[Random.Range(0, dice.AvailableTypes.Count)].Id;
+                }
+                case ItemClass.Consumable:
+                {
+                    if (item is ConsumableData consumable == false || 
+                        consumable.AvailableTypes == null || 
+                        consumable.AvailableTypes.Count == 0)
+                    {
+                        return string.Empty;
+                    }
+
+                    return consumable.AvailableTypes[Random.Range(0, consumable.AvailableTypes.Count)].Id;
+                }
+                default:
+                {
+                    ServiceDebug.LogError($"Необработанный класс предмета: {item.ItemClass}");
+                    return string.Empty;
+                }
+            }
+        }
+
         #endregion
     }
 }

@@ -29,15 +29,11 @@ namespace Blackset.Effects
         /// </summary>
         public List<InventoryItemType> AvailableTypes => availableTypes;
         
-        [SerializeField]
-        private BaseSet set;
-        [SerializeField]
-        private List<InventoryItemType> availableTypes = new List<InventoryItemType>();
+        [SerializeField] private BaseSet set;
+        [SerializeField] private List<InventoryItemType> availableTypes = new List<InventoryItemType>();
         
         [Header("Особенности"), Space]
-        [SerializeField]
-        protected EffectConfig effect;
-        [SerializeField]
-        protected Color color = Color.white;
+        [SerializeField] protected EffectConfig effect;
+        [SerializeField] protected Color color = Color.white;
     }
 }

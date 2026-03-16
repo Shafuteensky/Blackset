@@ -71,8 +71,8 @@ namespace Blackset.Shop
             }
             
             playerData.MetaData.RemoveMoney(itemPrice);
-            if (shopItem is DiceData) playerData.DicesInventory.AddItem(cell);
-            else if (shopItem is ConsumableData) playerData.ConsumablesInventory.AddItem(cell);
+            if (shopItem is DiceData) playerData.Inventory.AddItem(cell);
+            else if (shopItem is ConsumableData) playerData.Inventory.AddItem(cell);
             itemElement.DataContainer.RemoveItem(cell);
 
             onItemBought?.Invoke();

@@ -28,7 +28,7 @@ namespace Blackset.GameDebug
         public void AddRandomDice()
         {
             IReadOnlyList<InventoryItem> allDices = GameData.Instance.Dices.Data;
-            List<InventoryCell> dicesInventoryData = playerDataFacade.DicesInventory.Data;
+            List<InventoryCell> dicesInventoryData = playerDataFacade.Inventory.Data;
             
             int randomIndex = Random.Range(0, allDices.Count);
             InventoryItem randomItem = allDices[randomIndex];
@@ -38,17 +38,17 @@ namespace Blackset.GameDebug
             InventoryItemType randomDiceType = randomDiceItem.AvailableTypes[randomIndex];
 
             ItemContext diceItem = new ItemContext(randomDiceItem.Id, randomDiceType.Id, randomDiceItem.ItemClass);
-            playerDataFacade.DicesInventory.AddItem(diceItem, 1);
+            playerDataFacade.Inventory.AddItem(diceItem, 1);
             
             ServiceDebug.Log($"Добавлен новый дайс: {randomDiceItem.DataName}, {randomDiceType.DataName}. " +
-                             $"\nТеперь в инвентаре {dicesInventoryData.Count} дайсов: {GetDicesInventoryList(playerDataFacade.DicesInventory, "    ")}");
+                             $"\nТеперь в инвентаре {dicesInventoryData.Count} дайсов: {GetDicesInventoryList(playerDataFacade.Inventory, "    ")}");
         }
 
         [ContextMenu("Add Random Consumable")]
         public void AddRandomConsumable()
         {
             IReadOnlyList<InventoryItem> allConsumables = GameData.Instance.Consumables.Data;
-            List<InventoryCell> consumabledInventoryData = playerDataFacade.ConsumablesInventory.Data;
+            List<InventoryCell> consumabledInventoryData = playerDataFacade.Inventory.Data;
             
             int randomIndex = Random.Range(0, allConsumables.Count);
             InventoryItem randomItem = allConsumables[randomIndex];
@@ -58,11 +58,11 @@ namespace Blackset.GameDebug
             InventoryItemType randomConsumableType = GameData.Instance.ConsumableTypes.Data[randomIndex];
             
             ItemContext diceConsumable = new ItemContext(randomItem.Id, randomConsumableType.Id, randomItem.ItemClass);
-            playerDataFacade.ConsumablesInventory.AddItem(diceConsumable, 1);
+            playerDataFacade.Inventory.AddItem(diceConsumable, 1);
             
             ServiceDebug.Log($"Добавлен новый расходник: {randomConsumable.DataName}, {randomConsumableType.DataName}. " +
                              $"\nТеперь в инвентаре {consumabledInventoryData.Count} расходников: " +
-                             $"{GetConsumablesInventoryList(playerDataFacade.ConsumablesInventory, "    ")}");
+                             $"{GetConsumablesInventoryList(playerDataFacade.Inventory, "    ")}");
         }
         
         [ContextMenu("Add 10 Money")]
@@ -89,18 +89,16 @@ namespace Blackset.GameDebug
         public void PrintPlayerData()
         {
             PlayerMetaData metaData = playerDataFacade.MetaData.Data;
-            List<InventoryCell> dicesInventoryData = playerDataFacade.DicesInventory.Data;
-            List<InventoryCell> consumablesInventoryData = playerDataFacade.ConsumablesInventory.Data;
+            List<InventoryCell> dicesInventoryData = playerDataFacade.Inventory.Data;
+            List<InventoryCell> consumablesInventoryData = playerDataFacade.Inventory.Data;
 
             ServiceDebug.Log($"Данные игрока:" +
                              $"\nВалюта: {metaData.Money}$" +
                              $"\nОпыт: {metaData.GetThisLevelExp()}/{metaData.GetThisLevelRequiredExp()}" +
                              $"\nУровень: {metaData.GetPlayerLvl()}" +
-                             $"\nИнвантарь дайсов ({dicesInventoryData.Count} в сумме):" +
-                             $"{GetDicesInventoryList(playerDataFacade.DicesInventory, "    ")}" +
+                             $"\nИнвантарь ({dicesInventoryData.Count} в сумме):" +
+                             $"{GetDicesInventoryList(playerDataFacade.Inventory, "    ")}" +
                              $"\nПулы дайсов:" + GetDicesPoolList("        ") +
-                             $"\nИнвентарь расходников ({consumablesInventoryData.Count} в сумме): " +
-                             $"{GetConsumablesInventoryList(playerDataFacade.ConsumablesInventory, "    ")}" +
                              $"\nПул расходников:" + GetConsumablesInventoryList(playerDataFacade.ConsumablesPool, "    ")
                              );
         }

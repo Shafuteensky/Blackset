@@ -15,8 +15,10 @@ MonoBehaviour:
   id: 01fc5117fdeb4464ab961bdaac1d2232
   dataName: Advantage
   dataDescription: Throw 2 dices, take best result
-  itemClass: 2
+  baseAvailability: 0
+  restrictions: []
   price: 1
+  itemClass: 2
   set: {fileID: 11400000, guid: 27cada2d73a18a543a23e1a7fea1f12b, type: 2}
   availableTypes:
   - {fileID: 11400000, guid: 0e1a15f03f84f8d46ba873a79cfd79ab, type: 2}

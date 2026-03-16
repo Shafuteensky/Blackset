@@ -1,5 +1,6 @@
 using Blackset.Data.Base;
 using Blackset.Data.Items.Types;
+using Blackset.Inventories;
 using Blackset.Inventories.Items;
 using Blackset.Opponents;
 using Blackset.Player;
@@ -41,6 +42,13 @@ namespace Blackset.Data.Registries
         [field: SerializeField]
         [field: Tooltip("Фасад данных игрока")]
         public PlayerDataFacade PlayerDataFacade { get; private set; }
+        
+        /// <summary>
+        /// Инвентарь для показа новых предметов
+        /// </summary>
+        [field: SerializeField]
+        [field: Tooltip("Инвентарь показа новых предметов")]
+        public Inventory NewItemsPresenterInventory { get; private set; }
         
         // ==============================================
         [field: Header("Реестры предметов"), Space]

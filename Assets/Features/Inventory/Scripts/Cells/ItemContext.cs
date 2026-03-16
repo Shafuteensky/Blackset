@@ -1,5 +1,9 @@
 using System;
-using Features.Inventory.Scripts.Items;
+using Blackset.Data.Items.Types;
+using Blackset.Data.Registries;
+using Blackset.Inventories.Items;
+using Blackset.Inventories.Scripts.Items;
+using Extensions.Log;
 
 namespace Blackset.Inventories.Cells
 {
@@ -35,5 +39,67 @@ namespace Blackset.Inventories.Cells
             ItemTypeId = itemTypeId;
             ItemClass = itemClass;
         }
+
+        #region Данные предмета
+
+        /// <summary>
+        /// Получить данные предмета
+        /// </summary>
+        public InventoryItem GetItemData()
+        {
+            InventoryItem data;
+            GameData gameData = GameData.Instance;
+            switch (ItemClass)
+            {
+                case ItemClass.Consumable:
+                {
+                    data = gameData.GetConsumable(ItemId);
+                    break;
+                }
+                case ItemClass.Dice:
+                {
+                    data = gameData.GetDice(ItemId);
+                    break;
+                }
+                default:
+                {
+                    ServiceDebug.LogError("Необработанный класс предмета");
+                    return null;
+                }
+            }
+            
+            return data;
+        }
+
+        /// <summary>
+        /// Получить данные типа предмета
+        /// </summary>
+        public InventoryItemType GetTypeData()
+        {
+            InventoryItemType data;
+            GameData gameData = GameData.Instance;
+            switch (ItemClass)
+            {
+                case ItemClass.Consumable:
+                {
+                    data = gameData.GetConsumableType(ItemTypeId);
+                    break;
+                }
+                case ItemClass.Dice:
+                {
+                    data = gameData.GetDiceType(ItemTypeId);
+                    break;
+                }
+                default:
+                {
+                    ServiceDebug.LogError("Необработанный класс предмета");
+                    return null;
+                }
+            }
+
+            return data;
+        }
+        
+        #endregion
     }
 }

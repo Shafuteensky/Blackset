@@ -1,9 +1,11 @@
 using Blackset.Data.Registries;
 using Blackset.Player;
 using Extensions.Log;
-using Blacklset.ItemGenerators;
+using Blackset.ItemGenerators;
 using UnityEngine;
 using Blackset.Inventories;
+using Blackset.Inventories.Scripts.Items;
+using Blackset.ItemsRestrictions;
 
 namespace Blackset.Shop
 {
@@ -75,8 +77,8 @@ namespace Blackset.Shop
 
             for (int i = 0; i < amount; i++)
             {
-                var newDice = itemsGenerator.GetRandomDice();
-                inventory.AddItem(newDice.ToItemContext(), 1, false);
+                var newDice = itemsGenerator.GetRandomItem(ItemClass.Dice, ItemAvailability.Purchase);
+                inventory.AddItem(newDice, 1, false);
             }
         }
 
@@ -86,8 +88,8 @@ namespace Blackset.Shop
 
             for (int i = 0; i < amount; i++)
             {
-                var newConsumable = itemsGenerator.GetRandomConsumable();
-                inventory.AddItem(newConsumable.ToItemContext(), 1, false);
+                var newConsumable = itemsGenerator.GetRandomItem(ItemClass.Consumable, ItemAvailability.Purchase);
+                inventory.AddItem(newConsumable, 1, false);
             }
         }
         

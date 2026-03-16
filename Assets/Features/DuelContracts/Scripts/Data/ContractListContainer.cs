@@ -1,6 +1,7 @@
 using System;
-using Blackset.Data.Base;
+using Blackset.Data.Registries;
 using Blackset.Opponents;
+using Extensions.Data.InMemoryData;
 using Extensions.Log;
 using UnityEngine;
 
@@ -12,7 +13,7 @@ namespace Blackset.DuelContracts
     [CreateAssetMenu(
         fileName = nameof(ContractListContainer),
         menuName = "Blackset/Opponents/" + nameof(ContractListContainer))]
-    public class ContractListContainer : RegistrableDataContainer<DuelContract, OpponentData, OpponentsRegistry>
+    public class ContractListContainer : InMemoryDataContainer<DuelContract>
     {
         /// <summary>
         /// Получить данные о сопернике контракта
@@ -28,7 +29,7 @@ namespace Blackset.DuelContracts
             }
             
             string opponentId = GetById(contractId).OpponentId;
-            OpponentData opponentData = GetItemDataById(opponentId);
+            OpponentData opponentData = GameData.Instance.GetOpponent(opponentId);
             return opponentData;
         }
     }

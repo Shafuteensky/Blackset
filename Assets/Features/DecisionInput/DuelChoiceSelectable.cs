@@ -1,7 +1,7 @@
 using Blackset.Data.Items.Visual;
 using Blackset.Duel.Targets;
 using Extensions.Log;
-using Features.Inventory.Scripts.Items;
+using Blackset.Inventories.Scripts.Items;
 using UnityEngine;
 using UnityEngine.EventSystems;
 

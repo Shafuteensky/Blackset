@@ -5,7 +5,7 @@ using UnityEngine;
 using Blackset.Data.Items.Types;
 using Blackset.Inventories.Items;
 using Extensions.Log;
-using Features.Inventory.Scripts.Items;
+using Blackset.Inventories.Scripts.Items;
 
 namespace Blackset.Inventories.Cells
 {
@@ -160,35 +160,12 @@ namespace Blackset.Inventories.Cells
                 return null;
             }
 
-            InventoryItem data;
-            GameData gameData = GameData.Instance;
-            switch (Item.ItemClass)
-            {
-                case ItemClass.Consumable:
-                {
-                    data = gameData.GetConsumable(Item.ItemId);
-                    break;
-                }
-                case ItemClass.Dice:
-                {
-                    data = gameData.GetDice(Item.ItemId);
-                    break;
-                }
-                default:
-                {
-                    ServiceDebug.LogError("Необработанный класс предмета");
-                    return null;
-                }
-            }
-            
-            return data;
+            return Item.GetItemData();
         }
 
         /// <summary>
         /// Получить данные типа предмета в ячейке
         /// </summary>
-        /// <param name="dataRegistry">Реестр типа данных однотипных предметов</param>
-        /// <returns>Данные типа предмета</returns>
         public InventoryItemType GetTypeData()
         {
             if (isEmpty) return null;
@@ -197,29 +174,8 @@ namespace Blackset.Inventories.Cells
                 ServiceDebug.LogError("Невалидный id типа предмета ячейки инвентаря, данные не найдены");
                 return null;
             }
-
-            InventoryItemType data;
-            GameData gameData = GameData.Instance;
-            switch (Item.ItemClass)
-            {
-                case ItemClass.Consumable:
-                {
-                    data = gameData.GetConsumableType(Item.ItemTypeId);
-                    break;
-                }
-                case ItemClass.Dice:
-                {
-                    data = gameData.GetDiceType(Item.ItemTypeId);
-                    break;
-                }
-                default:
-                {
-                    ServiceDebug.LogError("Необработанный класс предмета");
-                    return null;
-                }
-            }
-
-            return data;
+            
+            return Item.GetTypeData();
         }
 
         /// <summary>

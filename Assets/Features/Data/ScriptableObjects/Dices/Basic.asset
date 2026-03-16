@@ -15,8 +15,10 @@ MonoBehaviour:
   id: BasicDice
   dataName: Basic dice
   dataDescription: Usual typical dice with no effects
-  itemClass: 1
+  baseAvailability: 0
+  restrictions: []
   price: 1
+  itemClass: 1
   set: {fileID: 11400000, guid: f3f0561c00f9c8942aa4724610bf93e3, type: 2}
   availableTypes:
   - {fileID: 11400000, guid: fbd3a5ad0b3ef2940a4f73d042a419d7, type: 2}

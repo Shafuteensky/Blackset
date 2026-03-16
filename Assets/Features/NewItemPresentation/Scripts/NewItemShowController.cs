@@ -1,9 +1,10 @@
-using System.Collections.Generic;
+using Blackset.Data.Registries;
 using Extensions.Generics;
 using Extensions.Log;
 using Extensions.UIWindows;
 using UnityEngine;
 using Blackset.Inventories;
+using Blackset.Inventories.Cells;
 
 namespace Blackset.Shop
 {
@@ -13,49 +14,34 @@ namespace Blackset.Shop
     public class NewItemShowController : InitializableMonoBehaviour
     {
         [Header("Окно показа новых предметов"), Space]
-        [SerializeField]
-        private UIWindowID windowID;
+        [SerializeField] private UIWindowID windowID;
         
-        [Header("Инвентари игрока"), Space]
-        [SerializeField]
-        private Inventory playerDicesInventory;
-        [SerializeField]
-        private Inventory playerConsumablesInventory;
-
         private UIWindowsController uiWindowsController;
         
-        private List<string> addedDices = new();
-        private List<string> addedConsumables = new();
+        private Inventory playerInventory;
         
         private void Awake()
         {
             uiWindowsController = UIWindowsController.Instance;
-            Initialize(uiWindowsController != null && windowID != null && 
-                       playerDicesInventory != null && playerConsumablesInventory != null);
+            playerInventory = GameData.Instance.PlayerDataFacade.Inventory;
+            Initialize(uiWindowsController != null && windowID != null && playerInventory != null);
         }
 
         private void OnEnable()
         {
-            playerDicesInventory.onCellAdded += RememberNewDice;
-            playerConsumablesInventory.onCellAdded += RememberNewConsumables;
+            playerInventory.onCellAdded += RememberNewItem;
         }
 
         private void OnDisable()
         {
-            playerDicesInventory.onCellAdded -= RememberNewDice;
-            playerConsumablesInventory.onCellAdded -= RememberNewConsumables;
+            playerInventory.onCellAdded -= RememberNewItem;
         }
 
         #region Учет новых добавленных предметов
 
-        private void RememberNewDice(string cellId)
+        private void RememberNewItem(InventoryCell cell)
         {
-            addedDices.Add(cellId);
-        }
-
-        private void RememberNewConsumables(string cellId)
-        {
-            addedConsumables.Add(cellId);
+            GameData.Instance.NewItemsPresenterInventory.Add(cell);
         }
 
         #endregion
@@ -64,7 +50,6 @@ namespace Blackset.Shop
         
         private void ShowNewItem()
         {
-            
             OpenPresentationWindow();
         }
 

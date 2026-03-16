@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Blackset.Data;
+using Blackset.Inventories.Cells;
 
 namespace Blackset.Duel.Requests
 {
@@ -17,13 +18,9 @@ namespace Blackset.Duel.Requests
         /// </summary>
         public int CurrencyDelta { get; }
         /// <summary>
-        /// Полученные дайсы
+        /// Полученные предметы
         /// </summary>
-        public List<DiceItemContext> Dices { get; }
-        /// <summary>
-        /// Полученные расходники
-        /// </summary>
-        public List<ConsumableItemContext> Consumables { get; }
+        public List<ItemContext> Items { get; }
 
         /// <summary>
         /// Выдаваемая игроку награда за дуэль
@@ -33,12 +30,11 @@ namespace Blackset.Duel.Requests
         /// <param name="dices">Полученные дайсы</param>
         /// <param name="consumables">Полученные расходники</param>
         public DuelRewards(int expDelta, int currencyDelta, 
-            List<DiceItemContext> dices, List<ConsumableItemContext> consumables)
+            List<ItemContext> items)
         {
             ExpDelta = expDelta;
             CurrencyDelta = currencyDelta;
-            Dices = dices;
-            Consumables = consumables;
+            Items = items;
         }
     }
 }

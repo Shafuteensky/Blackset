@@ -1,4 +1,4 @@
-namespace Features.Inventory.Scripts.Items
+namespace Blackset.Inventories.Scripts.Items
 {
     /// <summary>
     /// Класс предмета

@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Blackset.Data;
 using Blackset.Data.Registries;
 using Blackset.Duel.Requests;
+using Blackset.Inventories.Cells;
 using Blackset.Opponents;
 using UnityEngine;
 
@@ -26,10 +27,9 @@ namespace Blackset.Duel.Modules
             int earnedCurrency = gameData.RewardConfig.EvaluateMoney(request.IsWin, contractOpponent);
             
             // Предметы
-            List<DiceItemContext> earnedDices = new List<DiceItemContext> { request.Contract.DiceReward };
-            List<ConsumableItemContext> earnedConsumables = new List<ConsumableItemContext>(); // TODO Расходник в раграду
+            List<ItemContext> itemRewards = new List<ItemContext> { request.Contract.ItemReward };
             
-            DuelRewards result = new(earnedExperience, earnedCurrency, earnedDices, earnedConsumables);
+            DuelRewards result = new(earnedExperience, earnedCurrency, itemRewards );
             
             return result;
         }
@@ -40,11 +40,8 @@ namespace Blackset.Duel.Modules
             
             GameData.Instance.PlayerDataFacade.MetaData.AddMoney(result.CurrencyDelta);
             
-            foreach (DiceItemContext dice in result.Dices)
-                GameData.Instance.PlayerDataFacade.DicesInventory.AddItem(dice.ToItemContext());
-
-            foreach (ConsumableItemContext consumable in result.Consumables)
-                GameData.Instance.PlayerDataFacade.ConsumablesInventory.AddItem(consumable.ToItemContext());
+            foreach (ItemContext item in result.Items)
+                GameData.Instance.PlayerDataFacade.Inventory.AddItem(item);
         }
     }
 }

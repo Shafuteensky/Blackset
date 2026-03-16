@@ -1,11 +1,9 @@
 using System.Collections.Generic;
 using Blackset.Data;
-using Blackset.Data.Items.Types;
 using Blackset.Inventories;
 using Blackset.Inventories.Cells;
 using Extensions.Log;
-using Features.Inventory.Scripts.Items;
-using VHierarchy;
+using Blackset.Inventories.Scripts.Items;
 
 namespace Blackset.Duel.Sets
 {
