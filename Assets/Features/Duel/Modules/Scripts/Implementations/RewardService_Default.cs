@@ -41,10 +41,10 @@ namespace Blackset.Duel.Modules
             GameData.Instance.PlayerDataFacade.MetaData.AddMoney(result.CurrencyDelta);
             
             foreach (DiceItemContext dice in result.Dices)
-                GameData.Instance.PlayerDataFacade.DicesInventory.AddItem(dice.GetDice().Id, dice.GetDiceType().Id);
+                GameData.Instance.PlayerDataFacade.DicesInventory.AddItem(dice.ToItemContext());
 
             foreach (ConsumableItemContext consumable in result.Consumables)
-                GameData.Instance.PlayerDataFacade.ConsumablesInventory.AddItem(consumable.Consumable.Id, consumable.Type.Id);
+                GameData.Instance.PlayerDataFacade.ConsumablesInventory.AddItem(consumable.ToItemContext());
         }
     }
 }

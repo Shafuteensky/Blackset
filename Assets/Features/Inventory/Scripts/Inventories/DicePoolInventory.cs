@@ -30,7 +30,7 @@ namespace Blackset.Inventories
         {
             if (incomingCell == null || fromInventory == null) return false;
 
-            InventoryItem incomingItem = incomingCell.GetItemData(fromInventory.DataRegistry);
+            InventoryItem incomingItem = incomingCell.GetItemData();
             bool isAllowedByBudget = IsAllowedByBudget(incomingItem);
 
             return isAllowedByBudget;

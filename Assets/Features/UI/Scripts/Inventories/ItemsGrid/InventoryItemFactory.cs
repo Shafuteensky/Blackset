@@ -28,7 +28,7 @@ namespace Blackset.UI.InventoryManagement
         
         protected override bool OnValidateItem(InventoryCell item)
         {
-            bool isItemFiltered = filterItemType != null && item.ItemTypeId != filterItemType.Id;
+            bool isItemFiltered = filterItemType != null && item.Item.ItemTypeId != filterItemType.Id;
             return isItemFiltered;
         }
 

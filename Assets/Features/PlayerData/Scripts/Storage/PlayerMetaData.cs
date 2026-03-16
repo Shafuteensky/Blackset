@@ -233,7 +233,7 @@ namespace Blackset.Player
             int maxBudget = 0;
             foreach (InventoryCell cell in pool.Data)
             {
-                if (cell.GetItemData(pool.DataRegistry) is DiceData item)
+                if (cell.GetItemData() is DiceData item)
                 {
                     int diceBudgetPrice = item.BudgetPrice;
                     if (diceBudgetPrice > maxBudget) maxBudget = diceBudgetPrice;

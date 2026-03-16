@@ -3,9 +3,9 @@ using Blackset.Data;
 using Blackset.Data.Items.Types;
 using Blackset.Inventories;
 using Blackset.Inventories.Cells;
-using Blackset.Inventories.Items;
-using Extensions.Helpers;
 using Extensions.Log;
+using Features.Inventory.Scripts.Items;
+using VHierarchy;
 
 namespace Blackset.Duel.Sets
 {
@@ -49,7 +49,8 @@ namespace Blackset.Duel.Sets
             
             foreach (DiceItemContext dice in dices)
             {
-                DiceSetInventory.AddItem(dice.Dice, dice.Type);
+                ItemContext newDice = new ItemContext(dice.Dice, dice.Type, ItemClass.Dice);
+                DiceSetInventory.AddItem(newDice);
             }
 
             foreach (ConsumableItemContext consumable in consumables)
@@ -76,8 +77,8 @@ namespace Blackset.Duel.Sets
             
             if (cell != null)
             {
-                dice.Dice = cell.ItemId;
-                dice.Type = cell.ItemTypeId;
+                dice.Dice = cell.Item.ItemId;
+                dice.Type = cell.Item.ItemTypeId;
             }
             
             return cell != null;

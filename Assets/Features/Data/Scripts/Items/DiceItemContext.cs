@@ -1,5 +1,7 @@
 using Blackset.Data.Items.Types;
 using Blackset.Data.Registries;
+using Blackset.Inventories.Cells;
+using Features.Inventory.Scripts.Items;
 
 namespace Blackset.Data
 {
@@ -21,5 +23,7 @@ namespace Blackset.Data
         public DiceData GetDice() => GameData.Instance.GetDice(Dice);
         
         public DiceType GetDiceType() => GameData.Instance.GetDiceType(Type);
+
+        public ItemContext ToItemContext() => new ItemContext(Dice, Type, ItemClass.Dice);
     }
 }

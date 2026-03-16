@@ -36,8 +36,9 @@ namespace Blackset.GameDebug
             if (randomItem is not DiceData randomDiceItem) return;
             randomIndex = Random.Range(0, randomDiceItem.AvailableTypes.Count);
             InventoryItemType randomDiceType = randomDiceItem.AvailableTypes[randomIndex];
-            
-            playerDataFacade.DicesInventory.AddItem(randomDiceItem.Id, randomDiceType.Id, 1);
+
+            ItemContext diceItem = new ItemContext(randomDiceItem.Id, randomDiceType.Id, randomDiceItem.ItemClass);
+            playerDataFacade.DicesInventory.AddItem(diceItem, 1);
             
             ServiceDebug.Log($"Добавлен новый дайс: {randomDiceItem.DataName}, {randomDiceType.DataName}. " +
                              $"\nТеперь в инвентаре {dicesInventoryData.Count} дайсов: {GetDicesInventoryList(playerDataFacade.DicesInventory, "    ")}");
@@ -56,7 +57,8 @@ namespace Blackset.GameDebug
             randomIndex = Random.Range(0, GameData.Instance.ConsumableTypes.Data.Count);
             InventoryItemType randomConsumableType = GameData.Instance.ConsumableTypes.Data[randomIndex];
             
-            playerDataFacade.ConsumablesInventory.AddItem(randomConsumable.Id, randomConsumableType.Id, 1);
+            ItemContext diceConsumable = new ItemContext(randomItem.Id, randomConsumableType.Id, randomItem.ItemClass);
+            playerDataFacade.ConsumablesInventory.AddItem(diceConsumable, 1);
             
             ServiceDebug.Log($"Добавлен новый расходник: {randomConsumable.DataName}, {randomConsumableType.DataName}. " +
                              $"\nТеперь в инвентаре {consumabledInventoryData.Count} расходников: " +
@@ -108,9 +110,9 @@ namespace Blackset.GameDebug
             string dicesInInventory = String.Empty;
             foreach (InventoryCell cell in inventory.Data)
             {
-                InventoryItem diceInCell = cell.GetItemData(GameData.Instance.Dices);
+                InventoryItem diceInCell = cell.GetItemData();
                 if (diceInCell == null) continue;
-                InventoryItemType diceType = cell.GetTypeData(GameData.Instance.DiceTypes);
+                InventoryItemType diceType = cell.GetTypeData();
                 dicesInInventory += $"\n{prefix}- {diceInCell.DataName}, {diceType.DataName} ({cell.ItemAmount} шт)";
             }
             return dicesInInventory;
@@ -132,9 +134,9 @@ namespace Blackset.GameDebug
             string consumablesInInventory = String.Empty;
             foreach (InventoryCell cell in inventory.Data)
             {
-                InventoryItem consumableInCell = cell.GetItemData(GameData.Instance.Consumables);
+                InventoryItem consumableInCell = cell.GetItemData();
                 if (consumableInCell == null) continue;
-                InventoryItemType consumableType = cell.GetTypeData(GameData.Instance.ConsumableTypes);
+                InventoryItemType consumableType = cell.GetTypeData();
                 consumablesInInventory += $"\n{prefix}- {consumableInCell.DataName}, {consumableType.DataName} ({cell.ItemAmount} шт)";
             }
             return consumablesInInventory;

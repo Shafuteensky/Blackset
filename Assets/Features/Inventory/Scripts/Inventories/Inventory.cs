@@ -7,7 +7,7 @@ using Blackset.Inventories.Cells;
 using Blackset.Inventories.Items;
 using Extensions.Log;
 using Features.Inventory.Scripts.Items;
-using Blackset.Data.Base;
+using Extensions.Data.InMemoryData;
 
 namespace Blackset.Inventories
 {
@@ -23,7 +23,7 @@ namespace Blackset.Inventories
     [CreateAssetMenu(
         fileName = nameof(Inventory),
         menuName = "Blackset/Inventories/" + nameof(Inventory))]
-    public class Inventory : RegistrableDataContainer<InventoryCell, InventoryItem, InventoryItemsRegistry>
+    public class Inventory : InMemoryDataContainer<InventoryCell>
     {
         private const int INFINITE_CELLS_SIGN = 0;
         
@@ -116,8 +116,8 @@ namespace Blackset.Inventories
         /// <param name="cell">Ячейка предмета</param>
         public InventoryItem GetCellItemData(InventoryCell cell)
         {
-            if (!IsReferencesValid(cell, dataRegistry)) return null;
-            return cell.GetItemData(dataRegistry);
+            if (!IsCellValid(cell)) return null;
+            return cell.GetItemData();
         }
         
         /// <summary>
@@ -144,8 +144,8 @@ namespace Blackset.Inventories
         /// <param name="item">Ячейка предмета</param>
         public InventoryItemType GetCellTypeData(InventoryCell cell)
         {
-            if (!IsReferencesValid(cell, typeRegistry)) return null;
-            return cell.GetTypeData(typeRegistry);
+            if (!IsCellValid(cell)) return null;
+            return cell.GetTypeData();
         }
         
         /// <summary>
@@ -179,13 +179,11 @@ namespace Blackset.Inventories
         /// <param name="autoMerge">Слияние количества, если предметы одинаковые</param>
         /// <param name="targetIndex">Положение по индексу новой ячейки (-1 если в конец или первую пустую/дефолтную ячейку)</param>
         /// <returns>Количество не вместившихся предметов (0 если операция полностью успешна)</returns>
-        public int AddItem(string itemId, string itemTypeId, int amount = 1, bool autoMerge = true, int targetIndex = -1)
+        public int AddItem(ItemContext newItem, int amount = 1, bool autoMerge = true, int targetIndex = -1)
         {
-            if ( !CheckId(itemId) || 
-                 !CheckId(itemTypeId) || 
-                 !CheckAmount(amount) ) return amount;
+            if (!CheckAmount(amount) ) return amount;
             EnsureLoaded();
-            if (!IsItemAllowed(itemId, itemTypeId, this)) return amount;
+            if (!IsItemAllowed(newItem)) return amount;
 
             int remaining = amount;
             
@@ -208,7 +206,7 @@ namespace Blackset.Inventories
                     InventoryCell presentCell = Data[i];
                     if (presentCell is not { IsDefault: false }) continue;
 
-                    if (!presentCell.IsContentSame(itemId, itemTypeId)) continue;
+                    if (!presentCell.IsContentSame(newItem)) continue;
                     if (presentCell.ItemAmount >= maxCellAmount) continue;
 
                     remaining = presentCell.IncreaseAmount(remaining, maxCellAmount);
@@ -226,7 +224,7 @@ namespace Blackset.Inventories
                 int vacantCellIndex = EnsureSlotForNewCell();
                 if (IsSlotsLimited() && Data.Count >= slotsCount) break;
 
-                InventoryCell newCell = CreateCell(itemId, itemTypeId, chunk);
+                InventoryCell newCell = CreateCell(newItem, chunk);
                 if (newCell == null)
                 {
                     ServiceDebug.LogError($"{name}: создание ячейки завершено ошибкой, добавление прервано");
@@ -254,7 +252,7 @@ namespace Blackset.Inventories
         {
             if ( !CheckCell(cell) ) return 0;
 
-            return AddItem(cell.ItemId, cell.ItemTypeId, cell.ItemAmount, autoMerge, targetIndex);
+            return AddItem(cell.Item, cell.ItemAmount, autoMerge, targetIndex);
         }
         
         /// <summary>
@@ -375,7 +373,7 @@ namespace Blackset.Inventories
 
             int vacantCellIndex = EnsureSlotForNewCell();
 
-            InventoryCell newCell = CreateCell(cell.ItemId, cell.ItemTypeId, splitAmount);
+            InventoryCell newCell = CreateCell(cell.Item, splitAmount);
             if (newCell == null)
             {
                 ServiceDebug.LogError($"{name}: создание ячейки завершено ошибкой, разделение отменено");
@@ -428,9 +426,9 @@ namespace Blackset.Inventories
         #region Проверки
         
         /// <summary>
-        /// Проверка на null ячейки и реестра
+        /// Проверка на null ячейки
         /// </summary>
-        private bool IsReferencesValid(InventoryCell cell, BaseDataRegistry registry)
+        private bool IsCellValid(InventoryCell cell)
         {
             if (cell == null)
             {
@@ -438,9 +436,7 @@ namespace Blackset.Inventories
                 return false;
             }
 
-            if (registry != null) return true;
-            ServiceDebug.LogError($"{name}: реестр данных не назначен, данные не найдены");
-            return false;
+            return true;
         }
         
         /// <summary>
@@ -454,25 +450,19 @@ namespace Blackset.Inventories
         /// <param name="itemClass">Класс предмета</param>
         /// <param name="itemTypeId">Идентификатор типа предмета</param>
         /// <returns>true если класс и тип подходят, иначе false</returns>
-        private bool IsItemAllowed(string itemId, string typeId, Inventory fromInventory)
+        private bool IsItemAllowed(ItemContext item)
         {
-            // Реестры данных различных
-            if (fromInventory.dataRegistry.Id != dataRegistry.Id ||
-                fromInventory.typeRegistry.Id != typeRegistry.Id) return false;
-            
             // Нет ограничений от инвентаря — true
             if (allowedItemClass == ItemClass.Any && allowedItemType == null) return true;
             
             // Класс предмета не совпадает — false
-            InventoryItem item = fromInventory.dataRegistry.GetById(itemId);
             if (allowedItemClass != ItemClass.Any && allowedItemClass != item.ItemClass) return false;
             
             // Класс совпадает, ограничений по типу нет — true
             if (allowedItemType == null) return true;
             
             // Тип предмета не совпадает — false
-            InventoryItemType type = fromInventory.typeRegistry.GetById(typeId);
-            if (allowedItemType != null && allowedItemType != type) return false;
+            if (allowedItemType != null && allowedItemType.Id != item.ItemTypeId) return false;
             
             // Класс и тип предмета совпадают или разрешены — true
             return true;
@@ -483,7 +473,7 @@ namespace Blackset.Inventories
         /// </summary>
         /// <param name="InventoryCell">Ячейка инвентаря</param>
         /// <returns>true если класс и тип подходят, иначе false</returns>
-        private bool IsItemAllowed(InventoryCell cell, Inventory fromInventory) => IsItemAllowed(cell.ItemId, cell.ItemTypeId, fromInventory);
+        private bool IsItemAllowed(InventoryCell cell, Inventory fromInventory) => IsItemAllowed(cell.Item);
         
         /// <summary>
         /// Дополнительная проверка по условиям наследников класса
@@ -493,7 +483,7 @@ namespace Blackset.Inventories
         /// <summary>
         /// Полностью ли вмещается предмет из ячейки в инвентарь
         /// </summary>
-        private bool CanFitItemCompletely(Inventory inventory, string itemId, string itemTypeId, int amount, int additionalAvailableCells = 0)
+        private bool CanFitItemCompletely(Inventory inventory, ItemContext item, int amount, int additionalAvailableCells = 0)
         {
             if (amount <= 0) return true;
 
@@ -504,7 +494,7 @@ namespace Blackset.Inventories
                 InventoryCell cell = inventory.Data[i];
                 if (cell == null) continue;
                 if (cell.IsDefault || cell.IsEmpty) continue;
-                if (!cell.IsContentSame(itemId, itemTypeId)) continue;
+                if (!cell.IsContentSame(item)) continue;
 
                 int free = inventory.maxCellAmount - cell.ItemAmount;
                 if (free <= 0) continue;
@@ -582,16 +572,16 @@ namespace Blackset.Inventories
 
         #region Манипуляции ячейками
         
-        protected InventoryCell CreateCell(string itemId, string itemTypeId, int amount, bool isDefault = false)
+        protected InventoryCell CreateCell(ItemContext item, int amount, bool isDefault = false)
         {
             if (amount > maxCellAmount) ServiceDebug.LogWarning("Создана ячейка с количеством, больше дозволенного максимума");
-            InventoryCell newCell = new InventoryCell(itemId, itemTypeId, amount, isDefault);
+            InventoryCell newCell = new InventoryCell(item, amount, isDefault);
             return newCell;
         }
         
         protected InventoryCell CreateEmptyCell()
         {
-            InventoryCell newCell = new InventoryCell("", "", 0, true, true);
+            InventoryCell newCell = new InventoryCell(new ItemContext(), 0, true, true);
             return newCell;
         }
 
@@ -681,7 +671,7 @@ namespace Blackset.Inventories
             if (thisCell.IsEmpty || thisCell.IsDefault) return -1;
 
             int index = GetIndexById(cellId);
-            int remaining = targetInventory.AddItem(thisCell.ItemId, thisCell.ItemTypeId, itemAmount);
+            int remaining = targetInventory.AddItem(thisCell.Item, itemAmount);
             int movedAmount = itemAmount - remaining;
 
             if (movedAmount <= 0) return itemAmount;
@@ -784,7 +774,7 @@ namespace Blackset.Inventories
                 movedToTarget = Mathf.Min(thisCell.ItemAmount, targetInventory.maxCellAmount);
                 if (movedToTarget <= 0) return thisCell.ItemAmount;
 
-                InventoryCell newCell = targetInventory.CreateCell(thisCell.ItemId, thisCell.ItemTypeId, movedToTarget);
+                InventoryCell newCell = targetInventory.CreateCell(thisCell.Item, movedToTarget);
                 if (newCell == null) return thisCell.ItemAmount;
 
                 targetInventory.Data[targetCellIndex] = newCell;
@@ -812,7 +802,7 @@ namespace Blackset.Inventories
             }
             
             // Перемещение в заполненную иным содержимым ячейку — поменять ячейки местами
-            if (allowedItemType != null && thatCell.ItemTypeId != allowedItemType.Id) return thisCell.ItemAmount;
+            if (allowedItemType != null && thatCell.Item.ItemTypeId != allowedItemType.Id) return thisCell.ItemAmount;
 
             bool isSwapPossibleByAmounts =
                 thisCell.ItemAmount <= targetInventory.maxCellAmount &&
@@ -834,18 +824,18 @@ namespace Blackset.Inventories
                 return 0;
             }
 
-            if (!IsItemAllowed(thatCell.ItemId, thatCell.ItemTypeId, targetInventory)) return thisCell.ItemAmount;
+            if (!targetInventory.IsItemAllowed(thatCell.Item)) return thisCell.ItemAmount;
 
             movedToTarget = Mathf.Min(thisCell.ItemAmount, targetInventory.maxCellAmount);
             if (movedToTarget <= 0) return thisCell.ItemAmount;
             
             int additionalAvailableCells = 0;
             if (IsSlotsLimited() && thisCell.ItemAmount <= movedToTarget) additionalAvailableCells = 1;
-            if (!CanFitItemCompletely(this, thatCell.ItemId, thatCell.ItemTypeId, thatCell.ItemAmount, additionalAvailableCells)) return thisCell.ItemAmount;
+            if (!CanFitItemCompletely(this, thatCell.Item, thatCell.ItemAmount, additionalAvailableCells)) return thisCell.ItemAmount;
 
             InventoryCell displacedCell = thatCell;
 
-            InventoryCell newTargetCell = targetInventory.CreateCell(thisCell.ItemId, thisCell.ItemTypeId, movedToTarget);
+            InventoryCell newTargetCell = targetInventory.CreateCell(thisCell.Item, movedToTarget);
             if (newTargetCell == null) return thisCell.ItemAmount;
 
             targetInventory.Data[targetCellIndex] = newTargetCell;
@@ -853,7 +843,7 @@ namespace Blackset.Inventories
             targetInventory.onCellAdded?.Invoke(newTargetCell.Id);
             targetInventory.MarkDirty();
 
-            int displacedRemaining = AddItem(displacedCell.ItemId, displacedCell.ItemTypeId, displacedCell.ItemAmount);
+            int displacedRemaining = AddItem(displacedCell.Item, displacedCell.ItemAmount);
             if (displacedRemaining > 0)
             {
                 targetInventory.Data[targetCellIndex] = displacedCell;
@@ -966,20 +956,23 @@ namespace Blackset.Inventories
             {
                 string defaultItemId = nextDefault.ItemData.Id;
                 string defaultItemTypeId = nextDefault.ItemTypeData.Id;
+                ItemClass defaultItemClass = nextDefault.ItemData.ItemClass;
 
                 if (string.IsNullOrEmpty(defaultItemId) || string.IsNullOrEmpty(defaultItemTypeId))
                 {
                     ServiceDebug.LogWarning($"{name}: дефолтный предмет содержит невалидный(е) id, заполнение прервано");
                     return false;
                 }
-                if (!IsItemAllowed(nextDefault.ItemData.Id, defaultItemTypeId, this))
+
+                ItemContext defaultItem = new ItemContext(defaultItemId, defaultItemTypeId, defaultItemClass);
+                if (!IsItemAllowed(defaultItem))
                 {
                     ServiceDebug.LogError("Дефолтный предмет не подходит под ограничения инвентаря");
                     defaultFillPointer++;
                     return false;
                 }
                     
-                newCell = CreateCell(defaultItemId, defaultItemTypeId, 1, true);
+                newCell = CreateCell(defaultItem, 1, true);
             }
 
             Add(newCell, index);

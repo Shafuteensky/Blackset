@@ -6,7 +6,7 @@ namespace Blackset.Data.Items.Types
     /// <summary>
     /// База типа предмета
     /// </summary>
-    public abstract class InventoryItemType : BaseData
+    public class InventoryItemType : BaseData
     {
         /// <summary>
         /// Иконка типа

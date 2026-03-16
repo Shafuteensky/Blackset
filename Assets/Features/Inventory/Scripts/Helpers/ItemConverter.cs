@@ -19,9 +19,9 @@ namespace Blackset.Inventories.Helpers
             foreach (InventoryCell cell in inventory.Data)
             {
                 DiceItemContext context = new();
-                if (gameData.Dices.GetById(cell.ItemId) is not DiceData dice) continue;
+                if (gameData.Dices.GetById(cell.Item.ItemId) is not DiceData dice) continue;
                 context.Dice = dice.Id;
-                if (gameData.DiceTypes.GetById(cell.ItemTypeId) is not DiceType type) continue;
+                if (gameData.DiceTypes.GetById(cell.Item.ItemTypeId) is not DiceType type) continue;
                 context.Type = type.Id;
                 dices.Add(context);
             }
@@ -37,9 +37,9 @@ namespace Blackset.Inventories.Helpers
             foreach (InventoryCell cell in inventory.Data)
             {
                 ConsumableItemContext context = new();
-                if (gameData.Consumables.GetById(cell.ItemId) is not ConsumableData consumable) continue;
+                if (gameData.Consumables.GetById(cell.Item.ItemId) is not ConsumableData consumable) continue;
                 context.Consumable = consumable;
-                if (gameData.ConsumableTypes.GetById(cell.ItemTypeId) is not ConsumableType type) continue;
+                if (gameData.ConsumableTypes.GetById(cell.Item.ItemTypeId) is not ConsumableType type) continue;
                 context.Type = type;
                 consumables.Add(context);
             }

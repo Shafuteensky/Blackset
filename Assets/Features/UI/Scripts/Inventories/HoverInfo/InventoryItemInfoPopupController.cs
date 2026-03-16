@@ -45,8 +45,8 @@ namespace Blackset.UI.InventoryManagement
             InventoryCell cell = inventory.GetById(cellId);
             if (cell == null || cell.IsEmpty) return;
 
-            InventoryItem item = cell.GetItemData(inventory.DataRegistry);
-            InventoryItemType type = cell.GetTypeData(inventory.TypeRegistry);
+            InventoryItem item = cell.GetItemData();
+            InventoryItemType type = cell.GetTypeData();
             if (type == null) return;
 
             FillBaseInfo(item, type);

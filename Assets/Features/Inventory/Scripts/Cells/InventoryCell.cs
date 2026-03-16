@@ -5,6 +5,7 @@ using UnityEngine;
 using Blackset.Data.Items.Types;
 using Blackset.Inventories.Items;
 using Extensions.Log;
+using Features.Inventory.Scripts.Items;
 
 namespace Blackset.Inventories.Cells
 {
@@ -54,14 +55,9 @@ namespace Blackset.Inventories.Cells
         public bool IsDefault { get => isDefault; private set => isDefault = value; }
         
         /// <summary>
-        /// Идентификатор данных предмета в этой ячейке
+        /// Данные о предмете в ячейке
         /// </summary>
-        public string ItemId { get => itemId; private set => itemId = value; }
-        /// <summary>
-        /// Идентификатор данных типа предмета в этой ячейке
-        /// </summary>
-        public string ItemTypeId { get => itemTypeId; private set => itemTypeId = value; }
-
+        public ItemContext Item { get => item; private set => item = value; }
         /// <summary>
         /// Количество предметов в ячейке
         /// </summary>
@@ -70,9 +66,8 @@ namespace Blackset.Inventories.Cells
         protected bool isEmpty;
         protected bool isDefault;
         
-        protected string itemId;
-        protected string itemTypeId;
-        protected int itemAmount;
+        public ItemContext item;
+        public int itemAmount;
 
         /// <summary>
         /// Конструктор заполненной ячейки инвентаря
@@ -80,26 +75,14 @@ namespace Blackset.Inventories.Cells
         /// <param name="itemId">Идентификатор данных предмета в этой ячейке</param>
         /// <param name="itemTypeId">Идентификатор типа данных предмета в этой ячейке</param>
         /// <param name="itemAmount">Количество предметов в ячейке</param>
-        public InventoryCell(string itemId, string itemTypeId, int itemAmount = 1, bool isDefault = false, bool isEmpty = false)
+        public InventoryCell(ItemContext item, int itemAmount = 1, bool isDefault = false, bool isEmpty = false)
         {
-            if (String.IsNullOrEmpty(itemId))
-            {
-                ServiceDebug.LogError("Невалидный id предмета при создании ячейки инвентаря");
-                itemId = String.Empty;
-            }
-            if (String.IsNullOrEmpty(itemTypeId))
-            {
-                ServiceDebug.LogError("Невалидный id типа предмета при создании ячейки инвентаря");
-                itemTypeId = String.Empty;
-            }
-            
             if (itemAmount <= 0) itemAmount = 1;
             
             this.isEmpty = isEmpty;
             this.isDefault = isDefault;
             
-            this.itemId = itemId;
-            this.itemTypeId = itemTypeId;
+            this.item = item;
             this.itemAmount = itemAmount;
         }
 
@@ -168,23 +151,36 @@ namespace Blackset.Inventories.Cells
         /// <summary>
         /// Получить данные предмета в ячейке
         /// </summary>
-        /// <param name="dataRegistry">Реестр данных однотипных предметов</param>
-        /// <returns>Данные предмета</returns>
-        public InventoryItem GetItemData(InventoryItemsRegistry dataRegistry)
+        public InventoryItem GetItemData()
         {
             if (isEmpty) return null;
-            if (dataRegistry == null)
-            {
-                ServiceDebug.LogError("Реестр данных предметов не задан, данные не найдены");
-                return null;
-            }
-            if (String.IsNullOrEmpty(itemId))
+            if (String.IsNullOrEmpty(Item.ItemId))
             {
                 ServiceDebug.LogError("Невалидный id предмета ячейки инвентаря, данные не найдены");
                 return null;
             }
 
-            InventoryItem data = dataRegistry.GetById(itemId);
+            InventoryItem data;
+            GameData gameData = GameData.Instance;
+            switch (Item.ItemClass)
+            {
+                case ItemClass.Consumable:
+                {
+                    data = gameData.GetConsumable(Item.ItemId);
+                    break;
+                }
+                case ItemClass.Dice:
+                {
+                    data = gameData.GetDice(Item.ItemId);
+                    break;
+                }
+                default:
+                {
+                    ServiceDebug.LogError("Необработанный класс предмета");
+                    return null;
+                }
+            }
+            
             return data;
         }
 
@@ -193,21 +189,36 @@ namespace Blackset.Inventories.Cells
         /// </summary>
         /// <param name="dataRegistry">Реестр типа данных однотипных предметов</param>
         /// <returns>Данные типа предмета</returns>
-        public InventoryItemType GetTypeData(InventoryItemTypesRegistry typeRegistry)
+        public InventoryItemType GetTypeData()
         {
             if (isEmpty) return null;
-            if (typeRegistry == null)
-            {
-                ServiceDebug.LogError("Реестр данных предметов не задан, данные не найдены");
-                return null;
-            }
-            if (String.IsNullOrEmpty(itemTypeId))
+            if (String.IsNullOrEmpty(Item.ItemTypeId))
             {
                 ServiceDebug.LogError("Невалидный id типа предмета ячейки инвентаря, данные не найдены");
                 return null;
             }
 
-            InventoryItemType data = typeRegistry.GetById(itemTypeId);
+            InventoryItemType data;
+            GameData gameData = GameData.Instance;
+            switch (Item.ItemClass)
+            {
+                case ItemClass.Consumable:
+                {
+                    data = gameData.GetConsumableType(Item.ItemTypeId);
+                    break;
+                }
+                case ItemClass.Dice:
+                {
+                    data = gameData.GetDiceType(Item.ItemTypeId);
+                    break;
+                }
+                default:
+                {
+                    ServiceDebug.LogError("Необработанный класс предмета");
+                    return null;
+                }
+            }
+
             return data;
         }
 
@@ -217,20 +228,9 @@ namespace Blackset.Inventories.Cells
         /// <param name="otherItemId">Идентификатор сравниваемого предмета</param>
         /// <param name="otherItemTypeId">Идентификатор типа сравниваемого предмета</param>
         /// <returns>true если предмет и тип совпадают, иначе false</returns>
-        public bool IsContentSame(string otherItemId, string otherItemTypeId)
+        public bool IsContentSame(ItemContext itemContext)
         {
-            if (String.IsNullOrEmpty(otherItemId) || String.IsNullOrEmpty(otherItemTypeId))
-            {
-                ServiceDebug.LogError("Получены невалидные id, сравнение не выполнено");
-                return false;
-            }
-            
-            if (itemId == otherItemId && itemTypeId == otherItemTypeId)
-            {
-                return true;
-            }
-            
-            return false;
+            return Item.ItemId == itemContext.ItemId && Item.ItemTypeId == itemContext.ItemTypeId;
         }
 
         /// <summary>
@@ -240,18 +240,8 @@ namespace Blackset.Inventories.Cells
         /// <returns>true если предмет и тип совпадают, иначе false</returns>
         public bool IsContentSame(InventoryCell otherCell)
         {
-            if (String.IsNullOrEmpty(otherCell.ItemId) || String.IsNullOrEmpty(otherCell.ItemTypeId))
-            {
-                ServiceDebug.LogError("Получены невалидные id, сравнение не выполнено");
-                return false;
-            }
-            
-            if (itemId == otherCell.itemId && itemTypeId == otherCell.itemTypeId) // TODO добавить проверку на редкость
-            {
-                return true;
-            }
-            
-            return false;
+            return Item.ItemId == otherCell.Item.ItemId && Item.ItemTypeId == otherCell.Item.ItemTypeId; 
+            // TODO добавить проверку на редкость
         }
         
         #endregion
