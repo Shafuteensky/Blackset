@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6cc87b023e9a4095a6fec9bdfce11fe3, type: 3}
-  m_Name: ProgressionConfig
+  m_Name: Progression_Config
   m_EditorClassIdentifier: Assembly-CSharp::Features.Progression.ProgressionConfig
   levelCap: 0
   experienceFormula:
