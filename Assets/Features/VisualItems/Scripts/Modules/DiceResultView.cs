@@ -83,11 +83,12 @@ namespace Blackset.Data.Items.Visual.Modules
                 owner.FightState.TurnState.ChosenDice.Value != itemId) return;
             
             resultText.text = owner.FightState.RawRollResults[itemId].ToString();
+            resultText.gameObject.SetActive(true);
         }
 
         private void HideResults(BattleStartEvent _)
         {
-            if (resultText != null) resultText.text = String.Empty;
+            if (resultText != null) resultText.gameObject.SetActive(false);
         }
 
         private void ShowDeclared(DeclaredDiceEvent handler)

@@ -13,9 +13,9 @@ namespace Blackset.Duel.Participants
         #region События
 
         /// <summary>
-        /// Дайс из сборки использован в текущем бою
+        /// Дайс из сборки использован в текущем бою [идентификатор_дайса_в_сборке, первое_использование]
         /// </summary>
-        public event Action<string> onDiceUsed; 
+        public event Action<string, bool> onDiceUsed; 
         /// <summary>
         /// Расходник из сборки использован в текущем бою
         /// </summary>
@@ -109,8 +109,9 @@ namespace Blackset.Duel.Participants
         /// <param name="dice">Идентификатор дайса из сборки</param>
         public void MarkDiceUsed(string dice)
         {
+            bool firstTime = !dicesUsed.Contains(dice);
             dicesUsed.Add(dice);
-            onDiceUsed?.Invoke(dice);
+            onDiceUsed?.Invoke(dice, firstTime);
         }
 
         /// <summary>

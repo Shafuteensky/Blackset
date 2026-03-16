@@ -1,3 +1,6 @@
+using System.Collections.Generic;
+using System.Linq;
+using Blackset.Duel.History;
 using Blackset.Duel.Sequence;
 using Blackset.DuelEvents.EventTypes;
 using DG.Tweening;
@@ -10,6 +13,8 @@ namespace Blackset.Data.Items.Visual.Modules
     /// </summary>
     public sealed class DicePositionController : MonoBehaviour
     {
+        [SerializeField] private DOTweenAnimation animationTween;
+        
         private string itemId;
         private Transform diceTransform;
         private Vector3 initialPosition;
@@ -46,9 +51,16 @@ namespace Blackset.Data.Items.Visual.Modules
             duelController.EventHub.Subscribe<BattleStartEvent>(OnBattleStart);
         }
 
-        private void OnDiceUsed(string diceId)
+        private void OnDiceUsed(string diceId, bool firstTime)
         {
             if (diceId != itemId) return;
+            
+            // Если уже использован, то не двигается к центру
+            if (!firstTime && animationTween != null)
+            {
+                animationTween.tween.Restart();
+                return;
+            }
 
             // Переводим направление из локального пространства родителя в мировое
             Vector3 worldDir = diceTransform.parent.TransformDirection(moveDirLocal);
