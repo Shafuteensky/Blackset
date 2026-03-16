@@ -1,7 +1,10 @@
+using Blackset.Data.Registries;
 using Blackset.Duel.Context;
 using Blackset.Duel.Modules;
+using Blackset.DuelEvents.EventTypes;
 using Extensions.FiniteStateMachine;
 using Features.Duel.Context;
+using UnityEngine;
 
 namespace Blackset.Duel.Sequence.States
 {
@@ -27,6 +30,7 @@ namespace Blackset.Duel.Sequence.States
             if (duelEndResult.IsDuelEnded.Value)
             {
                 context.Progress.OnDuelFinished(duelEndResult);
+                eventHub.Publish(new DuelFinishEvent(context.Progress.DuelResult));
                 return StateResult.Switch<RewardResolveState>();
             }
             else

@@ -33,13 +33,13 @@ namespace Blackset.Duel.Modules
             {
                 case DuelWinPolicy.WinMostFights:
                 {
-                    // TODO Тай-брейк по вторичному критерию: если из 4 битв оба выиграли 2 раза, то засчитывать победу по набранным очкам
-                    // (добавить трекер очков: + за неизрасходованные дайсы/расходники)
                     if (IsSomeoneWonMoreThanHalfFights(context, out string winnerId))
+                    {
                         result.WinnerId = winnerId;
+                    }
+
                     break;
                 }
-                // Необработанные случаи
                 default:
                 {
                     ServiceDebug.LogError($"Необработанный случай политики окончания дуэли ({activeDuelWinPolicy})");
@@ -47,26 +47,36 @@ namespace Blackset.Duel.Modules
                 }
             }
 
-            // Есть победитель
             if (!string.IsNullOrEmpty(result.WinnerId))
             {
                 result.IsDuelEnded.Value = true;
-                bool IsWinnerPlayer = context.Participants[result.WinnerId].IsPlayer;
-                result.Winner.Value = IsWinnerPlayer ? FightWinner.Player : FightWinner.Opponent;
+                bool isWinnerPlayer = context.Participants[result.WinnerId].IsPlayer;
+                result.Winner.Value = isWinnerPlayer ? FightWinner.Player : FightWinner.Opponent;
                 return result;
             }
-            // Победителя нет — ничья
+
             if (IsLastFightDone(context))
             {
                 result.IsDuelEnded.Value = true;
-                result.Winner.Value = FightWinner.None;
-                result.WinnerId = string.Empty;
+
+                if (TryResolveWinnerByFightsOrScore(context, out string winnerId))
+                {
+                    result.WinnerId = winnerId;
+
+                    bool isWinnerPlayer = context.Participants[winnerId].IsPlayer;
+                    result.Winner.Value = isWinnerPlayer ? FightWinner.Player : FightWinner.Opponent;
+                }
+                else
+                {
+                    result.Winner.Value = FightWinner.None;
+                    result.WinnerId = string.Empty;
+                }
             }
 
             return result;
         }
 
-        #region  Проверки по правилам
+        #region Проверки по правилам
 
         /// <summary>
         /// Участник победил в более чем половине максимума боев дуэли
@@ -85,6 +95,74 @@ namespace Blackset.Duel.Modules
             }
             
             return false;
+        }
+
+        /// <summary>
+        /// Определить победителя по количеству выигранных боев или по очкам дуэли
+        /// </summary>
+        private bool TryResolveWinnerByFightsOrScore(DuelContext context, out string winnerId)
+        {
+            winnerId = string.Empty;
+
+            DuelParticipantState bestParticipant = null;
+            bool hasTieByFights = false;
+
+            foreach (DuelParticipantState participant in context.Participants.Values)
+            {
+                if (bestParticipant == null)
+                {
+                    bestParticipant = participant;
+                    hasTieByFights = false;
+                    continue;
+                }
+
+                if (participant.FightsWon.Value > bestParticipant.FightsWon.Value)
+                {
+                    bestParticipant = participant;
+                    hasTieByFights = false;
+                    continue;
+                }
+
+                if (participant.FightsWon.Value == bestParticipant.FightsWon.Value)
+                {
+                    hasTieByFights = true;
+                }
+            }
+
+            if (bestParticipant == null) return false;
+
+            if (hasTieByFights == false)
+            {
+                winnerId = bestParticipant.ParticipantId;
+                return true;
+            }
+
+            DuelParticipantState bestByScore = null;
+            bool hasTieByScore = false;
+
+            foreach (DuelParticipantState participant in context.Participants.Values)
+            {
+                if (bestByScore == null)
+                {
+                    bestByScore = participant;
+                    hasTieByScore = false;
+                    continue;
+                }
+
+                if (participant.DuelScore.Value > bestByScore.DuelScore.Value)
+                {
+                    bestByScore = participant;
+                    hasTieByScore = false;
+                    continue;
+                }
+
+                if (participant.DuelScore.Value == bestByScore.DuelScore.Value) hasTieByScore = true;
+            }
+
+            if (bestByScore == null || hasTieByScore) return false;
+
+            winnerId = bestByScore.ParticipantId;
+            return true;
         }
         
         /// <summary>

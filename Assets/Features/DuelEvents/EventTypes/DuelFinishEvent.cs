@@ -3,13 +3,13 @@ using Features.Duel.Context;
 namespace Blackset.DuelEvents.EventTypes
 {
     /// <summary>
-    /// Событие завершения дуэли (закрытие сессии)
+    /// Событие окончания дуэли (завершение всех битв)
     /// </summary>
-    public struct DuelEndEvent
+    public struct DuelFinishEvent
     {
         public readonly DuelEndResult DuelEndResult;
         
-        public DuelEndEvent(DuelEndResult duelEndResult)
+        public DuelFinishEvent(DuelEndResult duelEndResult)
         {
             DuelEndResult = duelEndResult;
         }

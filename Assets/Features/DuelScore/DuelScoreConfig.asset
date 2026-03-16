@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf5536a852c14ccd95300cc55dd3848b, type: 3}
+  m_Name: DuelScoreConfig
+  m_EditorClassIdentifier: Assembly-CSharp::Blackset.DuelScore.DuelScoreConfig
+  unusedItemsScore:
+    unusedDiceScore: 5
+    unusedConsumableScore: 10
+  declarationScore:
+    bluffDeclarationScore: 0
+    honestDeclarationScore: 5
+    successfulBluffScore: 15
+    caughtEnemyBluffScore: 15
+  battleResultScore:
+    battleWinScore: 40
+    quickWinScore: 20
+    comebackWinScore: 25
+    winStreakStepScore: 5
+  precisionScore:
+    diceCriticalScore: 5
+    exactTargetZoneHitScore: 10

@@ -81,7 +81,7 @@ namespace Blackset.Duel.Sequence.States
                 TurnParticipantState playerState = context.Participants[context.PlayerId].FightState.TurnState;
                 TurnParticipantState opponentState = context.Participants[context.OpponentId].FightState.TurnState;
                 
-                // Объявление дайса
+                // Объявление дайса ————————————————————————————————————————————————————————————————————————————————————
                 
                 eventHub.Publish(new DeclarationStartedEvent());
                 
@@ -95,8 +95,8 @@ namespace Blackset.Duel.Sequence.States
                     playerState.DeclareDice(declaredDiceId);
                     eventHub.Publish(new DeclaredDiceEvent(declaredDiceId, context.PlayerId));
                 }
-
-                // Намерения 
+                
+                // Намерения ———————————————————————————————————————————————————————————————————————————————————————————
                 
                 eventHub.Publish(new PlanningStartedEvent());
 
@@ -111,6 +111,15 @@ namespace Blackset.Duel.Sequence.States
                 else playerIntent = playerState;
                 playerState.ApplyState(playerIntent);
 
+                // —————————————————————————————————————————————————————————————————————————————————————————————————————
+
+                // Зачет очков дуэли за честность
+                IDuelScoreResolver duelScoreResolver = modules.Get<IDuelScoreResolver>();
+                duelScoreResolver.ResolveHonesty(context.Participants[context.PlayerId], 
+                    declaredDiceId, playerIntent.ChosenDice.Value);
+                duelScoreResolver.ResolveHonesty(context.Participants[context.OpponentId], 
+                    botDeclaredDiceId, botIntent.ChosenDice.Value);
+                
                 planningCompleted = true;
                 eventHub.Publish(new PlanningCompletedEvent());
             }

@@ -1,3 +1,4 @@
+using Blackset.Data.Registries;
 using Blackset.Duel.Context;
 using Blackset.Duel.Modules;
 using Blackset.DuelEvents.EventTypes;
@@ -17,11 +18,17 @@ namespace Blackset.Duel.Sequence.States
     public class BattleCheckState : BaseDuelState, IState<DuelContext>
     {
         private FightEndResult fightEndResult;
+        private IDuelScoreResolver duelScoreResolver;
         
         public void Enter(DuelContext context)
         {
+            // Проверка окончания битвы по правилам
             IFightEndResolver fightEndResolver = modules.Get<IFightEndResolver>();
             fightEndResult = fightEndResolver.Evaluate(context);
+                
+            // Зачет очков дуэли за победу в битве
+            duelScoreResolver = modules.Get<IDuelScoreResolver>();
+            duelScoreResolver.ResolveDuelWin(context, fightEndResult);
         }
         
         public StateResult Tick(DuelContext context)
@@ -34,6 +41,9 @@ namespace Blackset.Duel.Sequence.States
                     if (participant.Key == fightEndResult.WinnerId)
                         participant.Value.WinFight();
                 }
+                
+                // Зачет очков дуэли за неиспользованные предметы
+                duelScoreResolver.ResolveUnusedItems(context);
                 
                 eventHub.Publish(new BattleEndEvent(context, fightEndResult));
                 

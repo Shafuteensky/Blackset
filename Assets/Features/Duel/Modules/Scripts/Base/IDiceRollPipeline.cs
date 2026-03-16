@@ -13,7 +13,7 @@ namespace Blackset.Duel.Modules
         /// <param name="context">Данные дуэли</param>
         /// <param name="participantId">Идентификатор участника</param>
         /// <returns>Результат броска</returns>
-        public int RollChosenDice(DuelContext context, string participantId);
+        public int RollChosenDice(DuelContext context, string participantId, out bool isCrit);
         /// <summary>
         /// Бросить определенный дайс
         /// </summary>
@@ -21,6 +21,6 @@ namespace Blackset.Duel.Modules
         /// <param name="participantId">Идентификатор участника</param>
         /// <param name="diceId">Идентификатор дайса из сборки участника</param>
         /// <returns>Результат броска</returns>
-        public int RollDice(DuelContext context, string participantId, string diceId);
+        public int RollDice(DuelContext context, string participantId, string diceId, out bool isCrit);
     }
 }

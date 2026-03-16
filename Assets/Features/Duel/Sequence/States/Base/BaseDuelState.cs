@@ -1,3 +1,4 @@
+using Blackset.Data.Registries;
 using Blackset.DecisionInput;
 using Blackset.Duel.Modules;
 using Blackset.DuelEvents;
@@ -13,6 +14,7 @@ namespace Blackset.Duel.Sequence.States
         protected DuelModuleRegistry modules;
         protected DuelInputPresenter presenter;
         protected EventHub eventHub;
+        protected readonly GameData gameData = GameData.Instance;
         
         /// <summary>
         /// Инициализация данных состояния

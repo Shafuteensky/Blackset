@@ -85,17 +85,18 @@ namespace Blackset.Duel.Participants
         /// <param name="intentState">Состояние намерения</param>
         public void ApplyState(TurnParticipantState intentState)
         {
-            HasPassed = intentState.HasPassed;
+            HasPassed.Value = intentState.HasPassed.Value;
             
             IsDiceDeclared = intentState.IsDiceDeclared;
-            DeclaredDice = intentState.DeclaredDice;
+            if (!string.IsNullOrEmpty(intentState.DeclaredDice.Value))
+                DeclaredDice.Value = intentState.DeclaredDice.Value;
             
-            IsDiceChosen = intentState.IsDiceChosen;
-            ChosenDice = intentState.ChosenDice;
+            IsDiceChosen.Value = intentState.IsDiceChosen.Value;
+            ChosenDice.Value = intentState.ChosenDice.Value;
             
-            IsConsumableChosen = intentState.IsConsumableChosen;
-            ChosenConsumable = intentState.ChosenConsumable;
-            ConsumableTarget = intentState.ConsumableTarget;
+            IsConsumableChosen.Value = intentState.IsConsumableChosen.Value;
+            ChosenConsumable.Value = intentState.ChosenConsumable.Value;
+            ConsumableTarget.Value = intentState.ConsumableTarget.Value;
         }
         
         /// <summary>

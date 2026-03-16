@@ -17,17 +17,23 @@ namespace Blackset.Duel.Sequence.States
     {
         public void Enter(DuelContext context)
         {
-            // Броски дайсов
             IDiceRollPipeline diceRoller = modules.Get<IDiceRollPipeline>();
+            IDuelScoreResolver duelScoreResolver = modules.Get<IDuelScoreResolver>();
+            
+            // Броски дайсов
             foreach (string participantId in context.Participants.Keys)
             {
-                FightParticipantState participantFightState = context.Participants[participantId].FightState;
+                DuelParticipantState participant = context.Participants[participantId];
+                FightParticipantState participantFightState = participant.FightState;
                 if (participantFightState.TurnState.HasPassed.Value) continue;
                 
                 string chosenDiceId = participantFightState.TurnState.ChosenDice.Value;
-                int rollResult = diceRoller.RollDice(context, participantId, chosenDiceId);
-
+                int rollResult = diceRoller.RollDice(context, participantId, chosenDiceId, out bool isCrit);
+                
                 participantFightState.RegisterRawRollResult(chosenDiceId, rollResult); 
+
+                // Зачет очков дуэли за криты дайсов
+                duelScoreResolver.ResolveCrit(participant, isCrit);
                 
                 eventHub.Publish(new DiceRolledEvent(participantId, chosenDiceId, rollResult));
             }
