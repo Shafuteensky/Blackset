@@ -54,7 +54,7 @@ namespace Blackset.Duel.Participants
         /// <summary>
         /// Счет боя 
         /// </summary>
-        public ReactiveProperty<int> Score { get; private set; } = new(0);
+        public ReactiveProperty<int> FightScore { get; private set; } = new(0);
 
         private readonly List<string> dicesUsed = new();
         private readonly List<string> consumablesUsed = new();
@@ -81,7 +81,7 @@ namespace Blackset.Duel.Participants
             HasGivenUp.Value = false;
 
             Throws.Value = 0;
-            Score.Value = 0;
+            FightScore.Value = 0;
 
             dicesUsed.Clear();
             consumablesUsed.Clear();
@@ -143,7 +143,7 @@ namespace Blackset.Duel.Participants
         /// <param name="snapshotScore">Новое значение счета</param>
         public void UpdateScore(int snapshotScore)
         {
-            Score.Value = snapshotScore;
+            FightScore.Value = snapshotScore;
         }
     }
 }

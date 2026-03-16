@@ -173,7 +173,7 @@ namespace Blackset.GameDebug
             
             // --- Текущий бой ---
             sb.AppendLine($"  [Бой]");
-            sb.AppendLine($"    Счёт:           {fight.Score.Value}");
+            sb.AppendLine($"    Счёт:           {fight.FightScore.Value}");
             sb.AppendLine($"    Бросков:        {fight.Throws.Value}");
             sb.AppendLine($"    Сдался:         {fight.HasGivenUp.Value}");
 

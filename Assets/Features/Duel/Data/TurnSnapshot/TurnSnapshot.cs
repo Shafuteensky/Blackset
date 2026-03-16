@@ -54,7 +54,7 @@ namespace Blackset.Duel.Snapshots
             
             foreach (var participant in context.Participants)
             {
-                ParticipantScores.Add(participant.Key, participant.Value.FightState.Score.Value);
+                ParticipantScores.Add(participant.Key, participant.Value.FightState.FightScore.Value);
                 ParticipantStates.Add(participant.Key, participant.Value.FightState.TurnState.Clone());
                 ParticipantKnowledge.Add(participant.Key, context.Knowledge[participant.Key].Clone());
                 ParticipantRawRollResults.Add(participant.Key,

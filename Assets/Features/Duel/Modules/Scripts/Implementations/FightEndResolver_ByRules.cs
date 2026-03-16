@@ -92,7 +92,7 @@ namespace Blackset.Duel.Modules
         {
             FightWinPolicy activeFightWinPolicy = context.Rules.FightWinPolicy;
 
-            int score = participant.FightState.Score.Value;
+            int score = participant.FightState.FightScore.Value;
             int target = context.TargetValue.TargetValue.Value;
 
             switch (activeFightWinPolicy)
@@ -179,7 +179,7 @@ namespace Blackset.Duel.Modules
             FightLossPolicy activeFightLossPolicy = context.Rules.FightLossPolicy;
             loserId = string.Empty;
 
-            int score = participant.FightState.Score.Value;
+            int score = participant.FightState.FightScore.Value;
             int target = context.TargetValue.TargetValue.Value;
 
             switch (activeFightLossPolicy)

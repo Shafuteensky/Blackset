@@ -1,5 +1,6 @@
 using Blackset.Data.Base;
 using Blackset.Data.Items.Types;
+using Blackset.DuelScore;
 using Blackset.Inventories;
 using Blackset.Inventories.Items;
 using Blackset.Opponents;
@@ -26,12 +27,20 @@ namespace Blackset.Data.Registries
         [field: SerializeField]
         [field: Tooltip("Конфигурация прогресса игрока (баланса)")]
         public ProgressionConfig ProgressionConfig { get; private set; }
+        
         /// <summary>
         /// Конфигурация баланса наград за дуэли
         /// </summary>
         [field: SerializeField]
         [field: Tooltip("Конфигурация баланса наград за дуэли")]
-        public RewardConfig RewardConfig  { get; private set; }
+        public RewardConfig RewardConfig { get; private set; }
+        
+        /// <summary>
+        /// Конфигурация баланса заработка очков дуэли
+        /// </summary>
+        [field: SerializeField]
+        [field: Tooltip("Конфигурация баланса заработка очков дуэли")]
+        public DuelScoreConfig DuelScoreConfig { get; private set; }
         
         // ==============================================
         [field: Header("Постоянные данные игрока"), Space]

@@ -1,7 +1,8 @@
 using Blackset.Duel.Context;
-using Blackset.Duel.Sequence;
 using Blackset.DuelEvents.EventTypes;
 using Extensions.Log;
+using Features.Duel.Data.FightEnd;
+using UnityEngine;
 
 namespace Blackset.DuelUI
 {
@@ -10,9 +11,11 @@ namespace Blackset.DuelUI
     /// <summary>
     public abstract class ParticipantDataTextIndicator : DuelDataTextIndicator
     {
+        [Header("Участник"), Space]
+        [SerializeField] protected FightWinner participant = FightWinner.Player;
+        
         protected override void OnDuelInited(DuelInitedEvent handler)
         {
-            DuelContext duelContext = DuelController.Instance?.DuelContext;
             if (duelContext == null)
             {
                 ServiceDebug.LogError("Данные дуэли отсутствуют, индикатор неактивен");
@@ -20,6 +23,16 @@ namespace Blackset.DuelUI
             }
             
             OnDataInited(handler, duelContext);
+        }
+
+        protected string GetChosenParticipantId(DuelContext duelContext)
+        {
+            string participantId;
+            
+            if (participant == FightWinner.Opponent) participantId = duelContext.OpponentId;
+            else participantId = duelContext.PlayerId;
+            
+            return participantId;
         }
 
         protected abstract void OnDataInited(DuelInitedEvent handler, DuelContext duelContext);

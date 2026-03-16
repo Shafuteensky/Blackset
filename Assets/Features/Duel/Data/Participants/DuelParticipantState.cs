@@ -49,6 +49,11 @@ namespace Blackset.Duel.Participants
         public FightParticipantState FightState { get; private set; }
         
         /// <summary>
+        /// Очки за дуэль 
+        /// </summary>
+        public ReactiveProperty<int> DuelScore { get; private set; } = new(0);
+        
+        /// <summary>
         /// Уровень доверия бота (от 0 до 1)
         /// </summary>
         public readonly ReactiveProperty<float> TrustLevel = new();

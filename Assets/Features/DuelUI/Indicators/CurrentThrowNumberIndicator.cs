@@ -6,12 +6,11 @@ namespace Blackset.DuelUI
     /// <summary>
     /// Вывод числа текущего броска битвы дуэли
     /// </summary>
-    public sealed class ThrowNumberIndicator : DuelDataTextIndicator
+    public sealed class CurrentThrowNumberIndicator : DuelDataTextIndicator
     {
         protected override void OnDuelInited(DuelInitedEvent handler)
         {
-            DuelController.Instance?.DuelContext.Progress.ThrowNumber.Subscribe(
-                value => UpdateText(value.ToString()), true);
+            duelContext.Progress.ThrowNumber.Subscribe(value => UpdateText(value.ToString()), true);
         }
     }
 }

@@ -1,4 +1,3 @@
-using Blackset.Duel.Sequence;
 using Blackset.DuelEvents.EventTypes;
 
 namespace Blackset.DuelUI
@@ -6,12 +5,11 @@ namespace Blackset.DuelUI
     /// <summary>
     /// Вывод числа текущей битвы дуэли
     /// </summary>
-    public sealed class FightNumberIndicator : DuelDataTextIndicator
+    public sealed class CurrentFightNumberIndicator : DuelDataTextIndicator
     {
         protected override void OnDuelInited(DuelInitedEvent handler)
         {
-            DuelController.Instance?.DuelContext.Progress.FightNumber.Subscribe(
-                value => UpdateText(value.ToString()), true);
+            duelContext.Progress.FightNumber.Subscribe(value => UpdateText(value.ToString()), true);
         }
     }
 }

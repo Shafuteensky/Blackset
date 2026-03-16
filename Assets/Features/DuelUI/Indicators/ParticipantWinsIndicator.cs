@@ -4,13 +4,13 @@ using Blackset.DuelEvents.EventTypes;
 namespace Blackset.DuelUI
 {
     /// <summary>
-    /// Вывод количества побед игрока в битвах дуэли
+    /// Вывод количества побед участника в битвах дуэли
     /// <summary>
-    public sealed class PlayerWinsIndicator : ParticipantDataTextIndicator
+    public sealed class ParticipantWinsIndicator : ParticipantDataTextIndicator
     {
         protected override void OnDataInited(DuelInitedEvent handler, DuelContext duelContext)
         {
-            duelContext.Participants[duelContext.PlayerId].FightsWon.Subscribe(
+            duelContext.Participants[GetChosenParticipantId(duelContext)].FightsWon.Subscribe(
                 value => UpdateText(value.ToString()), true);
         }
     }

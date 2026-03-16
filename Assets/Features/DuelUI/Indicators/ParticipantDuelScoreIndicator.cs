@@ -4,13 +4,13 @@ using Blackset.DuelEvents.EventTypes;
 namespace Blackset.DuelUI
 {
     /// <summary>
-    /// Вывод счета битвы игрока
+    /// Вывод счета дуэли участника
     /// <summary>
-    public sealed class PlayerScoreIndicator : ParticipantDataTextIndicator
+    public sealed class ParticipantDuelScoreIndicator : ParticipantDataTextIndicator
     {
         protected override void OnDataInited(DuelInitedEvent handler, DuelContext duelContext)
         {
-            duelContext.Participants[duelContext.PlayerId].FightState.Score.Subscribe(
+            duelContext.Participants[GetChosenParticipantId(duelContext)].DuelScore.Subscribe(
                 value => UpdateText(value.ToString()), true);
         }
     }
