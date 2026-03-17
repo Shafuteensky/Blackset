@@ -1,5 +1,5 @@
+using Blackset.DecisionInput;
 using Blackset.Duel.Context;
-using Blackset.Duel.Participants;
 
 namespace Blackset.Duel.Modules
 {
@@ -9,16 +9,22 @@ namespace Blackset.Duel.Modules
     public interface IBotDecisionSource : IDuelModuleInterface
     {
         /// <summary>
-        /// Создать выбор объявления дайса на бросок
+        /// Создать объявление дайса на бросок
         /// </summary>
-        /// <param name="context">Дунные дуэли</param>
+        /// <param name="context">Данные дуэли</param>
         /// <returns>Идентификатор объявленного дайса</returns>
         public string BuildDeclaration(DuelContext context);
         /// <summary>
-        /// Создать намерение бота
+        /// Создать выбор дайса на бросок
         /// </summary>
         /// <param name="context">Данные дуэли</param>
         /// <returns>Состояние намерений бота на ход</returns>
-        public TurnParticipantState BuildIntentState(DuelContext context);
+        public SelectionState BuildDiceSelection(DuelContext context);
+        /// <summary>
+        /// Создать выбор расходника на бросок
+        /// </summary>
+        /// <param name="context">Данные дуэли</param>
+        /// <returns>Состояние намерений бота на ход</returns>
+        public SelectionState BuildConsumableSelection(DuelContext context);
     }
 }

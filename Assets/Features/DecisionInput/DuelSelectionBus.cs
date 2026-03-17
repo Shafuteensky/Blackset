@@ -11,8 +11,8 @@ namespace Blackset.DecisionInput
     /// </remarks>
     public static class DuelSelectionBus
     {
-        public static event Action<string, string> DiceSelected;
-        public static event Action<string, string, ApplyTarget> ConsumableSelected;
+        public static event Action<string, SelectionState> DiceSelected;
+        public static event Action<string, SelectionState> ConsumableSelected;
         public static event Action PassRequested;
 
         /// <summary>
@@ -20,9 +20,9 @@ namespace Blackset.DecisionInput
         /// </summary>
         /// <param name="ownerParticipantId">Идентификатор участника, выбравшего дайс</param>
         /// <param name="diceId">Идентификатор выбранного дайса в сборк</param>
-        public static void PublishDiceSelected(string ownerParticipantId, string diceId)
+        public static void PublishDiceSelected(string ownerParticipantId, SelectionState selection)
         {
-            DiceSelected?.Invoke(ownerParticipantId, diceId);
+            DiceSelected?.Invoke(ownerParticipantId, selection);
         }
 
         /// <summary>
@@ -31,12 +31,9 @@ namespace Blackset.DecisionInput
         /// <param name="ownerParticipantId">Идентификатор участника, выбравшего дайс</param>
         /// <param name="consumableId">Идентификатор расходника</param>
         /// <param name="target">Цель применения</param>
-        public static void PublishConsumableSelected(
-            string ownerParticipantId,
-            string consumableId,
-            ApplyTarget target)
+        public static void PublishConsumableSelected(string ownerParticipantId, SelectionState selection)
         {
-            ConsumableSelected?.Invoke(ownerParticipantId, consumableId, target);
+            ConsumableSelected?.Invoke(ownerParticipantId, selection);
         }
         
         /// <summary>

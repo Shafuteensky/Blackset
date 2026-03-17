@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Blackset.Data.Registries;
+using Blackset.DecisionInput;
 using Blackset.Duel.Context;
 using Blackset.Duel.Participants;
-using Blackset.Duel.Targets;
 using Blackset.Inventories;
+using Blackset.Inventories.Cells;
 using Blackset.Opponents;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -35,10 +37,9 @@ namespace Blackset.Duel.Modules
             return declaredDice;
         }
         
-        public TurnParticipantState BuildIntentState(DuelContext context)
+        public SelectionState BuildDiceSelection(DuelContext context)
         {
-            TurnParticipantState intentState = new TurnParticipantState();
-            intentState.ResetForNewTurn();
+            SelectionState selection = new();
             DuelParticipantState bot = context.Participants[context.OpponentId];
             
             // Если хитрый - кидает другой дайс (не который объявил)
@@ -46,20 +47,33 @@ namespace Blackset.Duel.Modules
             if (Random.value < opponent.CunningLevel && 
                 TryGetRandomUnused(bot.Sets.DiceSetInventory, bot.FightState.DicesUsed, out string unusedDiceId))
             {
-                intentState.ChoseDice(unusedDiceId);
+                selection.SelectItem(unusedDiceId);
             }
             else
-                intentState.ChoseDice(declaredDice); 
+                selection.SelectItem(declaredDice);
             
-            // Случайный расходник на себя
+            SelectRandomParticipantTarget(context, selection);
+            SelectRandomDiceTarget(context, selection);
+            
+            return selection;
+        }
+
+        public SelectionState BuildConsumableSelection(DuelContext context)
+        {
+            SelectionState selection = new();
+            DuelParticipantState bot = context.Participants[context.OpponentId];
+            
+            // Случайный расходник на случайную цель
             bool consumableChosen = Random.value <= CONSUMABLE_USE_CHANCE;
             if (consumableChosen && 
                 TryGetRandomUnused(bot.Sets.ConsumableSetInventory, bot.FightState.ConsumablesUsed, out string unusedConsId))
             {
-                intentState.ChoseConsumable(unusedConsId, ApplyTarget.Self);
+                selection.SelectItem(unusedConsId);
+                SelectRandomParticipantTarget(context, selection);
+                SelectRandomDiceTarget(context, selection);
             }
             
-            return intentState;
+            return selection;
         }
 
         #region Internal
@@ -84,6 +98,23 @@ namespace Blackset.Duel.Modules
             resultKey = availableKeys[randomIndex];
 
             return true;
+        }
+
+        private void SelectRandomParticipantTarget(DuelContext context, SelectionState selection)
+        {
+            string randomParticipant = context.Participants.ElementAt(Random.Range(0, context.Participants.Count)).Key;
+            
+            selection.SelectTargetParticipant(randomParticipant);
+        }
+
+        private void SelectRandomDiceTarget(DuelContext context, SelectionState selection)
+        {
+            string randomParticipant = context.Participants.ElementAt(Random.Range(0, context.Participants.Count)).Key;
+            List<InventoryCell> participantSet = context.Participants[randomParticipant].Sets.DiceSetInventory.Data;
+            int randomDice = Random.Range(0, participantSet.Count);
+            string randomTargetDice = participantSet[randomDice].Id;
+            
+            selection.SelectTargetDice(randomTargetDice);
         }
         
         #endregion

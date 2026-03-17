@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Threading;
+using Blackset.DecisionInput;
 using Blackset.Duel.Context;
 using Blackset.Duel.Modules;
 using Blackset.Duel.Participants;
@@ -74,51 +75,62 @@ namespace Blackset.Duel.Sequence.States
         {
             try
             {
+                SelectionState playerSelection = new SelectionState();
+                SelectionState botSelection = new SelectionState();
+                
+                IBotDecisionSource botDecisionSource = modules.Get<IBotDecisionSource>();
                 IPlayerDecisionSource playerDecisionSource = modules.Get<IPlayerDecisionSource>();
                 playerDecisionSource.Initialize(presenter);
-                IBotDecisionSource botDecisionSource = modules.Get<IBotDecisionSource>();
 
+                TurnParticipantState botState = context.Participants[context.OpponentId].FightState.TurnState;
                 TurnParticipantState playerState = context.Participants[context.PlayerId].FightState.TurnState;
-                TurnParticipantState opponentState = context.Participants[context.OpponentId].FightState.TurnState;
+                
+                string playerDeclaration = string.Empty;
+                string botDeclaration = string.Empty;
                 
                 // Объявление дайса ————————————————————————————————————————————————————————————————————————————————————
                 
                 eventHub.Publish(new DeclarationStartedEvent());
                 
-                string botDeclaredDiceId = botDecisionSource.BuildDeclaration(context);
-                opponentState.DeclareDice(botDeclaredDiceId);
-                eventHub.Publish(new DeclaredDiceEvent(botDeclaredDiceId, context.OpponentId));
+                // Бот объявляет дайс
+                botDeclaration = botDecisionSource.BuildDeclaration(context);
+                botSelection.SelectItem(botDeclaration);
+                botState.DeclareDice(botSelection);
+                eventHub.Publish(new DeclaredDiceEvent(botDeclaration, context.OpponentId));
                 
-                string declaredDiceId = await playerDecisionSource.GetDeclaration(context, cancellationToken);
-                if (!playerState.HasPassed.Value)
+                // Игрок объявляет дайс
+                playerSelection = await playerDecisionSource.GetSelection(context, cancellationToken);
+                if (!playerState.HasPassed.Value) // Если не спасовал
                 {
-                    playerState.DeclareDice(declaredDiceId);
-                    eventHub.Publish(new DeclaredDiceEvent(declaredDiceId, context.PlayerId));
+                    playerDeclaration = playerSelection.SelectedItemId;
+                    playerState.DeclareDice(playerSelection);
+                    eventHub.Publish(new DeclaredDiceEvent(playerSelection.SelectedItemId, context.PlayerId));
                 }
                 
-                // Намерения ———————————————————————————————————————————————————————————————————————————————————————————
+                // Выбор дайса —————————————————————————————————————————————————————————————————————————————————————————
                 
                 eventHub.Publish(new PlanningStartedEvent());
 
-                TurnParticipantState botIntent = botDecisionSource.BuildIntentState(context);
-                opponentState.ApplyState(botIntent);
+                // Бот выбирает дайс
+                botSelection = botDecisionSource.BuildDiceSelection(context);
+                botState.SelectDice(botSelection);
                 
-                TurnParticipantState playerIntent;
+                // Игрок выбирает дайс
                 if (!playerState.HasPassed.Value)
                 {
-                    playerIntent = await playerDecisionSource.GetIntentState(context, cancellationToken);
+                    playerSelection = await playerDecisionSource.GetSelection(context, cancellationToken);
                 }
-                else playerIntent = playerState;
-                playerState.ApplyState(playerIntent);
+                else playerSelection = new SelectionState();
+                playerState.SelectDice(playerSelection);
 
                 // —————————————————————————————————————————————————————————————————————————————————————————————————————
 
                 // Зачет очков дуэли за честность
                 IDuelScoreResolver duelScoreResolver = modules.Get<IDuelScoreResolver>();
                 duelScoreResolver.ResolveHonesty(context.Participants[context.PlayerId], 
-                    declaredDiceId, playerIntent.ChosenDice.Value);
+                    playerDeclaration, playerState.SelectedDice.Value);
                 duelScoreResolver.ResolveHonesty(context.Participants[context.OpponentId], 
-                    botDeclaredDiceId, botIntent.ChosenDice.Value);
+                    botDeclaration, botState.SelectedDice.Value);
                 
                 planningCompleted = true;
                 eventHub.Publish(new PlanningCompletedEvent());

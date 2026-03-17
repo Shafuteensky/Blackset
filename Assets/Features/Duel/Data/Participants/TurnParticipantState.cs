@@ -1,4 +1,5 @@
 using System;
+using Blackset.DecisionInput;
 using Blackset.Duel.Targets;
 using Extensions.Log;
 using Extensions.Reactive;
@@ -19,7 +20,7 @@ namespace Blackset.Duel.Participants
         /// </summary>
         public bool AllActionsDone =>
             !String.IsNullOrEmpty(DeclaredDice.Value)
-            && !String.IsNullOrEmpty(ChosenDice.Value)
+            && !String.IsNullOrEmpty(DiceTarget.Value)
             && IsConsumableChosen.Value;
 
         /// <summary>
@@ -43,7 +44,15 @@ namespace Blackset.Duel.Participants
         /// <summary>
         /// Выбранный для броска в этом ходу дайс
         /// </summary>
-        public ReactiveProperty<string> ChosenDice { get; private set; } = new(string.Empty);
+        public ReactiveProperty<string> SelectedDice { get; private set; } = new(string.Empty);
+        /// <summary>
+        /// Участник-цель применения эффекта дайса
+        /// </summary>
+        public ReactiveProperty<string> DiceParticipantTarget { get; private set; } = new(string.Empty);
+        /// <summary>
+        /// Дайс-цель применения эффекта дайса
+        /// </summary>
+        public ReactiveProperty<string> DiceTarget { get; private set; } = new(string.Empty);
         
         /// <summary>
         /// Использован ли расходник в этот ход
@@ -52,11 +61,15 @@ namespace Blackset.Duel.Participants
         /// <summary>
         /// Выбранный для использования в этом ходу расходник
         /// </summary>
-        public ReactiveProperty<string> ChosenConsumable { get; private set; } = new(string.Empty);
+        public ReactiveProperty<string> SelectedConsumable { get; private set; } = new(string.Empty);
         /// <summary>
-        /// Цель применения расходника
+        /// Участник-цель применения эффекта расходника
         /// </summary>
-        public ReactiveProperty<ApplyTarget> ConsumableTarget { get; private set; } = new(ApplyTarget.None);
+        public ReactiveProperty<string> ConsumableParticipantTarget { get; private set; } = new(string.Empty);
+        /// <summary>
+        /// Дайс-цель применения эффекта расходника
+        /// </summary>
+        public ReactiveProperty<string> ConsumableTarget { get; private set; } = new(string.Empty);
 
         #region Применение данных
         
@@ -72,31 +85,14 @@ namespace Blackset.Duel.Participants
             DeclaredDice.Value = String.Empty;
             
             IsDiceChosen.Value = false;
-            ChosenDice.Value = String.Empty;
+            SelectedDice.Value = String.Empty;
+            DiceParticipantTarget.Value = String.Empty;
+            DiceTarget.Value = String.Empty;
                 
             IsConsumableChosen.Value = false;
-            ChosenConsumable.Value = String.Empty;
-            ConsumableTarget.Value = ApplyTarget.None;
-        }
-        
-        /// <summary>
-        /// Применить намерение на действие в ходе
-        /// </summary>
-        /// <param name="intentState">Состояние намерения</param>
-        public void ApplyState(TurnParticipantState intentState)
-        {
-            HasPassed.Value = intentState.HasPassed.Value;
-            
-            IsDiceDeclared = intentState.IsDiceDeclared;
-            if (!string.IsNullOrEmpty(intentState.DeclaredDice.Value))
-                DeclaredDice.Value = intentState.DeclaredDice.Value;
-            
-            IsDiceChosen.Value = intentState.IsDiceChosen.Value;
-            ChosenDice.Value = intentState.ChosenDice.Value;
-            
-            IsConsumableChosen.Value = intentState.IsConsumableChosen.Value;
-            ChosenConsumable.Value = intentState.ChosenConsumable.Value;
-            ConsumableTarget.Value = intentState.ConsumableTarget.Value;
+            SelectedConsumable.Value = String.Empty;
+            ConsumableParticipantTarget.Value = String.Empty;
+            ConsumableTarget.Value = String.Empty;
         }
         
         /// <summary>
@@ -105,7 +101,23 @@ namespace Blackset.Duel.Participants
         public TurnParticipantState Clone()
         {
             var clone = new TurnParticipantState();
-            clone.ApplyState(this);
+            
+            clone.HasPassed.Value = HasPassed.Value;
+            
+            clone.IsDiceDeclared = IsDiceDeclared;
+            if (!string.IsNullOrEmpty(DeclaredDice.Value))
+                clone.DeclaredDice.Value = DeclaredDice.Value;
+            
+            clone.IsDiceChosen.Value = IsDiceChosen.Value;
+            clone.SelectedDice.Value = SelectedDice.Value;
+            clone.DiceParticipantTarget.Value = DiceParticipantTarget.Value;
+            clone.DiceTarget.Value = DiceTarget.Value;
+            
+            clone.IsConsumableChosen.Value = IsConsumableChosen.Value;
+            clone.SelectedConsumable.Value = SelectedConsumable.Value;
+            clone.ConsumableParticipantTarget.Value = ConsumableParticipantTarget.Value;
+            clone.ConsumableTarget.Value = ConsumableTarget.Value;
+            
             return clone;
         }
         
@@ -125,37 +137,40 @@ namespace Blackset.Duel.Participants
         /// Отметка объявленного дайса
         /// </summary>
         /// <param name="diceId">Идентификатор дайса</param>
-        public void DeclareDice(string diceId)
+        public void DeclareDice(SelectionState selection)
         {
-            if (string.IsNullOrEmpty(diceId)) return;
+            if (!selection.IsItemSelected) return;
             
-            DeclaredDice.Value = diceId;
-            IsDiceDeclared.Value = true;
+            DeclaredDice.Value = selection.SelectedItemId;
+            IsDiceDeclared.Value = selection.IsItemSelected;
         }
 
         /// <summary>
         /// Отметка выбранного дайса
         /// </summary>
         /// <param name="diceId">Идентификатор дайса</param>
-        public void ChoseDice(string diceId)
+        public void SelectDice(SelectionState selection)
         {
-            if (string.IsNullOrEmpty(diceId)) return;
+            if (!selection.IsItemSelected) return;
             
-            ChosenDice.Value = diceId;
-            IsDiceChosen.Value = true;
+            IsDiceChosen.Value = selection.IsItemSelected;
+            SelectedDice.Value = selection.SelectedItemId;
+            DiceParticipantTarget.Value = selection.TargetParticipantId;
+            DiceTarget.Value = selection.TargetDiceId;
         }
 
         /// <summary>
         /// Отметка выбранного расходника
         /// </summary>
         /// <param name="consumableId">Идентификатор расходника</param>
-        public void ChoseConsumable(string consumableId, ApplyTarget target = ApplyTarget.Self)
+        public void SelectConsumable(SelectionState selection)
         {
-            ServiceGuard.NotNullOrEmpty(consumableId, nameof(consumableId));
+            if (!selection.IsItemSelected) return;
             
-            ConsumableTarget.Value = target;
-            ChosenConsumable.Value = consumableId;
-            IsConsumableChosen.Value = true;
+            IsConsumableChosen.Value = selection.IsItemSelected;
+            SelectedConsumable.Value = selection.SelectedItemId;
+            ConsumableParticipantTarget.Value = selection.TargetParticipantId;
+            ConsumableTarget.Value = selection.TargetDiceId;
         }
 
         #endregion

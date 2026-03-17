@@ -17,18 +17,14 @@ namespace Blackset.Duel.Modules
         menuName = "Blackset/Duel/Modules/" + nameof(PlayerDecisionSource_Input))]
     public class PlayerDecisionSource_Input : BaseDuelModule, IPlayerDecisionSource
     {
+        private DuelContext duelContext;
         private DuelInputPresenter presenter;
 
-        private string selectedDiceId;
-        private TurnParticipantState currentIntent;
+        private UniTaskCompletionSource<SelectionState> inputCompletionSource;
 
-        private UniTaskCompletionSource<string> declarationTcs;
-        private UniTaskCompletionSource<TurnParticipantState> intentTcs;
+        private bool awaitingInput;
 
-        private bool declarationAwaiting;
-        private bool intentAwaiting;
-
-        private DuelContext duelContext;
+        private SelectionState selection = new();
 
         /// <summary>
         /// Инициализация зависимостей
@@ -39,135 +35,73 @@ namespace Blackset.Duel.Modules
             isInitialized = true;
 
             presenter.SetItemCallbacks(
-                HandleDiceSelected,
-                HandleConsumableSelected,
+                HandleInput,
+                HandleInput,
                 HandlePassRequested);
         }
 
-        /// <summary>
-        /// Получить объявление дайса от игрока
-        /// </summary>
-        public UniTask<string> GetDeclaration(DuelContext context, CancellationToken ct)
-        {
-            ServiceGuard.NotNull(context, nameof(context));
-            ServiceGuard.NotNull(presenter, nameof(presenter));
-            
-            duelContext = context;
-                
-            selectedDiceId = string.Empty;
-            declarationAwaiting = true;
-            declarationTcs = new UniTaskCompletionSource<string>();
-
-            ct.Register(CancelDeclaration);
-
-            presenter.BeginDeclaration(context.PlayerId);
-
-            return declarationTcs.Task;
-        }
-
-        /// <summary>
-        /// Получить намерения игрока на ход
-        /// </summary>
-        public UniTask<TurnParticipantState> GetIntentState(DuelContext context, CancellationToken ct)
-        {
-            ServiceGuard.NotNull(context, nameof(context));
-            ServiceGuard.NotNull(presenter, nameof(presenter));
-
-            duelContext = context;
-            
-            currentIntent = new TurnParticipantState();
-            currentIntent.ResetForNewTurn();
-
-            intentAwaiting = true;
-            intentTcs = new UniTaskCompletionSource<TurnParticipantState>();
-
-            ct.Register(CancelIntent);
-
-            presenter.BeginIntentSelection(context.PlayerId);
-
-            return intentTcs.Task;
-        }
-
-        #region Обработка
+        #region Ввод
         
-        private void HandleDiceSelected(string diceId)
+        /// <summary>
+        /// Получить ввод выбора от игрока
+        /// </summary>
+        public UniTask<SelectionState> GetSelection(DuelContext context, CancellationToken cancellationToken)
         {
-            if (declarationAwaiting)
-            {
-                selectedDiceId = diceId;
-                CompleteDeclaration();
-                return;
-            }
+            ServiceGuard.NotNull(context, nameof(context));
+            ServiceGuard.NotNull(presenter, nameof(presenter));
+            
+            duelContext = context;
 
-            if (!intentAwaiting) return;
+            selection = new SelectionState();
+            inputCompletionSource = new UniTaskCompletionSource<SelectionState>();
+            awaitingInput = true;
 
-            currentIntent.ChoseDice(diceId);
-            CompleteIntent();
+            cancellationToken.Register(CancelInput);
+
+            presenter.BeginSelectionInput(context.PlayerId);
+
+            return inputCompletionSource.Task;
         }
+        
+        #endregion
 
-        private void HandleConsumableSelected(string consumableId, ApplyTarget target)
+        #region Обработка ввода
+        
+        private void HandleInput(SelectionState inputSelection)
         {
-            if (!intentAwaiting) return;
-            currentIntent.ChoseConsumable(consumableId, target);
+            if (!awaitingInput) return;
+            
+            selection = inputSelection;
+            CompleteInput(selection);
         }
 
         private void HandlePassRequested()
         {
             duelContext.Participants[duelContext.PlayerId].FightState.TurnState.MarkPassed();
             
-            if (declarationAwaiting)
+            if (awaitingInput)
             {
-                CompleteDeclarationPass();
-                return;
+                SelectionState emptySelection = new SelectionState();
+                CompleteInput(emptySelection);
             }
-
-            if (intentAwaiting) CompleteIntentPass();
         }
+        
+        #endregion
 
-        private void CompleteDeclaration()
+        #region Завершение ввода
+        
+        private void CompleteInput(SelectionState inputSelection)
         {
-            declarationAwaiting = false;
+            awaitingInput = false;
             presenter.EndInput();
-            declarationTcs.TrySetResult(selectedDiceId);
+            inputCompletionSource.TrySetResult(selection);
         }
-
-        private void CompleteDeclarationPass()
+        
+        private void CancelInput()
         {
-            declarationAwaiting = false;
+            awaitingInput = false;
             presenter.EndInput();
-            declarationTcs.TrySetResult(string.Empty);
-        }
-
-        private void CancelDeclaration()
-        {
-            declarationAwaiting = false;
-            presenter.EndInput();
-            declarationTcs.TrySetCanceled();
-        }
-
-        private void CompleteIntent()
-        {
-            intentAwaiting = false;
-            presenter.EndInput();
-            intentTcs.TrySetResult(currentIntent);
-        }
-
-        private void CompleteIntentPass()
-        {
-            TurnParticipantState passIntent = new TurnParticipantState();
-            passIntent.ResetForNewTurn();
-            passIntent.MarkPassed();
-
-            intentAwaiting = false;
-            presenter.EndInput();
-            intentTcs.TrySetResult(passIntent);
-        }
-
-        private void CancelIntent()
-        {
-            intentAwaiting = false;
-            presenter.EndInput();
-            intentTcs.TrySetCanceled();
+            inputCompletionSource.TrySetCanceled();
         }
         
         #endregion

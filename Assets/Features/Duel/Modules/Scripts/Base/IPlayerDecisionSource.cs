@@ -12,31 +12,20 @@ namespace Blackset.Duel.Modules
     public interface IPlayerDecisionSource : IDuelModuleInterface
     {
         /// <summary>
-        /// Запрос на объявление дайса на бросок
+        /// Запрос на ввод выбора игрока
         /// </summary>
         /// <remarks>
         /// На этом этапе происходит ожидание ввода от игрока в UI
         /// </remarks>
-        /// <param name="context">Дунные дуэли</param>
-        /// <param name="ct">Токен отмены ожидания</param>
+        /// <param name="context">Данные дуэли</param>
+        /// <param name="cancellationToken">Токен отмены ожидания</param>
         /// <returns>Задача с ожиданием результата выбора</returns>
-        public UniTask<string> GetDeclaration(DuelContext context, CancellationToken ct);
-        /// <summary>
-        /// Запрос на создание данных о намерении игрока
-        /// </summary>
-        /// <remarks>
-        /// На этом этапе происходит ожидание ввода от игрока в UI
-        /// </remarks>
-        /// <param name="context">Дунные дуэли</param>
-        /// <param name="ct">Токен отмены ожидания</param>
-        /// <returns>Состояние намерений бота на ход</returns>
-        public UniTask<TurnParticipantState> GetIntentState(DuelContext context, CancellationToken ct);
+        public UniTask<SelectionState> GetSelection(DuelContext context, CancellationToken cancellationToken);
 
         /// <summary>
         /// Инициализация элементов источника
         /// </summary>
         /// <param name="newPresenter">UI-презентер</param>
         public void Initialize(DuelInputPresenter newPresenter);
-
     }
 }

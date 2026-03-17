@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Extensions.Reactive;
+using UnityEngine;
 
 namespace Blackset.Duel.Participants
 {

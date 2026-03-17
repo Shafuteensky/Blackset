@@ -1,5 +1,4 @@
 using Blackset.Data.Items.Visual;
-using Blackset.Duel.Targets;
 using Extensions.Log;
 using Blackset.Inventories.Scripts.Items;
 using UnityEngine;
@@ -16,6 +15,8 @@ namespace Blackset.DecisionInput
         [SerializeField] private ItemClass choiceType;
 
         private BaseVisual baseVisual;
+        
+        SelectionState selection = new SelectionState();
 
         private void Awake()
         {
@@ -28,17 +29,15 @@ namespace Blackset.DecisionInput
             {
                 case ItemClass.Dice:
                 {
-                    DuelSelectionBus.PublishDiceSelected(
-                        baseVisual.OwnerParticipantId,
-                        baseVisual.ItemId);
+                    selection = new SelectionState(baseVisual.ItemId);
+                    DuelSelectionBus.PublishDiceSelected(baseVisual.OwnerParticipantId, selection);
                     break;
                 }
                 case ItemClass.Consumable:
                 {
-                    DuelSelectionBus.PublishConsumableSelected(
-                        baseVisual.OwnerParticipantId,
-                        baseVisual.ItemId,
-                        ApplyTarget.Self); // TODO Заменить на выбор применения при необходимости (расходник или особый дайс)
+                    selection = new SelectionState(baseVisual.ItemId);
+                    DuelSelectionBus.PublishConsumableSelected(baseVisual.OwnerParticipantId, selection); 
+                    // TODO Заменить на выбор применения при необходимости (расходник или особый дайс)
                     break;
                 }
                 default:

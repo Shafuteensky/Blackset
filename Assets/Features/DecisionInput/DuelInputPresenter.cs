@@ -10,8 +10,8 @@ namespace Blackset.DecisionInput
     /// </summary>
     public class DuelInputPresenter : MonoBehaviour
     {
-        private Action<string> onDiceSelected;
-        private Action<string, ApplyTarget> onConsumableSelected;
+        private Action<SelectionState> onDiceSelected;
+        private Action<SelectionState> onConsumableSelected;
         private Action onPassRequested;
 
         private InputMode currentMode;
@@ -35,8 +35,8 @@ namespace Blackset.DecisionInput
         /// Зарегистрировать обработчики выбора
         /// </summary>
         public void SetItemCallbacks(
-            Action<string> newOnDiceSelected,
-            Action<string, ApplyTarget> newOnConsumableSelected,
+            Action<SelectionState> newOnDiceSelected,
+            Action<SelectionState> newOnConsumableSelected,
             Action newOnPassRequested)
         {
             onDiceSelected = newOnDiceSelected;
@@ -49,7 +49,7 @@ namespace Blackset.DecisionInput
         /// <summary>
         /// Разрешить объявление дайса
         /// </summary>
-        public void BeginDeclaration(string participantId)
+        public void BeginSelectionInput(string participantId)
         {
             activeParticipantId = participantId;
             currentMode = InputMode.Declaration;
@@ -85,18 +85,18 @@ namespace Blackset.DecisionInput
 
         #region Отправка запросов
         
-        private void HandleDiceSelected(string ownerParticipantId, string diceId)
+        private void HandleDiceSelected(string ownerParticipantId, SelectionState selection)
         {
-            if (CanAccept(ownerParticipantId)) onDiceSelected?.Invoke(diceId);
+            if (!CanAccept(ownerParticipantId)) return;
+            
+            onDiceSelected?.Invoke(selection);
         }
 
-        private void HandleConsumableSelected(
-            string ownerParticipantId,
-            string consumableId,
-            ApplyTarget target)
+        private void HandleConsumableSelected(string ownerParticipantId, SelectionState selection)
         {
             if (!CanAccept(ownerParticipantId) || currentMode != InputMode.Intent) return;
-            onConsumableSelected?.Invoke(consumableId, target);
+            
+            onConsumableSelected?.Invoke(selection);
         }
         
         private void HandlePassRequested()
@@ -108,8 +108,10 @@ namespace Blackset.DecisionInput
 
         private bool CanAccept(string ownerParticipantId)
         {
-            if (currentMode == InputMode.None || string.IsNullOrEmpty(activeParticipantId)) return false;
-            return activeParticipantId == ownerParticipantId;
+            if (currentMode == InputMode.None || string.IsNullOrEmpty(activeParticipantId)) 
+                return false;
+            else 
+                return activeParticipantId == ownerParticipantId;
         }
     }
 }
