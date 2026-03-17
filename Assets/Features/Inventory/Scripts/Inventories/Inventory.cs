@@ -210,6 +210,8 @@ namespace Blackset.Inventories
                     remaining = presentCell.IncreaseAmount(remaining, maxCellAmount);
                     onCellUpdated?.Invoke(presentCell.Id);
                     cellUpdated = true;
+                    
+                    presentCell.MarkNew();
                 }
                 if (cellUpdated) MarkDirty();
             }
@@ -233,6 +235,8 @@ namespace Blackset.Inventories
                 Add(newCell, targetIndex); // MarkDirty происходит внутри
                 remaining -= chunk;
                 onCellAdded?.Invoke(newCell);
+                
+                newCell.MarkNew();
             }
 
             onItemAdded?.Invoke(newItem, amount);
@@ -571,7 +575,7 @@ namespace Blackset.Inventories
         #endregion
 
         #region Манипуляции ячейками
-        
+
         protected InventoryCell CreateCell(ItemContext item, int amount, bool isDefault = false)
         {
             if (amount > maxCellAmount) ServiceDebug.LogWarning("Создана ячейка с количеством, больше дозволенного максимума");

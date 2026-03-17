@@ -53,6 +53,10 @@ namespace Blackset.Inventories.Cells
         /// Является ли ячейка дефолтной
         /// </summary>
         public bool IsDefault { get => isDefault; private set => isDefault = value; }
+        /// <summary>
+        /// Новая ли ячейка (добавлен ли нвоый предмет)
+        /// </summary>
+        public bool IsNew { get => isNew; private set => isNew = value; }
         
         /// <summary>
         /// Данные о предмете в ячейке
@@ -65,6 +69,7 @@ namespace Blackset.Inventories.Cells
 
         protected bool isEmpty;
         protected bool isDefault;
+        protected bool isNew;
         
         public ItemContext item;
         public int itemAmount;
@@ -81,6 +86,7 @@ namespace Blackset.Inventories.Cells
             
             this.isEmpty = isEmpty;
             this.isDefault = isDefault;
+            isNew = false;
             
             this.item = item;
             this.itemAmount = itemAmount;
@@ -200,6 +206,20 @@ namespace Blackset.Inventories.Cells
             // TODO добавить проверку на редкость
         }
         
+        #endregion
+
+        #region Состояние новизны
+
+        /// <summary>
+        /// Отметить ячейку как новую
+        /// </summary>
+        public void MarkNew() => isNew = true;
+
+        /// <summary>
+        /// Отметить ячейку как просмотренную
+        /// </summary>
+        public void MarkSeen() => isNew = false;
+
         #endregion
         
         #region Internal

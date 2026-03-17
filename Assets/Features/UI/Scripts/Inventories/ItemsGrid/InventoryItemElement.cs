@@ -18,7 +18,7 @@ namespace Blackset.UI.InventoryManagement
     /// Элемент UI фабрики содержимого инвентаря
     /// </summary>
     public sealed class InventoryItemElement : ContextIdHolder<Inventory, InventoryCell>, 
-        IDragHandler, IDropHandler, IBeginDragHandler, IEndDragHandler
+        IDragHandler, IDropHandler, IBeginDragHandler, IEndDragHandler, IPointerEnterHandler
     {
         /// <summary>
         /// Canvas-группа
@@ -30,6 +30,8 @@ namespace Blackset.UI.InventoryManagement
         private Image itemIconImage;
         [SerializeField]
         private Image setImage;
+        [SerializeField]
+        private GameObject newItemIndicator;
             
         [Header("Текст"), Space]
         [SerializeField]
@@ -87,6 +89,17 @@ namespace Blackset.UI.InventoryManagement
 
         #endregion
 
+        #region Pointer events
+
+        public void OnPointerEnter(PointerEventData eventData)
+        {
+            if (string.IsNullOrEmpty(EntryId)) return;
+            
+            UpdateNewItemIndicator(DataContainer.GetById(EntryId), true);
+        }
+
+        #endregion
+        
         /// <summary>
         /// Инициализация элемента
         /// </summary>
@@ -129,6 +142,8 @@ namespace Blackset.UI.InventoryManagement
                 
                 SetAmountText(cell);
                 SetItemPriceText(cellItem, cellItemTypeData);
+                
+                UpdateNewItemIndicator(cell);
 
                 // Параметры для EffectingItem
                 if (cellItem is not EffectingItem effectingItem) return;
@@ -204,6 +219,16 @@ namespace Blackset.UI.InventoryManagement
         {
             if (budgetText == null) return;
             budgetText.text = cellData.BudgetPrice.ToString();
+        }
+
+        private void UpdateNewItemIndicator(InventoryCell cell, bool markSeen = false)
+        {
+            if (newItemIndicator == null) return;
+
+            if (cell == null) return;
+            
+            if (markSeen) cell.MarkSeen();
+            newItemIndicator.SetActive(cell.IsNew);
         }
         
         #endregion
