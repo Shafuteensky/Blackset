@@ -37,6 +37,11 @@ namespace Extensions.Data.InMemoryData
 
         #endregion
 
+        /// <summary>
+        /// Содержит ли хранилище данные
+        /// </summary>
+        public bool IsEmpty => Data.Count == 0;
+        
         // Кэш-индекс данных для моментального доступа по идентификатору 
         protected Dictionary<string, TData> IndexById
         {

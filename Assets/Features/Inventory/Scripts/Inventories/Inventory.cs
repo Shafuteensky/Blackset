@@ -35,6 +35,11 @@ namespace Blackset.Inventories
         /// <param name="string">Идентификатор добавленной ячейки</param>
         public event Action<InventoryCell> onCellAdded;
         /// <summary>
+        /// Событие добавления новых предметов
+        /// </summary>
+        /// <param name="string">Идентификатор добавленной ячейки</param>
+        public event Action<ItemContext, int> onItemAdded;
+        /// <summary>
         /// Событие удаления ячейки
         /// </summary>
         /// <param name="int">Индекс удаленной ячейки</param>
@@ -230,6 +235,8 @@ namespace Blackset.Inventories
                 onCellAdded?.Invoke(newCell);
             }
 
+            onItemAdded?.Invoke(newItem, amount);
+            
             FillDefaultSlotsIfNeeded();
             return remaining;
         }

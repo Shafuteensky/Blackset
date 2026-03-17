@@ -996,6 +996,65 @@ ReflectionProbe:
   m_UseOcclusionCulling: 1
   m_Importance: 1
   m_CustomBakedTexture: {fileID: 0}
+--- !u!1 &222405584
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 222405585}
+  - component: {fileID: 222405587}
+  - component: {fileID: 222405586}
+  m_Layer: 0
+  m_Name: New Items Presentation
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &222405585
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 222405584}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1936877674}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &222405586
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 222405584}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 863cd563b5204217887a36a18daf165f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Blackset.Shop.AddedItemsWindowController
+  showOnEnable: 1
+  windowID: {fileID: 11400000, guid: 2ad7d848644627142bb2427508bfd84d, type: 2}
+--- !u!114 &222405587
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 222405584}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c56d02ed3ee4f84a7cfbd41520b4373, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Blackset.Shop.NewSecretItemMemorizer
 --- !u!1001 &227706958
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1586,6 +1645,51 @@ Transform:
   - {fileID: 240122749}
   m_Father: {fileID: 1936877674}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &436862521
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 436862522}
+  - component: {fileID: 436862523}
+  m_Layer: 0
+  m_Name: Shop Controller
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &436862522
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 436862521}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2136209336}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &436862523
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 436862521}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d2bcfa2c26d044dfae823b5ed90a9617, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Blackset.Shop.ShopController
+  dontDestroyOnLoad: 0
 --- !u!1 &447225710
 GameObject:
   m_ObjectHideFlags: 0
@@ -3153,6 +3257,7 @@ MonoBehaviour:
   - {fileID: 7304694210355963892, guid: a25983c86a7143442905ee760d526aca, type: 3}
   - {fileID: 7304694210355963892, guid: d456fbad8a5198d43a1faa26eccd105c, type: 3}
   - {fileID: 7304694210355963892, guid: 85af30fc106da6e44b96c15860fa8630, type: 3}
+  - {fileID: 7304694210355963892, guid: bb25359de75488d43b35eb5f35744d89, type: 3}
   root: {fileID: 2056406639}
   openedUIWindows: []
   focusedWindow: {fileID: 0}
@@ -4593,53 +4698,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1181607787
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1181607788}
-  - component: {fileID: 1181607789}
-  m_Layer: 0
-  m_Name: New Item Show Controller
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1181607788
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1181607787}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 2136209336}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1181607789
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1181607787}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 863cd563b5204217887a36a18daf165f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Features.Shop.NewItemShowController
-  windowID: {fileID: 11400000, guid: 6d862b6db18cc724eb3f454483837fb9, type: 2}
-  playerDicesInventory: {fileID: 11400000, guid: e067d24e7d7288947bf92dca08496108, type: 2}
-  playerConsumablesInventory: {fileID: 11400000, guid: 7ef245ecadf41734eb1ebc32e905b695, type: 2}
 --- !u!1 &1186030841
 GameObject:
   m_ObjectHideFlags: 0
@@ -6261,9 +6319,9 @@ MonoBehaviour:
   nameText: {fileID: 1817391912}
   descriptionText: {fileID: 1817391911}
   moneyText: {fileID: 1817391916}
-  dicePanel: {fileID: 1817391915}
-  diceImage: {fileID: 1817391914}
-  diceText: {fileID: 1817391913}
+  itemPanel: {fileID: 1817391915}
+  itemImage: {fileID: 1817391914}
+  itemText: {fileID: 1817391913}
 --- !u!1 &1802786221
 GameObject:
   m_ObjectHideFlags: 0
@@ -6876,6 +6934,7 @@ Transform:
   - {fileID: 956555615}
   - {fileID: 2136209336}
   - {fileID: 113410038}
+  - {fileID: 222405585}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1959217870
@@ -8790,8 +8849,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 436862522}
   - {fileID: 678539749}
-  - {fileID: 1181607788}
   m_Father: {fileID: 1936877674}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &2146443525

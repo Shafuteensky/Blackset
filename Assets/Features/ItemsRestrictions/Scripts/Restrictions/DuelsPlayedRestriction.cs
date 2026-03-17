@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Blackset.ItemsRestrictions
 {
     [CreateAssetMenu(
-        menuName = "Items/Restrictions/Duels Played Restriction",
+        menuName = "Blackset/Items/Restrictions/Duels Played Restriction",
         fileName = "ItemRestriction_DuelsPlayed")]
     public sealed class DuelsPlayedRestriction : ItemRestriction
     {

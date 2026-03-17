@@ -36,7 +36,7 @@ namespace Extensions.Data.InMemoryData
         [Header("Сохранение данных контейнера"), Space]
         [SerializeField]
         protected bool autoSave = true;
-
+        
         /// <summary>
         /// Хранимые данные
         /// </summary>

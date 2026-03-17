@@ -656,6 +656,7 @@ MonoBehaviour:
   <ProgressionConfig>k__BackingField: {fileID: 11400000, guid: b82e714e4e0cf474da30845cab98dacf, type: 2}
   <RewardConfig>k__BackingField: {fileID: 11400000, guid: 42bf43b34bf8cf24bbbb6ad3da8dc965, type: 2}
   <DuelScoreConfig>k__BackingField: {fileID: 11400000, guid: 8a65466d807bacf4784bde99d58a8534, type: 2}
+  <ShopConfig>k__BackingField: {fileID: 11400000, guid: 289ef206fdd28c242bd5aea1988773a9, type: 2}
   <PlayerDataFacade>k__BackingField: {fileID: 11400000, guid: 2c23989d68545684e9ab72265b43e0bc, type: 2}
   <NewItemsPresenterInventory>k__BackingField: {fileID: 11400000, guid: ea3483cb4ac20004f8292561f14c5f98, type: 2}
   <Dices>k__BackingField: {fileID: 11400000, guid: ed018a7561b12ba4f96674954885bfdc, type: 2}

@@ -6,6 +6,7 @@ using Blackset.Inventories.Items;
 using Blackset.Opponents;
 using Blackset.Player;
 using Blackset.Rewards;
+using Blackset.Shop;
 using Blackset.Storms;
 using Extensions.Log;
 using Extensions.Singleton;
@@ -41,6 +42,13 @@ namespace Blackset.Data.Registries
         [field: SerializeField]
         [field: Tooltip("Конфигурация баланса заработка очков дуэли")]
         public DuelScoreConfig DuelScoreConfig { get; private set; }
+        
+        /// <summary>
+        /// Конфигурация баланса магазина
+        /// </summary>
+        [field: SerializeField]
+        [field: Tooltip("Конфигурация баланса магазина")]
+        public ShopConfig ShopConfig { get; private set; }
         
         // ==============================================
         [field: Header("Постоянные данные игрока"), Space]

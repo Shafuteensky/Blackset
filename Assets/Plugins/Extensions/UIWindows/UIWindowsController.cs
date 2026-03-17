@@ -57,9 +57,9 @@ namespace Extensions.UIWindows
 
                     focusedWindow = window;
                     focusedWindow.gameObject.SetActive(true); 
+                    focusedWindow.transform.SetAsLastSibling();
                     
-                    if (setPrevious)
-                        focusedWindow.SetPreviousWindow(previousWindow);
+                    if (setPrevious) focusedWindow.SetPreviousWindow(previousWindow);
                     
                     return;
                 }
@@ -95,13 +95,14 @@ namespace Extensions.UIWindows
 
         private void OpenNewWindow(UIWindow window)
         {
-            if (transitionInProgress)
-                return;
+            if (transitionInProgress) return;
             
             previousWindow = focusedWindow?.Id;
-            focusedWindow = GameObject.Instantiate(window.gameObject, root).GetComponent<UIWindow>();
-            if (previousWindow)
-                focusedWindow.SetPreviousWindow(previousWindow);
+            focusedWindow = Instantiate(window.gameObject, root).GetComponent<UIWindow>();
+            
+            if (previousWindow) focusedWindow.SetPreviousWindow(previousWindow);
+            
+            focusedWindow.transform.SetAsLastSibling();
             openedUIWindows.Add(focusedWindow);
         }
     }
