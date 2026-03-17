@@ -2,8 +2,10 @@ using System.Collections.Generic;
 using Blackset.Data;
 using Blackset.Data.Registries;
 using Blackset.Duel.Requests;
+using Blackset.Inventories;
 using Blackset.Inventories.Cells;
 using Blackset.Opponents;
+using Blackset.Player;
 using UnityEngine;
 
 namespace Blackset.Duel.Modules
@@ -18,16 +20,18 @@ namespace Blackset.Duel.Modules
     {
         public DuelRewards BuildReward(RewardRequest request)
         {
-            // Опыт
+            // Опыт (при поражении поощрительный)
             GameData gameData = GameData.Instance;
             OpponentData contractOpponent = gameData.GetOpponent(request.Contract.OpponentId);
             int earnedExperience = gameData.ProgressionConfig.GetBattleExperienceReward(request.IsWin, contractOpponent);
             
-            // Валюта
+            // Валюта (при поражении поощрительный)
             int earnedCurrency = gameData.RewardConfig.EvaluateMoney(request.IsWin, contractOpponent);
             
-            // Предметы
-            List<ItemContext> itemRewards = new List<ItemContext> { request.Contract.ItemReward };
+            // Предметы (только при победе)
+            List<ItemContext> itemRewards = new List<ItemContext>();
+            if (request.IsWin)
+                itemRewards.Add(request.Contract.ItemReward);
             
             DuelRewards result = new(earnedExperience, earnedCurrency, itemRewards );
             
@@ -36,12 +40,13 @@ namespace Blackset.Duel.Modules
 
         public void ApplyResult(DuelRewards result)
         {
-            GameData.Instance.PlayerDataFacade.MetaData.AddExperience(result.ExpDelta);
+            PlayerDataFacade playerData = GameData.Instance.PlayerDataFacade;
+            playerData.MetaData.AddExperience(result.ExpDelta);
             
-            GameData.Instance.PlayerDataFacade.MetaData.AddMoney(result.CurrencyDelta);
+            playerData.MetaData.AddMoney(result.CurrencyDelta);
             
             foreach (ItemContext item in result.Items)
-                GameData.Instance.PlayerDataFacade.Inventory.AddItem(item);
+                playerData.Inventory.AddItem(item);
         }
     }
 }
