@@ -56,6 +56,20 @@ namespace Blackset.Duel.Modules
             }
         }
 
+        public void ResolveCrit(DuelParticipantState participant, bool isCrit)
+        {
+            if (!isCrit) return;
+            
+            participant.DuelScore.Value += duelScoreConfig.Precision.diceCriticalScore;
+        }
+
+        public void ResolveExactTargetHit(DuelParticipantState participant, bool isCrit)
+        {
+            if (!isCrit) return;
+            
+            participant.DuelScore.Value += duelScoreConfig.Precision.exactTargetZoneHitScore;
+        }
+
         public void ResolveHonesty(DuelParticipantState participant, string declared, string chosen)
         {
             int score = 0;
@@ -67,21 +81,18 @@ namespace Blackset.Duel.Modules
             participant.DuelScore.Value += Mathf.Max(0, score);
         }
 
-        public void ResolveCrit(DuelParticipantState participant, bool isCrit)
+        public void ResolveSuccessfulBluff(DuelParticipantState participant, bool isCrit)
         {
             if (!isCrit) return;
             
-            int score = 0;
-            score += duelScoreConfig.Precision.diceCriticalScore;
-
-            participant.DuelScore.Value += Mathf.Max(0, score);
+            participant.DuelScore.Value += duelScoreConfig.Declaration.successfulBluffScore;
         }
 
-        // TODO Рассчитать очки за блеф
-        // duelScoreConfig.Declaration.successfulBluffScore;
-        // duelScoreConfig.Declaration.caughtEnemyBluffScore;
-        
-        // TODO Рассчитать очки за удачу
-        // duelScoreConfig.Precision.exactTargetZoneHitScore;
+        public void ResolveCaughtBluff(DuelParticipantState participant, bool isCrit)
+        {
+            if (!isCrit) return;
+            
+            participant.DuelScore.Value += duelScoreConfig.Declaration.caughtEnemyBluffScore;
+        }
     }
 }
