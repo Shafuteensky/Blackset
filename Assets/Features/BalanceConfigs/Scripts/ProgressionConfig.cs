@@ -33,6 +33,8 @@ namespace Features.Progression
         
         [SerializeField]
         private int levelCap;
+        
+        [Space]
         [SerializeField]
         private ExperienceFormulaAB experienceFormula = new ExperienceFormulaAB
         {
@@ -60,17 +62,16 @@ namespace Features.Progression
             winModifier = 1f,
             loseModifier = 0.75f
         };
-        [SerializeField]
-        private ModifiersWeight modifiersWeight = new ModifiersWeight
-        {
-            opponentModifierWeight = 1f
-        };
+        
+        [Space]
         [SerializeField]
         private RewardsMultipliers rewardsMultipliers = new RewardsMultipliers
         {
             leagueMultiplier = 1f,
             modeMultiplier = 1f
         };
+        
+        [Space]
         [SerializeField]
         private OpponentDifficultyMultipliers opponentDifficultyMultipliers = new OpponentDifficultyMultipliers
         {
@@ -78,7 +79,8 @@ namespace Features.Progression
             masteryWeight = 1f,
             cunningWeight = 1f,
             minMultiplier = 0.8f,
-            maxMultiplier = 1.4f
+            maxMultiplier = 1.4f,
+            sumModifierWeight = 1f 
         };
 
         [Header("Лиги (WIP)"), Space]
@@ -201,7 +203,7 @@ namespace Features.Progression
             mult *= Mathf.Max(0f, rewardsMultipliers.modeMultiplier) * Mathf.Max(0f, mode);
 
             // Модификатор от сложности соперника
-            mult *= GetOpponentDifficultyMultiplier(opponent) * modifiersWeight.opponentModifierWeight;
+            mult *= GetOpponentDifficultyMultiplier(opponent) * opponentDifficultyMultipliers.sumModifierWeight;
 
             int value = Mathf.RoundToInt(baseReward * mult);
             if (value < 0) value = 0;
@@ -278,17 +280,20 @@ namespace Features.Progression
         [Serializable]
         public struct OpponentDifficultyMultipliers
         {
-            [Min(0f)]
+            [Range(0f, 2f)]
             public float buildValueWeight;
-            [Min(0f)]
+            [Range(0f, 2f)]
             public float masteryWeight;
-            [Min(0f)]
+            [Range(0f, 2f)]
             public float cunningWeight;
 
-            [Min(0f)]
+            [Range(0f, 2f)]
             public float minMultiplier;
-            [Min(0f)]
+            [Range(0f, 2f)]
             public float maxMultiplier;
+            
+            [Range(0f, 2f)]
+            public float sumModifierWeight;
         }
 
         [Serializable]
@@ -314,9 +319,11 @@ namespace Features.Progression
         {
             [Min(0)]
             public int startBudget;
+            [Min(0)]
             public int budgetPerLevel;
             [Min(1)]
             public int milestoneLevelStep;
+            [Min(0)]
             public int milestoneBonus;
         }
 
@@ -325,25 +332,18 @@ namespace Features.Progression
         {
             [Min(0)]
             public int participationBonus;
-            [Min(0)]
+            [Range(0f, 2f)]
             public float winModifier;
-            [Min(0)]
+            [Range(0f, 2f)]
             public float loseModifier;
-        }
-
-        [Serializable]
-        public struct ModifiersWeight
-        {
-            [Min(0)]
-            public float opponentModifierWeight;
         }
 
         [Serializable]
         public struct RewardsMultipliers
         {
-            [Min(0f)]
+            [Range(0f, 2f)]
             public float leagueMultiplier;
-            [Min(0f)]
+            [Range(0f, 2f)]
             public float modeMultiplier;
         }
 

@@ -329,7 +329,7 @@ MonoBehaviour:
           iconNameOrGuid: DebuggerEnabled
           isIconRecursive: 0
           isColorRecursive: 0
-        - colorIndex: 1
+        - colorIndex: 0
           iconNameOrGuid: DebuggerEnabled
           isIconRecursive: 0
           isColorRecursive: 0

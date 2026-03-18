@@ -30,19 +30,6 @@ namespace Blackset.Rewards
         protected ScoreWeights scoreWeights = new ScoreWeights
         {
             opponentDifficultyWeight = 1f,
-            unusedItemsWeight = 1f
-        };
-
-        [Header("Модификаторы от неиспользованных предметов"), Space]
-        
-        [SerializeField]
-        protected UnusedBonus unusedBonus = new UnusedBonus
-        {
-            unusedDiceMoney = 0,
-            unusedConsumableMoney = 0,
-            unusedDiceScore = 1,
-            unusedConsumableScore = 1,
-            totalCap = 999
         };
         
         [Header("Наградная валюта"), Space]
@@ -53,6 +40,14 @@ namespace Blackset.Rewards
             minMultiplier = 0.8f,
             maxMultiplier = 1.4f,
             moneyCurve01 = null
+        };
+        
+        [Space]
+        [SerializeField]
+        protected BaseRewardMultipliers rewardMultipliers = new BaseRewardMultipliers
+        {
+            winMultiplier = 1f,
+            loseMultiplier = 0.5f
         };
 
         [Header("Качество наградного предмета"), Space]
@@ -72,18 +67,14 @@ namespace Blackset.Rewards
         /// </summary>
         public int EvaluateMoney(
             bool isWin,
-            OpponentData opponent,
-            int unusedDices = 0,
-            int unusedConsumables = 0)
+            OpponentData opponent)
         {
             int baseValue = baseMoneyReward.participation;
 
-            if (isWin) baseValue += baseMoneyReward.winBonus;
-            else baseValue += baseMoneyReward.loseBonus;
+            if (isWin) baseValue = (int)Math.Round((baseValue * rewardMultipliers.winMultiplier) + baseMoneyReward.winBonus);
+            else baseValue = (int)Math.Round((baseValue * rewardMultipliers.loseMultiplier) + baseMoneyReward.loseBonus) ;
 
-            baseValue += GetUnusedMoneyBonus(unusedDices, unusedConsumables);
-
-            float score01 = EvaluateScore01(opponent, unusedDices, unusedConsumables);
+            float score01 = EvaluateScore01(opponent);
             float shaped = ApplyCurve01(moneySettings.moneyCurve01, score01);
 
             float minM = Mathf.Max(0f, moneySettings.minMultiplier);
@@ -99,13 +90,9 @@ namespace Blackset.Rewards
         /// <summary>
         /// Рассчитать качество награды (0..1)
         /// </summary>
-        public float EvaluateQuality01(
-            OpponentData opponent,
-            float difficulty01,
-            int unusedDices,
-            int unusedConsumables)
+        public float EvaluateQuality01(OpponentData opponent)
         {
-            float score01 = EvaluateScore01(opponent, unusedDices, unusedConsumables);
+            float score01 = EvaluateScore01(opponent);
             float shaped = ApplyCurve01(qualitySettings.qualityCurve01, score01);
 
             float minQ = Mathf.Clamp01(qualitySettings.minQuality);
@@ -116,95 +103,21 @@ namespace Blackset.Rewards
 
         #region Внутренние расчеты
 
-        private float EvaluateScore01(
-            OpponentData opponent,
-            int unusedDices,
-            int unusedConsumables)
+        private float EvaluateScore01(OpponentData opponent)
         {
             // Модификатор счета от сложности соперника
             float opponentDifficultyLevel = opponent.DifficultyLevel();
-            // Модификатор счета от неиспользованных предметов
-            float unusedItemsScore = EvaluateUnused01(unusedDices, unusedConsumables);
 
             // Балансные модификаторы счета
             float balanceDifficultyModifier = Mathf.Max(0f, scoreWeights.opponentDifficultyWeight);
-            float balanceUnusedModifier = Mathf.Max(0f, scoreWeights.unusedItemsWeight);
 
-            float sumModifier = balanceDifficultyModifier + balanceUnusedModifier;
+            float sumModifier = balanceDifficultyModifier;
             if (sumModifier <= 0f) return 0f;
 
             float score = 0f;
             score += opponentDifficultyLevel * balanceDifficultyModifier;
-            score += unusedItemsScore * balanceUnusedModifier;
 
             return Mathf.Clamp01(score / sumModifier);
-        }
-
-        private float EvaluateUnused01(int unusedDices, int unusedConsumables)
-        {
-            int dices = unusedDices;
-            int cons = unusedConsumables;
-
-            if (dices < 0) dices = 0;
-            if (cons < 0) cons = 0;
-
-            int total = dices + cons;
-            int cap = unusedBonus.totalCap;
-
-            if (total > cap)
-            {
-                int overflow = total - cap;
-
-                int removeFromDices = Mathf.Min(dices, overflow);
-                dices -= removeFromDices;
-                overflow -= removeFromDices;
-
-                if (overflow > 0)
-                {
-                    int removeFromCons = Mathf.Min(cons, overflow);
-                    cons -= removeFromCons;
-                }
-            }
-
-            int scoreRaw = 0;
-            scoreRaw += dices * unusedBonus.unusedDiceScore;
-            scoreRaw += cons * unusedBonus.unusedConsumableScore;
-
-            return Mathf.Clamp01(Mathf.InverseLerp(0, 1, scoreRaw));
-        }
-
-        private int GetUnusedMoneyBonus(int unusedDices, int unusedConsumables)
-        {
-            int dices = unusedDices;
-            int cons = unusedConsumables;
-
-            if (dices < 0) dices = 0;
-            if (cons < 0) cons = 0;
-
-            int total = dices + cons;
-            int cap = unusedBonus.totalCap;
-
-            if (total > cap)
-            {
-                int overflow = total - cap;
-
-                int removeFromDices = Mathf.Min(dices, overflow);
-                dices -= removeFromDices;
-                overflow -= removeFromDices;
-
-                if (overflow > 0)
-                {
-                    int removeFromCons = Mathf.Min(cons, overflow);
-                    cons -= removeFromCons;
-                }
-            }
-
-            int value = 0;
-            value += dices * unusedBonus.unusedDiceMoney;
-            value += cons * unusedBonus.unusedConsumableMoney;
-
-            if (value < 0) value = 0;
-            return value;
         }
 
         private float ApplyCurve01(AnimationCurve curve, float t)
@@ -225,24 +138,18 @@ namespace Blackset.Rewards
             [Min(0)] public int winBonus;
             [Min(0)] public int loseBonus;
         }
+        
+        [Serializable]
+        public struct BaseRewardMultipliers
+        {
+            [Range(0f, 2f)] public float winMultiplier;
+            [Range(0f, 2f)] public float loseMultiplier;
+        }
 
         [Serializable]
         public struct ScoreWeights
         {
             [Min(0f)] public float opponentDifficultyWeight;
-            [Min(0f)] public float unusedItemsWeight;
-        }
-
-        [Serializable]
-        public struct UnusedBonus
-        {
-            [Min(0)] public int unusedDiceMoney;
-            [Min(0)] public int unusedConsumableMoney;
-
-            [Min(0)] public int unusedDiceScore;
-            [Min(0)] public int unusedConsumableScore;
-
-            [Min(0)] public int totalCap;
         }
 
         [Serializable]

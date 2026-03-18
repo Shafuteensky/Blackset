@@ -25,7 +25,7 @@ namespace Blackset.Duel.Modules
             OpponentData contractOpponent = gameData.GetOpponent(request.Contract.OpponentId);
             int earnedExperience = gameData.ProgressionConfig.GetBattleExperienceReward(request.IsWin, contractOpponent, request.PlayerDuelScore);
             
-            // Валюта (при поражении поощрительный)
+            // Валюта (при поражении поощрительный, при сдаче минимальный)
             int earnedCurrency = gameData.RewardConfig.EvaluateMoney(request.IsWin, contractOpponent);
             
             // Предметы (только при победе)
