@@ -128,6 +128,9 @@ namespace Extensions.FiniteStateMachine
                 case StateTransition.Pop:
                     Pop(context);
                     return;
+                case StateTransition.Stop:
+                    Stop(context);
+                    return;
                 default:
                     throw new InvalidOperationException($"Необработанное состояние перехода ({result.Transition})");
             }
@@ -163,7 +166,56 @@ namespace Extensions.FiniteStateMachine
         }
 
         #endregion
+        
+        #region Логи
 
+        /// <summary>
+        /// Включить/отключить логи
+        /// </summary>
+        public void EnableLogs(bool isEnabled = true) => logsEnabled = isEnabled;
+        
+        #endregion
+        
+        #region Принудительное изменение состояния
+        
+        /// <summary>
+        /// Принудительное изменение состояния машины
+        /// </summary>
+        /// <param name="context">Входные данные</param>
+        /// <typeparam name="TState">Тип нового состояния</typeparam>
+        public void GoTo<TState>(TContext context)
+            where TState : class, IState<TContext>
+        {
+            GoTo(typeof(TState), context);
+        }
+
+        protected void GoTo(Type nextStateType, TContext context)
+        {
+            if (nextStateType == null) throw new ArgumentNullException(nameof(nextStateType));
+
+            if (!typeof(IState<TContext>).IsAssignableFrom(nextStateType))
+                throw new InvalidOperationException($"Тип '{nextStateType.Name}' не реализует IState");
+
+            if (!IsRunning)
+            {
+                currentStateType = nextStateType;
+                currentState = registry.Get(nextStateType);
+                if (currentState == null) throw new InvalidOperationException($"Реестр вернул невалидное состояние ({nextStateType.Name})");
+
+                currentState.Enter(context);
+                onStateChanged?.Invoke(null, nextStateType);
+                return;
+            }
+
+            if (currentStateType == nextStateType && stack.Count == 0)
+                return;
+
+            // важно: используем уже существующий Switch → не дублируем логику
+            Switch(nextStateType, context);
+        }
+        
+        #endregion
+        
         #region Манипуляция состояниями
 
         protected void Switch(Type nextStateType, TContext context)
@@ -243,15 +295,6 @@ namespace Extensions.FiniteStateMachine
             if (logsEnabled) ServiceDebug.Log($"Сменено (Pop) состояние с <b>{previous.Name}</b> на <b>{currentStateType.Name}</b>");
         }
 
-        #endregion
-
-        #region Логи
-
-        /// <summary>
-        /// Включить/отключить логи
-        /// </summary>
-        public void EnableLogs(bool isEnabled = true) => logsEnabled = isEnabled;
-        
         #endregion
     }
 }

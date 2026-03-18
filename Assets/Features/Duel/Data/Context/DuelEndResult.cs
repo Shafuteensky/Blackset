@@ -42,5 +42,10 @@ namespace Features.Duel.Context
             };
             WinnerId = winnerId;
         }
+
+        /// <summary>
+        /// Чистый результат
+        /// </summary>
+        public static DuelEndResult Clear(bool fightEnded = false) => new(fightEnded, string.Empty, FightWinner.None);
     }
 }

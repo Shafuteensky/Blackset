@@ -5,11 +5,14 @@ using Blackset.Duel.Requests;
 using Blackset.Duel.Rules;
 using Blackset.Duel.Sequence.States;
 using Blackset.DuelContracts;
+using Blackset.DuelEvents.EventTypes;
 using Blackset.Inventories;
 using Blackset.Storms;
 using Extensions.Events;
+using Extensions.FiniteStateMachine;
 using Extensions.Log;
 using Extensions.Singleton;
+using Features.Duel.Context;
 using UnityEngine;
 
 namespace Blackset.Duel.Sequence
@@ -68,7 +71,7 @@ namespace Blackset.Duel.Sequence
 
         private void Update()
         {
-            stateMachine?.Tick(context);
+            if (stateMachine.IsRunning) stateMachine.Tick(context);
         }
 
         // TODO Публикация событий состояний машины
@@ -97,7 +100,9 @@ namespace Blackset.Duel.Sequence
         /// </summary>
         public void EndDuel()
         {
-            stateMachine.Stop(context);
+            context.Progress.OnDuelFinished(DuelEndResult.Clear(true));
+            eventHub.Publish(new DuelFinishEvent(context.Progress.DuelResult));
+            stateMachine.GoTo<RewardResolveState>(context);
         }
         
         #endregion

@@ -11,7 +11,6 @@ namespace Extensions.FiniteStateMachine
         /// Тип перехода
         /// </summary>
         public StateTransition Transition { get; }
-
         /// <summary>
         /// Тип следующего состояния
         /// </summary>
@@ -28,6 +27,12 @@ namespace Extensions.FiniteStateMachine
         /// </summary>
         public static StateResult Stay() =>
             new StateResult(StateTransition.Stay);
+
+        /// <summary>
+        /// Запросить завершение работы FSM
+        /// </summary>
+        public static StateResult Stop() =>
+            new StateResult(StateTransition.Stop);
 
         /// <summary>
         /// Переключить состояние (сбрасывает стек)

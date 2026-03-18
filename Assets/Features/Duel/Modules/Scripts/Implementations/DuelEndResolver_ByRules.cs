@@ -20,7 +20,7 @@ namespace Blackset.Duel.Modules
         {
             ServiceGuard.NotNull(context, nameof(context));
             
-            DuelEndResult clearResult = new(false, string.Empty, FightWinner.None);
+            DuelEndResult clearResult = DuelEndResult.Clear();
             DuelEndResult resolvedResult = EvaluateByRules(context, clearResult);
             
             return resolvedResult;
