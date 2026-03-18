@@ -225,7 +225,10 @@ namespace Blackset.UI.InventoryManagement
 
             if (cell == null) return;
             
-            if (markSeen) cell.MarkSeen();
+            if (markSeen)
+            {
+                dataContainer.MarkSeen(cell);
+            }
             newItemIndicator.SetActive(cell.IsNew);
         }
         

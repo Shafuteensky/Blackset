@@ -277,11 +277,11 @@ namespace Extensions.Data.InMemoryData
 
         #region SaveLoad
         
-        protected override void MarkDirty()
+        protected override void MarkDirty(bool notify = true)
         {
             indexDirty = true;
             
-            base.MarkDirty();
+            base.MarkDirty(notify);
         }
         
         #endregion

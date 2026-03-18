@@ -218,11 +218,7 @@ namespace Blackset.Inventories.Cells
         /// <summary>
         /// Отметить ячейку как просмотренную
         /// </summary>
-        public void MarkSeen()
-        {
-            isNew = false;
-            
-        }
+        public void MarkSeen() => isNew = false;
 
         #endregion
         

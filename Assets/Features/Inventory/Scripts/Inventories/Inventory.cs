@@ -408,6 +408,17 @@ namespace Blackset.Inventories
         
         #endregion
 
+        /// <summary>
+        /// Отметить ячейку как рассмотренную
+        /// </summary>
+        /// <param name="cellId">Идентификатор ячейки</param>
+        public void MarkSeen(InventoryCell cell)
+        {
+            if (!cell.IsNew) return;
+            cell.MarkSeen();
+            MarkDirty(false);
+        }
+        
         #region Id & Index ячеек
         
         /// <summary>

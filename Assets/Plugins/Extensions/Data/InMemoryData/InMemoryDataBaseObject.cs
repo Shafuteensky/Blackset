@@ -190,16 +190,13 @@ namespace Extensions.Data.InMemoryData
 
         #region Internal
 
-        protected virtual void MarkDirty()
+        protected virtual void MarkDirty(bool notify = true)
         {
             dirty = true;
             
-            onDataUpdated?.Invoke();
+            if (notify) onDataUpdated?.Invoke();
 
-            if (autoSave)
-            {
-                Save();
-            }
+            if (autoSave) Save();
         }
 
         #endregion
