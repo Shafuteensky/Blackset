@@ -12,10 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b459915586e744d0b4759494ed7f5aed, type: 3}
   m_Name: ConsumablesPool
   m_EditorClassIdentifier: Assembly-CSharp::Blackset.Inventory.ItemPools.ConsumablesPool
-  id: 11c28cf6619e4dbc835f4f91781d8e60
+  id: ConsumablesPoolInventory
   autoSave: 1
-  dataRegistry: {fileID: 11400000, guid: d68c7f8b5e8d57343b1bade366855ab2, type: 2}
-  typeRegistry: {fileID: 11400000, guid: cc58f8da688b0ba4591b5b872639060e, type: 2}
   maxCellAmount: 1
   slotsCount: 4
   allowedItemClass: 2

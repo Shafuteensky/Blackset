@@ -68,7 +68,7 @@ namespace Blackset.Shop
             
             // Денег достаточно — отнять деньги, добавить в инвентарь, убрать из магазина
             playerData.MetaData.RemoveMoney(itemPrice);
-            playerData.Inventory.AddItem(cell.Item, DEFAULT_BUY_ITEM_AMOUNT);
+            playerData.Inventory.AddNewItem(cell.Item, DEFAULT_BUY_ITEM_AMOUNT);
             itemElement.DataContainer.RemoveItem(cell, DEFAULT_BUY_ITEM_AMOUNT);
 
             if (isHidden) onSecretItemBought?.Invoke(cell.Item, DEFAULT_BUY_ITEM_AMOUNT);

@@ -171,13 +171,13 @@ namespace Blackset.Inventories
         /// <summary>
         /// Добавить новую ячейку с предметом (с мерджем в существущие ячейки)
         /// </summary>
-        /// <param name="itemId">Идентификатор предмета в ячейке</param>
-        /// <param name="itemTypeId">Тип предмета в ячейке</param>
+        /// <param name="ItemContext">Данные предмета</param>
         /// <param name="amount">Количество предмета в ячейке</param>
         /// <param name="autoMerge">Слияние количества, если предметы одинаковые</param>
         /// <param name="targetIndex">Положение по индексу новой ячейки (-1 если в конец или первую пустую/дефолтную ячейку)</param>
+        /// <param name="markNew">Отметить ли предмет новым</param>
         /// <returns>Количество не вместившихся предметов (0 если операция полностью успешна)</returns>
-        public int AddItem(ItemContext newItem, int amount = 1, bool autoMerge = true, int targetIndex = -1)
+        public int AddItem(ItemContext newItem, int amount = 1, bool autoMerge = true, int targetIndex = -1, bool markNew = false)
         {
             if (!CheckAmount(amount) ) return amount;
             EnsureLoaded();
@@ -211,7 +211,7 @@ namespace Blackset.Inventories
                     onCellUpdated?.Invoke(presentCell.Id);
                     cellUpdated = true;
                     
-                    presentCell.MarkNew();
+                    if (markNew) presentCell.MarkNew();
                 }
                 if (cellUpdated) MarkDirty();
             }
@@ -236,7 +236,7 @@ namespace Blackset.Inventories
                 remaining -= chunk;
                 onCellAdded?.Invoke(newCell);
                 
-                newCell.MarkNew();
+                if (markNew) newCell.MarkNew();
             }
 
             onItemAdded?.Invoke(newItem, amount);
@@ -257,6 +257,17 @@ namespace Blackset.Inventories
             if ( !CheckCell(cell) ) return 0;
 
             return AddItem(cell.Item, cell.ItemAmount, autoMerge, targetIndex);
+        }
+
+        /// <summary>
+        /// Добавить новую ячейку с предметом (с мерджем в существущие ячейки и отметкой ячейки как новой)
+        /// </summary>
+        /// <param name="ItemContext">Данные предмета</param>
+        /// <param name="amount">Количество предмета в ячейке</param>
+        /// <returns>Количество не вместившихся предметов (0 если операция полностью успешна)</returns>
+        public int AddNewItem(ItemContext newItem, int amount = 1)
+        {
+            return AddItem(newItem, amount, true,-1, true);
         }
         
         /// <summary>

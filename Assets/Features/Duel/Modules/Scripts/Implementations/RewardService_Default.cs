@@ -46,7 +46,7 @@ namespace Blackset.Duel.Modules
             playerData.MetaData.AddMoney(result.CurrencyDelta);
             
             foreach (ItemContext item in result.Items)
-                playerData.Inventory.AddItem(item);
+                playerData.Inventory.AddNewItem(item);
         }
     }
 }

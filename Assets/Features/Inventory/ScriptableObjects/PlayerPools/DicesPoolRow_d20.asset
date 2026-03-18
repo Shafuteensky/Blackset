@@ -12,10 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b459915586e744d0b4759494ed7f5aed, type: 3}
   m_Name: DicesPoolRow_d20
   m_EditorClassIdentifier: Assembly-CSharp::Blackset.Inventory.ItemPools.DicesPoolRow
-  id: 4fc7894da9ca40acbccdcd23e8106e69
+  id: DicesPoolRow_d20
   autoSave: 1
-  dataRegistry: {fileID: 11400000, guid: ed018a7561b12ba4f96674954885bfdc, type: 2}
-  typeRegistry: {fileID: 11400000, guid: baff5f3f39c21ed4085b2717f755f0a8, type: 2}
   maxCellAmount: 1
   slotsCount: 2
   allowedItemClass: 1

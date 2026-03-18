@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6623fd50c9874f108445f49990016da6, type: 3}
   m_Name: NewItemsPresenterInventory
   m_EditorClassIdentifier: Assembly-CSharp::Blackset.Inventory.Inventories.DicesInventory
-  id: 8972784f52ee40b6bd7705df82640226
+  id: PresenterInventory
   autoSave: 1
   maxCellAmount: 99
   slotsCount: 0
