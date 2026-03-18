@@ -29,7 +29,7 @@ namespace Blackset.Duel.Sequence.States
             DuelRewards duelRewards = rewardService.BuildReward(rewardRequest);
             rewardService.ApplyResult(duelRewards);
             
-            eventHub.Publish(new PlayerRewardedEvent(duelRewards));
+            eventHub.PublishReplay(new PlayerRewardedEvent(duelRewards));
         }
         
         public StateResult Tick(DuelContext context)

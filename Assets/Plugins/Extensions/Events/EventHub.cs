@@ -13,6 +13,7 @@ namespace Extensions.Events
     public sealed class EventHub
     {
         private readonly Dictionary<Type, Delegate> handlers = new();
+        private readonly Dictionary<Type, object> replayEvents = new();
 
         /// <summary>
         /// Подписаться на событие
@@ -84,11 +85,69 @@ namespace Extensions.Events
             snapshot.Invoke(evt);
         }
 
+        #region Replay events
+
+        /// <summary>
+        /// Подписаться на событие и сразу получить последнее опубликованное replay-событие, если оно есть
+        /// </summary>
+        /// <param name="handler">Исполняемое действие</param>
+        /// <typeparam name="TEvent">Тип события</typeparam>
+        public void SubscribeReplay<TEvent>(Action<TEvent> handler)
+        {
+            Subscribe(handler);
+
+            if (replayEvents.TryGetValue(typeof(TEvent), out object storedEvent))
+            {
+                handler.Invoke((TEvent)storedEvent);
+            }
+        }
+        
+        /// <summary>
+        /// Опубликовать событие и сохранить его как последнее replay-событие этого типа
+        /// </summary>
+        /// <param name="evt">Событие</param>
+        /// <typeparam name="TEvent">Тип события</typeparam>
+        public void PublishReplay<TEvent>(TEvent evt)
+        {
+            replayEvents[typeof(TEvent)] = evt;
+            Publish(evt);
+        }
+
+        /// <summary>
+        /// Попробовать получить последнее replay-событие указанного типа
+        /// </summary>
+        /// <param name="evt">Последнее событие</param>
+        /// <typeparam name="TEvent">Тип события</typeparam>
+        /// <returns>true если событие есть, иначе false</returns>
+        public bool TryGetLastEvent<TEvent>(out TEvent evt)
+        {
+            if (replayEvents.TryGetValue(typeof(TEvent), out object storedEvent))
+            {
+                evt = (TEvent)storedEvent;
+                return true;
+            }
+
+            evt = default;
+            return false;
+        }
+
+        /// <summary>
+        /// Очистить последнее replay-событие указанного типа
+        /// </summary>
+        /// <typeparam name="TEvent">Тип события</typeparam>
+        public void ClearReplay<TEvent>() => replayEvents.Remove(typeof(TEvent));
+        
+        #endregion
+
         /// <summary>
         /// Очистить все подписки
         /// </summary>
-        public void Clear() => handlers.Clear();
-        
+        public void Clear()
+        {
+            handlers.Clear();
+            replayEvents.Clear();
+        }
+
         /// <summary>
         /// Есть ли подписчики
         /// </summary>

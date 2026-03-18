@@ -174,7 +174,26 @@ namespace Blackset.Player
             float v = (float)have / need;
             return Mathf.Clamp01(v);
         }
+        
+        /// <summary>
+        /// Прогресс до следующего уровня с вычетом указанного количества опыта
+        /// </summary>
+        /// <param name="expToSubtract">Сколько опыта вычесть</param>
+        /// <returns>Значение от 0 до 1</returns>
+        public float GetProgressToNextLevelWithOffset(int expToSubtract)
+        {
+            int need = GetThisLevelRequiredExp();
+            int have = GetThisLevelExp();
 
+            if (need <= 0) return 0f;
+
+            int adjusted = have - expToSubtract;
+            if (adjusted < 0) adjusted = 0;
+
+            float v = (float)adjusted / need;
+            return Mathf.Clamp01(v);
+        }
+        
         #endregion
 
         #region Dice Budget

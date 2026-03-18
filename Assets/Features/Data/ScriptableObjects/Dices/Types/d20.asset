@@ -16,7 +16,7 @@ MonoBehaviour:
   dataName: d20
   dataDescription: d20 dice
   icon: {fileID: 21300000, guid: 67f0c34bffdd59a4dbdb24bd026fbd81, type: 3}
-  priceMultiplier: 1.2
+  priceMultiplier: 1.25
   isRestricted: 0
   sidesNumber: 20
   visualDice: {fileID: 0}
