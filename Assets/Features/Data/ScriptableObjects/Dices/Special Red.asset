@@ -15,8 +15,10 @@ MonoBehaviour:
   id: SpecialDiceTest (1)
   dataName: Special red
   dataDescription: Unique special red-colored dice with active effect
+  baseAvailability: -1
+  restrictions: []
+  price: 7
   itemClass: 1
-  price: 8
   set: {fileID: 11400000, guid: 856a47c752457244f81e34de38ba0b74, type: 2}
   availableTypes:
   - {fileID: 11400000, guid: fbd3a5ad0b3ef2940a4f73d042a419d7, type: 2}
@@ -27,6 +29,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 98144d8369c0fd649a1a4aa9083c6aff, type: 2}
   effect: {fileID: 11400000, guid: a38436e006662cf4d8bf4d303d263335, type: 2}
   color: {r: 0.87169814, g: 0.16282657, b: 0.16282657, a: 1}
-  budgetPrice: 2
-  style: {fileID: 11400000, guid: b9b5599ccacff0c498b079098dc094a3, type: 2}
+  budgetPrice: 3
   numbersConfig: {fileID: 11400000, guid: 7e62f7f30d5c99345886153742ab05fa, type: 2}
+  style: {fileID: 11400000, guid: b9b5599ccacff0c498b079098dc094a3, type: 2}

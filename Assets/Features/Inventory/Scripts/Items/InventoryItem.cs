@@ -20,7 +20,7 @@ namespace Blackset.Inventories.Items
         
         [Header("Ценники"), Space]
         [Tooltip("Базовая стоимость в софт-валюте (без учета редкости и типа)")]
-        [Range(1, 100)]
+        [Range(0, 100)]
         [SerializeField] private int price = 1;
         
         [Header("Принадлежность"), Space]

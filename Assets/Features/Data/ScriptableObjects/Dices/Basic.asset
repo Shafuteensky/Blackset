@@ -17,7 +17,7 @@ MonoBehaviour:
   dataDescription: Usual typical dice with no effects
   baseAvailability: 0
   restrictions: []
-  price: 1
+  price: 0
   itemClass: 1
   set: {fileID: 11400000, guid: f3f0561c00f9c8942aa4724610bf93e3, type: 2}
   availableTypes:
@@ -29,6 +29,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 98144d8369c0fd649a1a4aa9083c6aff, type: 2}
   effect: {fileID: 0}
   color: {r: 0.97519994, g: 1, b: 0.8132075, a: 1}
-  budgetPrice: 1
-  style: {fileID: 11400000, guid: 3c13255d07d3177489f088c2231a082a, type: 2}
+  budgetPrice: 0
   numbersConfig: {fileID: 11400000, guid: 7e62f7f30d5c99345886153742ab05fa, type: 2}
+  style: {fileID: 11400000, guid: 3c13255d07d3177489f088c2231a082a, type: 2}

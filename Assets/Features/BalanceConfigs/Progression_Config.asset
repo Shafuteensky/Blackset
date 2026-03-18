@@ -17,7 +17,7 @@ MonoBehaviour:
     expA: 50
     expB: 150
   diceBudgetFormula:
-    startBudget: 6
+    startBudget: 1
     budgetPerLevel: 1
     milestoneLevelStep: 5
     milestoneBonus: 3

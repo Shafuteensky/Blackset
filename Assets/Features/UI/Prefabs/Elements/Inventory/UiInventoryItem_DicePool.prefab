@@ -40,6 +40,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: ResourceTrack
       objectReference: {fileID: 0}
+    - target: {fileID: 7451235033216264811, guid: 8a9d4f20357d929459ca239accdcf63d, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 9117852130183858856, guid: 8a9d4f20357d929459ca239accdcf63d, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -136,6 +140,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
+--- !u!1 &6943565177481997992 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7451235033216264811, guid: 8a9d4f20357d929459ca239accdcf63d, type: 3}
+  m_PrefabInstance: {fileID: 519151411487507651}
+  m_PrefabAsset: {fileID: 0}
 --- !u!224 &8772303170379370091 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 9117852130183858856, guid: 8a9d4f20357d929459ca239accdcf63d, type: 3}
@@ -237,6 +246,10 @@ PrefabInstance:
       propertyPath: budgetText
       value: 
       objectReference: {fileID: 3208699542149716499}
+    - target: {fileID: 7266762127616091038, guid: ef58cc00ff4104c4fbb5766090f18e29, type: 3}
+      propertyPath: budgetIndicator
+      value: 
+      objectReference: {fileID: 6943565177481997992}
     - target: {fileID: 7832653202750547814, guid: ef58cc00ff4104c4fbb5766090f18e29, type: 3}
       propertyPath: m_Name
       value: UiInventoryItem_DicePool

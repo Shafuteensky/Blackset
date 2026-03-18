@@ -28,13 +28,13 @@ namespace Blackset.Data
         public SideNumbersConfig NumbersConfig => numbersConfig;
 
         [Tooltip("Стоимость бюджета сборки"), Space]
-        [Range(1, 10)]
+        [Range(0, 10)]
         [SerializeField] private int budgetPrice = 1;
-        
-        [Header("Стиль"), Space]
-        [SerializeField] private DiceStyle style;
         
         [Header("Грани"), Space]
         [SerializeField] private SideNumbersConfig numbersConfig;
+        
+        [Header("Визуальный вид"), Space]
+        [SerializeField] private DiceStyle style;
     }
 }

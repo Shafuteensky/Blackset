@@ -26,30 +26,23 @@ namespace Blackset.UI.InventoryManagement
         public CanvasGroup CanvasGroup => canvasGroup;
         
         [Header("Графика"), Space]
-        [SerializeField]
-        private Image itemIconImage;
-        [SerializeField]
-        private Image setImage;
-        [SerializeField]
-        private GameObject newItemIndicator;
+        [SerializeField] private Image itemIconImage;
+        [SerializeField] private Image setImage;
+        [SerializeField] private GameObject newItemIndicator;
             
         [Header("Текст"), Space]
-        [SerializeField]
-        private TMP_Text amountText;
-        [SerializeField]
-        private TMP_Text setNameText;
-        [SerializeField]
-        private TMP_Text priceText;
-        [SerializeField]
-        private TMP_Text budgetText;
+        [SerializeField] private TMP_Text amountText;
+        [SerializeField] private TMP_Text setNameText;
+        [SerializeField] private TMP_Text priceText;
+        
+        [Header("Бюджетная стоимость"), Space]
+        [SerializeField] private TMP_Text budgetText;
+        [SerializeField] private GameObject budgetIndicator;
         
         [Header("Параметры Drag&Drop"), Space]
-        [SerializeField]
-        private CanvasGroup canvasGroup;
-        [SerializeField]
-        private bool canDrag = true;
-        [SerializeField]
-        private bool canDrop = true;
+        [SerializeField] private CanvasGroup canvasGroup;
+        [SerializeField] private bool canDrag = true;
+        [SerializeField] private bool canDrop = true;
 
         private InventoryDragDropCoordinator dropCoordinator;
         
@@ -217,6 +210,9 @@ namespace Blackset.UI.InventoryManagement
 
         private void SetDiceBudgetText(DiceData cellData)
         {
+            if (budgetIndicator == null) return;
+            budgetIndicator.SetActive(cellData.BudgetPrice > 0);
+            
             if (budgetText == null) return;
             budgetText.text = cellData.BudgetPrice.ToString();
         }

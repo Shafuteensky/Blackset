@@ -17,7 +17,7 @@ MonoBehaviour:
   dataDescription: Throw 2 dices, take best result
   baseAvailability: 0
   restrictions: []
-  price: 1
+  price: 0
   itemClass: 2
   set: {fileID: 11400000, guid: 27cada2d73a18a543a23e1a7fea1f12b, type: 2}
   availableTypes:
