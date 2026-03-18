@@ -87,7 +87,7 @@ namespace Blackset.UI.InventoryManagement
 
         protected void FillPriceLabel(InventoryItem item, InventoryItemType type)
         {
-            if (priceText != null) priceText.text = item.GetPrice(type).ToString();
+            if (priceText != null) priceText.text = item.GetSellPrice(type).ToString();
         }
 
         protected void SetIcon(InventoryCell cell, InventoryItem item, InventoryItemType type)

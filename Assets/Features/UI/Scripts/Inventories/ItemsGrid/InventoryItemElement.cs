@@ -31,6 +31,7 @@ namespace Blackset.UI.InventoryManagement
         
         [Header("Модули"), Space]
         [SerializeField] private BaseInventoryItemModule[] modules;
+        // TODO Передлать остальные элементы как модули
 
         [Header("Графика"), Space]
         [SerializeField] private Image itemIconImage;
@@ -144,6 +145,10 @@ namespace Blackset.UI.InventoryManagement
                 
                 UpdateNewItemIndicator(Cell);
 
+                // Инициализация модулей
+                foreach (var module in modules)
+                    module.Initialize(this, newContainer);
+                
                 // Параметры для EffectingItem
                 if (CellItem is not EffectingItem effectingItem) return;
                 SetIconColor(Cell, effectingItem);
@@ -152,11 +157,6 @@ namespace Blackset.UI.InventoryManagement
                 // Параметры для DiceItem
                 if (CellItem is not DiceData diceItem) return;
                 SetDiceBudgetText(diceItem);
-                
-                foreach (var module in modules)
-                {
-                    module.Initialize(this, newContainer);
-                }
             }
         }
 

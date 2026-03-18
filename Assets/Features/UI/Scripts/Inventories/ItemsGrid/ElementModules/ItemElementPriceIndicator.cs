@@ -1,3 +1,4 @@
+using Blackset.Effects;
 using Blackset.Shop;
 using TMPro;
 using UnityEngine;
@@ -21,12 +22,12 @@ namespace Blackset.UI.InventoryManagement.ElementModules
             
             if (priceText != null)
             {
-                int cellItemPrice;
+                int cellItemPrice = 0;
 
-                if (buyButton != null && buyButton.IsFixedPrice) 
-                    cellItemPrice = ShopController.GetFixedPrice(itemElement.CellItem.ItemClass);
+                if (buyButton != null && buyButton.IsFixedPrice && itemElement.CellItem is EffectingItem effectingItem)
+                    cellItemPrice = effectingItem.Set.GetBuyPrice();
                 else 
-                    cellItemPrice = itemElement.CellItem.GetPrice(itemElement.CellItemType);
+                    cellItemPrice = itemElement.CellItem.GetBuyPrice(itemElement.CellItemType);
                 
                 priceText.text = cellItemPrice.ToString();
             }

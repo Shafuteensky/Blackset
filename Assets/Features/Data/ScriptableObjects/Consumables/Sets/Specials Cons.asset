@@ -16,3 +16,8 @@ MonoBehaviour:
   dataName: Special consumables set
   dataDescription: Special unique consumables
   color: {r: 0.5560249, g: 0.17094338, b: 0.5999999, a: 1}
+  isPriceAveraged: 1
+  price: 5
+  itemsInSet:
+  - {fileID: 11400000, guid: 6ec587ed72a0cb24e94809a72b70a180, type: 2}
+  - {fileID: 11400000, guid: f97ab623a7576a04784a12ccf1244362, type: 2}

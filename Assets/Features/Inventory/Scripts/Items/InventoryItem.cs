@@ -1,6 +1,8 @@
+using System;
 using System.Collections.Generic;
 using Blackset.Data.Base;
 using Blackset.Data.Items.Types;
+using Blackset.Data.Registries;
 using Blackset.Inventories.Scripts.Items;
 using Blackset.ItemsRestrictions;
 using UnityEngine;
@@ -13,6 +15,10 @@ namespace Blackset.Inventories.Items
         /// Класс предмета
         /// </summary>
         public ItemClass ItemClass => itemClass;
+        /// <summary>
+        /// Базовая цена предмета (без зависимости от типа, редкости и модификаторов)
+        /// </summary>
+        public int RawPrice => price;
         
         [Header("Доступ"), Space]
         [SerializeField] private ItemAvailability baseAvailability = ItemAvailability.All;
@@ -27,10 +33,26 @@ namespace Blackset.Inventories.Items
         [SerializeField] protected ItemClass itemClass = ItemClass.Any;
 
         /// <summary>
-        /// Получить актуальную цену предмета
+        /// Получить актуальную цену предмета для продажи
         /// </summary>
-        /// <returns>Стоимость предмета с учетом редкости и типа</returns>
-        public int GetPrice(InventoryItemType type) => price * type.PriceMultiplier;
+        /// <param name="type">Тип предмета для учета наценки по типу</param>
+        /// <returns>Стоимость продажи предмета с учетом редкости, типа и балансных модификаторов</returns>
+        // TODO Добавить модификатор от редкости
+        public int GetSellPrice(InventoryItemType type) => 
+            (int)Math.Round(price * type.PriceMultiplier * GameData.Instance.ShopConfig.ItemsBuySell.ItemSellModifier);
+        
+        /// <summary>
+        /// Получить актуальную цену предмета для покупки
+        /// </summary>
+        /// <param name="type">Тип предмета для учета наценки по типу</param>
+        /// <returns>Стоимость покупки предмета с учетом редкости, типа и балансных модификаторов</returns>
+        // TODO Добавить модификатор от редкости
+        public int GetBuyPrice(InventoryItemType type = null)
+        {
+            float typeModifier = 1f;
+            if (type != null) typeModifier = type.PriceMultiplier;
+            return (int)Math.Round(price * typeModifier * GameData.Instance.ShopConfig.ItemsBuySell.ItemBuyModifier);
+        }
         
         #region Доступность предмета
         

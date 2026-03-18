@@ -11,38 +11,28 @@ namespace Blackset.Shop
         menuName = "Blackset/Shop/" + nameof(ShopConfig))]
     public class ShopConfig : ScriptableObject
     {
+        private const float DEFAULT_SELL_MODIFIER = 1f;
+        
         #region Инспектор
 
-        [Header("Цены гача-боксов"), Space]
-
-        [SerializeField]
-        public SecretBoxBuyPrices SecretBoxBuy = new()
-        {
-            diceBoxFixedPrice = 14,
-            consumableBoxFixedPrice = 8
-        };
+        [Header("Модификаторы покупки/продажи"), Space]
         
         [SerializeField]
-        public SellModifiers ItemsSell = new()
+        public BuySellModifiers ItemsBuySell = new()
         {
-            itemSellModifier = 0.5f,
+            ItemSellModifier = DEFAULT_SELL_MODIFIER,
+            ItemBuyModifier = 1.5f
         };
 
         #endregion
 
         #region Вспомогательные типы
-
-        [Serializable]
-        public struct SecretBoxBuyPrices
-        {
-            [Min(0)] public int diceBoxFixedPrice;
-            [Min(0)] public int consumableBoxFixedPrice;
-        }
         
         [Serializable]
-        public struct SellModifiers
+        public struct BuySellModifiers
         {
-            [Range(0f, 2f)] public float itemSellModifier;
+            [Range(0f, 2f)] public float ItemSellModifier;
+            [Range(0f, 2f)] public float ItemBuyModifier;
         }
 
         #endregion

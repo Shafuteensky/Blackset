@@ -16,3 +16,8 @@ MonoBehaviour:
   dataName: Basic consumable set
   dataDescription: 'Standart consumables '
   color: {r: 0.65882355, g: 0.6313726, b: 0.53333336, a: 1}
+  isPriceAveraged: 0
+  price: 0
+  itemsInSet:
+  - {fileID: 11400000, guid: b7ecc4b8edcdbe440a303c0019ea547e, type: 2}
+  - {fileID: 11400000, guid: 689640fd0e2d80740b72a67a6b141e72, type: 2}

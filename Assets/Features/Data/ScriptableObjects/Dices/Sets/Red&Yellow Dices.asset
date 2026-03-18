@@ -16,3 +16,8 @@ MonoBehaviour:
   dataName: Red&Yellow dices set
   dataDescription: Special unique dices
   color: {r: 0.690566, g: 0.48748797, b: 0.09250979, a: 1}
+  isPriceAveraged: 1
+  price: 5
+  itemsInSet:
+  - {fileID: 11400000, guid: 4bc081f65e2f08b46adea273e7eff6e3, type: 2}
+  - {fileID: 11400000, guid: 58882ffe1998c074faea486f3395f455, type: 2}

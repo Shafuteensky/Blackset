@@ -16,3 +16,7 @@ MonoBehaviour:
   dataName: Basic dice set
   dataDescription: Standart dices
   color: {r: 0.65882355, g: 0.6313726, b: 0.53333336, a: 1}
+  isPriceAveraged: 0
+  price: 0
+  itemsInSet:
+  - {fileID: 11400000, guid: c6be3b2a199fce44487b5c70e985fa69, type: 2}

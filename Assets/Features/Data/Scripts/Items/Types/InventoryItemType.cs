@@ -16,7 +16,7 @@ namespace Blackset.Data.Items.Types
         /// <summary>
         /// Множитель для мазовой цены расходника
         /// </summary>
-        public int PriceMultiplier => priceMultiplier;
+        public float PriceMultiplier => priceMultiplier;
         
         [Header("Параметры репрезентации типа"), Space]
         [SerializeField]
@@ -25,8 +25,8 @@ namespace Blackset.Data.Items.Types
             
         [Header("Множитель цены")]
         [SerializeField]
-        [Range(1, 10)]
+        [Range(0f, 10f)]
         [Tooltip("Множитель для базовой цены расходника")]
-        private int priceMultiplier;
+        private float priceMultiplier;
     }
 }
