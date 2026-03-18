@@ -13,6 +13,11 @@ namespace Blackset.Shop
     [RequireComponent(typeof(InventoryItemElement))]
     public sealed class BuyShopItemButton : AbstractHoldButton
     {
+        /// <summary>
+        /// Фиксированная ли стоимость у лота
+        /// </summary>
+        public bool IsFixedPrice => isFixedPrice;
+        
         [Header("Параметры лота"), Space]
         
         [Tooltip("Является ли предмет секретным")]

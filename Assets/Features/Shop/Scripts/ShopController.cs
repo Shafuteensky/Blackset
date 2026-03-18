@@ -52,7 +52,7 @@ namespace Blackset.Shop
             ItemClass itemClass = cell.Item.ItemClass;
             InventoryItem shopItem = itemElement.DataContainer.GetCellItemData(itemElement.EntryId);
             
-            // Деньги игрока и стоиомость предмета
+            // Деньги игрока и стоимость предмета
             int playerMoney = playerData.MetaData.Data.Money;
             int itemPrice = shopItem.GetPrice(itemElement.DataContainer.GetCellTypeData(itemElement.EntryId));
             
@@ -81,7 +81,7 @@ namespace Blackset.Shop
         /// Получить фиксированную цену секретного предмета
         /// </summary>
         /// <param name="itemClass">Класс предмета</param>
-        public int GetFixedPrice(ItemClass itemClass = ItemClass.Any)
+        public static int GetFixedPrice(ItemClass itemClass = ItemClass.Any)
         {
             GameData gameData = GameData.Instance;
             

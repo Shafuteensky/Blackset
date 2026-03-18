@@ -25,6 +25,13 @@ namespace Blackset.UI.InventoryManagement
         /// </summary>
         public CanvasGroup CanvasGroup => canvasGroup;
         
+        public InventoryCell Cell { get; private set; }
+        public InventoryItem CellItem { get; private set; }
+        public InventoryItemType CellItemType { get; private set; }
+        
+        [Header("Модули"), Space]
+        [SerializeField] private BaseInventoryItemModule[] modules;
+
         [Header("Графика"), Space]
         [SerializeField] private Image itemIconImage;
         [SerializeField] private Image setImage;
@@ -33,7 +40,6 @@ namespace Blackset.UI.InventoryManagement
         [Header("Текст"), Space]
         [SerializeField] private TMP_Text amountText;
         [SerializeField] private TMP_Text setNameText;
-        [SerializeField] private TMP_Text priceText;
         
         [Header("Бюджетная стоимость"), Space]
         [SerializeField] private TMP_Text budgetText;
@@ -45,6 +51,7 @@ namespace Blackset.UI.InventoryManagement
         [SerializeField] private bool canDrop = true;
 
         private InventoryDragDropCoordinator dropCoordinator;
+        
         
         private void OnEnable()
         {
@@ -113,39 +120,43 @@ namespace Blackset.UI.InventoryManagement
             // Конкретная ячейка
             else
             {
-                InventoryCell cell = newContainer.GetById(newItemCellId);
+                Cell = newContainer.GetById(newItemCellId);
                 
-                if (cell == null)
+                if (Cell == null)
                 {
                     ServiceDebug.LogError($"Ячейка с идентификатором «{newItemCellId}» не найдена, инициализация провалена");
                     return;
                 }
                 
-                InventoryItem cellItem = newContainer.GetCellItemData(cell);
-                InventoryItemType cellItemTypeData = newContainer.GetCellTypeData(cell);
+                CellItem = newContainer.GetCellItemData(Cell);
+                CellItemType = newContainer.GetCellTypeData(Cell);
                 
-                if (cellItemTypeData == null || cellItem == null)
+                if (CellItemType == null || CellItem == null)
                 {
                     ServiceDebug.LogError("Данные ячейки не полные, инициализация провалена");
                     return;
                 }
                 
-                SetDragDropConfig(cell);
-                SetIcon(cell, cellItem, cellItemTypeData);
+                SetDragDropConfig(Cell);
+                SetIcon(Cell, CellItem, CellItemType);
                 
-                SetAmountText(cell);
-                SetItemPriceText(cellItem, cellItemTypeData);
+                SetAmountText(Cell);
                 
-                UpdateNewItemIndicator(cell);
+                UpdateNewItemIndicator(Cell);
 
                 // Параметры для EffectingItem
-                if (cellItem is not EffectingItem effectingItem) return;
-                SetIconColor(cell, effectingItem);
+                if (CellItem is not EffectingItem effectingItem) return;
+                SetIconColor(Cell, effectingItem);
                 SetItemSetText(effectingItem);
                 
                 // Параметры для DiceItem
-                if (cellItem is not DiceData diceItem) return;
+                if (CellItem is not DiceData diceItem) return;
                 SetDiceBudgetText(diceItem);
+                
+                foreach (var module in modules)
+                {
+                    module.Initialize(this, newContainer);
+                }
             }
         }
 
@@ -197,15 +208,6 @@ namespace Blackset.UI.InventoryManagement
         private void SetItemSetText(EffectingItem cellItem)
         {
             if (setNameText != null) setNameText.text = cellItem.Set.DataName;
-        }
-
-        private void SetItemPriceText(InventoryItem cellItem, InventoryItemType cellItemTypeData)
-        {
-            if (priceText != null)
-            {
-                int cellItemPrice = cellItem.GetPrice(cellItemTypeData);
-                priceText.text = cellItemPrice.ToString();
-            }
         }
 
         private void SetDiceBudgetText(DiceData cellData)
