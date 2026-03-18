@@ -13,23 +13,11 @@ MonoBehaviour:
   m_Name: Reward_Config
   m_EditorClassIdentifier: Assembly-CSharp::Blackset.Rewards.RewardConfig
   baseMoneyReward:
-    participation: 3
+    participation: 0
     winBonus: 9
     loseBonus: 0
   scoreWeights:
-    opponentWeight: 1
-    difficultyWeight: 1
-    unusedWeight: 1
-  scoreRanges:
-    opponentRawRange: {x: 0, y: 1}
-    difficultyRange: {x: 0, y: 1}
-    unusedRange: {x: 0, y: 10}
-  unusedBonus:
-    unusedDiceMoney: 0
-    unusedConsumableMoney: 0
-    unusedDiceScore: 1
-    unusedConsumableScore: 1
-    totalCap: 999
+    opponentDifficultyWeight: 1
   moneySettings:
     minMultiplier: 0.5
     maxMultiplier: 2
@@ -57,6 +45,9 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
+  rewardMultipliers:
+    winMultiplier: 1
+    loseMultiplier: 0.1
   qualitySettings:
     minQuality: 0
     maxQuality: 1

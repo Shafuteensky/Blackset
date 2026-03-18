@@ -21,7 +21,7 @@ MonoBehaviour:
     successfulBluffScore: 15
     caughtEnemyBluffScore: 15
   BattleResult:
-    battleWinScore: 40
+    battleWinScore: 50
     quickWinScore: 20
     comebackWinScore: 25
   Precision:

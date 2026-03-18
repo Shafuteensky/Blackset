@@ -10,14 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: aecc964481164e049fb0f78c4bb26542, type: 3}
-  m_Name: Blue&Green Dices
+  m_Name: Extremums
   m_EditorClassIdentifier: Assembly-CSharp::Blackset.Data.DiceSet
-  id: cc057491c2ab4bac9bf4a91311bcd875
-  dataName: Blue&Green dices set
+  id: a3c4c3385e334db0b116713ed00f92fd
+  dataName: Extremums
   dataDescription: Special unique dices
-  color: {r: 0.11701665, g: 0.6405446, b: 0.6528301, a: 1}
+  color: {r: 0.690566, g: 0.48748797, b: 0.09250979, a: 1}
   isPriceAveraged: 1
   price: 5
   itemsInSet:
   - {fileID: 11400000, guid: 9471336848a38104cbcdea3ee5d326fe, type: 2}
-  - {fileID: 11400000, guid: e4fcc1457ee9f8445bee2f89e9b6deef, type: 2}
+  - {fileID: 11400000, guid: 58882ffe1998c074faea486f3395f455, type: 2}

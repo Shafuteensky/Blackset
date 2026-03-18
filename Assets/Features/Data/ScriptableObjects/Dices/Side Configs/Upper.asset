@@ -10,11 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 67c27ded4e3746c38684c143f276ddee, type: 3}
-  m_Name: AllMin
+  m_Name: Upper
   m_EditorClassIdentifier: Assembly-CSharp::Blackset.Data.Configurations.SideNumbersConfig
-  id: 3cac53d2db3440f99462273d3fb56dcb
-  dataName: All mined
-  dataDescription: All sides at dice minimum value
+  id: 9907e19773d84c81aaa7162b8e6222ba
+  dataName: High-Loaded
+  dataDescription: LoadedFaces are distributed across the upper half only. Low rolls
+    are gone.
   sideNumbersRules:
-  - rule: 11
+  - rule: 8
     n: 1

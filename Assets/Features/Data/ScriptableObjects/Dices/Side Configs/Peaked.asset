@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 67c27ded4e3746c38684c143f276ddee, type: 3}
-  m_Name: AllMin
+  m_Name: Peaked
   m_EditorClassIdentifier: Assembly-CSharp::Blackset.Data.Configurations.SideNumbersConfig
-  id: 3cac53d2db3440f99462273d3fb56dcb
-  dataName: All mined
-  dataDescription: All sides at dice minimum value
+  id: 84973f37e32e4443b2d2a6d9ff132936
+  dataName: Peaked
+  dataDescription: More faces land on extremes. The middle ground shrinks.
   sideNumbersRules:
-  - rule: 11
+  - rule: 3
     n: 1

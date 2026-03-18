@@ -17,3 +17,4 @@ MonoBehaviour:
   dataDescription: Default dice sides
   sideNumbersRules:
   - rule: 0
+    n: 1

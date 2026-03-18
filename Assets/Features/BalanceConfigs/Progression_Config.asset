@@ -22,11 +22,10 @@ MonoBehaviour:
     milestoneLevelStep: 5
     milestoneBonus: 3
   experienceRewards:
-    participation: 50
-    winBonus: 100
-    loseBonus: 0
+    participationBonus: 5
+    winModifier: 1
+    loseModifier: 0.5
   rewardsMultipliers:
-    difficultyMultiplier: 1
     leagueMultiplier: 1
     modeMultiplier: 1
   opponentDifficultyMultipliers:
@@ -35,8 +34,5 @@ MonoBehaviour:
     cunningWeight: 1
     minMultiplier: 0.8
     maxMultiplier: 1.4
-  unusedResourcesXpBonus:
-    unusedDiceBonus: 0
-    unusedConsumableBonus: 0
-    unusedTotalCap: 999
+    sumModifierWeight: 1
   leagueGates: []

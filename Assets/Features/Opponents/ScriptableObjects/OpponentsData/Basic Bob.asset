@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: af7790b37f324188ab8455dc6e6284f5, type: 3}
-  m_Name: Testan Testinsky
+  m_Name: Basic Bob
   m_EditorClassIdentifier: Assembly-CSharp::Blackset.Opponents.OpponentData
-  id: 515261c647da4a719fb6b1a3dda3f0bf
-  dataName: Testan Testinsky
+  id: 3efabd2f6279487a9fbe61e9453605c2
+  dataName: Basic Bob
   dataDescription: Easy opponent
   buildValue: 0
   masteryLevel: 0
