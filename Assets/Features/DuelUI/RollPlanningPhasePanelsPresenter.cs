@@ -1,6 +1,6 @@
 using Blackset.Duel.Sequence;
-using Blackset.DuelEvents;
 using Blackset.DuelEvents.EventTypes;
+using Extensions.Events;
 using Extensions.Log;
 using UnityEngine;
 

@@ -56,14 +56,18 @@ namespace Features.Progression
         [SerializeField]
         private ExperienceRewards experienceRewards = new ExperienceRewards
         {
-            participation = 10,
-            winBonus = 20,
-            loseBonus = 0
+            participationBonus = 10,
+            winModifier = 1f,
+            loseModifier = 0.75f
+        };
+        [SerializeField]
+        private ModifiersWeight modifiersWeight = new ModifiersWeight
+        {
+            opponentModifierWeight = 1f
         };
         [SerializeField]
         private RewardsMultipliers rewardsMultipliers = new RewardsMultipliers
         {
-            difficultyMultiplier = 1f,
             leagueMultiplier = 1f,
             modeMultiplier = 1f
         };
@@ -75,13 +79,6 @@ namespace Features.Progression
             cunningWeight = 1f,
             minMultiplier = 0.8f,
             maxMultiplier = 1.4f
-        };
-        [SerializeField]
-        private UnusedResourcesXpBonus unusedResourcesXpBonus = new UnusedResourcesXpBonus
-        {
-            unusedDiceBonus = 0,
-            unusedConsumableBonus = 0,
-            unusedTotalCap = 999
         };
 
         [Header("Лиги (WIP)"), Space]
@@ -182,26 +179,29 @@ namespace Features.Progression
         public int GetBattleExperienceReward(
             bool isWin,
             OpponentData opponent,
-            int unusedDices = 0,
-            int unusedConsumables = 0,
-            float difficulty = 1f,
+            int duelScore,
             float league = 1f,
             float mode = 1f)
         {
-            int baseReward = experienceRewards.participation;
+            // Базовый бонус за участие
+            int baseReward = duelScore + experienceRewards.participationBonus;
 
-            if (isWin) baseReward += experienceRewards.winBonus;
-            else baseReward += experienceRewards.loseBonus;
+            // Модификатор победа/проигрышь
+            float modifier = 1f;
+            if (isWin) 
+                modifier = experienceRewards.winModifier;
+            else 
+                modifier = experienceRewards.loseModifier;
+            baseReward = (int)Math.Round(baseReward * modifier);
 
-            int unusedBonus = GetUnusedResourcesBonus(unusedDices, unusedConsumables);
-            baseReward += unusedBonus;
-
+            // Модификатор от режима 
+            // TODO Обновить для лиги и т.д.
             float mult = 1f;
-            mult *= Mathf.Max(0f, rewardsMultipliers.difficultyMultiplier) * Mathf.Max(0f, difficulty);
             mult *= Mathf.Max(0f, rewardsMultipliers.leagueMultiplier) * Mathf.Max(0f, league);
             mult *= Mathf.Max(0f, rewardsMultipliers.modeMultiplier) * Mathf.Max(0f, mode);
 
-            mult *= GetOpponentDifficultyMultiplier(opponent);
+            // Модификатор от сложности соперника
+            mult *= GetOpponentDifficultyMultiplier(opponent) * modifiersWeight.opponentModifierWeight;
 
             int value = Mathf.RoundToInt(baseReward * mult);
             if (value < 0) value = 0;
@@ -270,39 +270,6 @@ namespace Features.Progression
 
             return Mathf.Lerp(minM, maxM, t);
         }
-
-        private int GetUnusedResourcesBonus(int unusedDices, int unusedConsumables)
-        {
-            if (unusedDices < 0) unusedDices = 0;
-            if (unusedConsumables < 0) unusedConsumables = 0;
-
-            int total = unusedDices + unusedConsumables;
-            int cap = unusedResourcesXpBonus.unusedTotalCap;
-
-            if (total > cap)
-            {
-                int overflow = total - cap;
-                if (overflow > 0)
-                {
-                    int removeFromDices = Mathf.Min(unusedDices, overflow);
-                    unusedDices -= removeFromDices;
-                    overflow -= removeFromDices;
-
-                    if (overflow > 0)
-                    {
-                        int removeFromConsumables = Mathf.Min(unusedConsumables, overflow);
-                        unusedConsumables -= removeFromConsumables;
-                    }
-                }
-            }
-
-            int value = 0;
-            value += unusedDices * unusedResourcesXpBonus.unusedDiceBonus;
-            value += unusedConsumables * unusedResourcesXpBonus.unusedConsumableBonus;
-
-            if (value < 0) value = 0;
-            return value;
-        }
         
         #endregion
         
@@ -324,17 +291,6 @@ namespace Features.Progression
             public float maxMultiplier;
         }
 
-        [Serializable]
-        public struct UnusedResourcesXpBonus
-        {
-            [Min(0)]
-            public int unusedDiceBonus;
-            [Min(0)]
-            public int unusedConsumableBonus;
-            [Min(0)]
-            public int unusedTotalCap;
-        }
-        
         [Serializable]
         public struct ExperienceFormulaAB
         {
@@ -365,31 +321,26 @@ namespace Features.Progression
         }
 
         [Serializable]
-        public struct LevelOverridesEntry
-        {
-            [Min(1)]
-            public int level;
-            public bool overrideDiceBudget;
-            [Min(0)]
-            public int diceBudget;
-        }
-
-        [Serializable]
         public struct ExperienceRewards
         {
             [Min(0)]
-            public int participation;
+            public int participationBonus;
             [Min(0)]
-            public int winBonus;
+            public float winModifier;
             [Min(0)]
-            public int loseBonus;
+            public float loseModifier;
+        }
+
+        [Serializable]
+        public struct ModifiersWeight
+        {
+            [Min(0)]
+            public float opponentModifierWeight;
         }
 
         [Serializable]
         public struct RewardsMultipliers
         {
-            [Min(0f)]
-            public float difficultyMultiplier;
             [Min(0f)]
             public float leagueMultiplier;
             [Min(0f)]

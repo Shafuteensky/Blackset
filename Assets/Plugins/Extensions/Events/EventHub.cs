@@ -1,11 +1,15 @@
 using System;
 using System.Collections.Generic;
 
-namespace Blackset.DuelEvents
+namespace Extensions.Events
 {
     /// <summary>
     /// Локальный хаб событий
     /// </summary>
+    /// <remarks>
+    /// Событие TEvent — структура передаваемых данных.
+    /// Вызываемое событие должно иметь параметр того же типа.
+    /// </remarks>
     public sealed class EventHub
     {
         private readonly Dictionary<Type, Delegate> handlers = new();

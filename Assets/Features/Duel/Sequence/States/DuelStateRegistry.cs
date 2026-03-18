@@ -1,7 +1,6 @@
 using Blackset.DecisionInput;
 using Blackset.Duel.Modules;
-using Blackset.DuelEvents;
-using UnityEngine;
+using Extensions.Events;
 
 namespace Blackset.Duel.Sequence.States
 {

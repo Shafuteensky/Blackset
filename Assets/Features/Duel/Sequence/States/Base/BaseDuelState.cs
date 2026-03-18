@@ -1,7 +1,7 @@
 using Blackset.Data.Registries;
 using Blackset.DecisionInput;
 using Blackset.Duel.Modules;
-using Blackset.DuelEvents;
+using Extensions.Events;
 using Extensions.Log;
 
 namespace Blackset.Duel.Sequence.States

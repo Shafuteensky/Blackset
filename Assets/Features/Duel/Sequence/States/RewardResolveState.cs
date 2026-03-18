@@ -9,7 +9,7 @@ using Features.Duel.Data.FightEnd;
 namespace Blackset.Duel.Sequence.States
 {
     /// <summary>
-    /// 11. Расчет и выдача наградд
+    /// 11. Расчет и выдача наград и опыта игроку
     /// </summary>
     /// <remarks>
     /// - Формирование награды по контракту с учетом бонусов и правил
@@ -21,8 +21,9 @@ namespace Blackset.Duel.Sequence.States
         {
             DuelEndResult duelEndState = context.Progress.DuelResult;
             bool isPlayerWon = duelEndState.Winner.Value == FightWinner.Player;
-            
-            RewardRequest rewardRequest = new RewardRequest(isPlayerWon, context.Contract);
+
+            int playerDuelScore = context.Participants[context.PlayerId].DuelScore.Value;
+            RewardRequest rewardRequest = new RewardRequest(isPlayerWon, context.Contract, playerDuelScore);
             IRewardService rewardService = modules.Get<IRewardService>();
             
             DuelRewards duelRewards = rewardService.BuildReward(rewardRequest);

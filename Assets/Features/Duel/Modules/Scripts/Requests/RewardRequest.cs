@@ -15,16 +15,21 @@ namespace Blackset.Duel.Requests
         /// Завершенный контракт
         /// </summary>
         public DuelContract Contract { get; }
+        /// <summary>
+        /// Счет дуэли игрока
+        /// </summary>
+        public int PlayerDuelScore { get; }
 
         /// <summary>
         /// Запрос на выдачу награды игроку за дуэль
         /// </summary>
         /// <param name="isWin">Победил ли игрок в дуэли</param>
         /// <param name="contractId">Завершенный контракт</param>
-        public RewardRequest(bool isWin, DuelContract contract)
+        public RewardRequest(bool isWin, DuelContract contract, int playerDuelScore)
         {
             IsWin = isWin;
             Contract = contract;
+            PlayerDuelScore = playerDuelScore;
         }
     }
 }
