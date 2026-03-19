@@ -16,9 +16,6 @@ namespace Blackset.UI.InventoryManagement
     /// </summary>
     public class InventoryItemInfoPopupController : BaseInfoPopupController<Inventory, InventoryCell, InventoryItemElement>
     {
-        [SerializeField]
-        protected GameObject budgetIndicator;
-        
         [Header("Графика"), Space]
         [SerializeField]
         protected Image iconImage;
@@ -36,9 +33,23 @@ namespace Blackset.UI.InventoryManagement
         protected TMP_Text descriptionText;
         [SerializeField]
         protected TMP_Text priceText;
+        
+        [Header("Бюджет дайса"), Space]
+        [SerializeField]
+        protected GameObject budgetIndicator;
         [SerializeField]
         protected TMP_Text budgetText;
         
+        [Header("Бюджет дайса"), Space]
+        [SerializeField]
+        protected GameObject diceSidesPanel;
+        [SerializeField]
+        protected TMP_Text diceSidesConfigText;
+        [SerializeField]
+        protected TMP_Text diceSidesNameText;
+        [SerializeField]
+        protected TMP_Text diceSidesDescText;
+
         protected override void OnShow(Inventory inventory, string cellId, Vector2 position)
         {
             if ( inventory == null || string.IsNullOrEmpty(cellId) ) return;
@@ -55,7 +66,7 @@ namespace Blackset.UI.InventoryManagement
             
             if (item is EffectingItem effectingItem)
             {
-                FillEffectingItemInfo(effectingItem);
+                FillEffectingItemInfo(effectingItem, type);
             }
         }
 
@@ -63,7 +74,8 @@ namespace Blackset.UI.InventoryManagement
 
         protected override void OnResetElements()
         {
-            budgetIndicator.SetActive(false);
+            budgetIndicator?.SetActive(false);
+            diceSidesPanel?.SetActive(false);
         }
 
         protected void FillBaseInfo(InventoryItem item, InventoryItemType type)
@@ -73,15 +85,26 @@ namespace Blackset.UI.InventoryManagement
             if (descriptionText != null) descriptionText.text = item.DataDescription;
         }
 
-        protected void FillEffectingItemInfo(EffectingItem effectingItem)
+        /// <summary>
+        /// Информация только о <see cref="EffectingItem"/> (дайс/расходник)
+        /// </summary>
+        protected void FillEffectingItemInfo(EffectingItem effectingItem, InventoryItemType type)
         {
             if (setText != null) setText.text = effectingItem.Set.DataName;
             if (iconImage != null) iconImage.color = effectingItem.Color;
 
-            if (effectingItem is DiceData diceItem)
+            // Информация о дайсе
+            if (effectingItem is DiceData diceItem && type is DiceType diceType)
             {
-                budgetIndicator.SetActive(true);
+                // Бюджет
+                budgetIndicator?.SetActive(true);
                 if (budgetText != null) budgetText.text = diceItem.BudgetPrice.ToString();
+                
+                // КОнфигурация значений граней
+                diceSidesPanel?.SetActive(true);
+                if (diceSidesConfigText != null) diceSidesConfigText.text = diceItem.NumbersConfig.GetSideNumbersString(diceType);
+                if (diceSidesNameText != null) diceSidesNameText.text = diceItem.NumbersConfig.DataName;
+                if (diceSidesDescText != null) diceSidesDescText.text = diceItem.NumbersConfig.DataDescription;
             }
         }
 

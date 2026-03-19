@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0633c8754f25404fa70edb0d98fc5f93, type: 3}
+  m_Name: "\u041C\u0438\u043D\u0438\u043C\u0430\u043B\u044C\u043D\u044B\u0439"
+  m_EditorClassIdentifier: Assembly-CSharp::Blackset.Data.DiceData
+  id: b68ffe97e47f40de808f2be5d262133e
+  dataName: Min-loaded
+  dataDescription: Special side-configured dice
+  baseAvailability: -1
+  restrictions: []
+  price: 1
+  itemClass: 1
+  set: {fileID: 11400000, guid: 856a47c752457244f81e34de38ba0b74, type: 2}
+  availableTypes:
+  - {fileID: 11400000, guid: fbd3a5ad0b3ef2940a4f73d042a419d7, type: 2}
+  - {fileID: 11400000, guid: 471cbfaa75a8b904fb3c95d36db6426f, type: 2}
+  - {fileID: 11400000, guid: 7b2c54bf4725d1a4db115c84e52f3363, type: 2}
+  - {fileID: 11400000, guid: 0ae8218b9522594459de916a9dc1bdfb, type: 2}
+  - {fileID: 11400000, guid: 62af0b23df6100641ba60be783e31f76, type: 2}
+  - {fileID: 11400000, guid: 98144d8369c0fd649a1a4aa9083c6aff, type: 2}
+  effect: {fileID: 0}
+  color: {r: 1, g: 0.08235294, b: 0, a: 1}
+  budgetPrice: 1
+  numbersConfig: {fileID: 11400000, guid: 144a64f56a1b1c0459d39d6d1b128903, type: 2}
+  style: {fileID: 11400000, guid: 976af6febc31b5f4698a929a8c645cbd, type: 2}

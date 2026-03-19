@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0dd7dcfdc4c5411db173a1a89252eaa2, type: 3}
+  m_Name: Red
+  m_EditorClassIdentifier: Assembly-CSharp::Blackset.Data.Items.Visual.DiceStyle
+  id: 6eac8f7ae1204fffab3a9668e21e8e69
+  dataName: 
+  dataDescription: 
+  typePrefabs:
+  - type: {fileID: 11400000, guid: fbd3a5ad0b3ef2940a4f73d042a419d7, type: 2}
+    material: {fileID: 2100000, guid: 91149ce0795067a4cae6d54b6ba1f4de, type: 2}
+    body: {fileID: 5620793050405887473, guid: 9399d2f86cd8039499207eda1ba9fda0, type: 3}
+  - type: {fileID: 11400000, guid: 471cbfaa75a8b904fb3c95d36db6426f, type: 2}
+    material: {fileID: 2100000, guid: 91149ce0795067a4cae6d54b6ba1f4de, type: 2}
+    body: {fileID: -1916982273490526068, guid: 84182a4a1d994c84e8e35f02bf118199, type: 3}
+  - type: {fileID: 11400000, guid: 7b2c54bf4725d1a4db115c84e52f3363, type: 2}
+    material: {fileID: 2100000, guid: 91149ce0795067a4cae6d54b6ba1f4de, type: 2}
+    body: {fileID: 1835090649810423853, guid: c7e97f5a5f2f6b9459f807d619f1c299, type: 3}
+  - type: {fileID: 11400000, guid: 0ae8218b9522594459de916a9dc1bdfb, type: 2}
+    material: {fileID: 2100000, guid: 91149ce0795067a4cae6d54b6ba1f4de, type: 2}
+    body: {fileID: 1852925915566027801, guid: e33570038e1f2bf499499192133c9252, type: 3}
+  - type: {fileID: 11400000, guid: 62af0b23df6100641ba60be783e31f76, type: 2}
+    material: {fileID: 2100000, guid: 91149ce0795067a4cae6d54b6ba1f4de, type: 2}
+    body: {fileID: -1394318976111508326, guid: 894a27584ce9ea4459081cfd5e3e589a, type: 3}
+  - type: {fileID: 11400000, guid: 98144d8369c0fd649a1a4aa9083c6aff, type: 2}
+    material: {fileID: 2100000, guid: 91149ce0795067a4cae6d54b6ba1f4de, type: 2}
+    body: {fileID: 8534377132834753856, guid: 536b1dde2e8fec74e851bf597144b23d, type: 3}
