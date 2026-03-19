@@ -47,7 +47,7 @@ namespace Blackset.DuelUI
             if (eventHub == null) return;
 
             eventHub.Subscribe<DeclarationStartedEvent>(OnDeclarationStarted);
-            eventHub.Subscribe<PlanningStartedEvent>(OnPlanningStarted);
+            eventHub.Subscribe<SelectionStartedEvent>(OnPlanningStarted);
             eventHub.Subscribe<PlanningCompletedEvent>(OnPlanningCompleted);
         }
 
@@ -56,13 +56,13 @@ namespace Blackset.DuelUI
             if (eventHub == null) return;
 
             eventHub.Unsubscribe<DeclarationStartedEvent>(OnDeclarationStarted);
-            eventHub.Unsubscribe<PlanningStartedEvent>(OnPlanningStarted);
+            eventHub.Unsubscribe<SelectionStartedEvent>(OnPlanningStarted);
             eventHub.Unsubscribe<PlanningCompletedEvent>(OnPlanningCompleted);
         }
 
         private void OnDeclarationStarted(DeclarationStartedEvent evt) => SetPanels(true, false, false);
 
-        private void OnPlanningStarted(PlanningStartedEvent evt) => SetPanels(false, true, false);
+        private void OnPlanningStarted(SelectionStartedEvent evt) => SetPanels(false, true, false);
 
         private void OnPlanningCompleted(PlanningCompletedEvent evt) => SetPanels(false, false, true);
 

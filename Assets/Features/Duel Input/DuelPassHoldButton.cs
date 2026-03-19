@@ -32,7 +32,7 @@ namespace Blackset.DecisionInput
             if (eventHub == null) return;
             
             eventHub.Subscribe<DeclarationStartedEvent>(OnDeclarationStarted);
-            eventHub.Subscribe<PlanningStartedEvent>(OnPlanningStarted);
+            eventHub.Subscribe<SelectionStartedEvent>(OnPlanningStarted);
             eventHub.Subscribe<PlanningCompletedEvent>(OnPlanningCompleted);
         }
 
@@ -43,7 +43,7 @@ namespace Blackset.DecisionInput
             if (eventHub == null) return;
 
             eventHub.Unsubscribe<DeclarationStartedEvent>(OnDeclarationStarted);
-            eventHub.Unsubscribe<PlanningStartedEvent>(OnPlanningStarted);
+            eventHub.Unsubscribe<SelectionStartedEvent>(OnPlanningStarted);
             eventHub.Unsubscribe<PlanningCompletedEvent>(OnPlanningCompleted);
         }
         
@@ -60,7 +60,7 @@ namespace Blackset.DecisionInput
             SetInteractable(true);
         }
 
-        private void OnPlanningStarted(PlanningStartedEvent evt)
+        private void OnPlanningStarted(SelectionStartedEvent evt)
         {
             SetInteractable(true);
         }

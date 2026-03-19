@@ -89,33 +89,35 @@ namespace Blackset.Duel.Sequence.States
         {
             try
             {
-                // Объявление дайса
-                
+                // Начало стадии объявления (блеф)
                 eventHub.Publish(new DeclarationStartedEvent());
-                
+                // Объявление дайса
                 BotDeclareDice();
                 await PlayerDeclareDice(cancellationToken);
 
+                // Начало стадии выборов действий
+                eventHub.Publish(new SelectionStartedEvent());
                 // Выбор дайса
-                
-                eventHub.Publish(new PlanningStartedEvent());
-                
                 BotSelectDice();
                 await PlayerSelectDice(cancellationToken);
+                // Выбор цели дайса
+                BotSelectDiceTarget();
+                await PlayerSelectDiceTarget(cancellationToken);
+                // Выбор расходника
+                BotSelectConsumable();
+                await PlayerSelectConsumable(cancellationToken);
+                // Выбор цели дайса
+                BotSelectConsumableTarget();
+                await PlayerSelectConsumableTarget(cancellationToken);
 
                 // Зачёт очков за честность
-                
-                ResolveHonesty();
+                ResolveDuelScore();
 
                 // Окончание планирования
-                
                 planningCompleted = true;
                 eventHub.Publish(new PlanningCompletedEvent());
             }
-            catch (OperationCanceledException)
-            {
-                // Нормальная ситуация: стейт покинули раньше завершения ввода
-            }
+            catch (OperationCanceledException) { } // Нормальная ситуация: стейт покинули раньше завершения ввода
             catch (Exception exception)
             {
                 planningException = exception;
@@ -179,18 +181,96 @@ namespace Blackset.Duel.Sequence.States
 
         #endregion
 
+        #region Выбор цели дайса
+
+        /// <summary>
+        /// Бот выбирает цель дайса
+        /// </summary>
+        private void BotSelectDiceTarget()
+        {
+            // TODO
+            SelectionState botSelection = botDecisionSource.BuildDiceSelection(context);
+            botState.SelectDice(botSelection);
+        }
+
+        /// <summary>
+        /// Игрок выбирает цель дайса
+        /// </summary>
+        private async UniTask PlayerSelectDiceTarget(CancellationToken cancellationToken)
+        {
+            // TODO
+            SelectionState playerSelection = playerState.HasPassed.Value
+                ? new SelectionState()
+                : await playerDecisionSource.GetSelection(context, cancellationToken);
+            playerState.SelectDice(playerSelection);
+        }
+
+        #endregion
+
+        #region Выбор расходника
+
+        /// <summary>
+        /// Бот выбирает расходник
+        /// </summary>
+        private void BotSelectConsumable()
+        {
+            // TODO
+            SelectionState botSelection = botDecisionSource.BuildDiceSelection(context);
+            botState.SelectDice(botSelection);
+        }
+
+        /// <summary>
+        /// Игрок выбирает расходник
+        /// </summary>
+        private async UniTask PlayerSelectConsumable(CancellationToken cancellationToken)
+        {
+            // TODO
+            SelectionState playerSelection = playerState.HasPassed.Value
+                ? new SelectionState()
+                : await playerDecisionSource.GetSelection(context, cancellationToken);
+            playerState.SelectDice(playerSelection);
+        }
+
+        #endregion
+
+        #region Выбор цели дайса
+
+        /// <summary>
+        /// Бот выбирает цель расходника
+        /// </summary>
+        private void BotSelectConsumableTarget()
+        {
+            // TODO
+            SelectionState botSelection = botDecisionSource.BuildDiceSelection(context);
+            botState.SelectDice(botSelection);
+        }
+
+        /// <summary>
+        /// Игрок выбирает  цель расходника
+        /// </summary>
+        private async UniTask PlayerSelectConsumableTarget(CancellationToken cancellationToken)
+        {
+            // TODO
+            SelectionState playerSelection = playerState.HasPassed.Value
+                ? new SelectionState()
+                : await playerDecisionSource.GetSelection(context, cancellationToken);
+            playerState.SelectDice(playerSelection);
+        }
+
+        #endregion
+
         #region Зачёт очков
 
         /// <summary>
-        /// Зачёт очков дуэли за честность объявления
+        /// Зачёт очков дуэли
         /// </summary>
-        private void ResolveHonesty()
+        private void ResolveDuelScore()
         {
             IDuelScoreResolver duelScoreResolver = modules.Get<IDuelScoreResolver>();
 
+            // Очки за честность объявления
             duelScoreResolver.ResolveHonesty(context.Participants[context.PlayerId],
                 playerDeclaration, playerState.SelectedDice.Value.ItemId);
-
             duelScoreResolver.ResolveHonesty(context.Participants[context.OpponentId],
                 botDeclaration, botState.SelectedDice.Value.ItemId);
         }
