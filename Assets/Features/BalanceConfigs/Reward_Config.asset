@@ -47,7 +47,7 @@ MonoBehaviour:
       m_RotationOrder: 4
   rewardMultipliers:
     winMultiplier: 1
-    loseMultiplier: 0.1
+    loseMultiplier: 0
   qualitySettings:
     minQuality: 0
     maxQuality: 1

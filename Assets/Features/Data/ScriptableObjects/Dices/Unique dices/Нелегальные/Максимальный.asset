@@ -19,7 +19,7 @@ MonoBehaviour:
   restrictions: []
   price: 20
   itemClass: 1
-  set: {fileID: 11400000, guid: 856a47c752457244f81e34de38ba0b74, type: 2}
+  set: {fileID: 11400000, guid: 1cc5e7ca7224db64cb311b1c83250950, type: 2}
   availableTypes:
   - {fileID: 11400000, guid: fbd3a5ad0b3ef2940a4f73d042a419d7, type: 2}
   - {fileID: 11400000, guid: 471cbfaa75a8b904fb3c95d36db6426f, type: 2}
@@ -28,7 +28,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 62af0b23df6100641ba60be783e31f76, type: 2}
   - {fileID: 11400000, guid: 98144d8369c0fd649a1a4aa9083c6aff, type: 2}
   effect: {fileID: 0}
-  color: {r: 1, g: 0.29531625, b: 0.2320754, a: 1}
+  color: {r: 0.9882353, g: 1, b: 0, a: 1}
   budgetPrice: 6
   numbersConfig: {fileID: 11400000, guid: 1d69828527d317944a25e4dbbcba60a5, type: 2}
   style: {fileID: 11400000, guid: 46956d7939cfc1047b50c0f5183aef7a, type: 2}
