@@ -1,5 +1,4 @@
 using System;
-using Blackset.Duel.Targets;
 using UnityEngine;
 
 namespace Blackset.DecisionInput
@@ -47,21 +46,12 @@ namespace Blackset.DecisionInput
         #region Фазы ввода
         
         /// <summary>
-        /// Разрешить объявление дайса
+        /// Начать ввод выбора
         /// </summary>
         public void BeginSelectionInput(string participantId)
         {
             activeParticipantId = participantId;
             currentMode = InputMode.Declaration;
-        }
-
-        /// <summary>
-        /// Разрешить выбор фактического действия
-        /// </summary>
-        public void BeginIntentSelection(string participantId)
-        {
-            activeParticipantId = participantId;
-            currentMode = InputMode.Intent;
         }
         
         #endregion
@@ -73,14 +63,6 @@ namespace Blackset.DecisionInput
         {
             activeParticipantId = string.Empty;
             currentMode = InputMode.None;
-        }
-
-        /// <summary>
-        /// Явный запрос паса извне
-        /// </summary>
-        public void RequestPass()
-        {
-            if (currentMode != InputMode.Intent) onPassRequested?.Invoke();
         }
 
         #region Отправка запросов

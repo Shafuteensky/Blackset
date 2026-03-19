@@ -31,7 +31,7 @@ namespace Blackset.Duel.Modules
             declaredDice = String.Empty;
             DuelParticipantState bot = context.Participants[context.OpponentId];
 
-            TryGetRandomUnused(bot.Sets.DiceSetInventory, bot.FightState.DicesUsed, out string unusedDiceId);
+            TryGetRandomUnused(bot.Sets.DiceSetInventory, bot.FightState.GetUsedDices(), out string unusedDiceId);
             declaredDice = unusedDiceId;
             
             return declaredDice;
@@ -45,7 +45,7 @@ namespace Blackset.Duel.Modules
             // Если хитрый - кидает другой дайс (не который объявил)
             OpponentData opponent = GameData.Instance.GetOpponent(context.Contract.OpponentId);
             if (Random.value < opponent.CunningLevel && 
-                TryGetRandomUnused(bot.Sets.DiceSetInventory, bot.FightState.DicesUsed, out string unusedDiceId))
+                TryGetRandomUnused(bot.Sets.DiceSetInventory, bot.FightState.GetUsedDices(), out string unusedDiceId))
             {
                 selection.SelectItem(unusedDiceId);
             }
@@ -66,7 +66,7 @@ namespace Blackset.Duel.Modules
             // Случайный расходник на случайную цель
             bool consumableChosen = Random.value <= CONSUMABLE_USE_CHANCE;
             if (consumableChosen && 
-                TryGetRandomUnused(bot.Sets.ConsumableSetInventory, bot.FightState.ConsumablesUsed, out string unusedConsId))
+                TryGetRandomUnused(bot.Sets.ConsumableSetInventory, bot.FightState.GetUsedConsumables(), out string unusedConsId))
             {
                 selection.SelectItem(unusedConsId);
                 SelectRandomParticipantTarget(context, selection);

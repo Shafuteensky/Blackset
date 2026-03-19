@@ -26,7 +26,7 @@ namespace Blackset.Duel.Sequence.States
                 FightParticipantState participantFightState = participant.FightState;
                 if (participantFightState.TurnState.HasPassed.Value) continue;
                 
-                string chosenDiceId = participantFightState.TurnState.SelectedDice.Value;
+                string chosenDiceId = participantFightState.TurnState.SelectedDice.Value.ItemId;
                 int rollResult = diceRoller.RollDice(context, participantId, chosenDiceId, out bool isCrit);
                 
                 participantFightState.RegisterRawRollResult(chosenDiceId, rollResult); 

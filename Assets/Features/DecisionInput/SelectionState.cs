@@ -1,4 +1,5 @@
 using System;
+using Blackset.Duel;
 
 namespace Blackset.DecisionInput
 {
@@ -71,5 +72,19 @@ namespace Blackset.DecisionInput
         /// </summary>
         /// <param name="itemId">Идентификатор дайс-цель</param>
         public void SelectTargetDice(string targetDiceId) => TargetDiceId = targetDiceId;
+
+        /// <summary>
+        /// Получить данные об использовании дайса/расходника
+        /// </summary>
+        public ItemUseContext ToUseContext()
+        {
+            ItemUseContext itemUseContext = new ItemUseContext
+            (
+                SelectedItemId,
+                TargetParticipantId,
+                TargetDiceId
+            );
+            return itemUseContext;
+        }
     }
 }

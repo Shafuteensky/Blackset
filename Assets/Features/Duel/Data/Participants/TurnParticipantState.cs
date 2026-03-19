@@ -1,7 +1,5 @@
 using System;
 using Blackset.DecisionInput;
-using Blackset.Duel.Targets;
-using Extensions.Log;
 using Extensions.Reactive;
 
 namespace Blackset.Duel.Participants
@@ -20,7 +18,6 @@ namespace Blackset.Duel.Participants
         /// </summary>
         public bool AllActionsDone =>
             !String.IsNullOrEmpty(DeclaredDice.Value)
-            && !String.IsNullOrEmpty(DiceTarget.Value)
             && IsConsumableChosen.Value;
 
         /// <summary>
@@ -44,15 +41,7 @@ namespace Blackset.Duel.Participants
         /// <summary>
         /// Выбранный для броска в этом ходу дайс
         /// </summary>
-        public ReactiveProperty<string> SelectedDice { get; private set; } = new(string.Empty);
-        /// <summary>
-        /// Участник-цель применения эффекта дайса
-        /// </summary>
-        public ReactiveProperty<string> DiceParticipantTarget { get; private set; } = new(string.Empty);
-        /// <summary>
-        /// Дайс-цель применения эффекта дайса
-        /// </summary>
-        public ReactiveProperty<string> DiceTarget { get; private set; } = new(string.Empty);
+        public ReactiveProperty<ItemUseContext> SelectedDice { get; private set; } = new();
         
         /// <summary>
         /// Использован ли расходник в этот ход
@@ -61,15 +50,7 @@ namespace Blackset.Duel.Participants
         /// <summary>
         /// Выбранный для использования в этом ходу расходник
         /// </summary>
-        public ReactiveProperty<string> SelectedConsumable { get; private set; } = new(string.Empty);
-        /// <summary>
-        /// Участник-цель применения эффекта расходника
-        /// </summary>
-        public ReactiveProperty<string> ConsumableParticipantTarget { get; private set; } = new(string.Empty);
-        /// <summary>
-        /// Дайс-цель применения эффекта расходника
-        /// </summary>
-        public ReactiveProperty<string> ConsumableTarget { get; private set; } = new(string.Empty);
+        public ReactiveProperty<ItemUseContext> SelectedConsumable { get; private set; } = new();
 
         #region Применение данных
         
@@ -85,14 +66,10 @@ namespace Blackset.Duel.Participants
             DeclaredDice.Value = String.Empty;
             
             IsDiceChosen.Value = false;
-            SelectedDice.Value = String.Empty;
-            DiceParticipantTarget.Value = String.Empty;
-            DiceTarget.Value = String.Empty;
+            SelectedDice.Value = ItemUseContext.Empty;
                 
             IsConsumableChosen.Value = false;
-            SelectedConsumable.Value = String.Empty;
-            ConsumableParticipantTarget.Value = String.Empty;
-            ConsumableTarget.Value = String.Empty;
+            SelectedConsumable.Value =  ItemUseContext.Empty;
         }
         
         /// <summary>
@@ -110,13 +87,9 @@ namespace Blackset.Duel.Participants
             
             clone.IsDiceChosen.Value = IsDiceChosen.Value;
             clone.SelectedDice.Value = SelectedDice.Value;
-            clone.DiceParticipantTarget.Value = DiceParticipantTarget.Value;
-            clone.DiceTarget.Value = DiceTarget.Value;
             
             clone.IsConsumableChosen.Value = IsConsumableChosen.Value;
             clone.SelectedConsumable.Value = SelectedConsumable.Value;
-            clone.ConsumableParticipantTarget.Value = ConsumableParticipantTarget.Value;
-            clone.ConsumableTarget.Value = ConsumableTarget.Value;
             
             return clone;
         }
@@ -154,9 +127,7 @@ namespace Blackset.Duel.Participants
             if (!selection.IsItemSelected) return;
             
             IsDiceChosen.Value = selection.IsItemSelected;
-            SelectedDice.Value = selection.SelectedItemId;
-            DiceParticipantTarget.Value = selection.TargetParticipantId;
-            DiceTarget.Value = selection.TargetDiceId;
+            SelectedDice.Value = selection.ToUseContext();
         }
 
         /// <summary>
@@ -168,9 +139,7 @@ namespace Blackset.Duel.Participants
             if (!selection.IsItemSelected) return;
             
             IsConsumableChosen.Value = selection.IsItemSelected;
-            SelectedConsumable.Value = selection.SelectedItemId;
-            ConsumableParticipantTarget.Value = selection.TargetParticipantId;
-            ConsumableTarget.Value = selection.TargetDiceId;
+            SelectedConsumable.Value = selection.ToUseContext();
         }
 
         #endregion

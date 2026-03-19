@@ -1,5 +1,4 @@
 using System;
-using Blackset.Duel.Targets;
 
 namespace Blackset.DecisionInput
 {

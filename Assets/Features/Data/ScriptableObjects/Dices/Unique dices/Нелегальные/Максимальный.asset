@@ -31,4 +31,4 @@ MonoBehaviour:
   color: {r: 0.9882353, g: 1, b: 0, a: 1}
   budgetPrice: 6
   numbersConfig: {fileID: 11400000, guid: 1d69828527d317944a25e4dbbcba60a5, type: 2}
-  style: {fileID: 11400000, guid: 46956d7939cfc1047b50c0f5183aef7a, type: 2}
+  style: {fileID: 11400000, guid: 54b8af2f208227c4b86dc3cac0ad809a, type: 2}

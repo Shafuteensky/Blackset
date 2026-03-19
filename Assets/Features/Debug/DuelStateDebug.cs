@@ -201,10 +201,10 @@ namespace Blackset.GameDebug
             string declared = string.IsNullOrEmpty(turn.DeclaredDice.Value) ? "—" : turn.DeclaredDice.Value;
             sb.AppendLine($"    Объявленный дайс:    {declared}");
 
-            string chosen = string.IsNullOrEmpty(turn.SelectedDice.Value) ? "—" : turn.SelectedDice.Value;
+            string chosen = string.IsNullOrEmpty(turn.SelectedDice.Value.ItemId) ? "—" : turn.SelectedDice.Value.ItemId;
             sb.AppendLine($"    Выбранный дайс:      {chosen}");
 
-            string consumable = string.IsNullOrEmpty(turn.SelectedConsumable.Value)
+            string consumable = string.IsNullOrEmpty(turn.SelectedConsumable.Value.ItemId)
                 ? "—"
                 : $"{turn.SelectedConsumable.Value} → {turn.SelectedConsumable.Value}";
             sb.Append(    $"    Расходник в ходе:    {consumable}");

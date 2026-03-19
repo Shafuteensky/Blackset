@@ -128,9 +128,9 @@ namespace Blackset.Duel.Sequence.States
                 // Зачет очков дуэли за честность
                 IDuelScoreResolver duelScoreResolver = modules.Get<IDuelScoreResolver>();
                 duelScoreResolver.ResolveHonesty(context.Participants[context.PlayerId], 
-                    playerDeclaration, playerState.SelectedDice.Value);
+                    playerDeclaration, playerState.SelectedDice.Value.ItemId);
                 duelScoreResolver.ResolveHonesty(context.Participants[context.OpponentId], 
-                    botDeclaration, botState.SelectedDice.Value);
+                    botDeclaration, botState.SelectedDice.Value.ItemId);
                 
                 planningCompleted = true;
                 eventHub.Publish(new PlanningCompletedEvent());

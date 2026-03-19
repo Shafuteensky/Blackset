@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using Extensions.Reactive;
-using UnityEngine;
 
 namespace Blackset.Duel.Participants
 {
@@ -15,22 +14,22 @@ namespace Blackset.Duel.Participants
         /// <summary>
         /// Дайс из сборки использован в текущем бою [идентификатор_дайса_в_сборке, первое_использование]
         /// </summary>
-        public event Action<string, bool> onDiceUsed; 
+        public event Action<ItemUseContext, bool> onDiceUsed; 
         /// <summary>
         /// Расходник из сборки использован в текущем бою
         /// </summary>
-        public event Action<string> onConsumableUsed; 
+        public event Action<ItemUseContext> onConsumableUsed; 
         
         #endregion
 
         /// <summary>
         /// Использованные за бой дайсы в порядке применения [id_дайса_в_сборке]
         /// </summary>
-        public List<string> DicesUsed => dicesUsed;
+        public List<ItemUseContext> DicesUsed => dicesUsed;
         /// <summary>
         /// Использованные за бой расходники в порядке применения [id_расходника_в_сборке]
         /// </summary>
-        public List<string> ConsumablesUsed => consumablesUsed;
+        public List<ItemUseContext> ConsumablesUsed => consumablesUsed;
 
         /// <summary>
         /// Результаты бросков дайсов (без эффектов и прочего — "сырые") [id_дайса_в_сборке, результат]
@@ -56,8 +55,8 @@ namespace Blackset.Duel.Participants
         /// </summary>
         public ReactiveProperty<int> FightScore { get; private set; } = new(0);
 
-        private readonly List<string> dicesUsed = new();
-        private readonly List<string> consumablesUsed = new();
+        private readonly List<ItemUseContext> dicesUsed = new();
+        private readonly List<ItemUseContext> consumablesUsed = new();
         
         private readonly Dictionary<string, int> rawRollResults = new();
         private readonly TurnParticipantState turnState = new();
@@ -69,6 +68,32 @@ namespace Blackset.Duel.Participants
         {
             ResetForNewFight();
         }
+
+        #region Получение данных
+        
+        /// <summary>
+        /// Получить список идентификаторов использованных за бой дайсов
+        /// </summary>
+        public List<string> GetUsedDices()
+        {
+            List<string> usedDices = new();
+            foreach (var item in DicesUsed)
+                usedDices.Add(item.ItemId);
+            return usedDices;
+        }
+
+        /// <summary>
+        /// Получить список идентификаторов использованных за бой расходников
+        /// </summary>
+        public List<string> GetUsedConsumables()
+        {
+            List<string> usedDices = new();
+            foreach (var item in ConsumablesUsed)
+                usedDices.Add(item.ItemId);
+            return usedDices;
+        }
+        
+        #endregion
         
         #region Сброс данных
         
@@ -107,21 +132,21 @@ namespace Blackset.Duel.Participants
         /// Отметить дайс использованным
         /// </summary>
         /// <param name="dice">Идентификатор дайса из сборки</param>
-        public void MarkDiceUsed(string dice)
+        public void MarkDiceUsed(ItemUseContext diceUseContext)
         {
-            bool firstTime = !dicesUsed.Contains(dice);
-            dicesUsed.Add(dice);
-            onDiceUsed?.Invoke(dice, firstTime);
+            bool firstTime = !dicesUsed.Contains(diceUseContext);
+            dicesUsed.Add(diceUseContext);
+            onDiceUsed?.Invoke(diceUseContext, firstTime);
         }
 
         /// <summary>
         /// Отметить расходник использованным
         /// </summary>
         /// <param name="dice">Идентификатор расходника из сборки</param>
-        public void MarkConsumableUsed(string consumable)
+        public void MarkConsumableUsed(ItemUseContext consumableUseContext)
         {
-            consumablesUsed.Add(consumable);
-            onConsumableUsed?.Invoke(consumable);
+            consumablesUsed.Add(consumableUseContext);
+            onConsumableUsed?.Invoke(consumableUseContext);
         }
 
         /// <summary>

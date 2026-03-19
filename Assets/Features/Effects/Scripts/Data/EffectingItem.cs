@@ -16,7 +16,7 @@ namespace Blackset.Effects
         /// </summary>
         public EffectConfig Effect => effect;
         /// <summary>
-        /// Цвет предмета // TODO заменить в будущем
+        /// Цвет предмета // TODO Заменить на рендер изображения предмета
         /// </summary>
         public Color Color => color;
         /// <summary>

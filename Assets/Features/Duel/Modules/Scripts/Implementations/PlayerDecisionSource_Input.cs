@@ -1,8 +1,6 @@
 using System.Threading;
 using Blackset.DecisionInput;
 using Blackset.Duel.Context;
-using Blackset.Duel.Participants;
-using Blackset.Duel.Targets;
 using Cysharp.Threading.Tasks;
 using Extensions.Log;
 using UnityEngine;

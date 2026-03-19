@@ -1,3 +1,4 @@
+using Blackset.Duel;
 using Blackset.Duel.Sequence;
 using Blackset.DuelEvents.EventTypes;
 using DG.Tweening;
@@ -48,9 +49,9 @@ namespace Blackset.Data.Items.Visual.Modules
             duelController.EventHub.Subscribe<BattleStartEvent>(OnBattleStart);
         }
 
-        private void OnDiceUsed(string diceId, bool firstTime)
+        private void OnDiceUsed(ItemUseContext usedDice, bool firstTime)
         {
-            if (diceId != itemId) return;
+            if (usedDice.ItemId != itemId) return;
             
             // Если уже использован, то не двигается к центру
             if (!firstTime && animationTween != null)
