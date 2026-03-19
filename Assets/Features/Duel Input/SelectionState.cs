@@ -1,4 +1,3 @@
-using System;
 using Blackset.Duel;
 
 namespace Blackset.DecisionInput

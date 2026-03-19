@@ -18,9 +18,10 @@ namespace Blackset.Duel.Modules
     {
         private DuelContext duelContext;
 
-        private UniTaskCompletionSource<SelectionState> inputCompletionSource;
         private string expectedParticipantId;
         private bool awaitingInput;
+        
+        private UniTaskCompletionSource<SelectionState> inputCompletionSource;
 
         #region Ввод
 
