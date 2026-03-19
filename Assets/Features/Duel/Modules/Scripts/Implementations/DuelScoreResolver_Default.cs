@@ -29,10 +29,10 @@ namespace Blackset.Duel.Modules
                     score += duelScoreConfig.BattleResult.battleWinScore;
 
                 // TODO Учитывать квиквин, камбек
-                if (false)
-                    score += duelScoreConfig.BattleResult.quickWinScore;
-                if (false)
-                    score += duelScoreConfig.BattleResult.comebackWinScore;
+                // if (false)
+                //     score += duelScoreConfig.BattleResult.quickWinScore;
+                // if (false)
+                //     score += duelScoreConfig.BattleResult.comebackWinScore;
 
                 participant.DuelScore.Value += Mathf.Max(0, score);
             }

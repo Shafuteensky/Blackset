@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Blackset.Data.Configurations.SideNumbersConfig
   id: 9907e19773d84c81aaa7162b8e6222ba
   dataName: High-Loaded
-  dataDescription: LoadedFaces are distributed across the upper half only. Low rolls
-    are gone.
+  dataDescription: Faces are distributed across the upper half only. Low rolls are
+    gone.
   sideNumbersRules:
   - rule: 8
     n: 1
