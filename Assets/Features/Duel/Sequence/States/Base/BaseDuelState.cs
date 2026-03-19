@@ -12,7 +12,6 @@ namespace Blackset.Duel.Sequence.States
     public class BaseDuelState
     {
         protected DuelModuleRegistry modules;
-        protected DuelInputPresenter presenter;
         protected EventHub eventHub;
         protected readonly GameData gameData = GameData.Instance;
         
@@ -20,14 +19,12 @@ namespace Blackset.Duel.Sequence.States
         /// Инициализация данных состояния
         /// </summary>
         /// <param name="modules">Реестр модулей обработки данных дуэли</param>
-        public void Initialize(DuelModuleRegistry modulesRegistry,  DuelInputPresenter inputPresenter,  EventHub duelEventHub)
+        public void Initialize(DuelModuleRegistry modulesRegistry,  EventHub duelEventHub)
         {
             ServiceGuard.NotNull(modulesRegistry, nameof(modulesRegistry));
-            ServiceGuard.NotNull(inputPresenter, nameof(inputPresenter));
             ServiceGuard.NotNull(duelEventHub, nameof(duelEventHub));
             
             modules = modulesRegistry;
-            presenter = inputPresenter;
             eventHub = duelEventHub;
         }
     }

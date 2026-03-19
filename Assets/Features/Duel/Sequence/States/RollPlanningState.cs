@@ -80,7 +80,6 @@ namespace Blackset.Duel.Sequence.States
                 
                 IBotDecisionSource botDecisionSource = modules.Get<IBotDecisionSource>();
                 IPlayerDecisionSource playerDecisionSource = modules.Get<IPlayerDecisionSource>();
-                playerDecisionSource.Initialize(presenter);
 
                 TurnParticipantState botState = context.Participants[context.OpponentId].FightState.TurnState;
                 TurnParticipantState playerState = context.Participants[context.PlayerId].FightState.TurnState;

@@ -28,7 +28,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 62af0b23df6100641ba60be783e31f76, type: 2}
   - {fileID: 11400000, guid: 98144d8369c0fd649a1a4aa9083c6aff, type: 2}
   effect: {fileID: 0}
-  color: {r: 0.9882353, g: 1, b: 0, a: 1}
+  color: {r: 0.76738703, g: 0.7735849, b: 0.14449976, a: 1}
   budgetPrice: 6
   numbersConfig: {fileID: 11400000, guid: 1d69828527d317944a25e4dbbcba60a5, type: 2}
-  style: {fileID: 11400000, guid: 54b8af2f208227c4b86dc3cac0ad809a, type: 2}
+  style: {fileID: 11400000, guid: 5dd0709b6eaae854eb90ca57d1fe270b, type: 2}

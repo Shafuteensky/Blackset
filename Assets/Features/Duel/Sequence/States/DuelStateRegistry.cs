@@ -1,4 +1,3 @@
-using Blackset.DecisionInput;
 using Blackset.Duel.Modules;
 using Extensions.Events;
 
@@ -11,17 +10,15 @@ namespace Blackset.Duel.Sequence.States
     public class DuelStateRegistry<TContext> : StateRegistry<TContext>
     {
         private DuelModuleRegistry modules;
-        private DuelInputPresenter presenter;
         private EventHub eventHub;
         
         /// <summary>
         /// Инициализация реестра модулей для состояний
         /// </summary>
         /// <param name="newModules">Реестр модулей</param>
-        public void InitializeModules(DuelModuleRegistry newModules, DuelInputPresenter inputPresenter, EventHub duelEventHub)
+        public void InitializeModules(DuelModuleRegistry newModules, EventHub duelEventHub)
         {
             modules = newModules;
-            presenter = inputPresenter;
             eventHub = duelEventHub;
         }
         
@@ -30,7 +27,7 @@ namespace Blackset.Duel.Sequence.States
             base.Add(state);
             
             if (state is BaseDuelState duelState && modules != null) 
-                duelState.Initialize(modules, presenter, eventHub);
+                duelState.Initialize(modules, eventHub);
         }
     }
 }

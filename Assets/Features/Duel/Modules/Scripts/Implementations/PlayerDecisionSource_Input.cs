@@ -8,100 +8,99 @@ using UnityEngine;
 namespace Blackset.Duel.Modules
 {
     /// <summary>
-    /// Получение намерений игрока через ввод с UI
+    /// Получение намерений игрока через ввод с UI.
+    /// Реализует <see cref="IDuelInputHandler"/> — UI обращается напрямую к этому классу.
     /// </summary>
     [CreateAssetMenu(
         fileName = nameof(PlayerDecisionSource_Input),
         menuName = "Blackset/Duel/Modules/" + nameof(PlayerDecisionSource_Input))]
-    public class PlayerDecisionSource_Input : BaseDuelModule, IPlayerDecisionSource
+    public class PlayerDecisionSource_Input : BaseDuelModule, IPlayerDecisionSource, IDuelInputHandler
     {
         private DuelContext duelContext;
-        private DuelInputPresenter presenter;
 
         private UniTaskCompletionSource<SelectionState> inputCompletionSource;
-
+        private string expectedParticipantId;
         private bool awaitingInput;
 
-        private SelectionState selection = new();
-
-        /// <summary>
-        /// Инициализация зависимостей
-        /// </summary>
-        public void Initialize(DuelInputPresenter newPresenter)
-        {
-            presenter = newPresenter;
-            isInitialized = true;
-
-            presenter.SetItemCallbacks(
-                HandleInput,
-                HandleInput,
-                HandlePassRequested);
-        }
-
         #region Ввод
-        
+
         /// <summary>
         /// Получить ввод выбора от игрока
         /// </summary>
         public UniTask<SelectionState> GetSelection(DuelContext context, CancellationToken cancellationToken)
         {
             ServiceGuard.NotNull(context, nameof(context));
-            ServiceGuard.NotNull(presenter, nameof(presenter));
-            
+
             duelContext = context;
 
-            selection = new SelectionState();
             inputCompletionSource = new UniTaskCompletionSource<SelectionState>();
+            expectedParticipantId = context.PlayerId;
             awaitingInput = true;
 
             cancellationToken.Register(CancelInput);
 
-            presenter.BeginSelectionInput(context.PlayerId);
-
             return inputCompletionSource.Task;
         }
-        
+
         #endregion
 
-        #region Обработка ввода
-        
-        private void HandleInput(SelectionState inputSelection)
+        #region IDuelInputHandler
+
+        /// <summary>
+        /// Вызывается UI при выборе дайса участником
+        /// </summary>
+        public void OnDiceSelected(string participantId, SelectionState selection)
         {
-            if (!awaitingInput) return;
-            
-            selection = inputSelection;
+            if (!CanAccept(participantId)) return;
+
             CompleteInput(selection);
         }
 
-        private void HandlePassRequested()
+        /// <summary>
+        /// Вызывается UI при выборе расходника участником
+        /// </summary>
+        public void OnConsumableSelected(string participantId, SelectionState selection)
         {
-            duelContext.Participants[duelContext.PlayerId].FightState.TurnState.MarkPassed();
-            
-            if (awaitingInput)
-            {
-                SelectionState emptySelection = new SelectionState();
-                CompleteInput(emptySelection);
-            }
+            if (!CanAccept(participantId)) return;
+
+            CompleteInput(selection);
         }
-        
+
+        /// <summary>
+        /// Вызывается UI при запросе паса
+        /// </summary>
+        public void OnPassRequested()
+        {
+            if (!awaitingInput) return;
+
+            duelContext.Participants[duelContext.PlayerId].FightState.TurnState.MarkPassed();
+            CompleteInput(new SelectionState());
+        }
+
         #endregion
 
         #region Завершение ввода
-        
-        private void CompleteInput(SelectionState inputSelection)
+
+        private void CompleteInput(SelectionState result)
         {
             awaitingInput = false;
-            presenter.EndInput();
-            inputCompletionSource.TrySetResult(selection);
+            expectedParticipantId = string.Empty;
+            inputCompletionSource.TrySetResult(result);
         }
-        
+
         private void CancelInput()
         {
             awaitingInput = false;
-            presenter.EndInput();
+            expectedParticipantId = string.Empty;
             inputCompletionSource.TrySetCanceled();
         }
-        
+
         #endregion
+
+        /// <summary>
+        /// Проверяет, может ли текущий ввод быть принят от данного участника
+        /// </summary>
+        private bool CanAccept(string participantId) =>
+            awaitingInput && participantId == expectedParticipantId;
     }
 }

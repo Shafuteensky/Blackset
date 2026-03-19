@@ -21,11 +21,5 @@ namespace Blackset.Duel.Modules
         /// <param name="cancellationToken">Токен отмены ожидания</param>
         /// <returns>Задача с ожиданием результата выбора</returns>
         public UniTask<SelectionState> GetSelection(DuelContext context, CancellationToken cancellationToken);
-
-        /// <summary>
-        /// Инициализация элементов источника
-        /// </summary>
-        /// <param name="newPresenter">UI-презентер</param>
-        public void Initialize(DuelInputPresenter newPresenter);
     }
 }

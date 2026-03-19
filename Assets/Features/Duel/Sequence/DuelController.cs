@@ -33,7 +33,6 @@ namespace Blackset.Duel.Sequence
         
         [Header("Модули"), Space]
         [SerializeField] private DuelModuleRegistry modules;
-        [SerializeField] private DuelInputPresenter inputPresenter;
         
         [Header("Входные данные"), Space]
         [SerializeField] private SelectedContract selectedContract;
@@ -139,7 +138,7 @@ namespace Blackset.Duel.Sequence
         {
             DuelStateRegistry<DuelContext> duelStateRegistry = new();
             ServiceGuard.NotNull(modules, nameof(modules));
-            duelStateRegistry.InitializeModules(modules, inputPresenter, eventHub);
+            duelStateRegistry.InitializeModules(modules, eventHub);
 
             duelStateRegistry.Add(new DuelInitState());
             

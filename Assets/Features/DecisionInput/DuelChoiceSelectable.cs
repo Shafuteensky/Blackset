@@ -10,7 +10,7 @@ namespace Blackset.DecisionInput
     /// Выбор предмета в фазах планирования
     /// </summary>
     [RequireComponent(typeof(BaseVisual))]
-    public sealed class DuelChoiceSelectable : MonoBehaviour, IPointerClickHandler
+    public sealed class DuelChoiceSelectable : InputHandlerProvider, IPointerClickHandler
     {
         [SerializeField] private ItemClass choiceType;
 
@@ -30,13 +30,13 @@ namespace Blackset.DecisionInput
                 case ItemClass.Dice:
                 {
                     selection = new SelectionState(baseVisual.ItemId);
-                    DuelSelectionBus.PublishDiceSelected(baseVisual.OwnerParticipantId, selection);
+                    inputHandler.OnDiceSelected(baseVisual.OwnerParticipantId, selection);
                     break;
                 }
                 case ItemClass.Consumable:
                 {
                     selection = new SelectionState(baseVisual.ItemId);
-                    DuelSelectionBus.PublishConsumableSelected(baseVisual.OwnerParticipantId, selection); 
+                    inputHandler.OnConsumableSelected(baseVisual.OwnerParticipantId, selection); 
                     // TODO Заменить на выбор применения при необходимости (расходник или особый дайс)
                     break;
                 }

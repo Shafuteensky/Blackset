@@ -2,6 +2,7 @@ using Blackset.Duel.Sequence;
 using Blackset.DuelEvents.EventTypes;
 using Extensions.Events;
 using Extensions.Generics;
+using UnityEngine;
 
 namespace Blackset.DecisionInput
 {
@@ -11,11 +12,17 @@ namespace Blackset.DecisionInput
     public sealed class DuelPassHoldButton : AbstractHoldButton
     {
         private EventHub eventHub;
+        private IDuelInputHandler inputHandler;
         
         protected override void Awake()
         {
             base.Awake();
             eventHub = DuelController.Instance.EventHub;
+        }
+        
+        private void Start()
+        {
+            inputHandler = InputRegistrar.Instance.InputHandler;
         }
 
         protected override void OnEnable()
@@ -43,7 +50,7 @@ namespace Blackset.DecisionInput
         public override void OnButtonClick()
         {
             // Запрос пасса 
-            DuelSelectionBus.PublishPassRequested();
+            inputHandler?.OnPassRequested();
         }
 
         #region Изменение состояния кнопки
