@@ -23,7 +23,7 @@ namespace Blackset.Duel.Modules
         
         private UniTaskCompletionSource<SelectionState> inputCompletionSource;
 
-        #region Ввод
+        #region IPlayerDecisionSource (Запрос на ввод)
 
         /// <summary>
         /// Получить ввод выбора от игрока
@@ -45,7 +45,7 @@ namespace Blackset.Duel.Modules
 
         #endregion
 
-        #region IDuelInputHandler
+        #region IDuelInputHandler (Ввод)
 
         /// <summary>
         /// Вызывается UI при выборе дайса участником

@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using System.Threading;
 using Blackset.DecisionInput;
 using Blackset.Duel.Context;
@@ -9,7 +8,6 @@ using Blackset.DuelEvents.EventTypes;
 using Cysharp.Threading.Tasks;
 using Extensions.FiniteStateMachine;
 using UnityEngine;
-using Random = UnityEngine.Random;
 
 namespace Blackset.Duel.Sequence.States
 {
@@ -27,6 +25,17 @@ namespace Blackset.Duel.Sequence.States
         private bool planningCompleted;
         private Exception planningException;
 
+        private DuelContext context;
+        private TurnParticipantState botState;
+        private TurnParticipantState playerState;
+        private IBotDecisionSource botDecisionSource;
+        private IPlayerDecisionSource playerDecisionSource;
+
+        private string playerDeclaration;
+        private string botDeclaration;
+
+        #region IState
+
         public void Enter(DuelContext context)
         {
             context.Progress.OnNewThrow();
@@ -35,25 +44,26 @@ namespace Blackset.Duel.Sequence.States
                 participant.FightState.TurnState.ResetForNewTurn();
             }
 
+            this.context = context;
+            botState = context.Participants[context.OpponentId].FightState.TurnState;
+            playerState = context.Participants[context.PlayerId].FightState.TurnState;
+            botDecisionSource = modules.Get<IBotDecisionSource>();
+            playerDecisionSource = modules.Get<IPlayerDecisionSource>();
+
             planningCompleted = false;
             planningException = null;
 
             planningCancellationTokenSource = new CancellationTokenSource();
 
-            RunPlanningAsync(context, planningCancellationTokenSource.Token).Forget();
+            RunPlanningAsync(planningCancellationTokenSource.Token).Forget();
         }
 
         public StateResult Tick(DuelContext context)
         {
-            if (planningException != null)
-            {
-                throw planningException;
-            }
-
-            if (!planningCompleted)
-            {
-                return StateResult.Stay();
-            }
+            // Ошибка планирования (метод RunPlanningAsync)
+            if (planningException != null) throw planningException;
+            // Ожидание ввода, если не завершен
+            if (!planningCompleted) return StateResult.Stay();
 
             return StateResult.Switch<RollResolveState>();
         }
@@ -68,68 +78,36 @@ namespace Blackset.Duel.Sequence.States
             }
         }
 
+        #endregion
+
+        #region Планирование хода
+
         /// <summary>
         /// Последовательно выполняет все шаги планирования хода
         /// </summary>
-        private async UniTaskVoid RunPlanningAsync(DuelContext context, CancellationToken cancellationToken)
+        private async UniTaskVoid RunPlanningAsync(CancellationToken cancellationToken)
         {
             try
             {
-                SelectionState playerSelection = new SelectionState();
-                SelectionState botSelection = new SelectionState();
-                
-                IBotDecisionSource botDecisionSource = modules.Get<IBotDecisionSource>();
-                IPlayerDecisionSource playerDecisionSource = modules.Get<IPlayerDecisionSource>();
-
-                TurnParticipantState botState = context.Participants[context.OpponentId].FightState.TurnState;
-                TurnParticipantState playerState = context.Participants[context.PlayerId].FightState.TurnState;
-                
-                string playerDeclaration = string.Empty;
-                string botDeclaration = string.Empty;
-                
-                // Объявление дайса ————————————————————————————————————————————————————————————————————————————————————
+                // Объявление дайса
                 
                 eventHub.Publish(new DeclarationStartedEvent());
                 
-                // Бот объявляет дайс
-                botDeclaration = botDecisionSource.BuildDeclaration(context);
-                botSelection.SelectItem(botDeclaration);
-                botState.DeclareDice(botSelection);
-                eventHub.Publish(new DeclaredDiceEvent(botDeclaration, context.OpponentId));
-                
-                // Игрок объявляет дайс
-                playerSelection = await playerDecisionSource.GetSelection(context, cancellationToken);
-                if (!playerState.HasPassed.Value) // Если не спасовал
-                {
-                    playerDeclaration = playerSelection.SelectedItemId;
-                    playerState.DeclareDice(playerSelection);
-                    eventHub.Publish(new DeclaredDiceEvent(playerSelection.SelectedItemId, context.PlayerId));
-                }
-                
-                // Выбор дайса —————————————————————————————————————————————————————————————————————————————————————————
+                BotDeclareDice();
+                await PlayerDeclareDice(cancellationToken);
+
+                // Выбор дайса
                 
                 eventHub.Publish(new PlanningStartedEvent());
-
-                // Бот выбирает дайс
-                botSelection = botDecisionSource.BuildDiceSelection(context);
-                botState.SelectDice(botSelection);
                 
-                // Игрок выбирает дайс
-                if (!playerState.HasPassed.Value)
-                {
-                    playerSelection = await playerDecisionSource.GetSelection(context, cancellationToken);
-                }
-                else playerSelection = new SelectionState();
-                playerState.SelectDice(playerSelection);
+                BotSelectDice();
+                await PlayerSelectDice(cancellationToken);
 
-                // —————————————————————————————————————————————————————————————————————————————————————————————————————
+                // Зачёт очков за честность
+                
+                ResolveHonesty();
 
-                // Зачет очков дуэли за честность
-                IDuelScoreResolver duelScoreResolver = modules.Get<IDuelScoreResolver>();
-                duelScoreResolver.ResolveHonesty(context.Participants[context.PlayerId], 
-                    playerDeclaration, playerState.SelectedDice.Value.ItemId);
-                duelScoreResolver.ResolveHonesty(context.Participants[context.OpponentId], 
-                    botDeclaration, botState.SelectedDice.Value.ItemId);
+                // Окончание планирования
                 
                 planningCompleted = true;
                 eventHub.Publish(new PlanningCompletedEvent());
@@ -143,5 +121,80 @@ namespace Blackset.Duel.Sequence.States
                 planningException = exception;
             }
         }
+
+        #endregion
+
+        #region Объявление дайса
+
+        /// <summary>
+        /// Бот объявляет дайс
+        /// </summary>
+        private void BotDeclareDice()
+        {
+            botDeclaration = botDecisionSource.BuildDeclaration(context);
+            SelectionState botSelection = new SelectionState();
+            botSelection.SelectItem(botDeclaration);
+            botState.DeclareDice(botSelection);
+            eventHub.Publish(new DeclaredDiceEvent(botDeclaration, context.OpponentId));
+        }
+
+        /// <summary>
+        /// Игрок объявляет дайс
+        /// </summary>
+        private async UniTask PlayerDeclareDice(CancellationToken cancellationToken)
+        {
+            SelectionState playerSelection = await playerDecisionSource.GetSelection(context, cancellationToken);
+            playerDeclaration = string.Empty;
+            if (!playerState.HasPassed.Value) // Если не спасовал
+            {
+                playerDeclaration = playerSelection.SelectedItemId;
+                eventHub.Publish(new DeclaredDiceEvent(playerDeclaration, context.PlayerId));
+            }
+            playerState.DeclareDice(playerSelection);
+        }
+
+        #endregion
+
+        #region Выбор дайса
+
+        /// <summary>
+        /// Бот выбирает дайс
+        /// </summary>
+        private void BotSelectDice()
+        {
+            SelectionState botSelection = botDecisionSource.BuildDiceSelection(context);
+            botState.SelectDice(botSelection);
+        }
+
+        /// <summary>
+        /// Игрок выбирает дайс
+        /// </summary>
+        private async UniTask PlayerSelectDice(CancellationToken cancellationToken)
+        {
+            SelectionState playerSelection = playerState.HasPassed.Value
+                ? new SelectionState()
+                : await playerDecisionSource.GetSelection(context, cancellationToken);
+            playerState.SelectDice(playerSelection);
+        }
+
+        #endregion
+
+        #region Зачёт очков
+
+        /// <summary>
+        /// Зачёт очков дуэли за честность объявления
+        /// </summary>
+        private void ResolveHonesty()
+        {
+            IDuelScoreResolver duelScoreResolver = modules.Get<IDuelScoreResolver>();
+
+            duelScoreResolver.ResolveHonesty(context.Participants[context.PlayerId],
+                playerDeclaration, playerState.SelectedDice.Value.ItemId);
+
+            duelScoreResolver.ResolveHonesty(context.Participants[context.OpponentId],
+                botDeclaration, botState.SelectedDice.Value.ItemId);
+        }
+
+        #endregion
     }
 }
