@@ -12,10 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6623fd50c9874f108445f49990016da6, type: 3}
   m_Name: ConsumableSetInventory_Player
   m_EditorClassIdentifier: Assembly-CSharp::Blackset.Inventories.Inventory
-  id: 176e5aca3b704d6a93e6884b3cca8102
+  id: eeb48706a06b4559a6515f5162456c25
   autoSave: 0
-  dataRegistry: {fileID: 11400000, guid: d68c7f8b5e8d57343b1bade366855ab2, type: 2}
-  typeRegistry: {fileID: 11400000, guid: cc58f8da688b0ba4591b5b872639060e, type: 2}
   maxCellAmount: 1
   slotsCount: 0
   allowedItemClass: 2

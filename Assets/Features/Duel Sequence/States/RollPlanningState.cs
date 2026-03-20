@@ -5,8 +5,11 @@ using Blackset.Duel.Context;
 using Blackset.Duel.Modules;
 using Blackset.Duel.Participants;
 using Blackset.DuelEvents.EventTypes;
+using Blackset.Effects;
+using Blackset.Inventories.Scripts.Items;
 using Cysharp.Threading.Tasks;
 using Extensions.FiniteStateMachine;
+using Extensions.Log;
 using UnityEngine;
 
 namespace Blackset.Duel.Sequence.States
@@ -100,15 +103,9 @@ namespace Blackset.Duel.Sequence.States
                 // Выбор дайса
                 BotSelectDice();
                 await PlayerSelectDice(cancellationToken);
-                // Выбор цели дайса
-                BotSelectDiceTarget();
-                await PlayerSelectDiceTarget(cancellationToken);
                 // Выбор расходника
                 BotSelectConsumable();
                 await PlayerSelectConsumable(cancellationToken);
-                // Выбор цели дайса
-                BotSelectConsumableTarget();
-                await PlayerSelectConsumableTarget(cancellationToken);
 
                 // Зачёт очков за честность
                 ResolveDuelScore();
@@ -181,32 +178,6 @@ namespace Blackset.Duel.Sequence.States
 
         #endregion
 
-        #region Выбор цели дайса
-
-        /// <summary>
-        /// Бот выбирает цель дайса
-        /// </summary>
-        private void BotSelectDiceTarget()
-        {
-            // TODO
-            SelectionState botSelection = botDecisionSource.BuildDiceSelection(context);
-            botState.SelectDice(botSelection);
-        }
-
-        /// <summary>
-        /// Игрок выбирает цель дайса
-        /// </summary>
-        private async UniTask PlayerSelectDiceTarget(CancellationToken cancellationToken)
-        {
-            // TODO
-            SelectionState playerSelection = playerState.HasPassed.Value
-                ? new SelectionState()
-                : await playerDecisionSource.GetSelection(context, cancellationToken);
-            playerState.SelectDice(playerSelection);
-        }
-
-        #endregion
-
         #region Выбор расходника
 
         /// <summary>
@@ -233,32 +204,6 @@ namespace Blackset.Duel.Sequence.States
 
         #endregion
 
-        #region Выбор цели дайса
-
-        /// <summary>
-        /// Бот выбирает цель расходника
-        /// </summary>
-        private void BotSelectConsumableTarget()
-        {
-            // TODO
-            SelectionState botSelection = botDecisionSource.BuildDiceSelection(context);
-            botState.SelectDice(botSelection);
-        }
-
-        /// <summary>
-        /// Игрок выбирает  цель расходника
-        /// </summary>
-        private async UniTask PlayerSelectConsumableTarget(CancellationToken cancellationToken)
-        {
-            // TODO
-            SelectionState playerSelection = playerState.HasPassed.Value
-                ? new SelectionState()
-                : await playerDecisionSource.GetSelection(context, cancellationToken);
-            playerState.SelectDice(playerSelection);
-        }
-
-        #endregion
-
         #region Зачёт очков
 
         /// <summary>
@@ -270,9 +215,9 @@ namespace Blackset.Duel.Sequence.States
 
             // Очки за честность объявления
             duelScoreResolver.ResolveHonesty(context.Participants[context.PlayerId],
-                playerDeclaration, playerState.SelectedDice.Value.ItemId);
+                playerDeclaration, playerState.SelectedDice.Value);
             duelScoreResolver.ResolveHonesty(context.Participants[context.OpponentId],
-                botDeclaration, botState.SelectedDice.Value.ItemId);
+                botDeclaration, botState.SelectedDice.Value);
         }
 
         #endregion

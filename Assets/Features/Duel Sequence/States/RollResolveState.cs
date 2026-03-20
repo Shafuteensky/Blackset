@@ -24,17 +24,20 @@ namespace Blackset.Duel.Sequence.States
             {
                 DuelParticipantState participant = context.Participants[participantId];
                 FightParticipantState participantFightState = participant.FightState;
+                
                 if (participantFightState.TurnState.HasPassed.Value) continue;
-                
-                string chosenDiceId = participantFightState.TurnState.SelectedDice.Value.ItemId;
-                int rollResult = diceRoller.RollDice(context, participantId, chosenDiceId, out bool isCrit);
-                
-                participantFightState.RegisterRawRollResult(chosenDiceId, rollResult); 
 
-                // Зачет очков дуэли за криты дайсов
-                duelScoreResolver.ResolveCrit(participant, isCrit);
+                if (participantFightState.TurnState.IsDiceChosen.Value)
+                {
+                    string chosenDiceId = participantFightState.TurnState.SelectedDice.Value;
+                    int rollResult = diceRoller.RollDice(context, participantId, chosenDiceId, out bool isCrit);
+                    participantFightState.RegisterRawRollResult(chosenDiceId, rollResult); 
+
+                    // Зачет очков дуэли за криты дайсов
+                    duelScoreResolver.ResolveCrit(participant, isCrit);
                 
-                eventHub.Publish(new DiceRolledEvent(participantId, chosenDiceId, rollResult));
+                    eventHub.Publish(new DiceRolledEvent(participantId, chosenDiceId, rollResult));
+                }
             }
         }
         

@@ -14,22 +14,22 @@ namespace Blackset.Duel.Participants
         /// <summary>
         /// Дайс из сборки использован в текущем бою [идентификатор_дайса_в_сборке, первое_использование]
         /// </summary>
-        public event Action<ItemUseContext, bool> onDiceUsed; 
+        public event Action<string, bool> onDiceUsed; 
         /// <summary>
         /// Расходник из сборки использован в текущем бою
         /// </summary>
-        public event Action<ItemUseContext> onConsumableUsed; 
+        public event Action<string> onConsumableUsed; 
         
         #endregion
 
         /// <summary>
         /// Использованные за бой дайсы в порядке применения [id_дайса_в_сборке]
         /// </summary>
-        public List<ItemUseContext> DicesUsed => dicesUsed;
+        public List<string> DicesUsed => dicesUsed;
         /// <summary>
         /// Использованные за бой расходники в порядке применения [id_расходника_в_сборке]
         /// </summary>
-        public List<ItemUseContext> ConsumablesUsed => consumablesUsed;
+        public List<string> ConsumablesUsed => consumablesUsed;
 
         /// <summary>
         /// Результаты бросков дайсов (без эффектов и прочего — "сырые") [id_дайса_в_сборке, результат]
@@ -55,8 +55,8 @@ namespace Blackset.Duel.Participants
         /// </summary>
         public ReactiveProperty<int> FightScore { get; private set; } = new(0);
 
-        private readonly List<ItemUseContext> dicesUsed = new();
-        private readonly List<ItemUseContext> consumablesUsed = new();
+        private readonly List<string> dicesUsed = new();
+        private readonly List<string> consumablesUsed = new();
         
         private readonly Dictionary<string, int> rawRollResults = new();
         private readonly TurnParticipantState turnState = new();
@@ -78,7 +78,7 @@ namespace Blackset.Duel.Participants
         {
             List<string> usedDices = new();
             foreach (var item in DicesUsed)
-                usedDices.Add(item.ItemId);
+                usedDices.Add(item);
             return usedDices;
         }
 
@@ -89,7 +89,7 @@ namespace Blackset.Duel.Participants
         {
             List<string> usedDices = new();
             foreach (var item in ConsumablesUsed)
-                usedDices.Add(item.ItemId);
+                usedDices.Add(item);
             return usedDices;
         }
         
@@ -132,21 +132,21 @@ namespace Blackset.Duel.Participants
         /// Отметить дайс использованным
         /// </summary>
         /// <param name="dice">Идентификатор дайса из сборки</param>
-        public void MarkDiceUsed(ItemUseContext diceUseContext)
+        public void MarkDiceUsed(string diceId)
         {
-            bool firstTime = !dicesUsed.Contains(diceUseContext);
-            dicesUsed.Add(diceUseContext);
-            onDiceUsed?.Invoke(diceUseContext, firstTime);
+            bool firstTime = !dicesUsed.Contains(diceId);
+            dicesUsed.Add(diceId);
+            onDiceUsed?.Invoke(diceId, firstTime);
         }
 
         /// <summary>
         /// Отметить расходник использованным
         /// </summary>
         /// <param name="dice">Идентификатор расходника из сборки</param>
-        public void MarkConsumableUsed(ItemUseContext consumableUseContext)
+        public void MarkConsumableUsed(string consumableId)
         {
-            consumablesUsed.Add(consumableUseContext);
-            onConsumableUsed?.Invoke(consumableUseContext);
+            consumablesUsed.Add(consumableId);
+            onConsumableUsed?.Invoke(consumableId);
         }
 
         /// <summary>

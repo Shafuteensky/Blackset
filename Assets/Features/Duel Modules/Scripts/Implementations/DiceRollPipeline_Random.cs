@@ -31,7 +31,7 @@ namespace Blackset.Duel.Modules
         
         public int RollChosenDice(DuelContext context, string participantId, out bool isCrit)
         {
-            string chosenDiceId = context.Participants[participantId].FightState.TurnState.SelectedDice.Value.ItemId;
+            string chosenDiceId = context.Participants[participantId].FightState.TurnState.SelectedDice.Value;
             int rollResult = RollDice(context, participantId, chosenDiceId, out isCrit);
             return rollResult;
         }

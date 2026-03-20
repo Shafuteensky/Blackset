@@ -1,5 +1,9 @@
+using Blackset.Data.Items.Visual.Modules;
+using Blackset.Duel.Sequence;
 using Blackset.Inventories;
+using Blackset.Inventories.Scripts.Items;
 using Blackset.UI.InventoryManagement;
+using Extensions.Log;
 using UnityEngine;
 
 namespace Blackset.Data.Items.Visual
@@ -20,7 +24,15 @@ namespace Blackset.Data.Items.Visual
         /// </summary>
         public  string OwnerParticipantId { get; private set; }
 
+        [Header("Предмет"), Space]
+        [SerializeField] protected ItemClass visualItemClass;
+        
+        [Header("Модули"), Space]
+        [SerializeField] protected ItemPositionController positionController;
+        [SerializeField] protected VisualItemInteractionBlocker interactionBlocker;
+        
         protected InventoryItemElement itemElement;
+        protected DuelController duelController;
 
         protected virtual void Awake()
         {
@@ -41,6 +53,19 @@ namespace Blackset.Data.Items.Visual
             OwnerParticipantId = ownerParticipantId;
             
             itemElement.Initialize(inventory, newItemCellId);
+            
+            duelController = DuelController.Instance;
+            if (duelController == null)
+            {
+                ServiceDebug.LogError(
+                    $"Не найден инстанс {nameof(DuelController)}, визуальный предмет не инициализирован");
+                return;
+            }
+
+            bool isParticipantPlayer = DuelController.Instance.DuelContext.PlayerId == ownerParticipantId;
+            interactionBlocker.Initialize(isParticipantPlayer);
+            
+            positionController.Initialize(DuelController.Instance, itemId, ownerParticipantId, transform, visualItemClass);
         }
     }
 }

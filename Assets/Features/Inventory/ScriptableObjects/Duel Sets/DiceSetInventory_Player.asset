@@ -10,12 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6623fd50c9874f108445f49990016da6, type: 3}
-  m_Name: DiceSetInventory_Opponent
+  m_Name: DiceSetInventory_Player
   m_EditorClassIdentifier: Assembly-CSharp::Blackset.Inventories.Inventory
-  id: 91743af2b1a74e4188e197d07179ff8a
+  id: 9a0de79e14c749788c762ae5bbb43a35
   autoSave: 0
-  dataRegistry: {fileID: 11400000, guid: ed018a7561b12ba4f96674954885bfdc, type: 2}
-  typeRegistry: {fileID: 11400000, guid: baff5f3f39c21ed4085b2717f755f0a8, type: 2}
   maxCellAmount: 1
   slotsCount: 0
   allowedItemClass: 1

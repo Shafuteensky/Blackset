@@ -15,9 +15,9 @@ namespace Blackset.Data
         /// <summary>
         /// Визуальный префаб расходника
         /// </summary>
-        public VisualConsumable VisualConsumable => visualConsumable;
+        public GameObject ConsumablePrefab => consumablePrefab;
 
         [Header("Визуал"), Space]
-        [SerializeField] private VisualConsumable visualConsumable;
+        [SerializeField] private GameObject consumablePrefab;
     }
 }

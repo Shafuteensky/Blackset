@@ -1,12 +1,10 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Blackset.Data.Registries;
 using Blackset.DecisionInput;
 using Blackset.Duel.Context;
 using Blackset.Duel.Participants;
 using Blackset.Inventories;
-using Blackset.Inventories.Cells;
 using Blackset.Opponents;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -52,9 +50,6 @@ namespace Blackset.Duel.Modules
             else
                 selection.SelectItem(declaredDice);
             
-            SelectRandomParticipantTarget(context, selection);
-            SelectRandomDiceTarget(context, selection);
-            
             return selection;
         }
 
@@ -69,8 +64,6 @@ namespace Blackset.Duel.Modules
                 TryGetRandomUnused(bot.Sets.ConsumableSetInventory, bot.FightState.GetUsedConsumables(), out string unusedConsId))
             {
                 selection.SelectItem(unusedConsId);
-                SelectRandomParticipantTarget(context, selection);
-                SelectRandomDiceTarget(context, selection);
             }
             
             return selection;
@@ -98,23 +91,6 @@ namespace Blackset.Duel.Modules
             resultKey = availableKeys[randomIndex];
 
             return true;
-        }
-
-        private void SelectRandomParticipantTarget(DuelContext context, SelectionState selection)
-        {
-            string randomParticipant = context.Participants.ElementAt(Random.Range(0, context.Participants.Count)).Key;
-            
-            selection.SelectTargetParticipant(randomParticipant);
-        }
-
-        private void SelectRandomDiceTarget(DuelContext context, SelectionState selection)
-        {
-            string randomParticipant = context.Participants.ElementAt(Random.Range(0, context.Participants.Count)).Key;
-            List<InventoryCell> participantSet = context.Participants[randomParticipant].Sets.DiceSetInventory.Data;
-            int randomDice = Random.Range(0, participantSet.Count);
-            string randomTargetDice = participantSet[randomDice].Id;
-            
-            selection.SelectTargetDice(randomTargetDice);
         }
         
         #endregion

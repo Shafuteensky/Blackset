@@ -18,16 +18,10 @@ namespace Blackset.Effects
 
         public EffectPhase[] Phases => phases;
 
-        public EffectTarget TargetType => targetType;
-
-        public bool RequiresChoice => requiresChoice;
-
         [SerializeField]
         private EffectType effectType;
         [SerializeField]
         private EffectPhase[] phases;
-        [SerializeField]
-        private EffectTarget targetType;
         
         [SerializeField]
         private int power;

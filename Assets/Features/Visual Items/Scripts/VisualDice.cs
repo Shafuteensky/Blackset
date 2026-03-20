@@ -1,6 +1,5 @@
 using Blackset.Data.Items.Visual.Modules;
 using Blackset.Duel.Participants;
-using Blackset.Duel.Sequence;
 using Blackset.Inventories;
 using Extensions.Log;
 using UnityEngine;
@@ -15,10 +14,8 @@ namespace Blackset.Data.Items.Visual
     /// </remarks>
     public sealed class VisualDice : BaseVisual
     {
-        [Header("Дочерние компоненты (модули)"), Space]
-        [SerializeField] private DicePositionController positionController;
+        [Header("Модули (дайс)"), Space]
         [SerializeField] private DiceResultView resultView;
-        [SerializeField] private VisualItemInteractionBlocker interactionBlocker;
         [SerializeField] private DiceViewRepresentation viewRepresentation;
         // [SerializeField] private DiceMeshView meshView; // TODO: добавить при реализации
 
@@ -26,24 +23,15 @@ namespace Blackset.Data.Items.Visual
             Inventory inventory, string newItemCellId)
         {
             base.Initialize(itemId, ownerParticipantId, inventory, newItemCellId);
-
-            DuelController duelController = DuelController.Instance;
-            if (duelController == null)
-            {
-                ServiceDebug.LogError(
-                    $"Не найден инстанс {nameof(DuelController)}, визуальный дайс не инициализирован");
-                return;
-            }
-
-            positionController.Initialize(duelController, itemId, ownerParticipantId, transform);
+            if (duelController == null) return;
+            
             resultView.Initialize(duelController, itemId, ownerParticipantId);
 
-            bool isParticipantPlayer = duelController.DuelContext.PlayerId == ownerParticipantId;
-            interactionBlocker.Initialize(isParticipantPlayer);
-
             DuelParticipantState participant = duelController.DuelContext.Participants[ownerParticipantId];
-            participant.Sets.TryGetDice(itemId, out DiceItemContext diceItem);
-            viewRepresentation.Initialize(diceItem);
+            if (participant.Sets.TryGetDice(itemId, out DiceItemContext diceItem))
+                viewRepresentation.Initialize(diceItem);
+            else
+                ServiceDebug.LogError($"Ошибка инициализации дайса {itemId}");
         }
     }
 }

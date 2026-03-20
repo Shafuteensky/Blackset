@@ -5,7 +5,6 @@ using Blackset.Duel.Sequence;
 using Blackset.DuelEvents.EventTypes;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace Blackset.Data.Items.Visual.Modules
 {
@@ -80,7 +79,7 @@ namespace Blackset.Data.Items.Visual.Modules
             DuelParticipantState owner = duelController.DuelContext.Participants[ownerParticipantId];
             if (owner.ParticipantId != ownerParticipantId ||
                 // и брошен был именно этот дайс
-                owner.FightState.TurnState.SelectedDice.Value.ItemId != itemId) return;
+                owner.FightState.TurnState.SelectedDice.Value != itemId) return;
             
             resultText.text = owner.FightState.RawRollResults[itemId].ToString();
             resultText.gameObject.SetActive(true);

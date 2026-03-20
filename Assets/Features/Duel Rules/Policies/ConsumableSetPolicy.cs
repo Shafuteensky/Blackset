@@ -5,7 +5,13 @@ namespace Blackset.Duel.Rules
     /// </summary>
     public enum ConsumableSetPolicy
     {
-        Random, // Все расходники случайные
-        None // Без расходников
+        /// <summary>
+        /// Все расходники случайные, с лимитом по количеству
+        /// </summary>
+        RandomLimited,
+        /// <summary>
+        /// Без расходников
+        /// </summary>
+        None
     }
 }

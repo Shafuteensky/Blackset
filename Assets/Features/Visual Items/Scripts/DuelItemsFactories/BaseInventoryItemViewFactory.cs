@@ -10,9 +10,10 @@ using UnityEngine;
 namespace Blackset.DuelContracts
 {
     /// <summary>
-    /// UI фабрика визуальных представлений предметов инвентаря
+    /// Базовая фабрика визуальных представлений предметов инвентаря
     /// </summary>
-    public class InventoryViewElementsFactory : BaseInMemoryDataFactory<VisualDice, InventoryCell, Inventory>
+    public abstract class BaseInventoryItemViewFactory<TVisual> : BaseInMemoryDataFactory<TVisual, InventoryCell, Inventory>
+        where TVisual : BaseVisual
     {
         [Header("Принадлежность элементов"), Space]
         [SerializeField] private bool isOwnerPlayer;
@@ -32,7 +33,7 @@ namespace Blackset.DuelContracts
         
         private void RebuildOnSetReady(SetReadyEvent handler) => Rebuild();
         
-        protected override void OnInstanceInitialization(VisualDice instance, InventoryCell item, Inventory container)
+        protected override void OnInstanceInitialization(TVisual instance, InventoryCell item, Inventory container)
         {
             ServiceGuard.NotNull(duelController, nameof(duelController));
             

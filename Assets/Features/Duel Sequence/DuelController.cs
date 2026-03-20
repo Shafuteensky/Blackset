@@ -1,4 +1,3 @@
-using Blackset.DecisionInput;
 using Blackset.Duel.Context;
 using Blackset.Duel.Modules;
 using Blackset.Duel.Requests;
@@ -9,7 +8,6 @@ using Blackset.DuelEvents.EventTypes;
 using Blackset.Inventories;
 using Blackset.Storms;
 using Extensions.Events;
-using Extensions.FiniteStateMachine;
 using Extensions.Log;
 using Extensions.Singleton;
 using Features.Duel.Context;

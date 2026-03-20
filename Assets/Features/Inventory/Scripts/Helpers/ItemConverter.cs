@@ -38,9 +38,9 @@ namespace Blackset.Inventories.Helpers
             {
                 ConsumableItemContext context = new();
                 if (gameData.Consumables.GetById(cell.Item.ItemId) is not ConsumableData consumable) continue;
-                context.Consumable = consumable;
+                context.Consumable = consumable.Id;
                 if (gameData.ConsumableTypes.GetById(cell.Item.ItemTypeId) is not ConsumableType type) continue;
-                context.Type = type;
+                context.Type = type.Id;
                 consumables.Add(context);
             }
             

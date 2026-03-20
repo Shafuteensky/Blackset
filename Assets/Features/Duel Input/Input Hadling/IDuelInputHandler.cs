@@ -7,17 +7,17 @@ namespace Blackset.DecisionInput
     public interface IDuelInputHandler
     {
         /// <summary>
-        /// Вызывается UI при выборе дайса участником
+        /// Вызывается в UI при выборе дайса участником
         /// </summary>
         void OnDiceSelected(string participantId, SelectionState selection);
 
         /// <summary>
-        /// Вызывается UI при выборе расходника участником
+        /// Вызывается в UI при выборе расходника участником
         /// </summary>
         void OnConsumableSelected(string participantId, SelectionState selection);
 
         /// <summary>
-        /// Вызывается UI при запросе паса
+        /// Вызывается в UI при запросе паса
         /// </summary>
         void OnPassRequested();
     }

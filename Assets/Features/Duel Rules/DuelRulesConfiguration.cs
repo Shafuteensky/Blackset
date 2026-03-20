@@ -13,7 +13,7 @@ namespace Blackset.Duel.Rules
         private const int DEFAULT_CONSUMABLES_IN_SET = 3;
         
         private const DiceSetPolicy DEFAULT_DICES_SET_POLICY = DiceSetPolicy.OneInType;
-        private const ConsumableSetPolicy DEFAULT_CONSUMABLES_SET_POLICY = ConsumableSetPolicy.Random;
+        private const ConsumableSetPolicy DEFAULT_CONSUMABLES_SET_POLICY = ConsumableSetPolicy.RandomLimited;
         
         private const int DEFAULT_MAX_REROLLS = 1;
         private const int DEFAULT_MAX_FIGHTS_PER_DUEL = 3;

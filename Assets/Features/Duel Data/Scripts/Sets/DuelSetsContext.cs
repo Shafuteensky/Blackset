@@ -53,8 +53,8 @@ namespace Blackset.Duel.Sets
 
             foreach (ConsumableItemContext consumable in consumables)
             {
-                // TODO Обновить ConsumableItemContext (как DiceItemContext), потом AddItem
-                //ConsumableSetInventory.AddItem(consumable.Consumable, consumable.Type)
+                ItemContext newConsumable = new ItemContext(consumable.Consumable, consumable.Type, ItemClass.Consumable);
+                ConsumableSetInventory.AddItem(newConsumable);
             }
         }
 
@@ -94,10 +94,8 @@ namespace Blackset.Duel.Sets
             
             if (cell != null)
             {
-                // TODO Обновить после ConsumableItemContext 
-                
-                // consumable.Consumable = cell.ItemId;
-                // consumable.Type = cell.ItemTypeId;
+                consumable.Consumable = cell.Item.ItemId;
+                consumable.Type = cell.Item.ItemTypeId;
             }
             
             return cell != null;

@@ -41,7 +41,7 @@ namespace Blackset.Duel.Participants
         /// <summary>
         /// Выбранный для броска в этом ходу дайс
         /// </summary>
-        public ReactiveProperty<ItemUseContext> SelectedDice { get; private set; } = new();
+        public ReactiveProperty<string> SelectedDice { get; private set; } = new();
         
         /// <summary>
         /// Использован ли расходник в этот ход
@@ -50,7 +50,7 @@ namespace Blackset.Duel.Participants
         /// <summary>
         /// Выбранный для использования в этом ходу расходник
         /// </summary>
-        public ReactiveProperty<ItemUseContext> SelectedConsumable { get; private set; } = new();
+        public ReactiveProperty<string> SelectedConsumable { get; private set; } = new();
 
         #region Применение данных
         
@@ -66,10 +66,10 @@ namespace Blackset.Duel.Participants
             DeclaredDice.Value = String.Empty;
             
             IsDiceChosen.Value = false;
-            SelectedDice.Value = ItemUseContext.Empty;
+            SelectedDice.Value = String.Empty;
                 
             IsConsumableChosen.Value = false;
-            SelectedConsumable.Value =  ItemUseContext.Empty;
+            SelectedConsumable.Value =  String.Empty;
         }
         
         /// <summary>
@@ -127,7 +127,7 @@ namespace Blackset.Duel.Participants
             if (!selection.IsItemSelected) return;
             
             IsDiceChosen.Value = selection.IsItemSelected;
-            SelectedDice.Value = selection.ToUseContext();
+            SelectedDice.Value = selection.SelectedItemId;
         }
 
         /// <summary>
@@ -139,7 +139,7 @@ namespace Blackset.Duel.Participants
             if (!selection.IsItemSelected) return;
             
             IsConsumableChosen.Value = selection.IsItemSelected;
-            SelectedConsumable.Value = selection.ToUseContext();
+            SelectedConsumable.Value = selection.SelectedItemId;
         }
 
         #endregion

@@ -27,7 +27,7 @@ namespace Blackset.Duel.Modules
 
             Inventory diceSetInventory;
             Inventory consumableSetInventory;
-            if (context.PlayerId == participantId)
+            if (participantId == context.PlayerId)
             {
                 diceSetInventory = context.PlayerDiceSetInventory;
                 consumableSetInventory = context.PlayerConsumableSetInventory;
@@ -84,7 +84,7 @@ namespace Blackset.Duel.Modules
             
             switch (activeConsumableSetPolicy)
             {
-                case ConsumableSetPolicy.Random:
+                case ConsumableSetPolicy.RandomLimited:
                     return GetRandomConsumables(consumablesPool, consumablesInSet, random);
         
                 case ConsumableSetPolicy.None:

@@ -21,8 +21,7 @@ MonoBehaviour:
   itemClass: 2
   set: {fileID: 11400000, guid: 27cada2d73a18a543a23e1a7fea1f12b, type: 2}
   availableTypes:
-  - {fileID: 11400000, guid: 0e1a15f03f84f8d46ba873a79cfd79ab, type: 2}
   - {fileID: 11400000, guid: 993bee1bbd4e925439649326aceece27, type: 2}
   effect: {fileID: 11400000, guid: 1c799dc0bd0d22c48b0aabdf28898c0d, type: 2}
   color: {r: 1, g: 0.7062172, b: 0.61698115, a: 1}
-  visualConsumable: {fileID: 0}
+  consumablePrefab: {fileID: 919132149155446097, guid: 53f5c4b89267aa848a3296e6fb681a2e, type: 3}
