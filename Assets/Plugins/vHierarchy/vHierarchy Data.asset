@@ -383,7 +383,6 @@ MonoBehaviour:
         - globalObjectIdString: GlobalObjectId_V1-1-5f80835addf1ae546b7526a156656d47-2577297206629727824-0
         - globalObjectIdString: GlobalObjectId_V1-1-5f80835addf1ae546b7526a156656d47-1239674129194372706-0
         - globalObjectIdString: GlobalObjectId_V1-1-5f80835addf1ae546b7526a156656d47-6514086578382982986-0
-        - globalObjectIdString: GlobalObjectId_V1-1-5f80835addf1ae546b7526a156656d47-0-0
         - globalObjectIdString: GlobalObjectId_V1-1-5f80835addf1ae546b7526a156656d47-5218663838803643402-0
         values:
         - colorIndex: 0
@@ -404,10 +403,6 @@ MonoBehaviour:
           isColorRecursive: 0
         - colorIndex: 0
           iconNameOrGuid: BoxCollider Icon
-          isIconRecursive: 0
-          isColorRecursive: 0
-        - colorIndex: 0
-          iconNameOrGuid: NetworkAnimator Icon
           isIconRecursive: 0
           isColorRecursive: 0
         - colorIndex: 0

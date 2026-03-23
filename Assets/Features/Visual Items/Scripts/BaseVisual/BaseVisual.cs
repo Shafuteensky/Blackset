@@ -45,7 +45,7 @@ namespace Blackset.Data.Items.Visual
         /// <param name="itemId">Идентификатор предмета в сборке участника</param>
         /// <param name="ownerParticipantId">Идентификатор участника-хозяина</param>
         /// <param name="inventory">Инвентарь (хранилище данных)</param>
-        /// <param name="newItemCellId">Идентификатор нвой ячейки (хранимых данных)</param>
+        /// <param name="newItemCellId">Идентификатор новой ячейки (хранимых данных)</param>
         public virtual void Initialize(string itemId, string ownerParticipantId,
             Inventory inventory, string newItemCellId)
         {

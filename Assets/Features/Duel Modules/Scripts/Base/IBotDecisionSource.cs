@@ -13,7 +13,7 @@ namespace Blackset.Duel.Modules
         /// </summary>
         /// <param name="context">Данные дуэли</param>
         /// <returns>Идентификатор объявленного дайса</returns>
-        public string BuildDeclaration(DuelContext context);
+        public SelectionState BuildDeclaration(DuelContext context);
         /// <summary>
         /// Создать выбор дайса на бросок
         /// </summary>

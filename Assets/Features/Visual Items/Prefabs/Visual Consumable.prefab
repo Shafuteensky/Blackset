@@ -724,8 +724,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp-firstpass::Extensions.Audio.PointerSoundsPlayer
   model: 3
   spatialPreset: {fileID: 11400000, guid: 1cbc6afd28091a94ca3a2da12561c161, type: 2}
-  enterSound: {fileID: 8300000, guid: 228d9c5ef2d94774f9d9f66cc7e752fb, type: 3}
-  downSound: {fileID: 8300000, guid: 228d9c5ef2d94774f9d9f66cc7e752fb, type: 3}
+  enterSound: {fileID: 8300000, guid: 357da955262efa148aa88a65eb2a2c9f, type: 3}
+  downSound: {fileID: 8300000, guid: 357da955262efa148aa88a65eb2a2c9f, type: 3}
 --- !u!114 &7965724094143004067
 MonoBehaviour:
   m_ObjectHideFlags: 0

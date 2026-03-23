@@ -24,15 +24,21 @@ namespace Blackset.Duel.Modules
 
         private string declaredDice = String.Empty;
         
-        public string BuildDeclaration(DuelContext context)
+        public SelectionState BuildDeclaration(DuelContext context)
         {
-            declaredDice = String.Empty;
+            SelectionState selection = new();
             DuelParticipantState bot = context.Participants[context.OpponentId];
-
-            TryGetRandomUnused(bot.Sets.DiceSetInventory, bot.FightState.GetUsedDices(), out string unusedDiceId);
-            declaredDice = unusedDiceId;
             
-            return declaredDice;
+            bool passed = Random.value <= PASS_CHANCE;
+            if (!passed && 
+                TryGetRandomUnused(bot.Sets.DiceSetInventory, bot.FightState.GetUsedDices(), out string unusedDiceId))
+            {
+                selection.SelectItem(unusedDiceId);
+            }
+            else
+                selection.SelectItem(string.Empty);
+            
+            return selection;
         }
         
         public SelectionState BuildDiceSelection(DuelContext context)
@@ -40,9 +46,9 @@ namespace Blackset.Duel.Modules
             SelectionState selection = new();
             DuelParticipantState bot = context.Participants[context.OpponentId];
             
-            // Если хитрый - кидает другой дайс (не который объявил)
             OpponentData opponent = GameData.Instance.GetOpponent(context.Contract.OpponentId);
-            if (Random.value < opponent.CunningLevel && 
+            bool isHonest = Random.value < opponent.CunningLevel;
+            if (!isHonest && 
                 TryGetRandomUnused(bot.Sets.DiceSetInventory, bot.FightState.GetUsedDices(), out string unusedDiceId))
             {
                 selection.SelectItem(unusedDiceId);
@@ -58,7 +64,6 @@ namespace Blackset.Duel.Modules
             SelectionState selection = new();
             DuelParticipantState bot = context.Participants[context.OpponentId];
             
-            // Случайный расходник на случайную цель
             bool consumableChosen = Random.value <= CONSUMABLE_USE_CHANCE;
             if (consumableChosen && 
                 TryGetRandomUnused(bot.Sets.ConsumableSetInventory, bot.FightState.GetUsedConsumables(), out string unusedConsId))

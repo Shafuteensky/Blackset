@@ -115,7 +115,9 @@ namespace Blackset.Inventories
         public InventoryItem GetCellItemData(InventoryCell cell)
         {
             if (!IsCellValid(cell)) return null;
-            return cell.GetItemData();
+            InventoryItem item = cell.GetItemData();
+            if (item == null) ServiceDebug.LogError($"Ошибка получения данных инвентаря {name}");
+            return item;
         }
         
         /// <summary>

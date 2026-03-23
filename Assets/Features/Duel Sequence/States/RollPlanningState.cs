@@ -5,12 +5,8 @@ using Blackset.Duel.Context;
 using Blackset.Duel.Modules;
 using Blackset.Duel.Participants;
 using Blackset.DuelEvents.EventTypes;
-using Blackset.Effects;
-using Blackset.Inventories.Scripts.Items;
 using Cysharp.Threading.Tasks;
 using Extensions.FiniteStateMachine;
-using Extensions.Log;
-using UnityEngine;
 
 namespace Blackset.Duel.Sequence.States
 {
@@ -33,9 +29,6 @@ namespace Blackset.Duel.Sequence.States
         private TurnParticipantState playerState;
         private IBotDecisionSource botDecisionSource;
         private IPlayerDecisionSource playerDecisionSource;
-
-        private string playerDeclaration;
-        private string botDeclaration;
 
         #region IState
 
@@ -92,25 +85,21 @@ namespace Blackset.Duel.Sequence.States
         {
             try
             {
-                // Начало стадии объявления (блеф)
                 eventHub.Publish(new DeclarationStartedEvent());
-                // Объявление дайса
+                
                 BotDeclareDice();
                 await PlayerDeclareDice(cancellationToken);
 
-                // Начало стадии выборов действий
                 eventHub.Publish(new SelectionStartedEvent());
-                // Выбор дайса
+                
                 BotSelectDice();
                 await PlayerSelectDice(cancellationToken);
-                // Выбор расходника
+                
                 BotSelectConsumable();
                 await PlayerSelectConsumable(cancellationToken);
 
-                // Зачёт очков за честность
                 ResolveDuelScore();
 
-                // Окончание планирования
                 planningCompleted = true;
                 eventHub.Publish(new PlanningCompletedEvent());
             }
@@ -130,11 +119,15 @@ namespace Blackset.Duel.Sequence.States
         /// </summary>
         private void BotDeclareDice()
         {
-            botDeclaration = botDecisionSource.BuildDeclaration(context);
-            SelectionState botSelection = new SelectionState();
-            botSelection.SelectItem(botDeclaration);
+            if (botState.HasPassed.Value) return;
+            
+            SelectionState botSelection = botDecisionSource.BuildDeclaration(context);
             botState.DeclareDice(botSelection);
-            eventHub.Publish(new DeclaredDiceEvent(botDeclaration, context.OpponentId));
+            
+            if (!botSelection.IsItemSelected) 
+                botState.MarkPassed();
+            else
+                eventHub.Publish(new DeclaredDiceEvent(botSelection.SelectedItemId, context.OpponentId));
         }
 
         /// <summary>
@@ -142,14 +135,15 @@ namespace Blackset.Duel.Sequence.States
         /// </summary>
         private async UniTask PlayerDeclareDice(CancellationToken cancellationToken)
         {
+            if (playerState.HasPassed.Value) return;
+            
             SelectionState playerSelection = await playerDecisionSource.GetSelection(context, cancellationToken);
-            playerDeclaration = string.Empty;
-            if (!playerState.HasPassed.Value) // Если не спасовал
-            {
-                playerDeclaration = playerSelection.SelectedItemId;
-                eventHub.Publish(new DeclaredDiceEvent(playerDeclaration, context.PlayerId));
-            }
             playerState.DeclareDice(playerSelection);
+            
+            if (!playerSelection.IsItemSelected) 
+                botState.MarkPassed();
+            else
+                eventHub.Publish(new DeclaredDiceEvent(playerSelection.SelectedItemId, context.PlayerId));
         }
 
         #endregion
@@ -161,8 +155,15 @@ namespace Blackset.Duel.Sequence.States
         /// </summary>
         private void BotSelectDice()
         {
+            if (botState.HasPassed.Value) return;
+            
             SelectionState botSelection = botDecisionSource.BuildDiceSelection(context);
             botState.SelectDice(botSelection);
+            
+            if (!botSelection.IsItemSelected) 
+                botState.MarkPassed();
+            else
+                eventHub.Publish(new SelectedDiceEvent(botSelection.SelectedItemId, context.OpponentId));
         }
 
         /// <summary>
@@ -170,10 +171,15 @@ namespace Blackset.Duel.Sequence.States
         /// </summary>
         private async UniTask PlayerSelectDice(CancellationToken cancellationToken)
         {
-            SelectionState playerSelection = playerState.HasPassed.Value
-                ? new SelectionState()
-                : await playerDecisionSource.GetSelection(context, cancellationToken);
+            if (playerState.HasPassed.Value) return;
+            
+            SelectionState playerSelection = await playerDecisionSource.GetSelection(context, cancellationToken);
             playerState.SelectDice(playerSelection);
+            
+            if (!playerSelection.IsItemSelected) 
+                botState.MarkPassed();
+            else
+                eventHub.Publish(new SelectedDiceEvent(playerSelection.SelectedItemId, context.PlayerId));
         }
 
         #endregion
@@ -185,9 +191,15 @@ namespace Blackset.Duel.Sequence.States
         /// </summary>
         private void BotSelectConsumable()
         {
-            // TODO
-            SelectionState botSelection = botDecisionSource.BuildDiceSelection(context);
-            botState.SelectDice(botSelection);
+            if (botState.HasPassed.Value) return;
+            
+            SelectionState botSelection = botDecisionSource.BuildConsumableSelection(context);
+            botState.SelectConsumable(botSelection);
+            
+            if (!botSelection.IsItemSelected) 
+                botState.MarkPassed();
+            else
+                eventHub.Publish(new SelectedConsumableEvent(botSelection.SelectedItemId, context.OpponentId));
         }
 
         /// <summary>
@@ -195,11 +207,15 @@ namespace Blackset.Duel.Sequence.States
         /// </summary>
         private async UniTask PlayerSelectConsumable(CancellationToken cancellationToken)
         {
-            // TODO
-            SelectionState playerSelection = playerState.HasPassed.Value
-                ? new SelectionState()
-                : await playerDecisionSource.GetSelection(context, cancellationToken);
-            playerState.SelectDice(playerSelection);
+            if (playerState.HasPassed.Value) return;
+            
+            SelectionState playerSelection = await playerDecisionSource.GetSelection(context, cancellationToken);
+            playerState.SelectConsumable(playerSelection);
+            
+            if (!playerSelection.IsItemSelected) 
+                botState.MarkPassed();
+            else
+                eventHub.Publish(new SelectedConsumableEvent(playerSelection.SelectedItemId, context.PlayerId));
         }
 
         #endregion
@@ -215,9 +231,9 @@ namespace Blackset.Duel.Sequence.States
 
             // Очки за честность объявления
             duelScoreResolver.ResolveHonesty(context.Participants[context.PlayerId],
-                playerDeclaration, playerState.SelectedDice.Value);
+                playerState.DeclaredDice.Value, playerState.SelectedDice.Value);
             duelScoreResolver.ResolveHonesty(context.Participants[context.OpponentId],
-                botDeclaration, botState.SelectedDice.Value);
+                botState.DeclaredDice.Value, botState.SelectedDice.Value);
         }
 
         #endregion

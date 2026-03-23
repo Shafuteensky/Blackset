@@ -16,6 +16,7 @@ namespace Blackset.Data.Items.Visual
     {
         [Header("Модули (дайс)"), Space]
         [SerializeField] private DiceResultView resultView;
+        [SerializeField] private SelectedDiceIndicator selectionView;
         [SerializeField] private DiceViewRepresentation viewRepresentation;
         // [SerializeField] private DiceMeshView meshView; // TODO: добавить при реализации
 
@@ -26,6 +27,7 @@ namespace Blackset.Data.Items.Visual
             if (duelController == null) return;
             
             resultView.Initialize(duelController, itemId, ownerParticipantId);
+            selectionView.Initialize(duelController, itemId, ownerParticipantId);
 
             DuelParticipantState participant = duelController.DuelContext.Participants[ownerParticipantId];
             if (participant.Sets.TryGetDice(itemId, out DiceItemContext diceItem))

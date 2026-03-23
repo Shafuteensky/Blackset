@@ -71,8 +71,8 @@ namespace Blackset.Inventories.Cells
         protected bool isDefault;
         protected bool isNew;
         
-        public ItemContext item;
-        public int itemAmount;
+        private ItemContext item;
+        private int itemAmount;
 
         /// <summary>
         /// Конструктор заполненной ячейки инвентаря
@@ -162,7 +162,7 @@ namespace Blackset.Inventories.Cells
             if (isEmpty) return null;
             if (String.IsNullOrEmpty(Item.ItemId))
             {
-                ServiceDebug.LogError("Невалидный id предмета ячейки инвентаря, данные не найдены");
+                ServiceDebug.LogError($"Невалидный id предмета ячейки инвентаря (id {Id}), данные не найдены");
                 return null;
             }
 

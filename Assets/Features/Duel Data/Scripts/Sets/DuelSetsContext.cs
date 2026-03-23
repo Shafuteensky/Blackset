@@ -44,7 +44,7 @@ namespace Blackset.Duel.Sets
             // Сброс данных в сохраняемом инвентаре
             DiceSetInventory.Clear();
             ConsumableSetInventory.Clear();
-            
+                                                                                                         
             foreach (DiceItemContext dice in dices)
             {
                 ItemContext newDice = new ItemContext(dice.Dice, dice.Type, ItemClass.Dice);

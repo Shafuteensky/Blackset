@@ -9,7 +9,7 @@ using UnityEngine;
 namespace Blackset.Data.Items.Visual.Modules
 {
     /// <summary>
-    /// Отображает результат броска дайса: сырое значение и зарезолвенное.
+    /// Отображение результата броска дайса (сырое значение и зарезолвенно)
     /// </summary>
     public sealed class DiceResultView : MonoBehaviour
     {
@@ -18,8 +18,6 @@ namespace Blackset.Data.Items.Visual.Modules
         [SerializeField] private GameObject billboard;
         [Tooltip("Текстовое значение результата")]
         [SerializeField] private TMP_Text resultText;
-        [Tooltip("Индикатор объявления")]
-        [SerializeField] private GameObject declaredIndicator;
 
         [Header("Цифры на сторонах"), Space]
         // TODO: Сделать как в Dice Roller (пара transform-text)?
@@ -39,12 +37,10 @@ namespace Blackset.Data.Items.Visual.Modules
             duelController.EventHub.Unsubscribe<DiceRolledEvent>(ShowRawResults);
             duelController.EventHub.Unsubscribe<EffectsResolvedEvent>(ShowResolvedResults);
             duelController.EventHub.Unsubscribe<BattleStartEvent>(HideResults);
-            duelController.EventHub.Unsubscribe<DeclaredDiceEvent>(ShowDeclared);
-            duelController.EventHub.Unsubscribe<PlanningCompletedEvent>(HideDeclaration);
         }
 
         /// <summary>
-        /// Инициализация от координатора VisualDice.
+        /// Инициализация от координатора VisualDice
         /// </summary>
         public void Initialize(DuelController duelController, string itemId, string ownerParticipantId)
         {
@@ -57,10 +53,8 @@ namespace Blackset.Data.Items.Visual.Modules
             // Присвоение зарезолвенного значения результата броска
             duelController.EventHub.Subscribe<EffectsResolvedEvent>(ShowResolvedResults);
             duelController.EventHub.Subscribe<BattleStartEvent>(HideResults);
-            // Состояние объявления участником
-            duelController.EventHub.Subscribe<DeclaredDiceEvent>(ShowDeclared);
-            duelController.EventHub.Subscribe<PlanningCompletedEvent>(HideDeclaration);
         }
+        
         private void ShowRawResults(DiceRolledEvent handler)
         {
             if (resultText == null) return;
@@ -90,27 +84,9 @@ namespace Blackset.Data.Items.Visual.Modules
             if (resultText != null) resultText.gameObject.SetActive(false);
         }
 
-        private void ShowDeclared(DeclaredDiceEvent handler)
-        {
-            if (declaredIndicator == null) return;
-            
-            // Только если обхявленный дайс пренадлежит бросившему
-            if (handler.ParticipantOwnerId != ownerParticipantId ||
-                // и объявлен был именно этот дайс
-                handler.DiceId != itemId) return;
-            
-            declaredIndicator.SetActive(true);
-        }
-
-        private void HideDeclaration(PlanningCompletedEvent _)
-        {
-            if (declaredIndicator != null) declaredIndicator.SetActive(false);
-        }
-
         private void Reset()
         {
             if (resultText != null) resultText.text = String.Empty;
-            if (declaredIndicator != null) declaredIndicator.SetActive(false);
         }
     }
 }
