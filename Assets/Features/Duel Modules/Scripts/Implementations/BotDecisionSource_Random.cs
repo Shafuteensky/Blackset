@@ -34,9 +34,13 @@ namespace Blackset.Duel.Modules
                 TryGetRandomUnused(bot.Sets.DiceSetInventory, bot.FightState.GetUsedDices(), out string unusedDiceId))
             {
                 selection.SelectItem(unusedDiceId);
+                declaredDice = unusedDiceId;
             }
             else
+            {
                 selection.SelectItem(string.Empty);
+                declaredDice = string.Empty;
+            }
             
             return selection;
         }

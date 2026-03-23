@@ -1,6 +1,7 @@
 using Blackset.Duel.Pools;
 using Blackset.Duel.Sets;
 using Blackset.Opponents;
+using Extensions.Log;
 using Extensions.Reactive;
 
 namespace Blackset.Duel.Participants
@@ -111,6 +112,11 @@ namespace Blackset.Duel.Participants
         {
             if (IsSetsInited) return;
             Sets = sets;
+            ServiceDebug.LogWarning(Sets.DiceSetInventory.name);
+            foreach (var cell in Sets.DiceSetInventory.Data)
+            {
+                ServiceDebug.LogError(cell.Id + ":\n" + cell.Item.ItemId + ", " + cell.Item.ItemTypeId);
+            }
         }
 
         /// <summary>

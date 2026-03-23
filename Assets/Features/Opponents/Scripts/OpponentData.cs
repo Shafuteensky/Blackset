@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Blackset.Data;
 using Blackset.Data.Base;
 using Blackset.Data.Items.Types;
+using Blackset.Data.Registries;
 using UnityEngine;
 
 namespace Blackset.Opponents
@@ -61,9 +62,11 @@ namespace Blackset.Opponents
                 DiceType diceType = pool.diceNominal;
                 foreach (DiceData diceInPool in pool.dices)
                 {
-                    DiceItemContext diceItem = new DiceItemContext();
-                    diceItem.Dice = diceInPool.Id;
-                    diceItem.Type = diceType.Id;
+                    DiceItemContext diceItem = new DiceItemContext
+                    {
+                        Dice = diceInPool.Id,
+                        Type = diceType.Id
+                    };
                     dicesInPool.Add(diceItem);
                 }
             }
@@ -78,10 +81,13 @@ namespace Blackset.Opponents
         {
             List<ConsumableItemContext> consumablesInPool = new List<ConsumableItemContext>();
             
-            foreach (ConsumableData consumable in consumables)
+            foreach (ConsumableData consumableInPool in consumables)
             {
-                ConsumableItemContext consumableItem = new ConsumableItemContext();
-                // TODO присовение рандомного типа расходника
+                ConsumableItemContext consumableItem = new()
+                {
+                    Consumable = consumableInPool.Id,
+                    Type = GameData.Instance.ConsumableTypes.Data[0].Id
+                };
                 consumablesInPool.Add(consumableItem);
             }
 

@@ -206,7 +206,7 @@ namespace Blackset.GameDebug
 
             string consumable = string.IsNullOrEmpty(turn.SelectedConsumable.Value)
                 ? "—"
-                : $"{turn.SelectedConsumable.Value} → {turn.SelectedConsumable.Value}";
+                : $"{turn.SelectedConsumable.Value}";
             sb.Append(    $"    Расходник в ходе:    {consumable}");
 
             // Знания об участнике

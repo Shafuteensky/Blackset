@@ -1,4 +1,3 @@
-using Blackset.Data.Items.Visual;
 using Blackset.Effects;
 using UnityEngine;
 
