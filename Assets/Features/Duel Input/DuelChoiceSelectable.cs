@@ -16,13 +16,13 @@ namespace Blackset.DecisionInput
 
         private BaseVisual baseVisual;
 
-        private void Awake()
-        {
-            baseVisual = GetComponent<BaseVisual>();
-        }
+        private void Awake() => baseVisual = GetComponent<BaseVisual>();
 
         public void OnPointerClick(PointerEventData eventData)
         {
+            string playerId = baseVisual.DuelController.DuelContext.PlayerId;
+            if (baseVisual.OwnerParticipantId != playerId) return;
+            
             SelectionState selection = new SelectionState(baseVisual.ItemId);
 
             switch (choiceType)

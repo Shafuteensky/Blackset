@@ -87,8 +87,8 @@ namespace Blackset.Duel.Sequence.States
             {
                 eventHub.Publish(new DeclarationStartedEvent());
 
-                BotDeclareDice();
                 await PlayerDeclareDice(cancellationToken);
+                BotDeclareDice();
 
                 eventHub.Publish(new SelectionStartedEvent());
 
@@ -125,7 +125,7 @@ namespace Blackset.Duel.Sequence.States
             if (!botSelection.IsItemSelected) 
                 botState.MarkPassed();
             else
-                eventHub.Publish(new DeclaredDiceEvent(botSelection.SelectedItemId, context.OpponentId));
+                eventHub.Publish(new DiceDeclarationCompletedEvent(botSelection.SelectedItemId, context.OpponentId));
         }
 
         /// <summary>
@@ -143,7 +143,7 @@ namespace Blackset.Duel.Sequence.States
                 return;
             }
 
-            eventHub.Publish(new DeclaredDiceEvent(playerState.DeclaredDice.Value, context.PlayerId));
+            eventHub.Publish(new DiceDeclarationCompletedEvent(playerState.DeclaredDice.Value, context.PlayerId));
         }
 
         #endregion
@@ -163,7 +163,7 @@ namespace Blackset.Duel.Sequence.States
             if (!botSelection.IsItemSelected) 
                 botState.MarkPassed();
             else
-                eventHub.Publish(new SelectedDiceEvent(botSelection.SelectedItemId, context.OpponentId));
+                eventHub.Publish(new DiceSelectionCompletedEvent(botSelection.SelectedItemId, context.OpponentId));
         }
 
         /// <summary>
@@ -177,7 +177,7 @@ namespace Blackset.Duel.Sequence.States
             botState.SelectConsumable(botSelection);
             
             if (botSelection.IsItemSelected) 
-                eventHub.Publish(new SelectedConsumableEvent(botSelection.SelectedItemId, context.OpponentId));
+                eventHub.Publish(new ConsumableSelectionCompletedEvent(botSelection.SelectedItemId, context.OpponentId));
         }
         
         private async UniTask PlayerSelectChoices(CancellationToken cancellationToken)
@@ -192,10 +192,10 @@ namespace Blackset.Duel.Sequence.States
                 return;
             }
 
-            eventHub.Publish(new SelectedDiceEvent(playerState.SelectedDice.Value, context.PlayerId));
+            eventHub.Publish(new DiceSelectionCompletedEvent(playerState.SelectedDice.Value, context.PlayerId));
 
             if (playerState.IsConsumableChosen.Value)
-                eventHub.Publish(new SelectedConsumableEvent(playerState.SelectedConsumable.Value, context.PlayerId));
+                eventHub.Publish(new ConsumableSelectionCompletedEvent(playerState.SelectedConsumable.Value, context.PlayerId));
         }
 
         #endregion

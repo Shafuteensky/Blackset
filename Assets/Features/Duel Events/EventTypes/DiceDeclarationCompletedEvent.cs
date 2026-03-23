@@ -3,12 +3,12 @@ namespace Blackset.DuelEvents.EventTypes
     /// <summary>
     /// Событие объявления дайса участником 
     /// </summary>
-    public struct DeclaredDiceEvent
+    public struct DiceDeclarationCompletedEvent
     {
         public string DiceId;
         public string ParticipantOwnerId;
 
-        public DeclaredDiceEvent(string diceId, string participantOwnerId)
+        public DiceDeclarationCompletedEvent(string diceId, string participantOwnerId)
         {
             DiceId = diceId;
             ParticipantOwnerId = participantOwnerId;

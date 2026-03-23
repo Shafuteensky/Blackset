@@ -23,6 +23,10 @@ namespace Blackset.Data.Items.Visual
         /// Идентификатор хозяина-участника дуэли
         /// </summary>
         public string OwnerParticipantId { get; private set; }
+        /// <summary>
+        /// Контроллер дуэли
+        /// </summary>
+        public DuelController DuelController { get; private set; }
 
         [Header("Модули"), Space]
         [SerializeField] private BaseVisualItemModule[] visualModules;
@@ -30,7 +34,6 @@ namespace Blackset.Data.Items.Visual
         protected abstract ItemClass visualItemClass { get; }
         
         protected InventoryItemElement itemElement;
-        protected DuelController duelController;
 
         protected virtual void Awake()
         {
@@ -52,16 +55,16 @@ namespace Blackset.Data.Items.Visual
 
             itemElement.Initialize(inventory, newItemCellId);
 
-            duelController = DuelController.Instance;
-            if (duelController == null)
+            DuelController = DuelController.Instance;
+            if (DuelController == null)
             {
                 ServiceDebug.LogError(
-                    $"Не найден инстанс {nameof(DuelController)}, визуальный предмет не инициализирован");
+                    $"Не найден инстанс {nameof(Duel.Sequence.DuelController)}, визуальный предмет не инициализирован");
                 return;
             }
 
             var context = new VisualItemContext(
-                duelController,
+                DuelController,
                 itemId,
                 visualItemClass,
                 ownerParticipantId,

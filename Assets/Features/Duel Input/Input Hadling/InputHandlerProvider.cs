@@ -9,9 +9,6 @@ namespace Blackset.DecisionInput
     {
         protected IDuelInputHandler inputHandler;
         
-        private void Start()
-        {
-            inputHandler = InputRegistrar.Instance.InputHandler;
-        }
+        private void Start() => inputHandler = InputRegistrar.Instance.InputHandler;
     }
 }

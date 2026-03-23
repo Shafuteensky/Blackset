@@ -1,3 +1,5 @@
+using System;
+using Blackset.Duel.Participants;
 using Blackset.Duel.Sequence;
 using Blackset.DuelEvents.EventTypes;
 using UnityEngine;
@@ -14,17 +16,15 @@ namespace Blackset.Data.Items.Visual.Modules
         [SerializeField] private GameObject selectedIndicator;
 
         private string itemId;
-        private string ownerParticipantId;
+        private TurnParticipantState turnState;
         private DuelController duelController;
+        private string ownerParticipantId;
 
-        private void Awake() => HideIndicator(new());
+        private void Awake() => OnSelectedConsumableChanged(String.Empty);
 
         private void OnDestroy()
         {
-            if (duelController == null) return;
-
-            duelController.EventHub.Unsubscribe<SelectedConsumableEvent>(ShowSelection);
-            duelController.EventHub.Unsubscribe<PlanningCompletedEvent>(HideIndicator);
+            turnState?.SelectedConsumable.Unsubscribe(OnSelectedConsumableChanged);
         }
 
         public override void Initialize(VisualItemContext context)
@@ -33,24 +33,18 @@ namespace Blackset.Data.Items.Visual.Modules
             ownerParticipantId = context.OwnerParticipantId;
             duelController = context.DuelController;
 
-            if (context.IsPlayer)
-                duelController.EventHub.Subscribe<SelectedConsumableEvent>(ShowSelection);
-            duelController.EventHub.Subscribe<PlanningCompletedEvent>(HideIndicator);
+            if (duelController.DuelContext.Participants.TryGetValue(ownerParticipantId, out var participant))
+            {
+                turnState = participant.FightState.TurnState;
+                if (ownerParticipantId == duelController.DuelContext.PlayerId)
+                    turnState.SelectedConsumable.Subscribe(OnSelectedConsumableChanged, true);
+            }
         }
 
-        private void ShowSelection(SelectedConsumableEvent handler)
+        private void OnSelectedConsumableChanged(string selectedId)
         {
-            if (selectedIndicator == null) return;
-
-            if (handler.ParticipantOwnerId != ownerParticipantId ||
-                handler.ConsumableId != itemId) return;
-
-            selectedIndicator.SetActive(true);
-        }
-
-        private void HideIndicator(PlanningCompletedEvent _)
-        {
-            if (selectedIndicator != null) selectedIndicator.SetActive(false);
+            if (selectedIndicator != null)
+                selectedIndicator.SetActive(selectedId == itemId);
         }
     }
 }

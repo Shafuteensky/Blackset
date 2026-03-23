@@ -25,9 +25,9 @@ namespace Blackset.Data.Items.Visual
             Inventory inventory, string newItemCellId)
         {
             base.Initialize(itemId, ownerParticipantId, inventory, newItemCellId);
-            if (duelController == null) return;
+            if (DuelController == null) return;
 
-            DuelParticipantState participant = duelController.DuelContext.Participants[ownerParticipantId];
+            DuelParticipantState participant = DuelController.DuelContext.Participants[ownerParticipantId];
             if (participant.Sets.TryGetDice(itemId, out DiceItemContext diceItem))
                 viewRepresentation.Initialize(diceItem);
             else

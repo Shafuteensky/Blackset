@@ -1,5 +1,5 @@
+using Blackset.Duel.Participants;
 using Blackset.Duel.Sequence;
-using Blackset.DuelEvents.EventTypes;
 using UnityEngine;
 
 namespace Blackset.Data.Items.Visual.Modules
@@ -18,16 +18,17 @@ namespace Blackset.Data.Items.Visual.Modules
         private string itemId;
         private string ownerParticipantId;
         private DuelController duelController;
+        private TurnParticipantState turnState;
 
-        private void Awake() => HideIndicators(new());
+        private void Awake() => HideIndicators();
 
         private void OnDestroy()
         {
-            if (duelController == null) return;
-
-            duelController.EventHub.Unsubscribe<DeclaredDiceEvent>(ShowDeclared);
-            duelController.EventHub.Unsubscribe<SelectedDiceEvent>(ShowSelection);
-            duelController.EventHub.Unsubscribe<PlanningCompletedEvent>(HideIndicators);
+            if (turnState != null)
+            {
+                turnState.DeclaredDice.Unsubscribe(OnDeclaredChanged);
+                turnState.SelectedDice.Unsubscribe(OnSelectedChanged);
+            }
         }
 
         public override void Initialize(VisualItemContext context)
@@ -36,36 +37,38 @@ namespace Blackset.Data.Items.Visual.Modules
             ownerParticipantId = context.OwnerParticipantId;
             duelController = context.DuelController;
 
-            duelController.EventHub.Subscribe<DeclaredDiceEvent>(ShowDeclared);
-            if (context.IsPlayer)
-                duelController.EventHub.Subscribe<SelectedDiceEvent>(ShowSelection);
-            duelController.EventHub.Subscribe<PlanningCompletedEvent>(HideIndicators);
+            if (duelController == null || duelController.DuelContext == null)
+                return;
+
+            if (!duelController.DuelContext.Participants.TryGetValue(ownerParticipantId, out var participant))
+                return;
+
+            turnState = participant.FightState.TurnState;
+
+            turnState.DeclaredDice.Subscribe(OnDeclaredChanged, true);
+            if (ownerParticipantId == duelController.DuelContext.PlayerId)
+                turnState.SelectedDice.Subscribe(OnSelectedChanged, true);
         }
 
-        private void ShowDeclared(DeclaredDiceEvent handler)
+        private void OnDeclaredChanged(string declaredId)
         {
-            if (declaredIndicator == null) return;
-
-            if (handler.ParticipantOwnerId != ownerParticipantId ||
-                handler.DiceId != itemId) return;
-
-            declaredIndicator.SetActive(true);
+            if (declaredIndicator != null)
+                declaredIndicator.SetActive(declaredId == itemId);
         }
 
-        private void ShowSelection(SelectedDiceEvent handler)
+        private void OnSelectedChanged(string selectedId)
         {
-            if (selectedIndicator == null) return;
-
-            if (handler.ParticipantOwnerId != ownerParticipantId ||
-                handler.DiceId != itemId) return;
-
-            selectedIndicator.SetActive(true);
+            if (selectedIndicator != null)
+                selectedIndicator.SetActive(selectedId == itemId);
         }
 
-        private void HideIndicators(PlanningCompletedEvent _)
+        private void HideIndicators()
         {
-            if (selectedIndicator != null) selectedIndicator.SetActive(false);
-            if (declaredIndicator != null) declaredIndicator.SetActive(false);
+            if (declaredIndicator != null)
+                declaredIndicator.SetActive(false);
+
+            if (selectedIndicator != null)
+                selectedIndicator.SetActive(false);
         }
     }
 }
