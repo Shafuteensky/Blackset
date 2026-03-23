@@ -24,4 +24,4 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 993bee1bbd4e925439649326aceece27, type: 2}
   effect: {fileID: 11400000, guid: 497d61c6951711e448b1de9e80550735, type: 2}
   color: {r: 0.57924527, g: 1, b: 0.767773, a: 1}
-  consumablePrefab: {fileID: 919132149155446097, guid: 53f5c4b89267aa848a3296e6fb681a2e, type: 3}
+  consumablePrefab: {fileID: 2614671250630885598, guid: aca4c613c56fe164ab899516b4c7e025, type: 3}
