@@ -14,8 +14,13 @@ namespace Blackset.Duel.Participants
         /// Список открытых за дуэль дайсов (по идентификатору из сборки)
         /// </summary>
         public IReadOnlyCollection<string> RevealedDices => revealedDices;
+        /// <summary>
+        /// Список открытых за дуэль расходников (по идентификатору из сборки)
+        /// </summary>
+        public IReadOnlyCollection<string> RevealedConsumables => revealedConsumables;
 
         private readonly HashSet<string> revealedDices = new();
+        private readonly HashSet<string> revealedConsumables = new();
 
         /// <summary>
         /// Раскрыть дайс
@@ -24,18 +29,24 @@ namespace Blackset.Duel.Participants
         /// <returns>True, если дайс был раскрыт впервые</returns>
         public bool RevealDice(string dice)
         {
-            if (string.IsNullOrEmpty(dice))
+            if (string.IsNullOrEmpty(dice) || revealedDices.Contains(dice)) 
                 return false;
-
+            
             return revealedDices.Add(dice);
         }
-
+        
         /// <summary>
-        /// Статус раскрытия дайса (хотя бы раз использован за дуэль с момента создания сборки участника)
+        /// Раскрыть расходник
         /// </summary>
-        /// <param name="dice">Идентификатор дайса</param>
-        /// <returns>True, если дайс раскрыт</returns>
-        public bool IsDiceRevealed(string dice) => revealedDices.Contains(dice);
+        /// <param name="dice">Идентификатор расходника</param>
+        /// <returns>True, если расходник был раскрыт впервые</returns>
+        public bool RevealConsumable(string consumable)
+        {
+            if (string.IsNullOrEmpty(consumable) || revealedDices.Contains(consumable)) 
+                return false;
+            
+            return revealedConsumables.Add(consumable);
+        }
         
         /// <summary>
         /// Создание копии
@@ -44,8 +55,12 @@ namespace Blackset.Duel.Participants
         public KnowledgeState Clone()
         {
             KnowledgeState clone = new KnowledgeState();
+            
             foreach (string dice in revealedDices)
                 clone.revealedDices.Add(dice);
+            foreach (string consumable in revealedConsumables)
+                clone.revealedConsumables.Add(consumable);
+            
             return clone;
         }
     }

@@ -35,9 +35,11 @@ namespace Blackset.Data.Items.Visual.Modules
 
             if (duelController.DuelContext.Participants.TryGetValue(ownerParticipantId, out var participant))
             {
-                turnState = participant.FightState.TurnState;
                 if (ownerParticipantId == duelController.DuelContext.PlayerId)
+                {
+                    turnState = participant.FightState.TurnState;
                     turnState.SelectedConsumable.Subscribe(OnSelectedConsumableChanged, true);
+                }
             }
         }
 

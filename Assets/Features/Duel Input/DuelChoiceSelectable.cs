@@ -1,4 +1,5 @@
 using Blackset.Data.Items.Visual;
+using Blackset.Data.Items.Visual.Modules;
 using Extensions.Log;
 using Blackset.Inventories.Scripts.Items;
 using UnityEngine;
@@ -9,32 +10,37 @@ namespace Blackset.DecisionInput
     /// <summary>
     /// Выбор предмета в фазах планирования
     /// </summary>
-    [RequireComponent(typeof(BaseVisual))]
-    public sealed class DuelChoiceSelectable : InputHandlerProvider, IPointerClickHandler
+    public sealed class DuelChoiceSelectable : BaseVisualItemModule, IPointerClickHandler
     {
         [SerializeField] private ItemClass choiceType;
 
-        private BaseVisual baseVisual;
+        private IDuelInputHandler inputHandler;
+        private VisualItemContext visualItemContext;
+        
+        private void Start() => inputHandler = InputRegistrar.Instance.InputHandler;
 
-        private void Awake() => baseVisual = GetComponent<BaseVisual>();
+        public override void Initialize(VisualItemContext context)
+        {
+            visualItemContext = context;
+            
+            string playerId = visualItemContext.DuelController.DuelContext.PlayerId;
+            if (visualItemContext.OwnerParticipantId != playerId) enabled = false;
+        }
 
         public void OnPointerClick(PointerEventData eventData)
         {
-            string playerId = baseVisual.DuelController.DuelContext.PlayerId;
-            if (baseVisual.OwnerParticipantId != playerId) return;
-            
-            SelectionState selection = new SelectionState(baseVisual.ItemId);
+            SelectionState selection = new SelectionState(visualItemContext.ItemId);
 
             switch (choiceType)
             {
                 case ItemClass.Dice:
                 {
-                    inputHandler.OnDiceSelected(baseVisual.OwnerParticipantId, selection);
+                    inputHandler.OnDiceSelected(visualItemContext.OwnerParticipantId, selection);
                     break;
                 }
                 case ItemClass.Consumable:
                 {
-                    inputHandler.OnConsumableSelected(baseVisual.OwnerParticipantId, selection);
+                    inputHandler.OnConsumableSelected(visualItemContext.OwnerParticipantId, selection);
                     break;
                 }
                 default:

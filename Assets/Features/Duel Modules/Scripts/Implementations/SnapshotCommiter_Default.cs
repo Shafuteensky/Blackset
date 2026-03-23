@@ -34,8 +34,6 @@ namespace Blackset.Duel.Snapshots
             ApplyScores(resolvedSnapshot, context);
             // 2) Отметка использования ресурсов (кубы/расходники/пасы)
             ApplyUsage(resolvedSnapshot, context);
-            // 3) Обновление knowledge (раскрытие кубов/расходников при первом использовании)
-            ApplyKnowledge(resolvedSnapshot, context);
             // 4) Запись истории хода (для UI/логов/повторов)
             AppendHistory(resolvedSnapshot, context);
             // 5) Прочие фиксации (если у тебя есть: длительные эффекты, таймеры, стаки и т.д.)

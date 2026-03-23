@@ -92,9 +92,9 @@ namespace Blackset.Duel.Sequence.States
 
                 eventHub.Publish(new SelectionStartedEvent());
 
+                await PlayerSelectChoices(cancellationToken);
                 BotSelectDice();
                 BotSelectConsumable();
-                await PlayerSelectChoices(cancellationToken);
 
                 ResolveDuelScore();
 
@@ -125,7 +125,10 @@ namespace Blackset.Duel.Sequence.States
             if (!botSelection.IsItemSelected) 
                 botState.MarkPassed();
             else
+            {
+                context.Knowledge[context.OpponentId].RevealDice(botSelection.SelectedItemId);
                 eventHub.Publish(new DiceDeclarationCompletedEvent(botSelection.SelectedItemId, context.OpponentId));
+            }
         }
 
         /// <summary>
@@ -138,12 +141,12 @@ namespace Blackset.Duel.Sequence.States
             SelectionState playerSelection = await playerDecisionSource.GetSelection(context, cancellationToken);
 
             if (!playerSelection.IsItemSelected)
+                playerState.MarkPassed();
+            else
             {
-                if (!playerState.HasPassed.Value) playerState.MarkPassed();
-                return;
+                context.Knowledge[context.PlayerId].RevealDice(playerState.DeclaredDice.Value);
+                eventHub.Publish(new DiceDeclarationCompletedEvent(playerState.DeclaredDice.Value, context.PlayerId));
             }
-
-            eventHub.Publish(new DiceDeclarationCompletedEvent(playerState.DeclaredDice.Value, context.PlayerId));
         }
 
         #endregion
@@ -163,7 +166,10 @@ namespace Blackset.Duel.Sequence.States
             if (!botSelection.IsItemSelected) 
                 botState.MarkPassed();
             else
+            {
+                context.Knowledge[context.OpponentId].RevealDice(botSelection.SelectedItemId);
                 eventHub.Publish(new DiceSelectionCompletedEvent(botSelection.SelectedItemId, context.OpponentId));
+            }
         }
 
         /// <summary>
@@ -176,10 +182,17 @@ namespace Blackset.Duel.Sequence.States
             SelectionState botSelection = botDecisionSource.BuildConsumableSelection(context);
             botState.SelectConsumable(botSelection);
             
-            if (botSelection.IsItemSelected) 
-                eventHub.Publish(new ConsumableSelectionCompletedEvent(botSelection.SelectedItemId, context.OpponentId));
+            if (botSelection.IsItemSelected)
+            {
+                context.Knowledge[context.OpponentId].RevealConsumable(botSelection.SelectedItemId);
+                eventHub.Publish(
+                    new ConsumableSelectionCompletedEvent(botSelection.SelectedItemId, context.OpponentId));
+            }
         }
         
+        /// <summary>
+        /// Игрок совершает выбор дайса и расходника
+        /// </summary>
         private async UniTask PlayerSelectChoices(CancellationToken cancellationToken)
         {
             if (playerState.HasPassed.Value) return;
@@ -187,15 +200,18 @@ namespace Blackset.Duel.Sequence.States
             SelectionState playerSelection = await playerDecisionSource.GetSelection(context, cancellationToken);
 
             if (!playerSelection.IsItemSelected)
+                playerState.MarkPassed();
+            else
             {
-                if (!playerState.HasPassed.Value) playerState.MarkPassed();
-                return;
+                context.Knowledge[context.PlayerId].RevealDice(playerState.SelectedDice.Value);
+                eventHub.Publish(new DiceSelectionCompletedEvent(playerState.SelectedDice.Value, context.PlayerId));
             }
 
-            eventHub.Publish(new DiceSelectionCompletedEvent(playerState.SelectedDice.Value, context.PlayerId));
-
             if (playerState.IsConsumableChosen.Value)
+            {
+                context.Knowledge[context.PlayerId].RevealConsumable(playerState.SelectedConsumable.Value);
                 eventHub.Publish(new ConsumableSelectionCompletedEvent(playerState.SelectedConsumable.Value, context.PlayerId));
+            }
         }
 
         #endregion

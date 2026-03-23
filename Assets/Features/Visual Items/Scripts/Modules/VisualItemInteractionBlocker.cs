@@ -6,7 +6,7 @@ namespace Blackset.Data.Items.Visual.Modules
     /// Запрет интеракции с визуальным предметом, не принадлежащим игроку
     /// </summary>
     [RequireComponent(typeof(Collider))]
-    public class VisualItemInteractionBlocker : BaseVisualItemModule
+    public class VisualItemInteractionBlocker : BaseKnownStateCallback
     {
         /// <summary>
         /// Состояние доступности к интеракции
@@ -17,11 +17,18 @@ namespace Blackset.Data.Items.Visual.Modules
 
         private void Awake() => triggerCollider = GetComponent<Collider>();
 
-        // TODO Дополнить логику: изменять в зависимости от раскрытия KnowledgeState
         public override void Initialize(VisualItemContext context)
         {
+            base.Initialize(context);
+            
             IsInteractable = context.IsPlayer;
             triggerCollider.enabled = context.IsPlayer;
+        }
+
+        protected override void OnStateUpdate()
+        {
+            if (IsInteractable) return;
+            triggerCollider.enabled = IsItemRevealed();
         }
     }
 }
