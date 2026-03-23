@@ -9,9 +9,9 @@ using UnityEngine;
 namespace Blackset.Data.Items.Visual.Modules
 {
     /// <summary>
-    /// Отображение результата броска дайса (сырое значение и зарезолвенно)
+    /// Отображение результата броска дайса (сырое значение и зарезолвенное)
     /// </summary>
-    public sealed class DiceResultView : MonoBehaviour
+    public sealed class DiceResultView : BaseVisualItemModule
     {
         [Header("Билборд с результатом"), Space]
         [Tooltip("Корневой объект билборда (для show/hide)")]
@@ -29,24 +29,21 @@ namespace Blackset.Data.Items.Visual.Modules
         private DuelController duelController;
 
         private void Awake() => Reset();
-        
+
         private void OnDestroy()
         {
             if (duelController == null) return;
-            
+
             duelController.EventHub.Unsubscribe<DiceRolledEvent>(ShowRawResults);
             duelController.EventHub.Unsubscribe<EffectsResolvedEvent>(ShowResolvedResults);
             duelController.EventHub.Unsubscribe<BattleStartEvent>(HideResults);
         }
 
-        /// <summary>
-        /// Инициализация от координатора VisualDice
-        /// </summary>
-        public void Initialize(DuelController duelController, string itemId, string ownerParticipantId)
+        public override void Initialize(VisualItemContext context)
         {
-            this.itemId = itemId;
-            this.ownerParticipantId = ownerParticipantId;
-            this.duelController = duelController;
+            itemId = context.ItemId;
+            ownerParticipantId = context.OwnerParticipantId;
+            duelController = context.DuelController;
 
             // Присвоение сырого значения результата броска
             duelController.EventHub.Subscribe<DiceRolledEvent>(ShowRawResults);
@@ -54,11 +51,11 @@ namespace Blackset.Data.Items.Visual.Modules
             duelController.EventHub.Subscribe<EffectsResolvedEvent>(ShowResolvedResults);
             duelController.EventHub.Subscribe<BattleStartEvent>(HideResults);
         }
-        
+
         private void ShowRawResults(DiceRolledEvent handler)
         {
             if (resultText == null) return;
-            // Только если этот дайс пренадлежит бросившему, и брошен был именно этот дайс
+            // Только если этот дайс принадлежит бросившему, и брошен был именно этот дайс
             if (handler.ParticipantId != ownerParticipantId || handler.ChosenDiceId != itemId) return;
 
             // TODO: Заменить на показ нужной грани
@@ -68,13 +65,13 @@ namespace Blackset.Data.Items.Visual.Modules
         private void ShowResolvedResults(EffectsResolvedEvent _)
         {
             if (resultText == null) return;
-            
-            // Только если этот дайс пренадлежит бросившему
+
+            // Только если этот дайс принадлежит бросившему
             DuelParticipantState owner = duelController.DuelContext.Participants[ownerParticipantId];
             if (owner.ParticipantId != ownerParticipantId ||
                 // и брошен был именно этот дайс
                 owner.FightState.TurnState.SelectedDice.Value != itemId) return;
-            
+
             resultText.text = owner.FightState.RawRollResults[itemId].ToString();
             resultText.gameObject.SetActive(true);
         }

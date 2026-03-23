@@ -1,4 +1,3 @@
-// ItemPositionController.cs
 using Blackset.Duel.Sequence;
 using Blackset.DuelEvents.EventTypes;
 using Blackset.Inventories.Scripts.Items;
@@ -7,7 +6,10 @@ using UnityEngine;
 
 namespace Blackset.Data.Items.Visual.Modules
 {
-    public sealed class ItemPositionController : MonoBehaviour
+    /// <summary>
+    /// Управляет позицией предмета: перемещение при использовании и сброс при новой битве.
+    /// </summary>
+    public sealed class ItemPositionController : BaseVisualItemModule
     {
         [SerializeField] private DOTweenAnimation animationTween;
 
@@ -32,13 +34,13 @@ namespace Blackset.Data.Items.Visual.Modules
             duelController.EventHub.Unsubscribe<BattleStartEvent>(OnBattleStart);
         }
 
-        public void Initialize(DuelController duelController, string itemId, string ownerParticipantId, Transform itemTransform, ItemClass itemClass)
+        public override void Initialize(VisualItemContext context)
         {
-            this.itemId = itemId;
-            this.ownerParticipantId = ownerParticipantId;
-            this.duelController = duelController;
-            this.itemTransform = itemTransform;
-            this.itemClass = itemClass;
+            itemId = context.ItemId;
+            ownerParticipantId = context.OwnerParticipantId;
+            duelController = context.DuelController;
+            itemTransform = context.Transform;
+            itemClass = context.ItemClass;
 
             Subscribe();
             duelController.EventHub.Subscribe<BattleStartEvent>(OnBattleStart);
@@ -57,7 +59,7 @@ namespace Blackset.Data.Items.Visual.Modules
                     fightState.onConsumableUsed += OnItemUsed;
                     break;
                 default:
-                    Debug.LogWarning($"[ItemPositionController] Необработанный класс предмета: {itemClass}; предмет не будет перемещен");
+                    Debug.LogWarning($"[ItemPositionController] Необработанный класс предмета: {itemClass}; предмет не будет перемещён");
                     break;
             }
         }
@@ -77,14 +79,17 @@ namespace Blackset.Data.Items.Visual.Modules
             }
         }
 
+        // Перегрузка для расходника (одиночная сигнатура)
         private void OnItemUsed(string usedItemId) => OnItemUsed(usedItemId, false);
-        
+
         private void OnItemUsed(string usedItemId, bool firstTime)
         {
             if (usedItemId != itemId) return;
 
+            // Если уже использован, то не двигается к центру
             if (!firstTime && animationTween != null) return;
 
+            // Переводим направление из локального пространства родителя в мировое
             Vector3 worldDir = itemTransform.parent.TransformDirection(moveDirLocal);
             Vector3 target = itemTransform.position + worldDir * moveDist;
 

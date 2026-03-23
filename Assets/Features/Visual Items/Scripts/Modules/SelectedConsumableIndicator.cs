@@ -7,7 +7,7 @@ namespace Blackset.Data.Items.Visual.Modules
     /// <summary>
     /// Индикатор выбора расходника
     /// </summary>
-    public class SelectedConsumableIndicator : MonoBehaviour
+    public class SelectedConsumableIndicator : BaseVisualItemModule
     {
         [Header("Элементы"), Space]
         [Tooltip("Индикатор выбора")]
@@ -18,36 +18,33 @@ namespace Blackset.Data.Items.Visual.Modules
         private DuelController duelController;
 
         private void Awake() => HideIndicator(new());
-        
+
         private void OnDestroy()
         {
             if (duelController == null) return;
-            
+
             duelController.EventHub.Unsubscribe<SelectedConsumableEvent>(ShowSelection);
             duelController.EventHub.Unsubscribe<PlanningCompletedEvent>(HideIndicator);
         }
 
-        /// <summary>
-        /// Инициализация от координатора VisualDice
-        /// </summary>
-        public void Initialize(DuelController duelController, string itemId, string ownerParticipantId)
+        public override void Initialize(VisualItemContext context)
         {
-            this.itemId = itemId;
-            this.ownerParticipantId = ownerParticipantId;
-            this.duelController = duelController;
+            itemId = context.ItemId;
+            ownerParticipantId = context.OwnerParticipantId;
+            duelController = context.DuelController;
 
-            if (duelController.DuelContext.Participants[ownerParticipantId].IsPlayer)
+            if (context.IsPlayer)
                 duelController.EventHub.Subscribe<SelectedConsumableEvent>(ShowSelection);
             duelController.EventHub.Subscribe<PlanningCompletedEvent>(HideIndicator);
         }
-        
+
         private void ShowSelection(SelectedConsumableEvent handler)
         {
             if (selectedIndicator == null) return;
-            
+
             if (handler.ParticipantOwnerId != ownerParticipantId ||
                 handler.ConsumableId != itemId) return;
-            
+
             selectedIndicator.SetActive(true);
         }
 

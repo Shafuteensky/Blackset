@@ -22,14 +22,12 @@ namespace Blackset.Data.Items.Visual
         /// <summary>
         /// Идентификатор хозяина-участника дуэли
         /// </summary>
-        public  string OwnerParticipantId { get; private set; }
+        public string OwnerParticipantId { get; private set; }
 
-        [Header("Предмет"), Space]
-        [SerializeField] protected ItemClass visualItemClass;
-        
         [Header("Модули"), Space]
-        [SerializeField] protected ItemPositionController positionController;
-        [SerializeField] protected VisualItemInteractionBlocker interactionBlocker;
+        [SerializeField] private BaseVisualItemModule[] visualModules;
+
+        protected abstract ItemClass visualItemClass { get; }
         
         protected InventoryItemElement itemElement;
         protected DuelController duelController;
@@ -38,7 +36,7 @@ namespace Blackset.Data.Items.Visual
         {
             itemElement = GetComponent<InventoryItemElement>();
         }
-        
+
         /// <summary>
         /// Инициализация данных
         /// </summary>
@@ -51,9 +49,9 @@ namespace Blackset.Data.Items.Visual
         {
             ItemId = itemId;
             OwnerParticipantId = ownerParticipantId;
-            
+
             itemElement.Initialize(inventory, newItemCellId);
-            
+
             duelController = DuelController.Instance;
             if (duelController == null)
             {
@@ -62,10 +60,16 @@ namespace Blackset.Data.Items.Visual
                 return;
             }
 
-            bool isParticipantPlayer = DuelController.Instance.DuelContext.PlayerId == ownerParticipantId;
-            interactionBlocker.Initialize(isParticipantPlayer);
-            
-            positionController.Initialize(DuelController.Instance, itemId, ownerParticipantId, transform, visualItemClass);
+            var context = new VisualItemContext(
+                duelController,
+                itemId,
+                visualItemClass,
+                ownerParticipantId,
+                transform);
+
+            if (visualModules == null) return;
+            foreach (var module in visualModules)
+                module.Initialize(context);
         }
     }
 }

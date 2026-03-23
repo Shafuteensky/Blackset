@@ -7,7 +7,7 @@ namespace Blackset.Data.Items.Visual.Modules
     /// <summary>
     /// Индикатор объявления и выбора дайса
     /// </summary>
-    public class SelectedDiceIndicator : MonoBehaviour
+    public class SelectedDiceIndicator : BaseVisualItemModule
     {
         [Header("Элементы"), Space]
         [Tooltip("Индикатор объявления")]
@@ -20,27 +20,24 @@ namespace Blackset.Data.Items.Visual.Modules
         private DuelController duelController;
 
         private void Awake() => HideIndicators(new());
-        
+
         private void OnDestroy()
         {
             if (duelController == null) return;
-            
+
             duelController.EventHub.Unsubscribe<DeclaredDiceEvent>(ShowDeclared);
             duelController.EventHub.Unsubscribe<SelectedDiceEvent>(ShowSelection);
             duelController.EventHub.Unsubscribe<PlanningCompletedEvent>(HideIndicators);
         }
 
-        /// <summary>
-        /// Инициализация от координатора VisualDice
-        /// </summary>
-        public void Initialize(DuelController duelController, string itemId, string ownerParticipantId)
+        public override void Initialize(VisualItemContext context)
         {
-            this.itemId = itemId;
-            this.ownerParticipantId = ownerParticipantId;
-            this.duelController = duelController;
+            itemId = context.ItemId;
+            ownerParticipantId = context.OwnerParticipantId;
+            duelController = context.DuelController;
 
             duelController.EventHub.Subscribe<DeclaredDiceEvent>(ShowDeclared);
-            if (duelController.DuelContext.Participants[ownerParticipantId].IsPlayer)
+            if (context.IsPlayer)
                 duelController.EventHub.Subscribe<SelectedDiceEvent>(ShowSelection);
             duelController.EventHub.Subscribe<PlanningCompletedEvent>(HideIndicators);
         }
@@ -48,20 +45,20 @@ namespace Blackset.Data.Items.Visual.Modules
         private void ShowDeclared(DeclaredDiceEvent handler)
         {
             if (declaredIndicator == null) return;
-            
+
             if (handler.ParticipantOwnerId != ownerParticipantId ||
                 handler.DiceId != itemId) return;
-            
+
             declaredIndicator.SetActive(true);
         }
-        
+
         private void ShowSelection(SelectedDiceEvent handler)
         {
             if (selectedIndicator == null) return;
-            
+
             if (handler.ParticipantOwnerId != ownerParticipantId ||
                 handler.DiceId != itemId) return;
-            
+
             selectedIndicator.SetActive(true);
         }
 

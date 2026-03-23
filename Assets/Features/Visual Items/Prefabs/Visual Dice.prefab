@@ -785,11 +785,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 73fc830e3e6e40e19af9654fa4890d8b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Blackset.Data.Items.Visual.VisualDice
-  visualItemClass: 1
-  positionController: {fileID: 4720389858177352104}
-  interactionBlocker: {fileID: 6536461567142214127}
-  resultView: {fileID: 5170476083873890199}
-  selectionView: {fileID: 6414196317569040448}
+  visualModules:
+  - {fileID: 4720389858177352104}
+  - {fileID: 6536461567142214127}
+  - {fileID: 5170476083873890199}
+  - {fileID: 6414196317569040448}
   viewRepresentation: {fileID: 5804505142746478482}
 --- !u!114 &4720389858177352104
 MonoBehaviour:

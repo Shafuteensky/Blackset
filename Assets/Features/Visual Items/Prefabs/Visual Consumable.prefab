@@ -553,8 +553,8 @@ GameObject:
   - component: {fileID: 3550402794109200855}
   - component: {fileID: 4720389858177352104}
   - component: {fileID: 6536461567142214127}
-  - component: {fileID: 4982052129392634665}
   - component: {fileID: 3385745180663081838}
+  - component: {fileID: 4982052129392634665}
   - component: {fileID: 5344105797481517764}
   - component: {fileID: 6741705545251219199}
   - component: {fileID: 4351025924490762769}
@@ -599,10 +599,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Blackset.Data.Items.Visual.VisualConsumable
   visualItemClass: 2
-  positionController: {fileID: 4720389858177352104}
-  interactionBlocker: {fileID: 6536461567142214127}
+  visualModules:
+  - {fileID: 4720389858177352104}
+  - {fileID: 6536461567142214127}
+  - {fileID: 3385745180663081838}
   viewRepresentation: {fileID: 4982052129392634665}
-  selectionView: {fileID: 3385745180663081838}
 --- !u!114 &4720389858177352104
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -628,19 +629,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ccb257f1b2414bc1b3f957d1b324b1da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Blackset.Data.Items.Visual.Modules.VisualItemInteractionBlocker
---- !u!114 &4982052129392634665
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5036757616722752098}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d5e3c4b941fa48edbd4795450b880aa5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Blackset.Data.Items.Visual.Modules.DConsumableViewRepresentation
-  consumableModelPosition: {fileID: 6024152470842704095}
 --- !u!114 &3385745180663081838
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -654,6 +642,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Blackset.Data.Items.Visual.Modules.SelectedConsumableIndicator
   selectedIndicator: {fileID: 1820349008451301847}
+--- !u!114 &4982052129392634665
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5036757616722752098}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5e3c4b941fa48edbd4795450b880aa5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Blackset.Data.Items.Visual.Modules.DConsumableViewRepresentation
+  consumableModelPosition: {fileID: 6024152470842704095}
 --- !u!65 &5344105797481517764
 BoxCollider:
   m_ObjectHideFlags: 0

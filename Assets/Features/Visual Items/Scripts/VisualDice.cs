@@ -1,6 +1,7 @@
 using Blackset.Data.Items.Visual.Modules;
 using Blackset.Duel.Participants;
 using Blackset.Inventories;
+using Blackset.Inventories.Scripts.Items;
 using Extensions.Log;
 using UnityEngine;
 
@@ -15,19 +16,16 @@ namespace Blackset.Data.Items.Visual
     public sealed class VisualDice : BaseVisual
     {
         [Header("Модули (дайс)"), Space]
-        [SerializeField] private DiceResultView resultView;
-        [SerializeField] private SelectedDiceIndicator selectionView;
         [SerializeField] private DiceViewRepresentation viewRepresentation;
         // [SerializeField] private DiceMeshView meshView; // TODO: добавить при реализации
 
+        protected override ItemClass visualItemClass => ItemClass.Dice;
+        
         public override void Initialize(string itemId, string ownerParticipantId,
             Inventory inventory, string newItemCellId)
         {
             base.Initialize(itemId, ownerParticipantId, inventory, newItemCellId);
             if (duelController == null) return;
-            
-            resultView.Initialize(duelController, itemId, ownerParticipantId);
-            selectionView.Initialize(duelController, itemId, ownerParticipantId);
 
             DuelParticipantState participant = duelController.DuelContext.Participants[ownerParticipantId];
             if (participant.Sets.TryGetDice(itemId, out DiceItemContext diceItem))
