@@ -13,87 +13,79 @@ namespace Blackset.Duel.Participants
         /// Может действовать
         /// </summary>
         public bool CanAct => !HasPassed.Value && !AllActionsDone;
+
         /// <summary>
-        /// Все ли возможные действия за ход выполнены
+        /// Все ли обязательные действия за ход выполнены
         /// </summary>
-        public bool AllActionsDone =>
-            !String.IsNullOrEmpty(DeclaredDice.Value)
-            && IsConsumableChosen.Value;
+        public bool AllActionsDone => IsDiceChosen.Value;
 
         /// <summary>
         /// Спасовал
         /// </summary>
         public ReactiveProperty<bool> HasPassed { get; private set; } = new(false);
-        
+
         /// <summary>
         /// Объявлен ли дайс в этот ход
         /// </summary>
         public ReactiveProperty<bool> IsDiceDeclared { get; private set; } = new(false);
+
         /// <summary>
         /// Объявленный в этом ходу дайс
         /// </summary>
         public ReactiveProperty<string> DeclaredDice { get; private set; } = new(string.Empty);
-        
+
         /// <summary>
         /// Использован ли дайс в этот ход
         /// </summary>
         public ReactiveProperty<bool> IsDiceChosen { get; private set; } = new(false);
+
         /// <summary>
         /// Выбранный для броска в этом ходу дайс
         /// </summary>
-        public ReactiveProperty<string> SelectedDice { get; private set; } = new();
-        
+        public ReactiveProperty<string> SelectedDice { get; private set; } = new(string.Empty);
+
         /// <summary>
         /// Использован ли расходник в этот ход
         /// </summary>
         public ReactiveProperty<bool> IsConsumableChosen { get; private set; } = new(false);
+
         /// <summary>
         /// Выбранный для использования в этом ходу расходник
         /// </summary>
-        public ReactiveProperty<string> SelectedConsumable { get; private set; } = new();
+        public ReactiveProperty<string> SelectedConsumable { get; private set; } = new(string.Empty);
 
         #region Применение данных
-        
+
         /// <summary>
-        /// Сброс данных до изначальных для нового хода (броска дайса)
+        /// Сброс данных до изначальных для нового хода
         /// </summary>
-        /// <param name="maxThrows"></param>
         public void ResetForNewTurn()
         {
             HasPassed.Value = false;
 
-            IsDiceDeclared.Value = false;
-            DeclaredDice.Value = String.Empty;
-            
-            IsDiceChosen.Value = false;
-            SelectedDice.Value = String.Empty;
-                
-            IsConsumableChosen.Value = false;
-            SelectedConsumable.Value =  String.Empty;
+            ClearDeclaredDice();
+            ClearSelectedDice();
+            ClearSelectedConsumable();
         }
-        
+
         /// <summary>
         /// Создание копии инстанса
         /// </summary>
         public TurnParticipantState Clone()
         {
-            var clone = new TurnParticipantState();
-            
+            TurnParticipantState clone = new TurnParticipantState();
+
             clone.HasPassed.Value = HasPassed.Value;
-            
-            clone.IsDiceDeclared = IsDiceDeclared;
-            if (!string.IsNullOrEmpty(DeclaredDice.Value))
-                clone.DeclaredDice.Value = DeclaredDice.Value;
-            
+            clone.IsDiceDeclared.Value = IsDiceDeclared.Value;
+            clone.DeclaredDice.Value = DeclaredDice.Value;
             clone.IsDiceChosen.Value = IsDiceChosen.Value;
             clone.SelectedDice.Value = SelectedDice.Value;
-            
             clone.IsConsumableChosen.Value = IsConsumableChosen.Value;
             clone.SelectedConsumable.Value = SelectedConsumable.Value;
-            
+
             return clone;
         }
-        
+
         #endregion
 
         #region Обновление данных за текущий ход
@@ -109,37 +101,115 @@ namespace Blackset.Duel.Participants
         /// <summary>
         /// Отметка объявленного дайса
         /// </summary>
-        /// <param name="diceId">Идентификатор дайса</param>
         public void DeclareDice(SelectionState selection)
         {
-            if (!selection.IsItemSelected) return;
-            
+            if (!selection.IsItemSelected)
+            {
+                ClearDeclaredDice();
+                return;
+            }
+
             DeclaredDice.Value = selection.SelectedItemId;
-            IsDiceDeclared.Value = selection.IsItemSelected;
+            IsDiceDeclared.Value = true;
+        }
+
+        /// <summary>
+        /// Снять объявление дайса
+        /// </summary>
+        public void ClearDeclaredDice()
+        {
+            DeclaredDice.Value = String.Empty;
+            IsDiceDeclared.Value = false;
+        }
+
+        /// <summary>
+        /// Переключить объявленный дайс
+        /// </summary>
+        public void ToggleDeclaredDice(string diceId)
+        {
+            if (DeclaredDice.Value == diceId)
+            {
+                ClearDeclaredDice();
+                return;
+            }
+
+            DeclareDice(new SelectionState(diceId));
         }
 
         /// <summary>
         /// Отметка выбранного дайса
         /// </summary>
-        /// <param name="diceId">Идентификатор дайса</param>
         public void SelectDice(SelectionState selection)
         {
-            if (!selection.IsItemSelected) return;
-            
-            IsDiceChosen.Value = selection.IsItemSelected;
+            if (!selection.IsItemSelected)
+            {
+                ClearSelectedDice();
+                return;
+            }
+
             SelectedDice.Value = selection.SelectedItemId;
+            IsDiceChosen.Value = true;
+        }
+
+        /// <summary>
+        /// Снять выбор дайса
+        /// </summary>
+        public void ClearSelectedDice()
+        {
+            SelectedDice.Value = String.Empty;
+            IsDiceChosen.Value = false;
+        }
+
+        /// <summary>
+        /// Переключить выбранный дайс
+        /// </summary>
+        public void ToggleSelectedDice(string diceId)
+        {
+            if (SelectedDice.Value == diceId)
+            {
+                ClearSelectedDice();
+                return;
+            }
+
+            SelectDice(new SelectionState(diceId));
         }
 
         /// <summary>
         /// Отметка выбранного расходника
         /// </summary>
-        /// <param name="consumableId">Идентификатор расходника</param>
         public void SelectConsumable(SelectionState selection)
         {
-            if (!selection.IsItemSelected) return;
-            
-            IsConsumableChosen.Value = selection.IsItemSelected;
+            if (!selection.IsItemSelected)
+            {
+                ClearSelectedConsumable();
+                return;
+            }
+
             SelectedConsumable.Value = selection.SelectedItemId;
+            IsConsumableChosen.Value = true;
+        }
+
+        /// <summary>
+        /// Снять выбор расходника
+        /// </summary>
+        public void ClearSelectedConsumable()
+        {
+            SelectedConsumable.Value = String.Empty;
+            IsConsumableChosen.Value = false;
+        }
+
+        /// <summary>
+        /// Переключить выбранный расходник
+        /// </summary>
+        public void ToggleSelectedConsumable(string consumableId)
+        {
+            if (SelectedConsumable.Value == consumableId)
+            {
+                ClearSelectedConsumable();
+                return;
+            }
+
+            SelectConsumable(new SelectionState(consumableId));
         }
 
         #endregion

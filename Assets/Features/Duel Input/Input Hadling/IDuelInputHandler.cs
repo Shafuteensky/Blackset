@@ -9,16 +9,21 @@ namespace Blackset.DecisionInput
         /// <summary>
         /// Вызывается в UI при выборе дайса участником
         /// </summary>
-        void OnDiceSelected(string participantId, SelectionState selection);
+        public void OnDiceSelected(string participantId, SelectionState selection);
 
         /// <summary>
         /// Вызывается в UI при выборе расходника участником
         /// </summary>
-        void OnConsumableSelected(string participantId, SelectionState selection);
+        public void OnConsumableSelected(string participantId, SelectionState selection);
 
+        /// <summary>
+        /// Вызывается в UI при запросе броска выбранного дайса
+        /// </summary>
+        public void OnInputCompletion();
+        
         /// <summary>
         /// Вызывается в UI при запросе паса
         /// </summary>
-        void OnPassRequested();
+        public void OnPassRequested();
     }
 }

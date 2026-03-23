@@ -15,8 +15,6 @@ namespace Blackset.DecisionInput
         [SerializeField] private ItemClass choiceType;
 
         private BaseVisual baseVisual;
-        
-        SelectionState selection = new SelectionState();
 
         private void Awake()
         {
@@ -25,19 +23,18 @@ namespace Blackset.DecisionInput
 
         public void OnPointerClick(PointerEventData eventData)
         {
+            SelectionState selection = new SelectionState(baseVisual.ItemId);
+
             switch (choiceType)
             {
                 case ItemClass.Dice:
                 {
-                    selection = new SelectionState(baseVisual.ItemId);
                     inputHandler.OnDiceSelected(baseVisual.OwnerParticipantId, selection);
                     break;
                 }
                 case ItemClass.Consumable:
                 {
-                    selection = new SelectionState(baseVisual.ItemId);
-                    inputHandler.OnConsumableSelected(baseVisual.OwnerParticipantId, selection); 
-                    // TODO Заменить на выбор применения при необходимости (расходник или особый дайс)
+                    inputHandler.OnConsumableSelected(baseVisual.OwnerParticipantId, selection);
                     break;
                 }
                 default:

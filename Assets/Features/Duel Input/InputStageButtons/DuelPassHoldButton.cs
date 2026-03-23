@@ -38,7 +38,7 @@ namespace Blackset.DecisionInput
 
         protected override void OnDisable()
         {
-            base.OnEnable();
+            base.OnDisable();
             
             if (eventHub == null) return;
 

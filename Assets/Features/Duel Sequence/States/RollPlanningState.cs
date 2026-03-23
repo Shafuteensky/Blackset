@@ -86,24 +86,22 @@ namespace Blackset.Duel.Sequence.States
             try
             {
                 eventHub.Publish(new DeclarationStartedEvent());
-                
+
                 BotDeclareDice();
                 await PlayerDeclareDice(cancellationToken);
 
                 eventHub.Publish(new SelectionStartedEvent());
-                
+
                 BotSelectDice();
-                await PlayerSelectDice(cancellationToken);
-                
                 BotSelectConsumable();
-                await PlayerSelectConsumable(cancellationToken);
+                await PlayerSelectChoices(cancellationToken);
 
                 ResolveDuelScore();
 
                 planningCompleted = true;
                 eventHub.Publish(new PlanningCompletedEvent());
             }
-            catch (OperationCanceledException) { } // Нормальная ситуация: стейт покинули раньше завершения ввода
+            catch (OperationCanceledException) { }
             catch (Exception exception)
             {
                 planningException = exception;
@@ -136,19 +134,21 @@ namespace Blackset.Duel.Sequence.States
         private async UniTask PlayerDeclareDice(CancellationToken cancellationToken)
         {
             if (playerState.HasPassed.Value) return;
-            
+
             SelectionState playerSelection = await playerDecisionSource.GetSelection(context, cancellationToken);
-            playerState.DeclareDice(playerSelection);
-            
-            if (!playerSelection.IsItemSelected) 
-                playerState.MarkPassed();
-            else
-                eventHub.Publish(new DeclaredDiceEvent(playerSelection.SelectedItemId, context.PlayerId));
+
+            if (!playerSelection.IsItemSelected)
+            {
+                if (!playerState.HasPassed.Value) playerState.MarkPassed();
+                return;
+            }
+
+            eventHub.Publish(new DeclaredDiceEvent(playerState.DeclaredDice.Value, context.PlayerId));
         }
 
         #endregion
 
-        #region Выбор дайса
+        #region Выборы
 
         /// <summary>
         /// Бот выбирает дайс
@@ -167,26 +167,6 @@ namespace Blackset.Duel.Sequence.States
         }
 
         /// <summary>
-        /// Игрок выбирает дайс
-        /// </summary>
-        private async UniTask PlayerSelectDice(CancellationToken cancellationToken)
-        {
-            if (playerState.HasPassed.Value) return;
-            
-            SelectionState playerSelection = await playerDecisionSource.GetSelection(context, cancellationToken);
-            playerState.SelectDice(playerSelection);
-            
-            if (!playerSelection.IsItemSelected) 
-                playerState.MarkPassed();
-            else
-                eventHub.Publish(new SelectedDiceEvent(playerSelection.SelectedItemId, context.PlayerId));
-        }
-
-        #endregion
-
-        #region Выбор расходника
-
-        /// <summary>
         /// Бот выбирает расходник
         /// </summary>
         private void BotSelectConsumable()
@@ -199,19 +179,23 @@ namespace Blackset.Duel.Sequence.States
             if (botSelection.IsItemSelected) 
                 eventHub.Publish(new SelectedConsumableEvent(botSelection.SelectedItemId, context.OpponentId));
         }
-
-        /// <summary>
-        /// Игрок выбирает расходник
-        /// </summary>
-        private async UniTask PlayerSelectConsumable(CancellationToken cancellationToken)
+        
+        private async UniTask PlayerSelectChoices(CancellationToken cancellationToken)
         {
             if (playerState.HasPassed.Value) return;
-            
+
             SelectionState playerSelection = await playerDecisionSource.GetSelection(context, cancellationToken);
-            playerState.SelectConsumable(playerSelection);
-            
-            if (playerSelection.IsItemSelected) 
-                eventHub.Publish(new SelectedConsumableEvent(playerSelection.SelectedItemId, context.PlayerId));
+
+            if (!playerSelection.IsItemSelected)
+            {
+                if (!playerState.HasPassed.Value) playerState.MarkPassed();
+                return;
+            }
+
+            eventHub.Publish(new SelectedDiceEvent(playerState.SelectedDice.Value, context.PlayerId));
+
+            if (playerState.IsConsumableChosen.Value)
+                eventHub.Publish(new SelectedConsumableEvent(playerState.SelectedConsumable.Value, context.PlayerId));
         }
 
         #endregion
