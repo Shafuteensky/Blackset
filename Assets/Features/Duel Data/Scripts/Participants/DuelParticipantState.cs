@@ -1,7 +1,5 @@
-using System;
 using Blackset.Duel.Pools;
 using Blackset.Duel.Sets;
-using Blackset.DuelScore;
 using Blackset.Opponents;
 using Extensions.Reactive;
 

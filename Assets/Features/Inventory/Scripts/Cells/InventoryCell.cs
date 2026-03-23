@@ -48,31 +48,24 @@ namespace Blackset.Inventories.Cells
         /// <summary>
         /// Пуста ли ячейка
         /// </summary>
-        public bool IsEmpty { get => isEmpty; private set => isEmpty = value; }
+        public bool IsEmpty { get; private set; }
         /// <summary>
         /// Является ли ячейка дефолтной
         /// </summary>
-        public bool IsDefault { get => isDefault; private set => isDefault = value; }
+        public bool IsDefault { get; private set; }
         /// <summary>
         /// Новая ли ячейка (добавлен ли нвоый предмет)
         /// </summary>
-        public bool IsNew { get => isNew; private set => isNew = value; }
+        public bool IsNew { get; private set; }
         
         /// <summary>
         /// Данные о предмете в ячейке
         /// </summary>
-        public ItemContext Item { get => item; private set => item = value; }
+        public ItemContext Item { get; private set; }
         /// <summary>
         /// Количество предметов в ячейке
         /// </summary>
-        public int ItemAmount { get => itemAmount; private set => itemAmount = value; }
-
-        protected bool isEmpty;
-        protected bool isDefault;
-        protected bool isNew;
-        
-        private ItemContext item;
-        private int itemAmount;
+        public int ItemAmount { get; private set; }
 
         /// <summary>
         /// Конструктор заполненной ячейки инвентаря
@@ -84,12 +77,12 @@ namespace Blackset.Inventories.Cells
         {
             if (itemAmount <= 0) itemAmount = 1;
             
-            this.isEmpty = isEmpty;
-            this.isDefault = isDefault;
-            isNew = false;
+            IsEmpty = isEmpty;
+            IsDefault = isDefault;
+            IsNew = false;
             
-            this.item = item;
-            this.itemAmount = itemAmount;
+            Item = item;
+            ItemAmount = itemAmount;
         }
 
         #region Манипуляции количеством
@@ -107,7 +100,7 @@ namespace Blackset.Inventories.Cells
                 return 0;
             }
 
-            int before = itemAmount;
+            int before = ItemAmount;
             int target = before + amount;
 
             int excess = Mathf.Max(0, target - maxAmount);
@@ -135,12 +128,12 @@ namespace Blackset.Inventories.Cells
                 return 0;
             }
 
-            if (itemAmount <= 0)
+            if (ItemAmount <= 0)
             {
                 return amount;
             }
 
-            int before = itemAmount;
+            int before = ItemAmount;
             int removed = Mathf.Min(before, amount);
             int target = before - removed;
 
@@ -159,7 +152,7 @@ namespace Blackset.Inventories.Cells
         /// </summary>
         public InventoryItem GetItemData()
         {
-            if (isEmpty) return null;
+            if (IsEmpty) return null;
             if (String.IsNullOrEmpty(Item.ItemId))
             {
                 ServiceDebug.LogError($"Невалидный id предмета ячейки инвентаря (id {Id}), данные не найдены");
@@ -174,7 +167,7 @@ namespace Blackset.Inventories.Cells
         /// </summary>
         public InventoryItemType GetTypeData()
         {
-            if (isEmpty) return null;
+            if (IsEmpty) return null;
             if (String.IsNullOrEmpty(Item.ItemTypeId))
             {
                 ServiceDebug.LogError("Невалидный id типа предмета ячейки инвентаря, данные не найдены");
@@ -213,12 +206,12 @@ namespace Blackset.Inventories.Cells
         /// <summary>
         /// Отметить ячейку как новую
         /// </summary>
-        public void MarkNew() => isNew = true;
+        public void MarkNew() => IsNew = true;
 
         /// <summary>
         /// Отметить ячейку как просмотренную
         /// </summary>
-        public void MarkSeen() => isNew = false;
+        public void MarkSeen() => IsNew = false;
 
         #endregion
         
@@ -232,7 +225,7 @@ namespace Blackset.Inventories.Cells
                 return;
             }
 
-            int before = itemAmount;
+            int before = ItemAmount;
 
             int clamped = value;
             if (clamped > maxAmount)
@@ -243,11 +236,11 @@ namespace Blackset.Inventories.Cells
 
             if (before == clamped) return;
 
-            itemAmount = clamped;
+            ItemAmount = clamped;
 
-            onAmountChanged?.Invoke(Id, itemAmount);
+            onAmountChanged?.Invoke(Id, ItemAmount);
 
-            if (before > 0 && itemAmount == 0)
+            if (before > 0 && ItemAmount == 0)
             {
                 onAmountDepleted?.Invoke(Id);
             }
