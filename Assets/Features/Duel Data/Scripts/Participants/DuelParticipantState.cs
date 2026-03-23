@@ -112,11 +112,6 @@ namespace Blackset.Duel.Participants
         {
             if (IsSetsInited) return;
             Sets = sets;
-            ServiceDebug.LogWarning(Sets.DiceSetInventory.name);
-            foreach (var cell in Sets.DiceSetInventory.Data)
-            {
-                ServiceDebug.LogError(cell.Id + ":\n" + cell.Item.ItemId + ", " + cell.Item.ItemTypeId);
-            }
         }
 
         /// <summary>

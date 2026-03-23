@@ -13,6 +13,7 @@ namespace Blackset.Data.Items.Visual
     {
         [Header("Модули (расходник)"), Space]
         [SerializeField] private ConsumableViewRepresentation viewRepresentation;
+        [SerializeField] private SelectedConsumableIndicator selectionView;
         // [SerializeField] private DiceMeshView meshView; // TODO: добавить при реализации
 
         public override void Initialize(string itemId, string ownerParticipantId,
@@ -20,6 +21,8 @@ namespace Blackset.Data.Items.Visual
         {
             base.Initialize(itemId, ownerParticipantId, inventory, newItemCellId);
             if (duelController == null) return;
+            
+            selectionView.Initialize(duelController, itemId, ownerParticipantId);
 
             DuelParticipantState participant = duelController.DuelContext.Participants[ownerParticipantId];
             if (participant.Sets.TryGetConsumable(itemId, out ConsumableItemContext consumableItem))

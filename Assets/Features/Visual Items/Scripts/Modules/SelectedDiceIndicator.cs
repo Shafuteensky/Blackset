@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Blackset.Data.Items.Visual.Modules
 {
     /// <summary>
-    /// 
+    /// Индикатор объявления и выбора дайса
     /// </summary>
     public class SelectedDiceIndicator : MonoBehaviour
     {
@@ -40,7 +40,8 @@ namespace Blackset.Data.Items.Visual.Modules
             this.duelController = duelController;
 
             duelController.EventHub.Subscribe<DeclaredDiceEvent>(ShowDeclared);
-            duelController.EventHub.Subscribe<SelectedDiceEvent>(ShowSelection);
+            if (duelController.DuelContext.Participants[ownerParticipantId].IsPlayer)
+                duelController.EventHub.Subscribe<SelectedDiceEvent>(ShowSelection);
             duelController.EventHub.Subscribe<PlanningCompletedEvent>(HideIndicators);
         }
 
