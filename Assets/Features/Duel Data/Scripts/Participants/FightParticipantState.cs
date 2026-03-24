@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Extensions.Reactive;
+using UnityEngine;
 
 namespace Blackset.Duel.Participants
 {
@@ -18,18 +19,9 @@ namespace Blackset.Duel.Participants
         /// <summary>
         /// Расходник из сборки использован в текущем бою
         /// </summary>
-        public event Action<string> onConsumableUsed; 
+        public event Action<string, bool> onConsumableUsed; 
         
         #endregion
-
-        /// <summary>
-        /// Использованные за бой дайсы в порядке применения [id_дайса_в_сборке]
-        /// </summary>
-        public List<string> DicesUsed => dicesUsed;
-        /// <summary>
-        /// Использованные за бой расходники в порядке применения [id_расходника_в_сборке]
-        /// </summary>
-        public List<string> ConsumablesUsed => consumablesUsed;
 
         /// <summary>
         /// Результаты бросков дайсов (без эффектов и прочего — "сырые") [id_дайса_в_сборке, результат]
@@ -57,17 +49,14 @@ namespace Blackset.Duel.Participants
 
         private readonly List<string> dicesUsed = new();
         private readonly List<string> consumablesUsed = new();
-        
+
         private readonly Dictionary<string, int> rawRollResults = new();
         private readonly TurnParticipantState turnState = new();
 
         /// <summary>
         /// Создание хранилища данных о состоянии участника дуэли во время битвы
         /// </summary>
-        public FightParticipantState()
-        {
-            ResetForNewFight();
-        }
+        public FightParticipantState() => ResetForNewFight();
 
         #region Получение данных
         
@@ -77,7 +66,7 @@ namespace Blackset.Duel.Participants
         public List<string> GetUsedDices()
         {
             List<string> usedDices = new();
-            foreach (var item in DicesUsed)
+            foreach (var item in dicesUsed)
                 usedDices.Add(item);
             return usedDices;
         }
@@ -87,11 +76,25 @@ namespace Blackset.Duel.Participants
         /// </summary>
         public List<string> GetUsedConsumables()
         {
-            List<string> usedDices = new();
-            foreach (var item in ConsumablesUsed)
-                usedDices.Add(item);
-            return usedDices;
+            List<string> usedConsumables = new();
+            foreach (var item in consumablesUsed)
+                usedConsumables.Add(item);
+            return usedConsumables;
         }
+        
+        /// <summary>
+        /// Использован ли дайс за этот бой
+        /// </summary>
+        /// <param name="dice">Идентификатор проверяемого дайса</param>
+        /// <returns>true если был использован хоть раз, иначе false</returns>
+        public bool IsDiceUsed(string dice) => dicesUsed.Contains(dice);
+        
+        /// <summary>
+        /// Использован ли расходник за этот бой
+        /// </summary>
+        /// <param name="consumable">Идентификатор проверяемого расходника</param>
+        /// <returns>true если был использован хоть раз, иначе false</returns>
+        public bool IsConsumableUsed(string consumable) => consumablesUsed.Contains(consumable);
         
         #endregion
         
@@ -109,11 +112,10 @@ namespace Blackset.Duel.Participants
             FightScore.Value = 0;
 
             dicesUsed.Clear();
-            consumablesUsed.Clear();
-            
             rawRollResults.Clear();
             
             turnState.ResetForNewTurn();
+            turnState.InitFightState(this);
         }
         
         #endregion
@@ -145,8 +147,9 @@ namespace Blackset.Duel.Participants
         /// <param name="dice">Идентификатор расходника из сборки</param>
         public void MarkConsumableUsed(string consumableId)
         {
+            bool firstTime = !consumablesUsed.Contains(consumableId);
             consumablesUsed.Add(consumableId);
-            onConsumableUsed?.Invoke(consumableId);
+            onConsumableUsed?.Invoke(consumableId, firstTime);
         }
 
         /// <summary>
@@ -154,10 +157,7 @@ namespace Blackset.Duel.Participants
         /// </summary>
         /// <param name="dice">Идентификатор дайса из сборки</param>
         /// <param name="rawResult">Сырой результат броска</param>
-        public void RegisterRawRollResult(string dice, int rawResult)
-        {
-            rawRollResults[dice] = rawResult;
-        }
+        public void RegisterRawRollResult(string dice, int rawResult) => rawRollResults[dice] = rawResult;
         
         #endregion
 
@@ -165,9 +165,6 @@ namespace Blackset.Duel.Participants
         /// Обновление счета
         /// </summary>
         /// <param name="snapshotScore">Новое значение счета</param>
-        public void UpdateScore(int snapshotScore)
-        {
-            FightScore.Value = snapshotScore;
-        }
+        public void UpdateScore(int snapshotScore) => FightScore.Value = snapshotScore;
     }
 }

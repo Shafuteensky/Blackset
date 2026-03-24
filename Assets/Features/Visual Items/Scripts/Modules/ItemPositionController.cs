@@ -79,9 +79,6 @@ namespace Blackset.Data.Items.Visual.Modules
             }
         }
 
-        // Перегрузка для расходника (одиночная сигнатура)
-        private void OnItemUsed(string usedItemId) => OnItemUsed(usedItemId, false);
-
         private void OnItemUsed(string usedItemId, bool firstTime)
         {
             if (usedItemId != itemId) return;
@@ -101,9 +98,16 @@ namespace Blackset.Data.Items.Visual.Modules
             animationTween.tween.Restart();
         }
 
-        private void OnBattleStart(BattleStartEvent _)
+        private void OnBattleStart(BattleStartEvent _) => MoveToInitialPosition();
+
+        private void MoveToInitialPosition()
         {
-            itemTransform.DOMove(initialPosition, 0.5f).SetEase(Ease.OutCubic);
+            switch (itemClass)
+            {
+                case ItemClass.Dice:
+                    itemTransform.DOMove(initialPosition, 0.5f).SetEase(Ease.OutCubic);
+                    break;
+            }
         }
     }
 }

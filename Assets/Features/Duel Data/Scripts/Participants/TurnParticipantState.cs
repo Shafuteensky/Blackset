@@ -54,6 +54,10 @@ namespace Blackset.Duel.Participants
         /// </summary>
         public ReactiveProperty<string> SelectedConsumable { get; private set; } = new(string.Empty);
 
+        private FightParticipantState fightState;
+        
+        public void InitFightState(FightParticipantState fightState) => this.fightState = fightState;
+        
         #region Применение данных
 
         /// <summary>
@@ -179,6 +183,8 @@ namespace Blackset.Duel.Participants
         /// </summary>
         public void SelectConsumable(SelectionState selection)
         {
+            if (fightState != null && fightState.IsConsumableUsed(selection.SelectedItemId)) return;
+
             if (!selection.IsItemSelected)
             {
                 ClearSelectedConsumable();

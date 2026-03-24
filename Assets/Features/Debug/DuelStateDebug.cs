@@ -177,13 +177,13 @@ namespace Blackset.GameDebug
             sb.AppendLine($"    Бросков:        {fight.Throws.Value}");
             sb.AppendLine($"    Сдался:         {fight.HasGivenUp.Value}");
 
-            string dicesUsed = fight.DicesUsed.Count > 0
-                ? string.Join(", ", fight.DicesUsed)
+            string dicesUsed = fight.GetUsedDices().Count > 0
+                ? string.Join(", ", fight.GetUsedDices())
                 : "—";
             sb.AppendLine($"    Дайсы за бой:   [{dicesUsed}]");
 
-            string consumablesUsed = fight.ConsumablesUsed.Count > 0
-                ? string.Join(", ", fight.ConsumablesUsed)
+            string consumablesUsed = fight.GetUsedConsumables().Count > 0
+                ? string.Join(", ", fight.GetUsedConsumables())
                 : "—";
             sb.AppendLine($"    Расходники:     [{consumablesUsed}]");
 

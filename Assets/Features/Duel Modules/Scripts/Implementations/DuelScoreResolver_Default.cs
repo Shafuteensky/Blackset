@@ -43,13 +43,13 @@ namespace Blackset.Duel.Modules
             foreach (var participant in context.Participants.Values)
             {
                 int unusedDicesCount = participant.Sets.DiceSetInventory.Data.Count -
-                                       participant.FightState.DicesUsed.Count;
+                                       participant.FightState.GetUsedDices().Count;
                     
                 int score = unusedDicesCount * duelScoreConfig.UnusedItems.unusedDiceScore;
                 participant.DuelScore.Value += Mathf.Max(0, score);
                 
                 int unusedConsumablesCount = participant.Sets.ConsumableSetInventory.Data.Count -
-                                             participant.FightState.ConsumablesUsed.Count;
+                                             participant.FightState.GetUsedConsumables().Count;
                 
                 score = unusedConsumablesCount * duelScoreConfig.UnusedItems.unusedConsumableScore;
                 participant.DuelScore.Value += Mathf.Max(0, score);
