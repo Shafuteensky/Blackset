@@ -30,6 +30,8 @@ namespace Blackset.Duel.Sequence.States
         private IBotDecisionSource botDecisionSource;
         private IPlayerDecisionSource playerDecisionSource;
 
+        private SelectionState playerLastDeclaration; 
+
         #region IState
 
         public void Enter(DuelContext context)
@@ -136,9 +138,14 @@ namespace Blackset.Duel.Sequence.States
         /// </summary>
         private async UniTask PlayerDeclareDice(CancellationToken cancellationToken)
         {
-            if (playerState.HasPassed.Value) return;
+            if (playerState.HasPassed.Value)
+            {
+                playerLastDeclaration = new SelectionState();
+                return;
+            }
 
             SelectionState playerSelection = await playerDecisionSource.GetSelection(context, cancellationToken);
+            playerLastDeclaration = playerSelection;
 
             if (!playerSelection.IsItemSelected)
                 playerState.MarkPassed();
@@ -196,6 +203,7 @@ namespace Blackset.Duel.Sequence.States
         private async UniTask PlayerSelectChoices(CancellationToken cancellationToken)
         {
             if (playerState.HasPassed.Value) return;
+            playerState.SelectDice(playerLastDeclaration);
 
             SelectionState playerSelection = await playerDecisionSource.GetSelection(context, cancellationToken);
 

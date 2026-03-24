@@ -16,5 +16,5 @@ MonoBehaviour:
   dataName: Odd
   dataDescription: All faces show odd numbers. Even values are rounded down.
   sideNumbersRules:
-  - rule: 1
+  - rule: 2
     n: 1
