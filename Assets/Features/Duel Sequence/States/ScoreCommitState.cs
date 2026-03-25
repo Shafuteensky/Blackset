@@ -20,8 +20,8 @@ namespace Blackset.Duel.Sequence.States
         {
             // Применение результатов бросков и эффектов
             TurnSnapshot snapshot = new TurnSnapshot(context);
-            IScoreUpdatePipeline effectsResolver = modules.Get<IScoreUpdatePipeline>();
-            TurnSnapshot resolvedSnapshot = effectsResolver.Resolve(snapshot);
+            IScoreUpdatePipeline scoreResolver = modules.Get<IScoreUpdatePipeline>();
+            TurnSnapshot resolvedSnapshot = scoreResolver.Resolve(snapshot);
             
             // Актуализация фактических данных дуэли
             ISnapshotCommiter commiterDefault = modules.Get<ISnapshotCommiter>();

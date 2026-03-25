@@ -7,7 +7,7 @@ using Extensions.FiniteStateMachine;
 namespace Blackset.Duel.Sequence.States
 {
     /// <summary>
-    /// 7. Броски дайсов (повторяемое состояние)
+    /// 7. Броски дайсов, трата расходников (повторяемое состояние)
     /// </summary>
     /// <remarks>
     /// - Генерация результатов бросков и запись

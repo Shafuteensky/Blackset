@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5549382bfafd4949ab99019ab0e7f578, type: 3}
-  m_Name: SpecialEffectTest (2)
+  m_Name: Mirror
   m_EditorClassIdentifier: Assembly-CSharp::Blackset.Effects.EffectConfig
   id: SpecialEffectTest (2)
   dataName: SpecialEffectTest (2)
+  dataDescription: 
   effectType: 5
   phases: 03000000
-  targetType: 3
   power: 2
   requiresChoice: 0

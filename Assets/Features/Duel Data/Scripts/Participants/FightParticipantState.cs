@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Extensions.Reactive;
 using UnityEngine;
 
@@ -81,6 +82,16 @@ namespace Blackset.Duel.Participants
                 usedConsumables.Add(item);
             return usedConsumables;
         }
+
+        /// <summary>
+        /// Получить идентификатор последнего использованного за бой дайса
+        /// </summary>
+        public string GetLastUsedDice() => dicesUsed.Last();
+
+        /// <summary>
+        /// Получить идентификатор последнего использованного за бой расходника
+        /// </summary>
+        public string GetLastUsedConsumable() => consumablesUsed.Last();
         
         /// <summary>
         /// Использован ли дайс за этот бой
@@ -133,21 +144,29 @@ namespace Blackset.Duel.Participants
         /// <summary>
         /// Отметить дайс использованным
         /// </summary>
-        /// <param name="dice">Идентификатор дайса из сборки</param>
+        /// <remarks>
+        /// При повторном использовании перемещается в конец
+        /// </remarks>
+        /// <param name="diceId">Идентификатор дайса из сборки</param>
         public void MarkDiceUsed(string diceId)
         {
             bool firstTime = !dicesUsed.Contains(diceId);
+    
             dicesUsed.Add(diceId);
             onDiceUsed?.Invoke(diceId, firstTime);
         }
-
+        
         /// <summary>
         /// Отметить расходник использованным
         /// </summary>
-        /// <param name="dice">Идентификатор расходника из сборки</param>
+        /// <remarks>
+        /// При повторном использовании перемещается в конец
+        /// </remarks>
+        /// <param name="consumableId">Идентификатор расходника из сборки</param>
         public void MarkConsumableUsed(string consumableId)
         {
             bool firstTime = !consumablesUsed.Contains(consumableId);
+    
             consumablesUsed.Add(consumableId);
             onConsumableUsed?.Invoke(consumableId, firstTime);
         }
