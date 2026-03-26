@@ -23,6 +23,6 @@ MonoBehaviour:
   availableTypes:
   - {fileID: 11400000, guid: 0e1a15f03f84f8d46ba873a79cfd79ab, type: 2}
   - {fileID: 11400000, guid: 993bee1bbd4e925439649326aceece27, type: 2}
-  effect: {fileID: 11400000, guid: 720de6e4f0af2ae4db45d32b0b7cbf83, type: 2}
+  effect: {fileID: 0}
   color: {r: 0.103773475, g: 0.70735455, b: 1, a: 1}
   consumablePrefab: {fileID: 2614671250630885598, guid: 1b316ced1b74006439599f32c51b78cd, type: 3}
