@@ -364,7 +364,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 54a52325277e1a845ace3c554ebb52f7, type: 3}
+  m_Sprite: {fileID: 21300000, guid: b97a24fe6ee8a634ab48f6da19fc137a, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1346,7 +1346,7 @@ MonoBehaviour:
   tweenTargetIsTargetGO: 1
   delay: 0
   duration: 0.09
-  easeType: 7
+  easeType: 6
   easeCurve:
     serializedVersion: 2
     m_Curve:
@@ -1372,7 +1372,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   loopType: 2
-  loops: 5
+  loops: 2
   id: 
   isRelative: 0
   isFrom: 0
@@ -1388,7 +1388,7 @@ MonoBehaviour:
   autoPlay: 0
   useTargetAsV3: 0
   endValueFloat: 0
-  endValueV3: {x: 80, y: 0, z: 80}
+  endValueV3: {x: 90, y: 0, z: 90}
   endValueV2: {x: 0, y: 0}
   endValueColor: {r: 1, g: 1, b: 1, a: 1}
   endValueString: 

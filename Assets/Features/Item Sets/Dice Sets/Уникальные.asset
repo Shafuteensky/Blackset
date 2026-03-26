@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aecc964481164e049fb0f78c4bb26542, type: 3}
+  m_Name: "\u0423\u043D\u0438\u043A\u0430\u043B\u044C\u043D\u044B\u0435"
+  m_EditorClassIdentifier: Assembly-CSharp::Blackset.Data.DiceSet
+  id: b6ad3fc5ade541ecbcb26c30d80580a3
+  dataName: Unique
+  dataDescription: Unique effects
+  color: {r: 0.10068811, g: 0.7132075, b: 0, a: 1}
+  isPriceAveraged: 1
+  price: 5
+  itemsInSet:
+  - {fileID: 11400000, guid: e8d4c9b040356864cb29cfd9d2d07d38, type: 2}
+  - {fileID: 11400000, guid: 4e7cdec84ea898149afbdc4bf0225337, type: 2}
+  - {fileID: 11400000, guid: e3c38b21ee363904da08fea814b14108, type: 2}
+  - {fileID: 11400000, guid: e25b468d6eac934488114dc97837e040, type: 2}
+  - {fileID: 11400000, guid: 9de061ca52aecc945a28ff73195f6781, type: 2}
