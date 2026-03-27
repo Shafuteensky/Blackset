@@ -7,26 +7,19 @@ using Extensions.FiniteStateMachine;
 namespace Blackset.Duel.Sequence.States
 {
     /// <summary>
-    /// 8. Применение эффектов и учет счетов (повторяемое состояние)
+    /// 8. Коммит рабочего снапшота текущего броска
     /// </summary>
-    /// <remarks>
-    /// - Построение снапшота хода боя для применения эффектов (резолва снапшота по правилам с учетом штормов и эффектов)
-    /// - Обновление фактических счетов
-    /// - Запись в историю
-    /// </remarks>
     public class ScoreCommitState : BaseDuelState, IState<DuelContext>
     {
         public void Enter(DuelContext context)
         {
-            // Применение результатов бросков и эффектов
-            TurnSnapshot snapshot = new TurnSnapshot(context);
-            IScoreUpdatePipeline scoreResolver = modules.Get<IScoreUpdatePipeline>();
-            TurnSnapshot resolvedSnapshot = scoreResolver.Resolve(snapshot);
-            
-            // Актуализация фактических данных дуэли
+            TurnSnapshot snapshot = context.Progress.CurrentTurnSnapshot;
+            if (snapshot == null) return;
+
             ISnapshotCommiter commiterDefault = modules.Get<ISnapshotCommiter>();
-            commiterDefault.Commit(resolvedSnapshot, context);
-            
+            commiterDefault.Commit(snapshot, context);
+
+            context.Progress.CurrentTurnSnapshot = null;
             eventHub.Publish(new EffectsResolvedEvent(context));
         }
         
@@ -35,9 +28,6 @@ namespace Blackset.Duel.Sequence.States
             return StateResult.Switch<BattleCheckState>();
         }
         
-        public void Exit(DuelContext context)
-        {
-            
-        }
+        public void Exit(DuelContext context) { }
     }
 }
