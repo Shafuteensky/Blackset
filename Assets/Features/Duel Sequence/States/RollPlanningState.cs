@@ -66,7 +66,7 @@ namespace Blackset.Duel.Sequence.States
             // Ожидание ввода, если не завершен
             if (!planningCompleted) return StateResult.Stay();
 
-            return StateResult.Switch<RollResolveState>();
+            return StateResult.Switch<PreRollEffectState>();
         }
 
         public void Exit(DuelContext context)

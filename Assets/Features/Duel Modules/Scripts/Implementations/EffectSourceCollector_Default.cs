@@ -126,6 +126,7 @@ namespace Blackset.Effects
                 DiceData diceData = gameData.GetDice(diceCell.Item.ItemId);
                 if (diceData == null || diceData.Effect == null) continue;
 
+                if (diceData.Effect.ApplyPolicy == EffectApplyPolicy.OnUse) continue;
                 if (diceData.Effect.EffectPhase != phase) continue;
 
                 ItemUsageState usageState = participant.FightState.GetOrCreateDiceUsageState(diceInstanceId);
@@ -160,7 +161,8 @@ namespace Blackset.Effects
                 GameData gameData = GameData.Instance;
                 ConsumableData consumableData = gameData.GetConsumable(consumableCell.Item.ItemId);
                 if (consumableData == null || consumableData.Effect == null) continue;
-
+                
+                if (consumableData.Effect.ApplyPolicy == EffectApplyPolicy.OnUse) continue;
                 if (consumableData.Effect.EffectPhase != phase) continue;
 
                 ItemUsageState usageState = participant.FightState.GetOrCreateConsumableUsageState(consumableInstanceId);

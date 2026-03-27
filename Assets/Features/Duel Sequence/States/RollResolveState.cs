@@ -75,7 +75,7 @@ namespace Blackset.Duel.Sequence.States
         
         public StateResult Tick(DuelContext context)
         {
-            return StateResult.Switch<ScoreCommitState>();
+            return StateResult.Switch<PostRollEffectState>();
         }
         
         public void Exit(DuelContext context)

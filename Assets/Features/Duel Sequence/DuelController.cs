@@ -146,8 +146,10 @@ namespace Blackset.Duel.Sequence
             duelStateRegistry.Add(new TargetValueSetupState());
             duelStateRegistry.Add(new BattleStartState());
             
+            duelStateRegistry.Add(new PreRollEffectState());
             duelStateRegistry.Add(new RollPlanningState());
             duelStateRegistry.Add(new RollResolveState());
+            duelStateRegistry.Add(new PostRollEffectState());
             
             duelStateRegistry.Add(new ScoreCommitState());
             duelStateRegistry.Add(new BattleCheckState());
