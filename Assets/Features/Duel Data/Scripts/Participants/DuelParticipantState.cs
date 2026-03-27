@@ -1,3 +1,4 @@
+using System;
 using Blackset.Duel.Pools;
 using Blackset.Duel.Sets;
 using Blackset.Opponents;
@@ -42,7 +43,7 @@ namespace Blackset.Duel.Participants
         /// <summary>
         /// Количество победных боев
         /// </summary>
-        public ReactiveProperty<int> FightsWon { get; private set; } = new(0);
+        public ReactiveProperty<int> FightsWon { get; private set; } = new(0, normalizer: v => Math.Max(0, v));
         /// <summary>
         /// Состояние на текущий бой
         /// </summary>
@@ -51,7 +52,7 @@ namespace Blackset.Duel.Participants
         /// <summary>
         /// Очки за дуэль 
         /// </summary>
-        public ReactiveProperty<int> DuelScore { get; private set; } = new(0);
+        public ReactiveProperty<int> DuelScore { get; private set; } = new(0, normalizer: v => Math.Max(0, v));
         
         /// <summary>
         /// Уровень доверия бота (от 0 до 1)

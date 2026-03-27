@@ -20,7 +20,7 @@ namespace Blackset.Effects
         /// </summary>
         protected override bool ApplyInternal(EffectApplyContext context)
         {
-            context.DuelContext.Participants[context.OwnerParticipantId].DuelScore.Value += amount;
+            context.Snapshot.AddDuelScore(context.OwnerParticipantId, amount);
             return true;
         }
     }

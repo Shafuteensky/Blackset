@@ -20,6 +20,7 @@ namespace Extensions.Reactive
         private readonly List<Action<T, T>> diffSubscribersToRemove = new();
         
         private readonly IEqualityComparer<T> comparer;
+        private readonly Func<T, T> normalizer;
 
         private ReadOnlyReactiveProperty<T> readOnlyWrapper;
 
@@ -50,9 +51,11 @@ namespace Extensions.Reactive
         /// Новое реактивное свойство
         /// </summary>
         /// <param name="defaultValue">Значение по-умолчанию</param>
-        public ReactiveProperty(T defaultValue)
+        /// <param name="normalizer">Нормализатор значения</param>
+        public ReactiveProperty(T defaultValue, Func<T, T> normalizer = null)
         {
-            _value = defaultValue;
+            this.normalizer = normalizer;
+            _value = normalizer != null ? normalizer(defaultValue) : defaultValue;
             comparer = EqualityComparer<T>.Default;
         }
 
@@ -65,9 +68,10 @@ namespace Extensions.Reactive
         /// Сравниватель по-умолчанию не отправляет события, если знаечние не изменено.
         /// Кастомный может переопределить логику сравнения.
         /// </remarks>
-        public ReactiveProperty(T defaultValue, IEqualityComparer<T> comparer)
+        public ReactiveProperty(T defaultValue, IEqualityComparer<T> comparer, Func<T, T> normalizer = null)
         {
-            _value = defaultValue;
+            this.normalizer = normalizer;
+            _value = normalizer != null ? normalizer(defaultValue) : defaultValue;
             this.comparer = comparer ?? EqualityComparer<T>.Default;
         }
         
@@ -171,13 +175,14 @@ namespace Extensions.Reactive
         /// <returns>true если слушатели оповещены, иначе false</returns>
         public bool SetValue(T newValue, bool forceNotify = false)
         {
+            if (normalizer != null) newValue = normalizer(newValue);
+
             if (!forceNotify && comparer.Equals(_value, newValue)) return false;
 
             T previous = _value;
             _value = newValue;
 
             NotifyInternal(previous, newValue);
-
             return true;
         }
 

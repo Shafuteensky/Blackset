@@ -33,11 +33,14 @@ namespace Blackset.Duel.Snapshots
             }
 
             ApplyScores(resolvedSnapshot, context);
+            ApplyDuelScores(resolvedSnapshot, context);
             ApplyRollResults(resolvedSnapshot, context);
             ApplyUsage(resolvedSnapshot, context);
             AppendHistory(resolvedSnapshot, context);
             ApplyKnowledge(resolvedSnapshot, context);
         }
+
+        #region Применение данных снапшота к фактическим данным дуэли
 
         /// <summary>
         /// Применяет финальные счета участников из снапшота
@@ -55,7 +58,24 @@ namespace Blackset.Duel.Snapshots
                 pair.Value.FightState.UpdateScore(snapshotScore);
             }
         }
+        
+        /// <summary>
+        /// Применяет финальные очки дуэли участников из снапшота
+        /// </summary>
+        private void ApplyDuelScores(TurnSnapshot snapshot, DuelContext context)
+        {
+            foreach (KeyValuePair<string, DuelParticipantState> pair in context.Participants)
+            {
+                if (!snapshot.ParticipantDuelScores.TryGetValue(pair.Key, out int snapshotDuelScore))
+                {
+                    ServiceDebug.LogError($"Очки дуэли участника '{pair.Key}' отсутствуют в снапшоте, пропущены");
+                    continue;
+                }
 
+                pair.Value.DuelScore.Value = snapshotDuelScore;
+            }
+        }
+        
         /// <summary>
         /// Применяет результаты текущего броска к истории бросков участников
         /// </summary>
@@ -143,5 +163,7 @@ namespace Blackset.Duel.Snapshots
 
             currentFightEntry.AddEntry(newTurnEntry);
         }
+        
+        #endregion
     }
 }

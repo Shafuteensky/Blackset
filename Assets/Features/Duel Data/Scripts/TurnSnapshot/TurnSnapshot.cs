@@ -12,21 +12,24 @@ namespace Blackset.Duel.Snapshots
     /// </summary>
     public class TurnSnapshot : ICloneable<TurnSnapshot>
     {
+        #region Данные снапшота
+        
         /// <summary>
-        /// Счета участников дуэли [идентификатор, счет]
+        /// Счета битвы участников дуэли [идентификатор, счет]
         /// </summary>
         public Dictionary<string, int> ParticipantScores { get; }
-
+        /// <summary>
+        /// Очки участников за дуэль [идентификатор, очки]
+        /// </summary>
+        public Dictionary<string, int> ParticipantDuelScores { get; }
         /// <summary>
         /// Намерения участников дуэли [идентификатор, намерение]
         /// </summary>
         public Dictionary<string, TurnParticipantState> ParticipantStates { get; }
-
         /// <summary>
         /// Знания об участниках дуэли [идентификатор, знания]
         /// </summary>
         public Dictionary<string, KnowledgeState> ParticipantKnowledge { get; }
-
         /// <summary>
         /// Текущие броски участников [идентификатор, запись броска]
         /// </summary>
@@ -36,7 +39,11 @@ namespace Blackset.Duel.Snapshots
         /// Изменения состояний использования источников по итогам текущего броска
         /// </summary>
         public List<UsageMutation> UsageMutations { get; }
+        
+        #endregion
 
+        #region Конструкторы
+        
         /// <summary>
         /// Новый пустой снапшот
         /// </summary>
@@ -47,6 +54,7 @@ namespace Blackset.Duel.Snapshots
             ParticipantKnowledge = new Dictionary<string, KnowledgeState>();
             ParticipantCurrentRolls = new Dictionary<string, RollHistoryEntry>();
             UsageMutations = new List<UsageMutation>();
+            ParticipantDuelScores = new Dictionary<string, int>();
         }
 
         /// <summary>
@@ -60,15 +68,21 @@ namespace Blackset.Duel.Snapshots
             ParticipantKnowledge = new Dictionary<string, KnowledgeState>();
             ParticipantCurrentRolls = new Dictionary<string, RollHistoryEntry>();
             UsageMutations = new List<UsageMutation>();
+            ParticipantDuelScores = new Dictionary<string, int>();
 
             foreach (var participant in context.Participants)
             {
                 ParticipantScores.Add(participant.Key, participant.Value.FightState.FightScore.Value);
                 ParticipantStates.Add(participant.Key, participant.Value.FightState.TurnState.Clone());
                 ParticipantKnowledge.Add(participant.Key, context.Knowledge[participant.Key].Clone());
+                ParticipantDuelScores.Add(participant.Key, participant.Value.DuelScore.Value);
             }
         }
+        
+        #endregion
 
+        #region Манипуляция данными
+        
         /// <summary>
         /// Изменить счет участника
         /// </summary>
@@ -81,7 +95,20 @@ namespace Blackset.Duel.Snapshots
 
             ParticipantScores[participantId] += delta;
         }
+        
+        /// <summary>
+        /// Изменить очки дуэли участника
+        /// </summary>
+        public void AddDuelScore(string participantId, int delta)
+        {
+            if (!ParticipantDuelScores.ContainsKey(participantId))
+            {
+                ParticipantDuelScores.Add(participantId, 0);
+            }
 
+            ParticipantDuelScores[participantId] += delta;
+        }
+        
         /// <summary>
         /// Установить запись текущего броска участника
         /// </summary>
@@ -106,6 +133,10 @@ namespace Blackset.Duel.Snapshots
             UsageMutations.Add(usageMutation);
         }
 
+        #endregion
+
+        #region Клонирование
+        
         public TurnSnapshot CloneDeep()
         {
             var clone = new TurnSnapshot();
@@ -142,5 +173,7 @@ namespace Blackset.Duel.Snapshots
         }
 
         public TurnSnapshot CloneShallow() => throw new NotImplementedException();
+        
+        #endregion
     }
 }
