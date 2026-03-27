@@ -351,6 +351,10 @@ PrefabInstance:
       propertyPath: m_FillAmount
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3362523963642155232, guid: a9e0a9c0936f1c5448e7f978974f2ae7, type: 3}
+      propertyPath: onHoldCompleteSound
+      value: 
+      objectReference: {fileID: 8300000, guid: 357da955262efa148aa88a65eb2a2c9f, type: 3}
     - target: {fileID: 3700277388155629751, guid: a9e0a9c0936f1c5448e7f978974f2ae7, type: 3}
       propertyPath: m_Delegates.Array.data[1].callback.m_PersistentCalls.m_Calls.Array.size
       value: 0
@@ -479,6 +483,14 @@ PrefabInstance:
       propertyPath: m_SizeDelta.x
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6765767123656637142, guid: a9e0a9c0936f1c5448e7f978974f2ae7, type: 3}
+      propertyPath: downSound
+      value: 
+      objectReference: {fileID: 8300000, guid: 228d9c5ef2d94774f9d9f66cc7e752fb, type: 3}
+    - target: {fileID: 6765767123656637142, guid: a9e0a9c0936f1c5448e7f978974f2ae7, type: 3}
+      propertyPath: enterSound
+      value: 
+      objectReference: {fileID: 8300000, guid: 357da955262efa148aa88a65eb2a2c9f, type: 3}
     - target: {fileID: 7415672989497147742, guid: a9e0a9c0936f1c5448e7f978974f2ae7, type: 3}
       propertyPath: m_IsActive
       value: 0

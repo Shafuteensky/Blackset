@@ -1865,6 +1865,10 @@ PrefabInstance:
       propertyPath: dataContainer
       value: 
       objectReference: {fileID: 11400000, guid: e067d24e7d7288947bf92dca08496108, type: 2}
+    - target: {fileID: 4144823467076495505, guid: a1aeaeaa16f259a46a64d9a6ea8b6c4e, type: 3}
+      propertyPath: itemElementPrefab
+      value: 
+      objectReference: {fileID: 6292600610836133615, guid: 5c912ab856f9b6c4f9b862f04f24b350, type: 3}
     - target: {fileID: 6374350891849992487, guid: a1aeaeaa16f259a46a64d9a6ea8b6c4e, type: 3}
       propertyPath: m_Size
       value: 0.90125
@@ -7488,7 +7492,7 @@ PrefabInstance:
     - target: {fileID: 2415496723880491523, guid: d814b39a12d40b04e8c9dcb1856af90a, type: 3}
       propertyPath: itemElementPrefab
       value: 
-      objectReference: {fileID: 7266762127616091038, guid: ef58cc00ff4104c4fbb5766090f18e29, type: 3}
+      objectReference: {fileID: 6292600610836133615, guid: 5c912ab856f9b6c4f9b862f04f24b350, type: 3}
     - target: {fileID: 3363685926035101353, guid: d814b39a12d40b04e8c9dcb1856af90a, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
