@@ -52,8 +52,6 @@ namespace Blackset.Duel.Sequence.States
 
                     source.Effect.TryApplyEffect(applyContext);
                 }
-
-                snapshot.AddScore(participantId, currentRoll.FinalResult);
             }
         }
 
