@@ -2676,7 +2676,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 40d96505507fc004cbc7e4450a25813f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Blackset.GameDebug.DuelStateDebug
-  enableLogs: 1
+  enableLogs: 0
   duelController: {fileID: 1327738401}
 --- !u!1 &663073233
 GameObject:

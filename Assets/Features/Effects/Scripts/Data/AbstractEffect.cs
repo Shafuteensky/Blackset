@@ -77,5 +77,19 @@ namespace Blackset.Effects
                     return false;
             }
         }
+
+        /// <summary>
+        /// Получить идентификатор соперника владельца эффекта
+        /// </summary>
+        protected string ResolveOpponentId(EffectApplyContext context)
+        {
+            foreach (string participantId in context.DuelContext.Participants.Keys)
+            {
+                if (participantId != context.OwnerParticipantId)
+                    return participantId;
+            }
+
+            return string.Empty;
+        }
     }
 }

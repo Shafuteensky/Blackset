@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 371d2bb3ca10457ea70ed4b7d76dba72, type: 3}
-  m_Name: PlusPoints
+  m_Name: MinusScore
   m_EditorClassIdentifier: Assembly-CSharp::Blackset.Data.ConsumableData
-  id: e2217dcf002c46d49fe6d7fff59b2ace
-  dataName: Plus points
-  dataDescription: Add some points to your duel score
+  id: 053592b8641143ddb7a8a75d9c08f92b
+  dataName: Minus score
+  dataDescription: Remove some points from your fight score
   baseAvailability: -1
   restrictions: []
   price: 2
@@ -23,6 +23,6 @@ MonoBehaviour:
   availableTypes:
   - {fileID: 11400000, guid: 0e1a15f03f84f8d46ba873a79cfd79ab, type: 2}
   - {fileID: 11400000, guid: 993bee1bbd4e925439649326aceece27, type: 2}
-  effect: {fileID: 11400000, guid: 6ee8e5f76891a3c4eab3ee7ce90505e9, type: 2}
-  color: {r: 0.103773475, g: 0.70735455, b: 1, a: 1}
-  consumablePrefab: {fileID: 2614671250630885598, guid: 1b316ced1b74006439599f32c51b78cd, type: 3}
+  effect: {fileID: 11400000, guid: 240e79636b37c124c970f669f76eaf3b, type: 2}
+  color: {r: 1, g: 0.8483827, b: 0.2924527, a: 1}
+  consumablePrefab: {fileID: 2614671250630885598, guid: b49960c920d7bef4896da2e9ddefa6f7, type: 3}
