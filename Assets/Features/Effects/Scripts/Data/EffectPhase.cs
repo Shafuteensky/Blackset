@@ -5,12 +5,13 @@ namespace Blackset.Effects
     /// </summary>
     public enum EffectPhase
     {
-        DiceConfiguration,
+        /// <summary>
+        /// До броска дайсов
+        /// </summary>
         PreRoll,
-        OnRoll,
-        PostRoll,
-        PreApply,
-        OnApply,
-        PostApply
+        /// <summary>
+        /// После броска дайсов
+        /// </summary>
+        PostRoll
     }
 }
