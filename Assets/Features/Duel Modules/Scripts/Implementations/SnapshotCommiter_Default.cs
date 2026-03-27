@@ -86,10 +86,10 @@ namespace Blackset.Duel.Snapshots
                 fightState.MarkThrow();
 
                 if (participantState.IsDiceChosen.Value)
-                    fightState.MarkDiceUsed(participantState.SelectedDice.Value);
+                    fightState.MarkDiceUsed(participantState.SelectedDice.Value, participantId);
 
                 if (participantState.IsConsumableChosen.Value)
-                    fightState.MarkConsumableUsed(participantState.SelectedConsumable.Value);
+                    fightState.MarkConsumableUsed(participantState.SelectedConsumable.Value, participantId);
             }
         }
 

@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Blackset.Duel.Rolls;
+using Blackset.Effects;
 using Extensions.Reactive;
 using UnityEngine;
 
@@ -30,6 +32,21 @@ namespace Blackset.Duel.Participants
         public Dictionary<string, int> RawRollResults => rawRollResults;
 
         /// <summary>
+        /// История бросков участника в текущем бою
+        /// </summary>
+        public List<RollHistoryEntry> RollHistory => rollHistory;
+
+        /// <summary>
+        /// Состояния применения дайсов в текущем бою
+        /// </summary>
+        public Dictionary<string, ItemUsageState> DiceUsageStates => diceUsageStates;
+
+        /// <summary>
+        /// Состояния применения расходников в текущем бою
+        /// </summary>
+        public Dictionary<string, ItemUsageState> ConsumableUsageStates => consumableUsageStates;
+
+        /// <summary>
         /// Состояние на текущий ход
         /// </summary>
         public TurnParticipantState TurnState => turnState;
@@ -52,6 +69,9 @@ namespace Blackset.Duel.Participants
         private readonly List<string> consumablesUsed = new();
 
         private readonly Dictionary<string, int> rawRollResults = new();
+        private readonly List<RollHistoryEntry> rollHistory = new();
+        private readonly Dictionary<string, ItemUsageState> diceUsageStates = new();
+        private readonly Dictionary<string, ItemUsageState> consumableUsageStates = new();
         private readonly TurnParticipantState turnState = new();
 
         /// <summary>
@@ -106,6 +126,54 @@ namespace Blackset.Duel.Participants
         /// <param name="consumable">Идентификатор проверяемого расходника</param>
         /// <returns>true если был использован хоть раз, иначе false</returns>
         public bool IsConsumableUsed(string consumable) => consumablesUsed.Contains(consumable);
+
+        /// <summary>
+        /// Получить запись истории последнего броска
+        /// </summary>
+        public RollHistoryEntry GetLastRoll() => rollHistory.Last();
+
+        /// <summary>
+        /// Попробовать получить запись истории последнего броска
+        /// </summary>
+        public bool TryGetLastRoll(out RollHistoryEntry rollEntry)
+        {
+            if (rollHistory.Count == 0)
+            {
+                rollEntry = null;
+                return false;
+            }
+
+            rollEntry = rollHistory[^1];
+            return true;
+        }
+
+        /// <summary>
+        /// Получить или создать состояние применения дайса
+        /// </summary>
+        public ItemUsageState GetOrCreateDiceUsageState(string diceId)
+        {
+            if (!diceUsageStates.TryGetValue(diceId, out ItemUsageState usageState))
+            {
+                usageState = new ItemUsageState(diceId, EffectSourceKind.Dice);
+                diceUsageStates.Add(diceId, usageState);
+            }
+
+            return usageState;
+        }
+
+        /// <summary>
+        /// Получить или создать состояние применения расходника
+        /// </summary>
+        public ItemUsageState GetOrCreateConsumableUsageState(string consumableId)
+        {
+            if (!consumableUsageStates.TryGetValue(consumableId, out ItemUsageState usageState))
+            {
+                usageState = new ItemUsageState(consumableId, EffectSourceKind.Consumable);
+                consumableUsageStates.Add(consumableId, usageState);
+            }
+
+            return usageState;
+        }
         
         #endregion
         
@@ -114,7 +182,6 @@ namespace Blackset.Duel.Participants
         /// <summary>
         /// Сброс данных до изначальных для нового боя
         /// </summary>
-        /// <param name="maxThrows"></param>
         public void ResetForNewFight()
         {
             HasGivenUp.Value = false;
@@ -123,7 +190,11 @@ namespace Blackset.Duel.Participants
             FightScore.Value = 0;
 
             dicesUsed.Clear();
+            consumablesUsed.Clear();
             rawRollResults.Clear();
+            rollHistory.Clear();
+            diceUsageStates.Clear();
+            consumableUsageStates.Clear();
             
             turnState.ResetForNewTurn();
             turnState.InitFightState(this);
@@ -136,10 +207,7 @@ namespace Blackset.Duel.Participants
         /// <summary>
         /// Участник совершил бросок
         /// </summary>
-        public void MarkThrow()
-        {
-            Throws.Value += 1;
-        }
+        public void MarkThrow() => Throws.Value += 1;
 
         /// <summary>
         /// Отметить дайс использованным
@@ -148,11 +216,13 @@ namespace Blackset.Duel.Participants
         /// При повторном использовании перемещается в конец
         /// </remarks>
         /// <param name="diceId">Идентификатор дайса из сборки</param>
-        public void MarkDiceUsed(string diceId)
+        /// <param name="targetParticipantId">Идентификатор целевого участника</param>
+        public void MarkDiceUsed(string diceId, string targetParticipantId)
         {
             bool firstTime = !dicesUsed.Contains(diceId);
-    
+
             dicesUsed.Add(diceId);
+            GetOrCreateDiceUsageState(diceId).MarkUsed(Throws.Value, targetParticipantId);
             onDiceUsed?.Invoke(diceId, firstTime);
         }
         
@@ -163,20 +233,37 @@ namespace Blackset.Duel.Participants
         /// При повторном использовании перемещается в конец
         /// </remarks>
         /// <param name="consumableId">Идентификатор расходника из сборки</param>
-        public void MarkConsumableUsed(string consumableId)
+        /// <param name="targetParticipantId">Идентификатор целевого участника</param>
+        public void MarkConsumableUsed(string consumableId, string targetParticipantId)
         {
             bool firstTime = !consumablesUsed.Contains(consumableId);
-    
+
             consumablesUsed.Add(consumableId);
+            GetOrCreateConsumableUsageState(consumableId).MarkUsed(Throws.Value, targetParticipantId);
             onConsumableUsed?.Invoke(consumableId, firstTime);
         }
 
         /// <summary>
         /// Учесть результат ролла дайса из сборки
         /// </summary>
-        /// <param name="dice">Идентификатор дайса из сборки</param>
+        /// <param name="diceId">Идентификатор дайса из сборки</param>
         /// <param name="rawResult">Сырой результат броска</param>
-        public void RegisterRawRollResult(string dice, int rawResult) => rawRollResults[dice] = rawResult;
+        public void RegisterRawRollResult(string diceId, int rawResult)
+        {
+            rawRollResults[diceId] = rawResult;
+            rollHistory.Add(new RollHistoryEntry(Throws.Value, diceId, rawResult));
+        }
+
+        /// <summary>
+        /// Обновить финальный результат последнего броска
+        /// </summary>
+        /// <param name="finalResult">Финальный результат броска</param>
+        public void UpdateLastRollFinalResult(int finalResult)
+        {
+            if (rollHistory.Count == 0) return;
+
+            rollHistory[^1].FinalResult = finalResult;
+        }
         
         #endregion
 

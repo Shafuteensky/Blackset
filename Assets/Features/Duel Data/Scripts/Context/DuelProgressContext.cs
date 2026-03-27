@@ -1,3 +1,4 @@
+using Blackset.Duel.Snapshots;
 using Extensions.Reactive;
 using Features.Duel.Context;
 
@@ -24,7 +25,12 @@ namespace Blackset.Duel.Context
         /// Результат окончания дуэли
         /// </summary>
         public DuelEndResult DuelResult { get; private set; }
-
+        
+        /// <summary>
+        /// Текущий рабочий снапшот броска/фазы
+        /// </summary>
+        public TurnSnapshot CurrentTurnSnapshot { get; set; }
+        
         /// <summary>
         /// Новая запись прогресса дуэли
         /// </summary>
@@ -34,7 +40,8 @@ namespace Blackset.Duel.Context
             {
                 FightNumber = new ReactiveProperty<int>(0),
                 ThrowNumber = new ReactiveProperty<int>(0),
-                IsDuelFinished = new ReactiveProperty<bool>(false)
+                IsDuelFinished = new ReactiveProperty<bool>(false),
+                CurrentTurnSnapshot = null
             };
         }
         
