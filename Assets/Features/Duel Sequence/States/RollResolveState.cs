@@ -63,7 +63,7 @@ namespace Blackset.Duel.Sequence.States
                             participantId));
                     }
 
-                    duelScoreResolver.ResolveCrit(participant, isCrit);
+                    duelScoreResolver.ResolveCrit(participantId, isCrit, snapshot);
                     eventHub.Publish(new DiceRolledEvent(participantId, chosenDiceId, rawResult));
                 }
             }

@@ -143,6 +143,9 @@ namespace Blackset.Duel.Snapshots
 
             foreach (var (key, value) in ParticipantScores)
                 clone.ParticipantScores.Add(key, value);
+            
+            foreach (var (key, value) in ParticipantDuelScores)
+                clone.ParticipantDuelScores.Add(key, value);
 
             foreach (var (key, value) in ParticipantStates)
                 clone.ParticipantStates.Add(key, value.Clone());

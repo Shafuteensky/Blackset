@@ -235,12 +235,19 @@ namespace Blackset.Duel.Sequence.States
         private void ResolveDuelScore()
         {
             IDuelScoreResolver duelScoreResolver = modules.Get<IDuelScoreResolver>();
+            var snapshot = context.Progress.CurrentTurnSnapshot;
 
-            // Очки за честность объявления
-            duelScoreResolver.ResolveHonesty(context.Participants[context.PlayerId],
-                playerState.DeclaredDice.Value, playerState.SelectedDice.Value);
-            duelScoreResolver.ResolveHonesty(context.Participants[context.OpponentId],
-                botState.DeclaredDice.Value, botState.SelectedDice.Value);
+            duelScoreResolver.ResolveHonesty(
+                context.PlayerId,
+                playerState.DeclaredDice.Value,
+                playerState.SelectedDice.Value,
+                snapshot);
+
+            duelScoreResolver.ResolveHonesty(
+                context.OpponentId,
+                botState.DeclaredDice.Value,
+                botState.SelectedDice.Value,
+                snapshot);
         }
 
         #endregion
