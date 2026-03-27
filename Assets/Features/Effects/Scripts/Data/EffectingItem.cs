@@ -12,9 +12,9 @@ namespace Blackset.Effects
     public abstract class EffectingItem : InventoryItem
     {
         /// <summary>
-        /// Конфигурация эффекта
+        /// Эффект предмета
         /// </summary>
-        public EffectConfig Effect => effect;
+        public AbstractEffect Effect => effect;
         /// <summary>
         /// Цвет предмета // TODO Заменить на рендер изображения предмета
         /// </summary>
@@ -33,7 +33,7 @@ namespace Blackset.Effects
         [SerializeField] private List<InventoryItemType> availableTypes = new List<InventoryItemType>();
         
         [Header("Особенности"), Space]
-        [SerializeField] protected EffectConfig effect;
+        [SerializeField] protected AbstractEffect effect;
         [SerializeField] protected Color color = Color.white;
     }
 }
