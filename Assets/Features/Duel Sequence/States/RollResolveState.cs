@@ -1,6 +1,7 @@
 using Blackset.Duel.Context;
 using Blackset.Duel.Modules;
 using Blackset.Duel.Participants;
+using Blackset.Duel.Rolls;
 using Blackset.Duel.Snapshots;
 using Blackset.DuelEvents.EventTypes;
 using Blackset.Effects;
@@ -33,15 +34,23 @@ namespace Blackset.Duel.Sequence.States
                 DuelParticipantState participant = context.Participants[participantId];
                 FightParticipantState participantFightState = participant.FightState;
                 
-                if (participantFightState.TurnState.HasPassed.Value) continue;
+                if (participantFightState.TurnState.HasPassed.Value)
+                {
+                    continue;
+                }
 
                 if (participantFightState.TurnState.IsDiceChosen.Value)
                 {
                     string chosenDiceId = participantFightState.TurnState.SelectedDice.Value;
-                    int rollResult = diceRoller.RollDice(context, participantId, chosenDiceId, out bool isCrit);
+                    int rawResult = diceRoller.RollDice(context, participantId, chosenDiceId, out bool isCrit);
 
-                    snapshot.SetRawRollResult(participantId, rollResult);
-                    snapshot.SetFinalRollResult(participantId, rollResult);
+                    RollHistoryEntry rollEntry = new RollHistoryEntry(
+                        context.Progress.ThrowNumber.Value,
+                        chosenDiceId,
+                        rawResult);
+
+                    snapshot.SetCurrentRoll(participantId, rollEntry);
+                    snapshot.AddScore(participantId, rollEntry.FinalResult);
 
                     snapshot.AddUsageMutation(new UsageMutation(
                         participantId,
@@ -59,7 +68,7 @@ namespace Blackset.Duel.Sequence.States
                     }
 
                     duelScoreResolver.ResolveCrit(participant, isCrit);
-                    eventHub.Publish(new DiceRolledEvent(participantId, chosenDiceId, rollResult));
+                    eventHub.Publish(new DiceRolledEvent(participantId, chosenDiceId, rawResult));
                 }
             }
         }

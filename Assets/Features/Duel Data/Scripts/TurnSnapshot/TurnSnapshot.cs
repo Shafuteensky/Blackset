@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Blackset.Duel.Context;
 using Blackset.Duel.Participants;
+using Blackset.Duel.Rolls;
 using Extensions.Helpers;
 
 namespace Blackset.Duel.Snapshots
@@ -27,14 +28,9 @@ namespace Blackset.Duel.Snapshots
         public Dictionary<string, KnowledgeState> ParticipantKnowledge { get; }
 
         /// <summary>
-        /// Сырые результаты текущего броска [id_участника, результат]
+        /// Текущие броски участников [идентификатор, запись броска]
         /// </summary>
-        public Dictionary<string, int> ParticipantRawRollResults { get; }
-
-        /// <summary>
-        /// Финальные результаты текущего броска [id_участника, результат]
-        /// </summary>
-        public Dictionary<string, int> ParticipantFinalRollResults { get; }
+        public Dictionary<string, RollHistoryEntry> ParticipantCurrentRolls { get; }
 
         /// <summary>
         /// Изменения состояний использования источников по итогам текущего броска
@@ -49,8 +45,7 @@ namespace Blackset.Duel.Snapshots
             ParticipantScores = new Dictionary<string, int>();
             ParticipantStates = new Dictionary<string, TurnParticipantState>();
             ParticipantKnowledge = new Dictionary<string, KnowledgeState>();
-            ParticipantRawRollResults = new Dictionary<string, int>();
-            ParticipantFinalRollResults = new Dictionary<string, int>();
+            ParticipantCurrentRolls = new Dictionary<string, RollHistoryEntry>();
             UsageMutations = new List<UsageMutation>();
         }
 
@@ -63,8 +58,7 @@ namespace Blackset.Duel.Snapshots
             ParticipantScores = new Dictionary<string, int>();
             ParticipantStates = new Dictionary<string, TurnParticipantState>();
             ParticipantKnowledge = new Dictionary<string, KnowledgeState>();
-            ParticipantRawRollResults = new Dictionary<string, int>();
-            ParticipantFinalRollResults = new Dictionary<string, int>();
+            ParticipantCurrentRolls = new Dictionary<string, RollHistoryEntry>();
             UsageMutations = new List<UsageMutation>();
 
             foreach (var participant in context.Participants)
@@ -89,19 +83,19 @@ namespace Blackset.Duel.Snapshots
         }
 
         /// <summary>
-        /// Установить сырой результат текущего броска участника
+        /// Установить запись текущего броска участника
         /// </summary>
-        public void SetRawRollResult(string participantId, int rawResult)
+        public void SetCurrentRoll(string participantId, RollHistoryEntry rollEntry)
         {
-            ParticipantRawRollResults[participantId] = rawResult;
+            ParticipantCurrentRolls[participantId] = rollEntry;
         }
 
         /// <summary>
-        /// Установить финальный результат текущего броска участника
+        /// Попробовать получить запись текущего броска участника
         /// </summary>
-        public void SetFinalRollResult(string participantId, int finalResult)
+        public bool TryGetCurrentRoll(string participantId, out RollHistoryEntry rollEntry)
         {
-            ParticipantFinalRollResults[participantId] = finalResult;
+            return ParticipantCurrentRolls.TryGetValue(participantId, out rollEntry);
         }
 
         /// <summary>
@@ -125,11 +119,15 @@ namespace Blackset.Duel.Snapshots
             foreach (var (key, value) in ParticipantKnowledge)
                 clone.ParticipantKnowledge.Add(key, value.Clone());
 
-            foreach (var (key, value) in ParticipantRawRollResults)
-                clone.ParticipantRawRollResults.Add(key, value);
-
-            foreach (var (key, value) in ParticipantFinalRollResults)
-                clone.ParticipantFinalRollResults.Add(key, value);
+            foreach (var (key, value) in ParticipantCurrentRolls)
+            {
+                clone.ParticipantCurrentRolls.Add(
+                    key,
+                    new RollHistoryEntry(value.ThrowIndex, value.DiceInstanceId, value.RawResult)
+                    {
+                        FinalResult = value.FinalResult
+                    });
+            }
 
             foreach (UsageMutation mutation in UsageMutations)
             {

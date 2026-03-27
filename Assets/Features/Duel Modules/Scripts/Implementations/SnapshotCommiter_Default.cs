@@ -3,6 +3,7 @@ using Blackset.Duel.Context;
 using Blackset.Duel.History;
 using Blackset.Duel.Modules;
 using Blackset.Duel.Participants;
+using Blackset.Duel.Rolls;
 using Blackset.Effects;
 using Extensions.Helpers;
 using Extensions.Log;
@@ -60,9 +61,10 @@ namespace Blackset.Duel.Snapshots
         /// </summary>
         private void ApplyRollResults(TurnSnapshot snapshot, DuelContext context)
         {
-            foreach (KeyValuePair<string, int> pair in snapshot.ParticipantRawRollResults)
+            foreach (KeyValuePair<string, RollHistoryEntry> pair in snapshot.ParticipantCurrentRolls)
             {
                 string participantId = pair.Key;
+                RollHistoryEntry rollEntry = pair.Value;
 
                 if (!context.Participants.TryGetValue(participantId, out DuelParticipantState participant))
                 {
@@ -71,17 +73,9 @@ namespace Blackset.Duel.Snapshots
                 }
 
                 FightParticipantState fightState = participant.FightState;
-                TurnParticipantState turnState = fightState.TurnState;
-
-                if (!turnState.IsDiceChosen.Value) continue;
-
                 fightState.MarkThrow();
-                fightState.RegisterRawRollResult(turnState.SelectedDice.Value, pair.Value);
-
-                if (snapshot.ParticipantFinalRollResults.TryGetValue(participantId, out int finalResult))
-                {
-                    fightState.UpdateLastRollFinalResult(finalResult);
-                }
+                fightState.RegisterRawRollResult(rollEntry.DiceInstanceId, rollEntry.RawResult);
+                fightState.UpdateLastRollFinalResult(rollEntry.FinalResult);
             }
         }
 
