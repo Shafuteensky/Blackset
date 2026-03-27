@@ -34,10 +34,7 @@ namespace Blackset.Duel.Sequence.States
                 DuelParticipantState participant = context.Participants[participantId];
                 FightParticipantState participantFightState = participant.FightState;
                 
-                if (participantFightState.TurnState.HasPassed.Value)
-                {
-                    continue;
-                }
+                if (participantFightState.TurnState.HasPassed.Value) continue;
 
                 if (participantFightState.TurnState.IsDiceChosen.Value)
                 {
@@ -50,7 +47,6 @@ namespace Blackset.Duel.Sequence.States
                         rawResult);
 
                     snapshot.SetCurrentRoll(participantId, rollEntry);
-                    snapshot.AddScore(participantId, rollEntry.FinalResult);
 
                     snapshot.AddUsageMutation(new UsageMutation(
                         participantId,
