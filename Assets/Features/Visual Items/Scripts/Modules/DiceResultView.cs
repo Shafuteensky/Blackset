@@ -72,7 +72,7 @@ namespace Blackset.Data.Items.Visual.Modules
                 // и брошен был именно этот дайс
                 owner.FightState.TurnState.SelectedDice.Value != itemId) return;
 
-            resultText.text = owner.FightState.RawRollResults[itemId].ToString();
+            resultText.text = owner.FightState.RollHistory[itemId].FinalResult.ToString();
             resultText.gameObject.SetActive(true);
         }
 

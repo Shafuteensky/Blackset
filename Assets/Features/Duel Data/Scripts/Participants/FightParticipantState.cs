@@ -34,7 +34,7 @@ namespace Blackset.Duel.Participants
         /// <summary>
         /// История бросков участника в текущем бою
         /// </summary>
-        public List<RollHistoryEntry> RollHistory => rollHistory;
+        public Dictionary<string, RollHistoryEntry> RollHistory => rollHistory;
 
         /// <summary>
         /// Состояния применения дайсов в текущем бою
@@ -69,7 +69,7 @@ namespace Blackset.Duel.Participants
         private readonly List<string> consumablesUsed = new();
 
         private readonly Dictionary<string, int> rawRollResults = new();
-        private readonly List<RollHistoryEntry> rollHistory = new();
+        private readonly Dictionary<string, RollHistoryEntry> rollHistory = new();
         private readonly Dictionary<string, ItemUsageState> diceUsageStates = new();
         private readonly Dictionary<string, ItemUsageState> consumableUsageStates = new();
         private readonly TurnParticipantState turnState = new();
@@ -128,11 +128,6 @@ namespace Blackset.Duel.Participants
         public bool IsConsumableUsed(string consumable) => consumablesUsed.Contains(consumable);
 
         /// <summary>
-        /// Получить запись истории последнего броска
-        /// </summary>
-        public RollHistoryEntry GetLastRoll() => rollHistory.Last();
-
-        /// <summary>
         /// Попробовать получить запись истории последнего броска
         /// </summary>
         public bool TryGetLastRoll(out RollHistoryEntry rollEntry)
@@ -143,7 +138,7 @@ namespace Blackset.Duel.Participants
                 return false;
             }
 
-            rollEntry = rollHistory[^1];
+            rollEntry = rollHistory.Last().Value;
             return true;
         }
 
@@ -251,7 +246,7 @@ namespace Blackset.Duel.Participants
         public void RegisterRawRollResult(string diceId, int rawResult)
         {
             rawRollResults[diceId] = rawResult;
-            rollHistory.Add(new RollHistoryEntry(Throws.Value, diceId, rawResult));
+            rollHistory.Add(diceId, new RollHistoryEntry(Throws.Value, diceId, rawResult));
         }
 
         /// <summary>
@@ -262,7 +257,7 @@ namespace Blackset.Duel.Participants
         {
             if (rollHistory.Count == 0) return;
 
-            rollHistory[^1].FinalResult = finalResult;
+            rollHistory.Last().Value.FinalResult = finalResult;
         }
         
         #endregion
