@@ -4,7 +4,6 @@ using Blackset.DecisionInput;
 using Blackset.Duel.Context;
 using Blackset.Duel.Modules;
 using Blackset.Duel.Participants;
-using Blackset.Duel.Snapshots;
 using Blackset.DuelEvents.EventTypes;
 using Cysharp.Threading.Tasks;
 using Extensions.FiniteStateMachine;
@@ -44,7 +43,6 @@ namespace Blackset.Duel.Sequence.States
                 participant.FightState.TurnState.ResetForNewTurn();
             }
 
-            context.Progress.CurrentTurnSnapshot = new TurnSnapshot(context);
             this.context = context;
             
             botState = context.Participants[context.OpponentId].FightState.TurnState;

@@ -1,5 +1,6 @@
 using System;
 using Blackset.DecisionInput;
+using Blackset.Duel.Rolls;
 using Extensions.Reactive;
 
 namespace Blackset.Duel.Participants
@@ -28,7 +29,7 @@ namespace Blackset.Duel.Participants
         /// Объявлен ли дайс в этот ход
         /// </summary>
         public ReactiveProperty<bool> IsDiceDeclared { get; private set; } = new(false);
-
+        
         /// <summary>
         /// Объявленный в этом ходу дайс
         /// </summary>

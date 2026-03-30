@@ -16,9 +16,9 @@ namespace Blackset.Effects
         
         protected override bool ApplyInternal(EffectApplyContext context)
         {
-            if (!context.Snapshot.TryGetCurrentRoll(context.OwnerParticipantId, out RollHistoryEntry currentRoll))
-                return false;
             if (!context.DuelContext.Participants.TryGetValue(context.OwnerParticipantId, out var participant))
+                return false;
+            if (!participant.FightState.TryGetLastRoll(out RollHistoryEntry currentRoll))
                 return false;
             if (!participant.FightState.TryGetLastRoll(out RollHistoryEntry previousRoll))
                 return false;

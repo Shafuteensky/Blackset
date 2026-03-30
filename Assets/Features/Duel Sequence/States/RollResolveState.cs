@@ -1,10 +1,7 @@
 using Blackset.Duel.Context;
 using Blackset.Duel.Modules;
 using Blackset.Duel.Participants;
-using Blackset.Duel.Rolls;
-using Blackset.Duel.Snapshots;
 using Blackset.DuelEvents.EventTypes;
-using Blackset.Effects;
 using Extensions.FiniteStateMachine;
 
 namespace Blackset.Duel.Sequence.States
@@ -19,13 +16,6 @@ namespace Blackset.Duel.Sequence.States
     {
         public void Enter(DuelContext context)
         {
-            TurnSnapshot snapshot = context.Progress.CurrentTurnSnapshot;
-            if (snapshot == null)
-            {
-                snapshot = new TurnSnapshot(context);
-                context.Progress.CurrentTurnSnapshot = snapshot;
-            }
-
             IDiceRollPipeline diceRoller = modules.Get<IDiceRollPipeline>();
             IDuelScoreResolver duelScoreResolver = modules.Get<IDuelScoreResolver>();
             
@@ -40,32 +30,17 @@ namespace Blackset.Duel.Sequence.States
                 {
                     string chosenDiceId = participantFightState.TurnState.SelectedDice.Value;
                     int rawResult = diceRoller.RollDice(context, participantId, chosenDiceId, out bool isCrit);
+                    participantFightState.RegisterRawRollResult(chosenDiceId, rawResult);
+                    participantFightState.MarkDiceUsed(chosenDiceId, participantId);
                     
-                    RollHistoryEntry rollEntry = new RollHistoryEntry(
-                        context.Progress.ThrowNumber.Value,
-                        chosenDiceId,
-                        rawResult);
-
-                    snapshot.ParticipantCurrentRolls[participantId] = rollEntry;
-                    snapshot.SetCurrentRoll(participantId, rollEntry);
-
-                    snapshot.AddUsageMutation(new UsageMutation(
-                        participantId,
-                        chosenDiceId,
-                        EffectSourceKind.Dice,
-                        participantId));
-
-                    if (participantFightState.TurnState.IsConsumableChosen.Value)
-                    {
-                        snapshot.AddUsageMutation(new UsageMutation(
-                            participantId,
-                            participantFightState.TurnState.SelectedConsumable.Value,
-                            EffectSourceKind.Consumable,
-                            participantId));
-                    }
-
                     duelScoreResolver.ResolveCrit(context, participantId, isCrit);
                     eventHub.Publish(new DiceRolledEvent(participantId, chosenDiceId, rawResult));
+                }
+                
+                if (participantFightState.TurnState.IsConsumableChosen.Value)
+                {
+                    string chosenConsumableId = participantFightState.TurnState.SelectedConsumable.Value;
+                    participantFightState.MarkConsumableUsed(chosenConsumableId, participantId);
                 }
             }
         }

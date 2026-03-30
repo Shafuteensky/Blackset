@@ -16,11 +16,11 @@ namespace Blackset.Effects
         
         protected override bool ApplyInternal(EffectApplyContext context)
         {
-            if (!context.Snapshot.TryGetCurrentRoll(context.OwnerParticipantId, out RollHistoryEntry currentRoll))
-                return false;
             if (!context.DuelContext.Participants.TryGetValue(context.OwnerParticipantId, out var participant))
                 return false;
-            if (!participant.FightState.TryGetLastRoll(out RollHistoryEntry previousRoll))
+            if (!participant.FightState.TryGetLastRoll(out RollHistoryEntry currentRoll))
+                return false;
+            if (!participant.FightState.TryGetPreviousRoll(out RollHistoryEntry previousRoll))
                 return false;
 
             int ownerDiceMaxValue = EffectsHelpers.GetCurrentDiceMaxValue(context);

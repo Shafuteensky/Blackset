@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using Blackset.Duel.Context;
 using Blackset.Duel.Modules;
 using Blackset.Duel.Participants;
-using Blackset.Duel.Snapshots;
 using Blackset.Effects;
 
 namespace Blackset.Duel.Sequence.States
@@ -15,22 +14,8 @@ namespace Blackset.Duel.Sequence.States
     {
         protected abstract EffectPhase Phase { get; }
 
-        /// <summary>
-        /// Подготовить снапшот перед началом цикла.
-        /// Вернуть null — прервать выполнение Enter.
-        /// </summary>
-        protected abstract TurnSnapshot ResolveSnapshot(DuelContext context);
-
-        /// <summary>
-        /// Дополнительная проверка участника. По умолчанию — пропускать нечего.
-        /// </summary>
-        protected abstract bool ShouldSkipParticipant(string participantId, TurnSnapshot snapshot);
-
         protected void ApplyEffects(DuelContext context)
         {
-            TurnSnapshot snapshot = ResolveSnapshot(context);
-            if (snapshot == null) return;
-
             IEffectSourceCollector sourceCollector = modules.Get<IEffectSourceCollector>();
 
             foreach (string participantId in context.Participants.Keys)
@@ -39,7 +24,6 @@ namespace Blackset.Duel.Sequence.States
 
                 TurnParticipantState turnState = participant.FightState.TurnState;
                 if (turnState.HasPassed.Value) continue;
-                if (ShouldSkipParticipant(participantId, snapshot)) continue;
 
                 List<EffectSourceRef> sources = sourceCollector.Collect(context, participantId, Phase);
 
@@ -53,7 +37,6 @@ namespace Blackset.Duel.Sequence.States
 
                     EffectApplyContext applyContext = new EffectApplyContext(
                         context,
-                        snapshot,
                         Phase,
                         context.Progress.ThrowNumber.Value,
                         participantId,

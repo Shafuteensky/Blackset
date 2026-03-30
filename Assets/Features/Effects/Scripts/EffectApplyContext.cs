@@ -14,11 +14,6 @@ namespace Blackset.Effects
         public DuelContext DuelContext { get; }
 
         /// <summary>
-        /// Текущий снапшот броска/фазы
-        /// </summary>
-        public TurnSnapshot Snapshot { get; }
-
-        /// <summary>
         /// Текущая фаза применения
         /// </summary>
         public EffectPhase CurrentPhase { get; }
@@ -68,7 +63,6 @@ namespace Blackset.Effects
         /// </summary>
         public EffectApplyContext(
             DuelContext duelContext,
-            TurnSnapshot snapshot,
             EffectPhase currentPhase,
             int throwIndex,
             string ownerParticipantId,
@@ -80,7 +74,6 @@ namespace Blackset.Effects
             ItemUsageState usageState)
         {
             DuelContext = duelContext;
-            Snapshot = snapshot;
             CurrentPhase = currentPhase;
             ThrowIndex = throwIndex;
             OwnerParticipantId = ownerParticipantId;

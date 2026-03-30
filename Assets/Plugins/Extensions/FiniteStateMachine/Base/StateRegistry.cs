@@ -16,14 +16,22 @@ namespace Blackset.Duel.Sequence
             if (state == null) throw new ArgumentNullException(nameof(state));
             states[typeof(TState)] = state;
         }
-
+        
         public virtual IState<TContext> Get(Type stateType)
         {
             if (states.TryGetValue(stateType, out IState<TContext> state))
                 return state;
 
-            throw new InvalidOperationException(
-                $"Состояние '{stateType.Name}' не найдено в реестре. Вызовите Add() при инициализации.");
+            if (!typeof(IState<TContext>).IsAssignableFrom(stateType))
+                throw new InvalidOperationException(
+                    $"Тип '{stateType.Name}' не реализует IState<{typeof(TContext).Name}>.");
+
+            if (Activator.CreateInstance(stateType) is not IState<TContext> createdState)
+                throw new InvalidOperationException(
+                    $"Не удалось создать состояние '{stateType.Name}'. Проверьте наличие публичного конструктора без параметров.");
+
+            states.Add(stateType, createdState);
+            return createdState;
         }
     }
 }

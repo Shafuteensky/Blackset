@@ -1,8 +1,6 @@
-using System.Collections.Generic;
 using Blackset.Duel.Context;
-using Blackset.Duel.Modules;
+using Blackset.Duel.Participants;
 using Blackset.Duel.Rolls;
-using Blackset.Duel.Snapshots;
 using Blackset.DuelEvents.EventTypes;
 using Extensions.FiniteStateMachine;
 
@@ -15,14 +13,8 @@ namespace Blackset.Duel.Sequence.States
     {
         public void Enter(DuelContext context)
         {
-            TurnSnapshot snapshot = context.Progress.CurrentTurnSnapshot;
-            if (snapshot == null) return;
-
-            ISnapshotCommiter commiterDefault = modules.Get<ISnapshotCommiter>();
-            commiterDefault.Commit(snapshot, context);
-
-            context.Progress.CurrentTurnSnapshot = null;
             eventHub.Publish(new EffectsResolvedEvent(context));
+            ApplyParticipantsLastRollsToScore(context);
         }
 
         public StateResult Tick(DuelContext context)
@@ -31,5 +23,19 @@ namespace Blackset.Duel.Sequence.States
         }
 
         public void Exit(DuelContext context) { }
+
+        private void ApplyParticipantsLastRollsToScore(DuelContext context)
+        {
+            foreach (var participant in context.Participants.Values)
+            {
+                FightParticipantState fightState = participant.FightState;
+                if (fightState.TurnState.IsDiceChosen.Value &&
+                    fightState.TryGetLastRoll(out RollHistoryEntry rollEntry))
+                {
+                    fightState.AddScore(rollEntry.FinalResult);
+                }
+            }
+        }
+
     }
 }

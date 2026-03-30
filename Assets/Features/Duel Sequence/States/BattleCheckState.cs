@@ -1,6 +1,5 @@
 using Blackset.Duel.Context;
 using Blackset.Duel.Modules;
-using Blackset.Duel.Snapshots;
 using Blackset.DuelEvents.EventTypes;
 using Extensions.FiniteStateMachine;
 using Features.Duel.Data.FightEnd;
@@ -22,7 +21,6 @@ namespace Blackset.Duel.Sequence.States
 
             duelScoreResolver = modules.Get<IDuelScoreResolver>();
 
-            TurnSnapshot snapshot = new TurnSnapshot(context);
             duelScoreResolver.ResolveDuelWin(context, fightEndResult);
         }
         
@@ -38,7 +36,6 @@ namespace Blackset.Duel.Sequence.States
                     }
                 }
 
-                TurnSnapshot snapshot = new TurnSnapshot(context);
                 duelScoreResolver.ResolveUnusedItems(context);
                 
                 eventHub.Publish(new BattleEndEvent(context, fightEndResult));

@@ -97,10 +97,7 @@ namespace Blackset.Duel.Participants
         /// <summary>
         /// Добавить очки дуэли
         /// </summary>
-        public void AddDuelScore(int delta)
-        {
-            DuelScore.Value += delta;
-        }
+        public void AddDuelScore(int delta) => DuelScore.Value += delta;
         
         #endregion
 

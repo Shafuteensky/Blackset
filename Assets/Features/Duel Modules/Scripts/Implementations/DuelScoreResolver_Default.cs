@@ -80,7 +80,7 @@ namespace Blackset.Duel.Modules
         public void ResolveCaughtBluff(DuelContext context, string participantId, bool isCrit)
         {
             if (!isCrit) return;
-            context.Participants[participantId].AddDuelScore(DuelScoreConfig.Declaration.caughtEnemyBluffScore);
+            context.Participants[participantId].AddDuelScore(DuelScoreConfig.Declaration.successfulBluffScore);
         }
     }
 }

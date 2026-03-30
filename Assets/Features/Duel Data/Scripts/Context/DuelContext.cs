@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Blackset.Duel.History;
 using Blackset.Duel.Participants;
 using Blackset.Duel.Rules;
 using Blackset.Duel.TargetValue;
@@ -64,11 +63,6 @@ namespace Blackset.Duel.Context
         /// Данные о прогрессе дуэли
         /// </summary>
         public DuelProgressContext Progress;
-        
-        /// <summary>
-        /// История ходов
-        /// </summary>
-        public readonly DuelHistory History;
 
         /// <summary>
         /// Инвентарь для временного хранения сборки дайсов игрока
@@ -107,7 +101,6 @@ namespace Blackset.Duel.Context
             
             TargetValue = new TargetValueContext();
             Progress = DuelProgressContext.Default();
-            History = new DuelHistory();
                 
             Contract = contract;
             
