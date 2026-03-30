@@ -40,7 +40,7 @@ namespace Blackset.Duel.Sequence.States
                 {
                     string chosenDiceId = participantFightState.TurnState.SelectedDice.Value;
                     int rawResult = diceRoller.RollDice(context, participantId, chosenDiceId, out bool isCrit);
-
+                    
                     RollHistoryEntry rollEntry = new RollHistoryEntry(
                         context.Progress.ThrowNumber.Value,
                         chosenDiceId,
@@ -64,7 +64,7 @@ namespace Blackset.Duel.Sequence.States
                             participantId));
                     }
 
-                    duelScoreResolver.ResolveCrit(participantId, isCrit, snapshot);
+                    duelScoreResolver.ResolveCrit(context, participantId, isCrit);
                     eventHub.Publish(new DiceRolledEvent(participantId, chosenDiceId, rawResult));
                 }
             }

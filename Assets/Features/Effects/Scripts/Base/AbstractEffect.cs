@@ -46,18 +46,22 @@ namespace Blackset.Effects
         {
             ItemUsageState usage = context.UsageState;
 
+            bool isSelectedNow =
+                context.SourceKind == EffectSourceKind.Dice
+                    ? context.SelectedDiceInstanceId == context.SourceInstanceId
+                    : context.SelectedConsumableInstanceId == context.SourceInstanceId;
+
             switch (GetApplyPolicy())
             {
                 case EffectApplyPolicy.OnUse:
-                    return usage.IsUsed &&
-                           usage.FirstUsedThrowIndex == context.ThrowIndex &&
-                           usage.TimesApplied == 0 &&
-                           !usage.IsConsumed;
+                    return isSelectedNow &&
+                           !usage.IsConsumed &&
+                           usage.LastAppliedThrowIndex != context.ThrowIndex;
 
                 case EffectApplyPolicy.OnNextThrow:
-                    return usage.IsUsed &&
+                    return !usage.IsConsumed &&
                            usage.NextApplyThrowIndex == context.ThrowIndex &&
-                           !usage.IsConsumed;
+                           usage.LastAppliedThrowIndex != context.ThrowIndex;
 
                 case EffectApplyPolicy.EveryThrowWhileUsed:
                     return usage.IsUsed &&
@@ -66,7 +70,7 @@ namespace Blackset.Effects
                            context.ThrowIndex >= usage.FirstUsedThrowIndex;
 
                 case EffectApplyPolicy.OncePerBattle:
-                    return usage.IsUsed &&
+                    return isSelectedNow &&
                            !usage.IsConsumed &&
                            usage.TimesApplied == 0;
 

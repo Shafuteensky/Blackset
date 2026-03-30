@@ -18,7 +18,7 @@ namespace Blackset.Duel.Modules
         private GameData GameData => GameData.Instance;
         private DuelScoreConfig DuelScoreConfig => GameData.DuelScoreConfig;
         
-        public void ResolveDuelWin(DuelContext context, FightEndResult fightEndResult, TurnSnapshot snapshot)
+        public void ResolveDuelWin(DuelContext context, FightEndResult fightEndResult)
         {
             foreach (var participant in context.Participants.Values)
             {
@@ -29,11 +29,11 @@ namespace Blackset.Duel.Modules
                     score += DuelScoreConfig.BattleResult.battleWinScore;
                 }
 
-                snapshot.AddDuelScore(participant.ParticipantId, Mathf.Max(0, score));
+                context.Participants[participant.ParticipantId].AddDuelScore(score);
             }
         }
 
-        public void ResolveUnusedItems(DuelContext context, TurnSnapshot snapshot)
+        public void ResolveUnusedItems(DuelContext context)
         {
             foreach (var participant in context.Participants.Values)
             {
@@ -41,51 +41,46 @@ namespace Blackset.Duel.Modules
                                        participant.FightState.GetUsedDices().Count;
 
                 int score = unusedDicesCount * DuelScoreConfig.UnusedItems.unusedDiceScore;
-                snapshot.AddDuelScore(participant.ParticipantId, Mathf.Max(0, score));
+                context.Participants[participant.ParticipantId].AddDuelScore(score);
                 
                 int unusedConsumablesCount = participant.Sets.ConsumableSetInventory.Data.Count -
                                              participant.FightState.GetUsedConsumables().Count;
-
                 score = unusedConsumablesCount * DuelScoreConfig.UnusedItems.unusedConsumableScore;
-                snapshot.AddDuelScore(participant.ParticipantId, Mathf.Max(0, score));
+                context.Participants[participant.ParticipantId].AddDuelScore(score);
             }
         }
 
-        public void ResolveCrit(string participantId, bool isCrit, TurnSnapshot snapshot)
+        public void ResolveCrit(DuelContext context, string participantId, bool isCrit)
         {
             if (!isCrit) return;
-
-            snapshot.AddDuelScore(participantId, DuelScoreConfig.Precision.diceCriticalScore);
+            context.Participants[participantId].AddDuelScore(DuelScoreConfig.Precision.diceCriticalScore);
         }
 
-        public void ResolveExactTargetHit(string participantId, bool isCrit, TurnSnapshot snapshot)
+        public void ResolveExactTargetHit(DuelContext context, string participantId, bool isCrit)
         {
             if (!isCrit) return;
-
-            snapshot.AddDuelScore(participantId, DuelScoreConfig.Precision.exactTargetZoneHitScore);
+            context.Participants[participantId].AddDuelScore(DuelScoreConfig.Precision.exactTargetZoneHitScore);
         }
 
-        public void ResolveHonesty(string participantId, string declared, string chosen, TurnSnapshot snapshot)
+        public void ResolveHonesty(DuelContext context, string participantId, string declared, string chosen)
         {
             int score = declared == chosen
                 ? DuelScoreConfig.Declaration.honestDeclarationScore
                 : DuelScoreConfig.Declaration.bluffDeclarationScore;
 
-            snapshot.AddDuelScore(participantId, Mathf.Max(0, score));
+            context.Participants[participantId].AddDuelScore(score);
         }
 
-        public void ResolveSuccessfulBluff(string participantId, bool isCrit, TurnSnapshot snapshot)
+        public void ResolveSuccessfulBluff(DuelContext context, string participantId, bool isCrit)
         {
             if (!isCrit) return;
-
-            snapshot.AddDuelScore(participantId, DuelScoreConfig.Declaration.successfulBluffScore);
+            context.Participants[participantId].AddDuelScore(DuelScoreConfig.Declaration.successfulBluffScore);
         }
 
-        public void ResolveCaughtBluff(string participantId, bool isCrit, TurnSnapshot snapshot)
+        public void ResolveCaughtBluff(DuelContext context, string participantId, bool isCrit)
         {
             if (!isCrit) return;
-
-            snapshot.AddDuelScore(participantId, DuelScoreConfig.Declaration.caughtEnemyBluffScore);
+            context.Participants[participantId].AddDuelScore(DuelScoreConfig.Declaration.caughtEnemyBluffScore);
         }
     }
 }

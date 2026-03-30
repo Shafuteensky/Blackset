@@ -2,7 +2,6 @@ using System;
 using Blackset.Duel.Pools;
 using Blackset.Duel.Sets;
 using Blackset.Opponents;
-using Extensions.Log;
 using Extensions.Reactive;
 
 namespace Blackset.Duel.Participants
@@ -84,6 +83,8 @@ namespace Blackset.Duel.Participants
             TrustLevel.Value = DEFAULT_BOT_TRUST_LEVEL;
             PanicLevel.Value = 0;
         }
+        
+        #region Обновление данных
 
         /// <summary>
         /// Отметка о победе в битве
@@ -92,6 +93,16 @@ namespace Blackset.Duel.Participants
         {
             FightsWon.Value++;
         }
+
+        /// <summary>
+        /// Добавить очки дуэли
+        /// </summary>
+        public void AddDuelScore(int delta)
+        {
+            DuelScore.Value += delta;
+        }
+        
+        #endregion
 
         #region Инициализация данных
         

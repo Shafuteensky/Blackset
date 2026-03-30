@@ -77,7 +77,7 @@ namespace Blackset.Duel.Participants
         /// </summary>
         public TurnParticipantState Clone()
         {
-            TurnParticipantState clone = new TurnParticipantState();
+            TurnParticipantState clone = new();
 
             clone.HasPassed.Value = HasPassed.Value;
             clone.IsDiceDeclared.Value = IsDiceDeclared.Value;

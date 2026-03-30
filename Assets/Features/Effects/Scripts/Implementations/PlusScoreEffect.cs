@@ -16,7 +16,7 @@ namespace Blackset.Effects
         [SerializeField] private int step;
         
         public override EffectPhase GetEffectPhase() => EffectPhase.PreRoll;
-        public override EffectApplyPolicy GetApplyPolicy() => EffectApplyPolicy.OnUse;
+        public override EffectApplyPolicy GetApplyPolicy() => EffectApplyPolicy.OncePerBattle;
         
         protected override bool ApplyInternal(EffectApplyContext context)
         {

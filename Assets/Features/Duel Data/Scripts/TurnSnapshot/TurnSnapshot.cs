@@ -19,18 +19,6 @@ namespace Blackset.Duel.Snapshots
         /// </summary>
         public Dictionary<string, int> ParticipantScores { get; }
         /// <summary>
-        /// Очки участников за дуэль [идентификатор, очки]
-        /// </summary>
-        public Dictionary<string, int> ParticipantDuelScores { get; }
-        /// <summary>
-        /// Намерения участников дуэли [идентификатор, намерение]
-        /// </summary>
-        public Dictionary<string, TurnParticipantState> ParticipantStates { get; }
-        /// <summary>
-        /// Знания об участниках дуэли [идентификатор, знания]
-        /// </summary>
-        public Dictionary<string, KnowledgeState> ParticipantKnowledge { get; }
-        /// <summary>
         /// Текущие броски участников [идентификатор, запись броска]
         /// </summary>
         public Dictionary<string, RollHistoryEntry> ParticipantCurrentRolls { get; }
@@ -50,11 +38,8 @@ namespace Blackset.Duel.Snapshots
         private TurnSnapshot()
         {
             ParticipantScores = new Dictionary<string, int>();
-            ParticipantStates = new Dictionary<string, TurnParticipantState>();
-            ParticipantKnowledge = new Dictionary<string, KnowledgeState>();
             ParticipantCurrentRolls = new Dictionary<string, RollHistoryEntry>();
             UsageMutations = new List<UsageMutation>();
-            ParticipantDuelScores = new Dictionary<string, int>();
         }
 
         /// <summary>
@@ -64,18 +49,12 @@ namespace Blackset.Duel.Snapshots
         public TurnSnapshot(DuelContext context)
         {
             ParticipantScores = new Dictionary<string, int>();
-            ParticipantStates = new Dictionary<string, TurnParticipantState>();
-            ParticipantKnowledge = new Dictionary<string, KnowledgeState>();
             ParticipantCurrentRolls = new Dictionary<string, RollHistoryEntry>();
             UsageMutations = new List<UsageMutation>();
-            ParticipantDuelScores = new Dictionary<string, int>();
 
             foreach (var participant in context.Participants)
             {
                 ParticipantScores.Add(participant.Key, participant.Value.FightState.FightScore.Value);
-                ParticipantStates.Add(participant.Key, participant.Value.FightState.TurnState.Clone());
-                ParticipantKnowledge.Add(participant.Key, context.Knowledge[participant.Key].Clone());
-                ParticipantDuelScores.Add(participant.Key, participant.Value.DuelScore.Value);
             }
         }
         
@@ -84,29 +63,47 @@ namespace Blackset.Duel.Snapshots
         #region Манипуляция данными
         
         /// <summary>
+        /// Пересчитать счета битвы участников по актуальным результатам их дайсов
+        /// </summary>
+        /// <param name="context">Данные дуэли</param>
+        public void RecalculateFightScores()
+        {
+            foreach (var participantPair in ParticipantCurrentRolls)
+            {
+                string participantId = participantPair.Key;
+                RollHistoryEntry participant = participantPair.Value;
+                
+                ParticipantScores[participantId] = 
+
+                Dictionary<string, int> latestDiceResults = new Dictionary<string, int>();
+
+                foreach (RollHistoryEntry rollEntry in participant.FightState.RollHistory.Values)
+                {
+                    latestDiceResults[rollEntry.DiceInstanceId] = rollEntry.FinalResult;
+                }
+
+                if (ParticipantCurrentRolls.TryGetValue(participantId, out RollHistoryEntry currentRoll))
+                {
+                    latestDiceResults[currentRoll.DiceInstanceId] = currentRoll.FinalResult;
+                }
+
+                int totalScore = 0;
+                foreach (int rollResult in latestDiceResults.Values)
+                {
+                    totalScore += rollResult;
+                }
+
+                ParticipantScores[participantId] = totalScore;
+            }
+        }
+        
+        /// <summary>
         /// Изменить счет участника
         /// </summary>
         public void AddScore(string participantId, int delta)
         {
-            if (!ParticipantScores.ContainsKey(participantId))
-            {
-                ParticipantScores.Add(participantId, 0);
-            }
-
+            ParticipantScores.TryAdd(participantId, 0);
             ParticipantScores[participantId] += delta;
-        }
-        
-        /// <summary>
-        /// Изменить очки дуэли участника
-        /// </summary>
-        public void AddDuelScore(string participantId, int delta)
-        {
-            if (!ParticipantDuelScores.ContainsKey(participantId))
-            {
-                ParticipantDuelScores.Add(participantId, 0);
-            }
-
-            ParticipantDuelScores[participantId] += delta;
         }
         
         /// <summary>
@@ -132,6 +129,7 @@ namespace Blackset.Duel.Snapshots
         {
             UsageMutations.Add(usageMutation);
         }
+        
 
         #endregion
 
@@ -144,15 +142,6 @@ namespace Blackset.Duel.Snapshots
             foreach (var (key, value) in ParticipantScores)
                 clone.ParticipantScores.Add(key, value);
             
-            foreach (var (key, value) in ParticipantDuelScores)
-                clone.ParticipantDuelScores.Add(key, value);
-
-            foreach (var (key, value) in ParticipantStates)
-                clone.ParticipantStates.Add(key, value.Clone());
-
-            foreach (var (key, value) in ParticipantKnowledge)
-                clone.ParticipantKnowledge.Add(key, value.Clone());
-
             foreach (var (key, value) in ParticipantCurrentRolls)
             {
                 clone.ParticipantCurrentRolls.Add(

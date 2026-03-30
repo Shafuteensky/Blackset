@@ -1,5 +1,4 @@
 using Blackset.Data.Registries;
-using Blackset.DecisionInput;
 using Blackset.Duel.Modules;
 using Extensions.Events;
 using Extensions.Log;

@@ -57,7 +57,7 @@ namespace Blackset.Duel.Context
         public string OpponentId = string.Empty;
         
         /// <summary>
-        /// Денные о целевом значении
+        /// Данные о целевом значении
         /// </summary>
         public TargetValueContext TargetValue = new();
         /// <summary>

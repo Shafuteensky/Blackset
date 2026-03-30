@@ -18,8 +18,6 @@ namespace Blackset.Duel.Sequence.States
             TurnSnapshot snapshot = context.Progress.CurrentTurnSnapshot;
             if (snapshot == null) return;
 
-            ApplyCurrentRollScores(snapshot);
-
             ISnapshotCommiter commiterDefault = modules.Get<ISnapshotCommiter>();
             commiterDefault.Commit(snapshot, context);
 
@@ -32,17 +30,6 @@ namespace Blackset.Duel.Sequence.States
             return StateResult.Switch<BattleCheckState>();
         }
 
-        public void Exit(DuelContext context)
-        {
-        }
-
-        /// <summary>
-        /// Начислить очки за текущие финальные результаты бросков
-        /// </summary>
-        private void ApplyCurrentRollScores(TurnSnapshot snapshot)
-        {
-            foreach (KeyValuePair<string, RollHistoryEntry> pair in snapshot.ParticipantCurrentRolls)
-                snapshot.AddScore(pair.Key, pair.Value.FinalResult);
-        }
+        public void Exit(DuelContext context) { }
     }
 }

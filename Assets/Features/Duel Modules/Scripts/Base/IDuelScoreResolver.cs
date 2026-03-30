@@ -15,24 +15,24 @@ namespace Blackset.Duel.Modules
         /// </summary>
         /// <param name="context">Данные дуэли</param>
         /// <param name="fightEndResult">Данные об окончании битвы</param>
-        public void ResolveDuelWin(DuelContext context, FightEndResult fightEndResult, TurnSnapshot snapshot);
+        public void ResolveDuelWin(DuelContext context, FightEndResult fightEndResult);
         
         /// <summary>
         /// Зачет очков за неиспользованные предметы
         /// </summary>
         /// <param name="context">Данные дуэли</param>
-        public void ResolveUnusedItems(DuelContext context, TurnSnapshot snapshot);
+        public void ResolveUnusedItems(DuelContext context);
 
         /// <summary>
         /// Зачет очков за честность
         /// </summary>
         /// <param name="context">Данные дуэли</param>
-        public void ResolveHonesty(string participantId, string declared, string chosen, TurnSnapshot snapshot);
+        public void ResolveHonesty(DuelContext context, string participantId, string declared, string chosen);
 
         /// <summary>
         /// Зачет очков за криты дайсов
         /// </summary>
         /// <param name="context">Данные дуэли</param>
-        public void ResolveCrit(string participantId, bool isCrit, TurnSnapshot snapshot);
+        public void ResolveCrit(DuelContext context, string participantId, bool isCrit);
     }
 }

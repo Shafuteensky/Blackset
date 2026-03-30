@@ -33,11 +33,9 @@ namespace Blackset.Duel.Snapshots
             }
 
             ApplyScores(resolvedSnapshot, context);
-            ApplyDuelScores(resolvedSnapshot, context);
             ApplyRollResults(resolvedSnapshot, context);
             ApplyUsage(resolvedSnapshot, context);
             AppendHistory(resolvedSnapshot, context);
-            ApplyKnowledge(resolvedSnapshot, context);
         }
 
         #region Применение данных снапшота к фактическим данным дуэли
@@ -55,24 +53,7 @@ namespace Blackset.Duel.Snapshots
                     continue;
                 }
                 
-                pair.Value.FightState.UpdateScore(snapshotScore);
-            }
-        }
-        
-        /// <summary>
-        /// Применяет финальные очки дуэли участников из снапшота
-        /// </summary>
-        private void ApplyDuelScores(TurnSnapshot snapshot, DuelContext context)
-        {
-            foreach (KeyValuePair<string, DuelParticipantState> pair in context.Participants)
-            {
-                if (!snapshot.ParticipantDuelScores.TryGetValue(pair.Key, out int snapshotDuelScore))
-                {
-                    ServiceDebug.LogError($"Очки дуэли участника '{pair.Key}' отсутствуют в снапшоте, пропущены");
-                    continue;
-                }
-
-                pair.Value.DuelScore.Value = snapshotDuelScore;
+                pair.Value.FightState.AddScore(snapshotScore);
             }
         }
         
@@ -124,24 +105,6 @@ namespace Blackset.Duel.Snapshots
                         fightState.MarkConsumableUsed(mutation.SourceInstanceId, mutation.TargetParticipantId);
                         break;
                 }
-            }
-        }
-
-        /// <summary>
-        /// Раскрывает дайсы участников, использованные в этот ход
-        /// </summary>
-        private void ApplyKnowledge(TurnSnapshot snapshot, DuelContext context)
-        {
-            foreach (KeyValuePair<string, KnowledgeState> pair in snapshot.ParticipantKnowledge)
-            {
-                if (!context.Knowledge.TryGetValue(pair.Key, out KnowledgeState knowledge))
-                {
-                    ServiceDebug.LogError($"KnowledgeState для '{pair.Key}' не найден, пропущен");
-                    continue;
-                }
-
-                foreach (string diceId in pair.Value.RevealedDices)
-                    knowledge.RevealDice(diceId);
             }
         }
 

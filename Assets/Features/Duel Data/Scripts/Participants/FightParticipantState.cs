@@ -267,6 +267,6 @@ namespace Blackset.Duel.Participants
         /// Обновление счета
         /// </summary>
         /// <param name="snapshotScore">Новое значение счета</param>
-        public void UpdateScore(int snapshotScore) => FightScore.Value = snapshotScore;
+        public void AddScore(int snapshotScore) => FightScore.Value += snapshotScore;
     }
 }

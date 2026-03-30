@@ -23,8 +23,7 @@ namespace Blackset.Duel.Sequence.States
             duelScoreResolver = modules.Get<IDuelScoreResolver>();
 
             TurnSnapshot snapshot = new TurnSnapshot(context);
-            duelScoreResolver.ResolveDuelWin(context, fightEndResult, snapshot);
-            ApplyDuelScores(snapshot, context);
+            duelScoreResolver.ResolveDuelWin(context, fightEndResult);
         }
         
         public StateResult Tick(DuelContext context)
@@ -40,8 +39,7 @@ namespace Blackset.Duel.Sequence.States
                 }
 
                 TurnSnapshot snapshot = new TurnSnapshot(context);
-                duelScoreResolver.ResolveUnusedItems(context, snapshot);
-                ApplyDuelScores(snapshot, context);
+                duelScoreResolver.ResolveUnusedItems(context);
                 
                 eventHub.Publish(new BattleEndEvent(context, fightEndResult));
                 return StateResult.Switch<DuelCheckState>();
@@ -51,19 +49,6 @@ namespace Blackset.Duel.Sequence.States
             return StateResult.Switch<RollPlanningState>();
         }
         
-        public void Exit(DuelContext context)
-        {
-        }
-
-        private void ApplyDuelScores(TurnSnapshot snapshot, DuelContext context)
-        {
-            foreach (var pair in context.Participants)
-            {
-                if (snapshot.ParticipantDuelScores.TryGetValue(pair.Key, out int duelScore))
-                {
-                    pair.Value.DuelScore.Value = duelScore;
-                }
-            }
-        }
+        public void Exit(DuelContext context) { }
     }
 }
