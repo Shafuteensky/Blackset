@@ -20,7 +20,7 @@ namespace Blackset.Effects
         
         protected override bool ApplyInternal(EffectApplyContext context)
         {
-            context.DuelContext.Participants[context.OwnerParticipantId].FightState.AddScore(amount);
+            context.DuelContext.Participants[context.OwnerParticipantId].FightState.PersistentFightScoreModifier.Value += amount;
             return true;
         }
     }

@@ -1,5 +1,4 @@
 using Blackset.Duel.Context;
-using Blackset.Duel.Snapshots;
 
 namespace Blackset.Effects
 {

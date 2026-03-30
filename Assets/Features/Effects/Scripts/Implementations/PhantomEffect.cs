@@ -20,7 +20,7 @@ namespace Blackset.Effects
                 return false;
             if (!participant.FightState.TryGetLastRoll(out RollHistoryEntry currentRoll))
                 return false;
-            if (!participant.FightState.TryGetLastRoll(out RollHistoryEntry previousRoll))
+            if (!participant.FightState.TryGetPreviousRoll(out RollHistoryEntry previousRoll))
                 return false;
 
             int ownerDiceMaxValue = EffectsHelpers.GetCurrentDiceMaxValue(context);

@@ -51,6 +51,10 @@ namespace Blackset.Duel.Participants
         /// Счет боя 
         /// </summary>
         public ReactiveProperty<int> FightScore { get; private set; } = new(0);
+        /// <summary>
+        /// Постоянный модификаторы счета боя
+        /// </summary>
+        public ReactiveProperty<int> PersistentFightScoreModifier { get; private set; } = new(0);
 
         private readonly OrderedDictionary<string, RollHistoryEntry> rollHistory = new();
         private readonly OrderedDictionary<string, ItemUsageState> diceUsageStates = new();
@@ -169,6 +173,7 @@ namespace Blackset.Duel.Participants
 
             Throws.Value = 0;
             FightScore.Value = 0;
+            PersistentFightScoreModifier.Value = 0;
 
             rollHistory.Clear();
             diceUsageStates.Clear();
@@ -229,23 +234,7 @@ namespace Blackset.Duel.Participants
             RollHistoryEntry entry = new(Throws.Value, diceId, rawResult);
             rollHistory[diceId] = entry;
         }
-
-        /// <summary>
-        /// Обновить финальный результат последнего броска
-        /// </summary>
-        /// <param name="finalResult">Финальный результат броска</param>
-        public void UpdateLastRollFinalResult(int finalResult)
-        {
-            if (rollHistory.TryGetLast(out var rollEntry))
-                rollEntry.FinalResult = finalResult;
-        }
         
         #endregion
-
-        /// <summary>
-        /// Обновление счета
-        /// </summary>
-        /// <param name="snapshotScore">Новое значение счета</param>
-        public void AddScore(int snapshotScore) => FightScore.Value += snapshotScore;
     }
 }

@@ -27,7 +27,7 @@ namespace Blackset.Effects
 
             if (!context.DuelContext.Participants.TryGetValue(opponentId, out var opponentParticipant))
                 return false;
-            if (!opponentParticipant.FightState.TryGetLastRoll(out RollHistoryEntry opponentLastRoll))
+            if (!opponentParticipant.FightState.TryGetPreviousRoll(out RollHistoryEntry opponentLastRoll))
                 return false;
 
             int ownerDiceMaxValue = EffectsHelpers.GetCurrentDiceMaxValue(context);

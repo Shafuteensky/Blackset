@@ -24,18 +24,34 @@ namespace Blackset.Duel.Sequence.States
 
         public void Exit(DuelContext context) { }
 
+        #region Inner
+        
         private void ApplyParticipantsLastRollsToScore(DuelContext context)
         {
             foreach (var participant in context.Participants.Values)
             {
+                int newScore = 0;
                 FightParticipantState fightState = participant.FightState;
-                if (fightState.TurnState.IsDiceChosen.Value &&
-                    fightState.TryGetLastRoll(out RollHistoryEntry rollEntry))
-                {
-                    fightState.AddScore(rollEntry.FinalResult);
-                }
+
+                newScore += GetFinalRollResultsSum(fightState);
+                newScore += fightState.PersistentFightScoreModifier.Value;
+
+                fightState.FightScore.Value = newScore;
             }
         }
 
+        private int GetFinalRollResultsSum(FightParticipantState fightState)
+        {
+            int sumFinalRollsResult = 0;
+            
+            foreach (var roll in fightState.RollHistory.Values)
+            {
+                sumFinalRollsResult += roll.FinalResult;
+            }
+
+            return sumFinalRollsResult;
+        }
+        
+        #endregion
     }
 }

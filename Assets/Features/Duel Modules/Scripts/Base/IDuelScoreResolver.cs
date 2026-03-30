@@ -1,6 +1,4 @@
 using Blackset.Duel.Context;
-using Blackset.Duel.Participants;
-using Blackset.Duel.Snapshots;
 using Features.Duel.Data.FightEnd;
 
 namespace Blackset.Duel.Modules
