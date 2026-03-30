@@ -246,7 +246,8 @@ namespace Blackset.Duel.Participants
         public void RegisterRawRollResult(string diceId, int rawResult)
         {
             rawRollResults[diceId] = rawResult;
-            rollHistory.Add(diceId, new RollHistoryEntry(Throws.Value, diceId, rawResult));
+            RollHistoryEntry entry = new(Throws.Value, diceId, rawResult);
+            rollHistory[diceId] = entry;
         }
 
         /// <summary>

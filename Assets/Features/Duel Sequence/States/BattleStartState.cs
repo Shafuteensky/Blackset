@@ -33,9 +33,6 @@ namespace Blackset.Duel.Sequence.States
             return StateResult.Switch<RollPlanningState>();
         }
         
-        public void Exit(DuelContext context)
-        {
-            
-        }
+        public void Exit(DuelContext context) { }
     }
 }

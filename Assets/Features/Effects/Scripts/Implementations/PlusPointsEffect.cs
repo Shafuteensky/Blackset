@@ -15,9 +15,9 @@ namespace Blackset.Effects
         [Header("Шаг на редкость"), Space]
         [SerializeField] private int step;
         
-        /// <summary>
-        /// Применить внутреннюю логику эффекта
-        /// </summary>
+        public override EffectPhase GetEffectPhase() => EffectPhase.PreRoll;
+        public override EffectApplyPolicy GetApplyPolicy() => EffectApplyPolicy.OnUse;
+        
         protected override bool ApplyInternal(EffectApplyContext context)
         {
             context.Snapshot.AddDuelScore(context.OwnerParticipantId, amount);

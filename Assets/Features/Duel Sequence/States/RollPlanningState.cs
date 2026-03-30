@@ -46,8 +46,10 @@ namespace Blackset.Duel.Sequence.States
 
             context.Progress.CurrentTurnSnapshot = new TurnSnapshot(context);
             this.context = context;
+            
             botState = context.Participants[context.OpponentId].FightState.TurnState;
             playerState = context.Participants[context.PlayerId].FightState.TurnState;
+            
             botDecisionSource = modules.Get<IBotDecisionSource>();
             playerDecisionSource = modules.Get<IPlayerDecisionSource>();
 
@@ -55,7 +57,6 @@ namespace Blackset.Duel.Sequence.States
             planningException = null;
 
             planningCancellationTokenSource = new CancellationTokenSource();
-
             RunPlanningAsync(planningCancellationTokenSource.Token).Forget();
         }
 
@@ -230,19 +231,19 @@ namespace Blackset.Duel.Sequence.States
         #region Зачёт очков
 
         /// <summary>
-        /// Зачёт очков дуэли
+        /// Зачёт очков дуэли 
         /// </summary>
         private void ResolveDuelScore()
         {
             IDuelScoreResolver duelScoreResolver = modules.Get<IDuelScoreResolver>();
-            var snapshot = context.Progress.CurrentTurnSnapshot;
+            TurnSnapshot snapshot = context.Progress.CurrentTurnSnapshot;
 
+            // За честное объявление
             duelScoreResolver.ResolveHonesty(
                 context.PlayerId,
                 playerState.DeclaredDice.Value,
                 playerState.SelectedDice.Value,
                 snapshot);
-
             duelScoreResolver.ResolveHonesty(
                 context.OpponentId,
                 botState.DeclaredDice.Value,

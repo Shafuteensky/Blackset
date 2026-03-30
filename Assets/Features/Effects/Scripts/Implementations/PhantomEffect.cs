@@ -4,12 +4,12 @@ using UnityEngine;
 namespace Blackset.Effects
 {
     /// <summary>
-    /// Эффект копирования последнего финального броска соперника (не выше макс. дайса)
+    /// Эффект замены текущего результата на модуль разницы с предыдущим своим финальным броском
     /// </summary>
     [CreateAssetMenu(
-        fileName = nameof(MirrorEffect),
-        menuName = "Blackset/Effects/" + nameof(MirrorEffect))]
-    public class MirrorEffect : AbstractEffect
+        fileName = nameof(PhantomEffect),
+        menuName = "Blackset/Effects/" + nameof(PhantomEffect))]
+    public class PhantomEffect : AbstractEffect
     {
         public override EffectPhase GetEffectPhase() => EffectPhase.PostRoll;
         public override EffectApplyPolicy GetApplyPolicy() => EffectApplyPolicy.OnUse;
@@ -18,21 +18,17 @@ namespace Blackset.Effects
         {
             if (!context.Snapshot.TryGetCurrentRoll(context.OwnerParticipantId, out RollHistoryEntry currentRoll))
                 return false;
-
-            string opponentId = ResolveOpponentId(context);
-            if (string.IsNullOrEmpty(opponentId))
+            if (!context.DuelContext.Participants.TryGetValue(context.OwnerParticipantId, out var participant))
                 return false;
-
-            if (!context.DuelContext.Participants.TryGetValue(opponentId, out var opponentParticipant))
-                return false;
-            if (!opponentParticipant.FightState.TryGetLastRoll(out RollHistoryEntry opponentLastRoll))
+            if (!participant.FightState.TryGetLastRoll(out RollHistoryEntry previousRoll))
                 return false;
 
             int ownerDiceMaxValue = EffectsHelpers.GetCurrentDiceMaxValue(context);
             if (ownerDiceMaxValue <= 0)
                 return false;
 
-            currentRoll.FinalResult = Mathf.Min(opponentLastRoll.FinalResult, ownerDiceMaxValue);
+            int diffValue = Mathf.Abs(currentRoll.FinalResult - previousRoll.FinalResult);
+            currentRoll.FinalResult = Mathf.Min(diffValue, ownerDiceMaxValue);
             return true;
         }
     }

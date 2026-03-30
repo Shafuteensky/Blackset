@@ -4,12 +4,12 @@ using UnityEngine;
 namespace Blackset.Effects
 {
     /// <summary>
-    /// Эффект копирования последнего финального броска соперника (не выше макс. дайса)
+    /// Эффект выбора лучшего между текущим и предыдущим своим финальным броском (не выше макс. дайса)
     /// </summary>
     [CreateAssetMenu(
-        fileName = nameof(MirrorEffect),
-        menuName = "Blackset/Effects/" + nameof(MirrorEffect))]
-    public class MirrorEffect : AbstractEffect
+        fileName = nameof(EchoEffect),
+        menuName = "Blackset/Effects/" + nameof(EchoEffect))]
+    public class EchoEffect : AbstractEffect
     {
         public override EffectPhase GetEffectPhase() => EffectPhase.PostRoll;
         public override EffectApplyPolicy GetApplyPolicy() => EffectApplyPolicy.OnUse;
@@ -18,21 +18,17 @@ namespace Blackset.Effects
         {
             if (!context.Snapshot.TryGetCurrentRoll(context.OwnerParticipantId, out RollHistoryEntry currentRoll))
                 return false;
-
-            string opponentId = ResolveOpponentId(context);
-            if (string.IsNullOrEmpty(opponentId))
+            if (!context.DuelContext.Participants.TryGetValue(context.OwnerParticipantId, out var participant))
                 return false;
-
-            if (!context.DuelContext.Participants.TryGetValue(opponentId, out var opponentParticipant))
-                return false;
-            if (!opponentParticipant.FightState.TryGetLastRoll(out RollHistoryEntry opponentLastRoll))
+            if (!participant.FightState.TryGetLastRoll(out RollHistoryEntry previousRoll))
                 return false;
 
             int ownerDiceMaxValue = EffectsHelpers.GetCurrentDiceMaxValue(context);
             if (ownerDiceMaxValue <= 0)
                 return false;
 
-            currentRoll.FinalResult = Mathf.Min(opponentLastRoll.FinalResult, ownerDiceMaxValue);
+            int bestValue = Mathf.Max(currentRoll.FinalResult, previousRoll.FinalResult);
+            currentRoll.FinalResult = Mathf.Min(bestValue, ownerDiceMaxValue);
             return true;
         }
     }

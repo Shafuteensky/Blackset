@@ -64,7 +64,7 @@ namespace Blackset.Effects
             DiceData diceData = gameData.GetDice(diceCell.Item.ItemId);
             if (diceData == null || diceData.Effect == null) return;
 
-            if (diceData.Effect.EffectPhase != phase) return;
+            if (diceData.Effect.GetEffectPhase() != phase) return;
 
             participant.FightState.GetOrCreateDiceUsageState(diceInstanceId);
 
@@ -95,7 +95,7 @@ namespace Blackset.Effects
             ConsumableData consumableData = gameData.GetConsumable(consumableCell.Item.ItemId);
             if (consumableData == null || consumableData.Effect == null) return;
 
-            if (consumableData.Effect.EffectPhase != phase) return;
+            if (consumableData.Effect.GetEffectPhase() != phase) return;
 
             participant.FightState.GetOrCreateConsumableUsageState(consumableInstanceId);
 
@@ -126,8 +126,8 @@ namespace Blackset.Effects
                 DiceData diceData = gameData.GetDice(diceCell.Item.ItemId);
                 if (diceData == null || diceData.Effect == null) continue;
 
-                if (diceData.Effect.ApplyPolicy == EffectApplyPolicy.OnUse) continue;
-                if (diceData.Effect.EffectPhase != phase) continue;
+                if (diceData.Effect.GetApplyPolicy() == EffectApplyPolicy.OnUse) continue;
+                if (diceData.Effect.GetEffectPhase() != phase) continue;
 
                 ItemUsageState usageState = participant.FightState.GetOrCreateDiceUsageState(diceInstanceId);
                 if (!usageState.IsUsed || usageState.IsConsumed) continue;
@@ -162,8 +162,8 @@ namespace Blackset.Effects
                 ConsumableData consumableData = gameData.GetConsumable(consumableCell.Item.ItemId);
                 if (consumableData == null || consumableData.Effect == null) continue;
                 
-                if (consumableData.Effect.ApplyPolicy == EffectApplyPolicy.OnUse) continue;
-                if (consumableData.Effect.EffectPhase != phase) continue;
+                if (consumableData.Effect.GetApplyPolicy() == EffectApplyPolicy.OnUse) continue;
+                if (consumableData.Effect.GetEffectPhase() != phase) continue;
 
                 ItemUsageState usageState = participant.FightState.GetOrCreateConsumableUsageState(consumableInstanceId);
                 if (!usageState.IsUsed || usageState.IsConsumed) continue;

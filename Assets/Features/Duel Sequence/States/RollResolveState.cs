@@ -46,6 +46,7 @@ namespace Blackset.Duel.Sequence.States
                         chosenDiceId,
                         rawResult);
 
+                    snapshot.ParticipantCurrentRolls[participantId] = rollEntry;
                     snapshot.SetCurrentRoll(participantId, rollEntry);
 
                     snapshot.AddUsageMutation(new UsageMutation(
@@ -74,8 +75,6 @@ namespace Blackset.Duel.Sequence.States
             return StateResult.Switch<PostRollEffectState>();
         }
         
-        public void Exit(DuelContext context)
-        {
-        }
+        public void Exit(DuelContext context) { }
     }
 }

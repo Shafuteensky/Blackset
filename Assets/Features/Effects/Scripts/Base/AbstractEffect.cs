@@ -8,31 +8,28 @@ namespace Blackset.Effects
     public abstract class AbstractEffect : ScriptableObject
     {
         /// <summary>
-        /// Политика применения эффекта
-        /// </summary>
-        public EffectApplyPolicy ApplyPolicy => applyPolicy;
-        /// <summary>
-        /// Фаза применения эффекта
-        /// </summary>
-        public EffectPhase EffectPhase => effectPhase;
-
-        [SerializeField] protected EffectApplyPolicy applyPolicy;
-        [SerializeField] protected EffectPhase effectPhase;
-
-        /// <summary>
         /// Попытаться применить эффект
         /// </summary>
         /// <param name="context">Контекст применения</param>
         /// <returns>true если эффект был применен, иначе false</returns>
         public bool TryApplyEffect(EffectApplyContext context)
         {
-            if (context.CurrentPhase != effectPhase || !CanApplyByPolicy(context)) return false;
+            if (context.CurrentPhase != GetEffectPhase() || !CanApplyByPolicy(context)) return false;
 
             bool applied = ApplyInternal(context);
             if (applied) context.UsageState.MarkApplied(context.ThrowIndex);
             return applied;
         }
 
+        /// <summary>
+        /// Фаза применения эффекта
+        /// </summary>
+        public abstract EffectPhase GetEffectPhase();
+        /// <summary>
+        /// Политика применения эффекта
+        /// </summary>
+        public abstract EffectApplyPolicy GetApplyPolicy();
+        
         /// <summary>
         /// Применить внутреннюю логику эффекта
         /// </summary>
@@ -49,7 +46,7 @@ namespace Blackset.Effects
         {
             ItemUsageState usage = context.UsageState;
 
-            switch (applyPolicy)
+            switch (GetApplyPolicy())
             {
                 case EffectApplyPolicy.OnUse:
                     return usage.IsUsed &&

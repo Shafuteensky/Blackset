@@ -53,21 +53,15 @@ namespace Blackset.Duel.Modules
 
         public void ResolveCrit(string participantId, bool isCrit, TurnSnapshot snapshot)
         {
-            if (!isCrit)
-            {
-                return;
-            }
-            
+            if (!isCrit) return;
+
             snapshot.AddDuelScore(participantId, DuelScoreConfig.Precision.diceCriticalScore);
         }
 
         public void ResolveExactTargetHit(string participantId, bool isCrit, TurnSnapshot snapshot)
         {
-            if (!isCrit)
-            {
-                return;
-            }
-            
+            if (!isCrit) return;
+
             snapshot.AddDuelScore(participantId, DuelScoreConfig.Precision.exactTargetZoneHitScore);
         }
 
@@ -82,21 +76,15 @@ namespace Blackset.Duel.Modules
 
         public void ResolveSuccessfulBluff(string participantId, bool isCrit, TurnSnapshot snapshot)
         {
-            if (!isCrit)
-            {
-                return;
-            }
-            
+            if (!isCrit) return;
+
             snapshot.AddDuelScore(participantId, DuelScoreConfig.Declaration.successfulBluffScore);
         }
 
         public void ResolveCaughtBluff(string participantId, bool isCrit, TurnSnapshot snapshot)
         {
-            if (!isCrit)
-            {
-                return;
-            }
-            
+            if (!isCrit) return;
+
             snapshot.AddDuelScore(participantId, DuelScoreConfig.Declaration.caughtEnemyBluffScore);
         }
     }
