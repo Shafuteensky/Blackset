@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Blackset.Opponents.OpponentData
   id: ca7f595374214204863dabdfb86a5fb2
   dataName: Big Ben *
-  dataDescription: His dices are BIG
+  dataDescription: Big balls
   buildValue: 1
   masteryLevel: 0.75
   cunningLevel: 0
