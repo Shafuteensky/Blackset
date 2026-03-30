@@ -62,6 +62,7 @@ namespace Blackset.Duel.Sequence.States
             int rawResult = diceRoller.RollDice(context, participantId, chosenDiceId, out bool isCrit);
 
             participantFightState.RegisterRawRollResult(chosenDiceId, rawResult);
+            participantFightState.MarkThrow();
             participantFightState.MarkDiceUsed(chosenDiceId, participantId);
 
             duelScoreResolver.ResolveCrit(context, participantId, isCrit);

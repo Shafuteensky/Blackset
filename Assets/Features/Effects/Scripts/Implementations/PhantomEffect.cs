@@ -24,8 +24,6 @@ namespace Blackset.Effects
                 return false;
 
             int ownerDiceMaxValue = EffectsHelpers.GetCurrentDiceMaxValue(context);
-            if (ownerDiceMaxValue <= 0)
-                return false;
 
             int diffValue = Mathf.Abs(currentRoll.FinalResult - previousRoll.FinalResult);
             currentRoll.FinalResult = Mathf.Min(diffValue, ownerDiceMaxValue);

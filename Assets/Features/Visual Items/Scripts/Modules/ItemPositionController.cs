@@ -102,12 +102,7 @@ namespace Blackset.Data.Items.Visual.Modules
 
         private void MoveToInitialPosition()
         {
-            switch (itemClass)
-            {
-                case ItemClass.Dice:
-                    itemTransform.DOMove(initialPosition, 0.5f).SetEase(Ease.OutCubic);
-                    break;
-            }
+            itemTransform.DOMove(initialPosition, 0.5f).SetEase(Ease.OutCubic);
         }
     }
 }

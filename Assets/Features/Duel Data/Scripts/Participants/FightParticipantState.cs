@@ -5,6 +5,7 @@ using Blackset.Duel.Rolls;
 using Blackset.Effects;
 using Extensions.Helpers;
 using Extensions.Reactive;
+using UnityEngine;
 
 namespace Blackset.Duel.Participants
 {
@@ -14,7 +15,6 @@ namespace Blackset.Duel.Participants
     public class FightParticipantState
     {
         #region События
-
         /// <summary>
         /// Дайс из сборки использован в текущем бою [идентификатор_дайса_в_сборке, первое_использование]
         /// </summary>
@@ -23,9 +23,9 @@ namespace Blackset.Duel.Participants
         /// Расходник из сборки использован в текущем бою
         /// </summary>
         public event Action<string, bool> onConsumableUsed; 
-        
         #endregion
 
+        #region Геттеры
         /// <summary>
         /// Результаты бросков дайсов (без эффектов и прочего — "сырые") [id_дайса_в_сборке, результат]
         /// </summary>
@@ -38,7 +38,9 @@ namespace Blackset.Duel.Participants
         /// Состояние на текущий ход
         /// </summary>
         public TurnParticipantState TurnState => turnState;
+        #endregion
         
+        #region Автосвойства
         /// <summary>
         /// Сдался в текущем бою
         /// </summary>
@@ -55,17 +57,22 @@ namespace Blackset.Duel.Participants
         /// Постоянный модификаторы счета боя
         /// </summary>
         public ReactiveProperty<int> PersistentFightScoreModifier { get; private set; } = new(0);
+        #endregion
 
+        #region Внутренние данные
         private readonly OrderedDictionary<string, RollHistoryEntry> rollHistory = new();
         private readonly OrderedDictionary<string, ItemUsageState> diceUsageStates = new();
         private readonly OrderedDictionary<string, ItemUsageState> consumableUsageStates = new();
         private readonly TurnParticipantState turnState = new();
+        #endregion
 
+        #region Конструктор
         /// <summary>
         /// Создание хранилища данных о состоянии участника дуэли во время битвы
         /// </summary>
         public FightParticipantState() => ResetForNewFight();
-
+        #endregion
+        
         #region Получение данных
 
         /// <summary>
@@ -80,23 +87,6 @@ namespace Blackset.Duel.Participants
         public List<string> GetUsedConsumables() => 
             consumableUsageStates.ToDictionary().Where(x => x.Value.IsUsed).Select(x => x.Key).ToList();
 
-        /// <summary>
-        /// Получить идентификатор последнего использованного за бой дайса
-        /// </summary>
-        public string GetLastUsedDice() => GetUsedDices().Last();
-
-        /// <summary>
-        /// Получить идентификатор последнего использованного за бой расходника
-        /// </summary>
-        public string GetLastUsedConsumable() => GetUsedConsumables().Last();
-        
-        /// <summary>
-        /// Использован ли дайс за этот бой
-        /// </summary>
-        /// <param name="dice">Идентификатор проверяемого дайса</param>
-        /// <returns>true если был использован хоть раз, иначе false</returns>
-        public bool IsDiceUsed(string dice) => GetUsedDices().Contains(dice);
-        
         /// <summary>
         /// Использован ли расходник за этот бой
         /// </summary>
@@ -131,6 +121,10 @@ namespace Blackset.Duel.Participants
 
             return rollHistory.TryGetPrevious(out rollEntry);
         }
+        
+        #endregion
+        
+        #region Состояния использования предметов
         
         /// <summary>
         /// Получить или создать состояние применения дайса
@@ -203,7 +197,6 @@ namespace Blackset.Duel.Participants
         public void MarkDiceUsed(string diceId, string targetParticipantId)
         {
             bool firstTime = !GetUsedDices().Contains(diceId);
-
             GetOrCreateDiceUsageState(diceId).MarkUsed(Throws.Value, targetParticipantId);
             onDiceUsed?.Invoke(diceId, firstTime);
         }
@@ -219,7 +212,6 @@ namespace Blackset.Duel.Participants
         public void MarkConsumableUsed(string consumableId, string targetParticipantId)
         {
             bool firstTime = !GetUsedConsumables().Contains(consumableId);
-
             GetOrCreateConsumableUsageState(consumableId).MarkUsed(Throws.Value, targetParticipantId);
             onConsumableUsed?.Invoke(consumableId, firstTime);
         }

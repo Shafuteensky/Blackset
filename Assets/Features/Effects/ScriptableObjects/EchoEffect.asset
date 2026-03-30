@@ -12,5 +12,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5e535768b6d44ba86766933275ccb25, type: 3}
   m_Name: EchoEffect
   m_EditorClassIdentifier: Assembly-CSharp::Blackset.Effects.EchoEffect
-  applyPolicy: 0
-  effectPhase: 0

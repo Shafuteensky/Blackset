@@ -12,5 +12,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 41e51fd83b6249f7925f302bca14ed5d, type: 3}
   m_Name: PhantomEffect
   m_EditorClassIdentifier: Assembly-CSharp::Blackset.Effects.PhantomEffect
-  applyPolicy: 0
-  effectPhase: 0
