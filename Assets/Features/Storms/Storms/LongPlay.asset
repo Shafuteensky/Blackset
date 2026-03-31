@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Blackset.Storms.Storm
   id: c55993e4dad94b4590279c5523bad9a3
   dataName: Long play
-  dataDescription: Maximum fights number increased to 5.
+  dataDescription: Maximum fights number increased to 7.
   dicesInSet:
     enabled: 0
     value: 0
@@ -35,7 +35,7 @@ MonoBehaviour:
     value: 0
   maxFightsPerDuel:
     enabled: 1
-    value: 5
+    value: 7
   fightWinPolicy:
     enabled: 0
     value: 0

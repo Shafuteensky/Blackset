@@ -22,6 +22,6 @@ MonoBehaviour:
   set: {fileID: 11400000, guid: 27cada2d73a18a543a23e1a7fea1f12b, type: 2}
   availableTypes:
   - {fileID: 11400000, guid: 993bee1bbd4e925439649326aceece27, type: 2}
-  effect: {fileID: 0}
+  effect: {fileID: 11400000, guid: bf2e5282ea85c5648a7c93ff0d40734a, type: 2}
   color: {r: 0.57924527, g: 1, b: 0.767773, a: 1}
   consumablePrefab: {fileID: 2614671250630885598, guid: aca4c613c56fe164ab899516b4c7e025, type: 3}

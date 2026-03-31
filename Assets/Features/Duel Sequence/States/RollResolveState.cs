@@ -99,7 +99,6 @@ namespace Blackset.Duel.Sequence.States
                 int first = diceRoller.RollDice(context, participantId, chosenDiceId, out bool firstCrit);
                 int second = diceRoller.RollDice(context, participantId, chosenDiceId, out bool secondCrit);
 
-                Debug.LogError(first + ", " + second);
                 int best = Mathf.Max(first, second);
                 isCrit = best == first ? firstCrit : secondCrit;
                 return best;

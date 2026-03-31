@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ea2359b72c94dca8fecd15c1e011aa9, type: 3}
   m_Name: StoneEffect
   m_EditorClassIdentifier: Assembly-CSharp::Blackset.Effects.StoneEffect
-  expectedValueFactor: 0.25
+  expectedValueFactor: 0.5
