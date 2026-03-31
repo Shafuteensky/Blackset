@@ -13,9 +13,9 @@ namespace Extensions.Generics
         /// <summary>
         /// Событие, вызываемое после изменения состояния переключателя
         /// </summary>
-        public event Action onToggleChanged;
+        public event Action<bool> onToggled;
         
-        protected Toggle toggle = default;
+        protected Toggle toggle;
 
         protected virtual void Awake() => toggle = GetComponent<Toggle>();
 
@@ -25,13 +25,13 @@ namespace Extensions.Generics
 
         protected virtual void OnToggleAction(bool state)
         {
-            OnToggleChanged(state);
-            onToggleChanged?.Invoke();
+            OnToggled(state);
+            onToggled?.Invoke(state);
         }
         
         /// <summary>
         /// Код, выполняемый при изменении состояния переключателя
         /// </summary>
-        public abstract void OnToggleChanged(bool state);
+        public abstract void OnToggled(bool state);
     }
 }
