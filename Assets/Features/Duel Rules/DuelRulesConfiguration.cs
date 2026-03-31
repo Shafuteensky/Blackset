@@ -16,7 +16,7 @@ namespace Blackset.Duel.Rules
         private const ConsumableSetPolicy DEFAULT_CONSUMABLES_SET_POLICY = ConsumableSetPolicy.RandomLimited;
         
         private const int DEFAULT_MAX_REROLLS = 1;
-        private const int DEFAULT_MAX_FIGHTS_PER_DUEL = 3;
+        private const int DEFAULT_MAX_FIGHTS_PER_DUEL = 5;
         private const int DEFAULT_MAX_THROWS_PER_FIGHT = 6;
         
         private const DuelWinPolicy DEFAULT_DUEL_WIN_POLICY = DuelWinPolicy.WinMostFights;

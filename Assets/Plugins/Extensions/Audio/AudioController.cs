@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.Audio;
@@ -6,6 +7,8 @@ using Extensions.Log;
 using Extensions.Pool;
 using Extensions.Singleton;
 using Extensions.Helpers;
+using Extensions.ScriptableValues;
+using Random = UnityEngine.Random;
 
 namespace Extensions.Audio
 {
@@ -20,9 +23,16 @@ namespace Extensions.Audio
     {
         private const int PREWARM_SOURCES_NUMBER = 4;
         
+        /// <summary>
+        /// Событие изменения громкости
+        /// </summary>
+        public event Action onVolumeChanged;
+        
         [Header("Значения по-умолчанию")]
         [Space]
         
+        [SerializeField]
+        private FloatValue commonVolume;
         [SerializeField]
         private AudioDefaults musicDefaults;
         [SerializeField] 
@@ -44,7 +54,21 @@ namespace Extensions.Audio
         private int oneShotMaxInstances = 32;
 
         private ObjectPool<AudioSource> oneShotPool;
+        private readonly Dictionary<AudioSource, ActiveAudioSourceData> activeSources = new();
         private readonly Dictionary<AudioSource, CoroutineTask> releaseTasks = new();
+        private readonly HashSet<FloatValue> subscribedVolumes = new();
+
+        private struct ActiveAudioSourceData
+        {
+            public AudioModel Model;
+            public float VolumeModifier;
+
+            public ActiveAudioSourceData(AudioModel model, float volumeModifier)
+            {
+                Model = model;
+                VolumeModifier = volumeModifier;
+            }
+        }
 
         #region MonoLifeCycle
         
@@ -52,15 +76,10 @@ namespace Extensions.Audio
         {
             base.Awake();
 
-            if (oneShotPrefab == null)
-            {
-                return;
-            }
+            SubscribeVolumeValues();
 
-            if (oneShotRoot == null)
-            {
-                oneShotRoot = transform;
-            }
+            if (oneShotPrefab == null) return;
+            if (oneShotRoot == null) oneShotRoot = transform;
 
             oneShotPool = new ObjectPool<AudioSource>(
                 oneShotPrefab,
@@ -72,6 +91,8 @@ namespace Extensions.Audio
 
         private void OnDestroy()
         {
+            UnsubscribeVolumeValues();
+
             foreach (KeyValuePair<AudioSource, CoroutineTask> pair in releaseTasks)
             {
                 if (pair.Value == null) continue;
@@ -79,6 +100,7 @@ namespace Extensions.Audio
             }
 
             releaseTasks.Clear();
+            activeSources.Clear();
         }
 
         #endregion
@@ -129,6 +151,27 @@ namespace Extensions.Audio
         }
 
         /// <summary>
+        /// Получить текущее значение громкости для типа аудио
+        /// </summary>
+        /// <param name="model">Тип аудио</param>
+        /// <returns>Текущее значение громкости</returns>
+        public float GetVolume(AudioModel model)
+        {
+            AudioDefaults defaults = GetDefaults(model);
+            float typeVolume = defaults.volume == null ? 1f : defaults.volume.Value;
+            float globalVolume = commonVolume == null ? 1f : commonVolume.Value;
+            return typeVolume * globalVolume;
+        }
+
+        /// <summary>
+        /// Получить итоговую громкость для типа аудио
+        /// </summary>
+        /// <param name="model">Тип аудио</param>
+        /// <param name="volumeModifier">Модификатор громкости</param>
+        /// <returns>Итоговая громкость</returns>
+        public float GetAppliedVolume(AudioModel model, float volumeModifier) => volumeModifier * GetVolume(model);
+
+        /// <summary>
         /// Построение настроек аудио
         /// </summary>
         /// <param name="defaults">Дефолтные параметры аудио трека</param>
@@ -136,11 +179,10 @@ namespace Extensions.Audio
         /// <returns></returns>
         public AppliedAudioSettings BuildSettings(AudioDefaults defaults, bool loop = false)
         {
-            AppliedAudioSettings settings = new()
-            {
-                mixerGroup = defaults.mixerGroup,
-                volume = defaults.volume
-            };
+            AppliedAudioSettings settings = new();
+
+            settings.mixerGroup = defaults.mixerGroup;
+            settings.volume = defaults.volumeModifier;
 
             float minPitch = defaults.pitchMin;
             float maxPitch = defaults.pitchMax;
@@ -205,23 +247,25 @@ namespace Extensions.Audio
             }
 
             if (followTarget != null)
-            {
                 source.transform.position = followTarget.position;
-            }
             else if (position.HasValue)
-            {
                 source.transform.position = position.Value;
-            }
 
             AudioDefaults defaults = GetDefaults(model);
             AppliedAudioSettings settings = BuildSettings(defaults);
+            float volumeModifier = defaults.volumeModifier;
+
             if (spatialPreset != null)
             {
                 settings.spatialBlend = spatialPreset.SpatialBlend;
                 settings.minDistance = spatialPreset.MinDistance;
                 settings.maxDistance = spatialPreset.MaxDistance;
             }
+
+            settings.volume = GetAppliedVolume(model, volumeModifier);
+
             ApplySettings(source, settings);
+            RegisterActiveSource(source, model, volumeModifier);
 
             source.resource = resource;
             source.Play();
@@ -253,10 +297,7 @@ namespace Extensions.Audio
 
         private CoroutineTask GetReleaseTask(AudioSource source)
         {
-            if (releaseTasks.TryGetValue(source, out CoroutineTask task))
-            {
-                return task;
-            }
+            if (releaseTasks.TryGetValue(source, out CoroutineTask task)) return task;
 
             task = new CoroutineTask(this);
             releaseTasks.Add(source, task);
@@ -267,11 +308,7 @@ namespace Extensions.Audio
         {
             while (source.isPlaying)
             {
-                if (followTarget != null)
-                {
-                    source.transform.position = followTarget.position;
-                }
-
+                if (followTarget != null) source.transform.position = followTarget.position;
                 yield return null;
             }
 
@@ -279,12 +316,56 @@ namespace Extensions.Audio
             source.resource = null;
             source.loop = false;
 
+            activeSources.Remove(source);
             oneShotPool.Release(source);
 
-            if (releaseTasks.TryGetValue(source, out CoroutineTask task))
+            if (releaseTasks.TryGetValue(source, out CoroutineTask task)) task.Stop();
+        }
+
+        private void RegisterActiveSource(AudioSource source, AudioModel model, float volumeModifier)
+        {
+            if (source == null) return;
+            activeSources[source] = new ActiveAudioSourceData(model, volumeModifier);
+        }
+
+        private void SubscribeVolumeValues()
+        {
+            SubscribeVolume(commonVolume);
+            SubscribeVolume(musicDefaults.volume);
+            SubscribeVolume(ambienceDefaults.volume);
+            SubscribeVolume(uiDefaults.volume);
+            SubscribeVolume(sfxDefaults.volume);
+        }
+
+        private void SubscribeVolume(FloatValue volume)
+        {
+            if (volume == null) return;
+            if (subscribedVolumes.Contains(volume)) return;
+
+            volume.onValueChanged += RefreshActiveVolumes;
+            subscribedVolumes.Add(volume);
+        }
+
+        private void UnsubscribeVolumeValues()
+        {
+            foreach (FloatValue volume in subscribedVolumes)
             {
-                task.Stop();
+                if (volume == null) continue;
+                volume.onValueChanged -= RefreshActiveVolumes;
             }
+
+            subscribedVolumes.Clear();
+        }
+
+        private void RefreshActiveVolumes(float _)
+        {
+            foreach (KeyValuePair<AudioSource, ActiveAudioSourceData> pair in activeSources)
+            {
+                if (pair.Key == null) continue;
+
+                pair.Key.volume = GetAppliedVolume(pair.Value.Model, pair.Value.VolumeModifier);
+            }
+            onVolumeChanged?.Invoke();
         }
 
         private bool isPoolValid()

@@ -41,7 +41,11 @@ namespace Extensions.Audio
             SetLoop(audioResource, playFadeSeconds);
         }
 
-        protected virtual void OnDisable() => Stop();
+        protected override void OnDisable()
+        {
+            base.OnDisable();
+            Stop();
+        }
 
         protected virtual void OnDestroy()
         {
@@ -92,12 +96,20 @@ namespace Extensions.Audio
         {
             if (source != null) return;
 
-            GameObject go = new GameObject("AudioLoopSource");
-            go.transform.SetParent(transform, false);
+            GameObject sourceObject = new GameObject("AudioLoopSource");
+            sourceObject.transform.SetParent(transform, false);
 
-            source = go.AddComponent<AudioSource>();
+            source = sourceObject.AddComponent<AudioSource>();
         }
+        
+        protected override void OnVolumeSettingsChanged()
+        {
+            if (source == null) return;
+            if (!source.isPlaying) return;
 
+            source.volume = audioController.GetAppliedVolume(model, defaults.volumeModifier);
+        }
+        
         protected System.Collections.IEnumerator SetLoopRoutine(
             AudioResource resource,
             float fadeSeconds,
@@ -132,6 +144,10 @@ namespace Extensions.Audio
                 
             AudioDefaults defaults = audioController.GetDefaults(model);
             AppliedAudioSettings settings = audioController.BuildSettings(defaults, true);
+            settings.spatialBlend = spatialPreset.SpatialBlend;
+            settings.minDistance = spatialPreset.MinDistance;
+            settings.maxDistance = spatialPreset.MaxDistance;
+            settings.volume = audioController.GetAppliedVolume(model, defaults.volumeModifier);
 
             audioController.ApplySettings(source, settings);
 

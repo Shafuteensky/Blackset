@@ -20,8 +20,9 @@ namespace Features.DiceBudget
             DicePoolInventory.onBudgetCheckFailed += PlaySound;
         }
         
-        private void OnDisable()
+        protected override void OnDisable()
         {
+            base.OnDisable();
             DicePoolInventory.onBudgetCheckFailed -= PlaySound;
         }
         

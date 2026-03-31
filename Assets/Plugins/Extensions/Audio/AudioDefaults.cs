@@ -1,4 +1,5 @@
 using System;
+using Extensions.ScriptableValues;
 using UnityEngine;
 using UnityEngine.Audio;
 
@@ -17,11 +18,18 @@ namespace Extensions.Audio
         public AudioMixerGroup mixerGroup;
 
         /// <summary>
+        /// Модификатор базовой громкости
+        /// </summary>
+        [Tooltip("Модификатор базовой громкости")]
+        [Range(0f, 1f)]
+        public float volumeModifier;
+
+        /// <summary>
         /// Громкость
         /// </summary>
         [Tooltip("Громкость")]
-        [Range(0f, 1f)]
-        public float volume;
+        public FloatValue volume;
+
 
         /// <summary>
         /// Длительность затухания

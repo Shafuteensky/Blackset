@@ -30,8 +30,9 @@ namespace Extensions.Audio
             holdButton.onHoldCompleted += PlayOnHoldCompleted;
         }
 
-        protected virtual void OnDisable()
+        protected override void OnDisable()
         {
+            base.OnDisable();
             if (holdButton == null) return;
             holdButton.onHoldCompleted -= PlayOnHoldCompleted;
         }

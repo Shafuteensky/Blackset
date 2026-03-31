@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using Extensions.Data;
-using Extensions.Identification;
 using UnityEngine;
 
 namespace Extensions.ScriptableValues
@@ -9,7 +8,7 @@ namespace Extensions.ScriptableValues
     /// <summary>
     /// Базовая абстракция ScriptableValue — хранилища значения
     /// </summary>
-    public abstract class ScriptableValue<T> : IdentifiableObject
+    public abstract class ScriptableValue<T> : BaseScriptableValue
     {
         /// <summary>
         /// Событие изменения значения
@@ -67,7 +66,12 @@ namespace Extensions.ScriptableValues
                 JsonSaveLoad.Save(runtimeValue, Id);
             }
         }
-
+        
+        /// <summary>
+        /// Сброс значения к дефолтному
+        /// </summary>
+        public override void ResetToDefault() => SetValue(defaultValue);
+        
         protected virtual void LoadIfNeeded()
         {
             if (!Application.isPlaying || isLoaded) return;
@@ -81,9 +85,7 @@ namespace Extensions.ScriptableValues
             }
 
             T loadedValue = JsonSaveLoad.Load(Id, defaultValue);
-
-            // Если загрузка вернула null или default — используем дефолт
-            runtimeValue = EqualityComparer<T>.Default.Equals(loadedValue, default) ? defaultValue : loadedValue;
+            runtimeValue = loadedValue;
         }
     }
 }
