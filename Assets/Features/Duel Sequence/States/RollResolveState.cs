@@ -3,6 +3,7 @@ using Blackset.Duel.Modules;
 using Blackset.Duel.Participants;
 using Blackset.DuelEvents.EventTypes;
 using Extensions.FiniteStateMachine;
+using UnityEngine;
 
 namespace Blackset.Duel.Sequence.States
 {
@@ -75,6 +76,8 @@ namespace Blackset.Duel.Sequence.States
 
             string chosenConsumableId = participantFightState.TurnState.SelectedConsumable.Value;
             participantFightState.MarkConsumableUsed(chosenConsumableId, participantId);
+            
+            eventHub.Publish(new ConsumableUsedEvent(participantId, chosenConsumableId));
         }
         
         #endregion

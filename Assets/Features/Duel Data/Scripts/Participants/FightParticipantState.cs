@@ -20,7 +20,7 @@ namespace Blackset.Duel.Participants
         /// </summary>
         public event Action<string, bool> onDiceUsed; 
         /// <summary>
-        /// Расходник из сборки использован в текущем бою
+        /// Расходник из сборки использован в текущем бою [идентификатор_расходника_в_сборке, первое_использование]
         /// </summary>
         public event Action<string, bool> onConsumableUsed; 
         #endregion

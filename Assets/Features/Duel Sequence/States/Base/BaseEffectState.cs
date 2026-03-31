@@ -3,6 +3,7 @@ using Blackset.Duel.Context;
 using Blackset.Duel.Modules;
 using Blackset.Duel.Participants;
 using Blackset.Effects;
+using UnityEngine;
 
 namespace Blackset.Duel.Sequence.States
 {
@@ -59,7 +60,10 @@ namespace Blackset.Duel.Sequence.States
             switch (source.SourceKind)
             {
                 case EffectSourceKind.Dice:       return fightState.GetOrCreateDiceUsageState(source.SourceInstanceId);
-                case EffectSourceKind.Consumable: return fightState.GetOrCreateConsumableUsageState(source.SourceInstanceId);
+                case EffectSourceKind.Consumable:
+                {
+                    return fightState.GetOrCreateConsumableUsageState(source.SourceInstanceId);
+                }
                 default:                          return null;
             }
         }

@@ -1,6 +1,5 @@
 using Blackset.Duel.Sequence;
 using Blackset.DuelEvents.EventTypes;
-using Blackset.Inventories.Scripts.Items;
 using DG.Tweening;
 using UnityEngine;
 
@@ -14,16 +13,16 @@ namespace Blackset.Data.Items.Visual.Modules
         [SerializeField] private DOTweenAnimation animationTween;
 
         private string itemId;
+        private string ownerParticipantId;
+        
         private Transform itemTransform;
         private Vector3 initialPosition;
-
-        private DuelController duelController;
-        private string ownerParticipantId;
-        private ItemClass itemClass;
-
         private readonly Vector3 moveDirLocal = new(-1, 0, 0);
         private readonly float moveDist = 7f;
 
+        private DuelController duelController;
+        bool hasMoved;
+        
         private void Start() => initialPosition = itemTransform.position;
 
         private void OnDestroy()
@@ -31,66 +30,75 @@ namespace Blackset.Data.Items.Visual.Modules
             if (duelController == null) return;
 
             Unsubscribe();
-            duelController.EventHub.Unsubscribe<BattleStartEvent>(OnBattleStart);
         }
 
+        #region BaseVisualItemModule
+        
         public override void Initialize(VisualItemContext context)
         {
             itemId = context.ItemId;
             ownerParticipantId = context.OwnerParticipantId;
             duelController = context.DuelController;
             itemTransform = context.Transform;
-            itemClass = context.ItemClass;
+
+            hasMoved = false;
 
             Subscribe();
-            duelController.EventHub.Subscribe<BattleStartEvent>(OnBattleStart);
         }
+        
+        #endregion
+
+        #region Подписка
 
         private void Subscribe()
         {
-            var fightState = duelController.DuelContext.Participants[ownerParticipantId].FightState;
-
-            switch (itemClass)
-            {
-                case ItemClass.Dice:
-                    fightState.onDiceUsed += OnItemUsed;
-                    break;
-                case ItemClass.Consumable:
-                    fightState.onConsumableUsed += OnItemUsed;
-                    break;
-                default:
-                    Debug.LogWarning($"[ItemPositionController] Необработанный класс предмета: {itemClass}; предмет не будет перемещён");
-                    break;
-            }
+            duelController.EventHub.Subscribe<DiceRolledEvent>(OnDiceRolled);
+            duelController.EventHub.Subscribe<ConsumableUsedEvent>(OnConsumableUsed);
+            duelController.EventHub.Subscribe<BattleStartEvent>(OnBattleStart);
         }
 
         private void Unsubscribe()
         {
-            var fightState = duelController.DuelContext.Participants[ownerParticipantId].FightState;
-
-            switch (itemClass)
-            {
-                case ItemClass.Dice:
-                    fightState.onDiceUsed -= OnItemUsed;
-                    break;
-                case ItemClass.Consumable:
-                    fightState.onConsumableUsed -= OnItemUsed;
-                    break;
-            }
+            duelController.EventHub.Unsubscribe<DiceRolledEvent>(OnDiceRolled);
+            duelController.EventHub.Unsubscribe<ConsumableUsedEvent>(OnConsumableUsed);
+            duelController.EventHub.Unsubscribe<BattleStartEvent>(OnBattleStart);
         }
 
-        private void OnItemUsed(string usedItemId, bool firstTime)
+        #endregion
+        
+        #region Реакция на события
+        
+        private void OnItemUsed(string usedItemId, string ownerId)
         {
-            if (usedItemId != itemId) return;
+            if (usedItemId != itemId || ownerId != ownerParticipantId) return;
+            if (hasMoved && animationTween != null) return;
+            hasMoved = true;
 
-            // Если уже использован, то не двигается к центру
-            if (!firstTime && animationTween != null) return;
+            MoveToRollTable(GetWorldPosition());
+        }
 
-            // Переводим направление из локального пространства родителя в мировое
-            Vector3 worldDir = itemTransform.parent.TransformDirection(moveDirLocal);
-            Vector3 target = itemTransform.position + worldDir * moveDist;
+        private void OnDiceRolled(DiceRolledEvent handler) => OnItemUsed(handler.ChosenDiceId, handler.ParticipantId);
 
-            itemTransform.DOMove(target, 0.5f).SetEase(Ease.OutCubic).OnComplete(() =>
+        private void OnConsumableUsed(ConsumableUsedEvent handler) => OnItemUsed(handler.ChosenConsumableId, handler.ParticipantId);
+
+        private void OnBattleStart(BattleStartEvent _)
+        {
+            MoveToInitialPosition();
+            hasMoved = false;
+        }
+
+        #endregion
+        
+        #region Перемещение
+        
+        private void MoveToInitialPosition()
+        {
+            itemTransform.DOMove(initialPosition, 0.5f).SetEase(Ease.OutCubic);
+        }
+
+        private void MoveToRollTable(Vector3 position)
+        {
+            itemTransform.DOMove(position, 0.5f).SetEase(Ease.OutCubic).OnComplete(() =>
             {
                 animationTween.DOComplete();
                 animationTween.DOPause();
@@ -98,11 +106,13 @@ namespace Blackset.Data.Items.Visual.Modules
             animationTween.tween.Restart();
         }
 
-        private void OnBattleStart(BattleStartEvent _) => MoveToInitialPosition();
-
-        private void MoveToInitialPosition()
+        private Vector3 GetWorldPosition()
         {
-            itemTransform.DOMove(initialPosition, 0.5f).SetEase(Ease.OutCubic);
+            Vector3 worldDir = itemTransform.parent.TransformDirection(moveDirLocal);
+            Vector3 target = itemTransform.position + worldDir * moveDist;
+            return target;
         }
+        
+        #endregion
     }
 }
