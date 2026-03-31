@@ -7,7 +7,7 @@ using Extensions.FiniteStateMachine;
 namespace Blackset.Duel.Sequence.States
 {
     /// <summary>
-    /// 8. Коммит рабочего снапшота текущего броска
+    /// 8. Пересчет счета битвы по актуальной истории бросков
     /// </summary>
     public class ScoreCommitState : BaseDuelState, IState<DuelContext>
     {

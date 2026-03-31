@@ -11,7 +11,7 @@ namespace Blackset.Duel.Sequence.States
     /// 7. Броски дайсов, трата расходников (повторяемое состояние)
     /// </summary>
     /// <remarks>
-    /// - Генерация результатов бросков и запись в рабочий снапшот текущего броска
+    /// - Генерация результатов бросков и запись в состояние текущей битвы участника
     /// </remarks>
     public class RollResolveState : BaseDuelState, IState<DuelContext>
     {
