@@ -60,7 +60,13 @@ namespace Blackset.Duel.Sequence.States
             if (!participantFightState.TurnState.IsDiceChosen.Value) return;
 
             string chosenDiceId = participantFightState.TurnState.SelectedDice.Value;
-            int rawResult = diceRoller.RollDice(context, participantId, chosenDiceId, out bool isCrit);
+            int rawResult = ResolveDiceRollWithModifiers(
+                context,
+                participantId,
+                chosenDiceId,
+                participantFightState.TurnState.RollModifiers,
+                diceRoller,
+                out bool isCrit);
 
             participantFightState.RegisterRawRollResult(chosenDiceId, rawResult);
             participantFightState.MarkThrow();
@@ -78,6 +84,38 @@ namespace Blackset.Duel.Sequence.States
             participantFightState.MarkConsumableUsed(chosenConsumableId, participantId);
             
             eventHub.Publish(new ConsumableUsedEvent(participantId, chosenConsumableId));
+        }
+        
+        private int ResolveDiceRollWithModifiers(
+            DuelContext context,
+            string participantId,
+            string chosenDiceId,
+            CurrentRollModifiersState rollModifiers,
+            IDiceRollPipeline diceRoller,
+            out bool isCrit)
+        {
+            if (rollModifiers.HasAdvantage.Value)
+            {
+                int first = diceRoller.RollDice(context, participantId, chosenDiceId, out bool firstCrit);
+                int second = diceRoller.RollDice(context, participantId, chosenDiceId, out bool secondCrit);
+
+                Debug.LogError(first + ", " + second);
+                int best = Mathf.Max(first, second);
+                isCrit = best == first ? firstCrit : secondCrit;
+                return best;
+            }
+
+            if (rollModifiers.HasDisadvantage.Value)
+            {
+                int first = diceRoller.RollDice(context, participantId, chosenDiceId, out bool firstCrit);
+                int second = diceRoller.RollDice(context, participantId, chosenDiceId, out bool secondCrit);
+
+                int worst = Mathf.Min(first, second);
+                isCrit = worst == first ? firstCrit : secondCrit;
+                return worst;
+            }
+
+            return diceRoller.RollDice(context, participantId, chosenDiceId, out isCrit);
         }
         
         #endregion

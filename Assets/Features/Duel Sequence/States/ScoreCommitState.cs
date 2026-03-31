@@ -1,6 +1,5 @@
 using Blackset.Duel.Context;
 using Blackset.Duel.Participants;
-using Blackset.Duel.Rolls;
 using Blackset.DuelEvents.EventTypes;
 using Extensions.FiniteStateMachine;
 

@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Blackset.Duel.Context;
 using Blackset.Duel.Modules;
 using Blackset.Duel.Participants;
+using Blackset.DuelEvents.EventTypes;
 using Blackset.Effects;
 using UnityEngine;
 
@@ -36,12 +37,16 @@ namespace Blackset.Duel.Sequence.States
                     if (IsCurrentlySelectedSource(turnState, source) && !usageState.IsUsed)
                         usageState.MarkUsed(context.Progress.ThrowNumber.Value, participantId);
 
+                    string targetParticipantId = string.IsNullOrEmpty(usageState.TargetParticipantId)
+                        ? participantId
+                        : usageState.TargetParticipantId;
+                        
                     EffectApplyContext applyContext = new EffectApplyContext(
                         context,
                         Phase,
                         context.Progress.ThrowNumber.Value,
                         participantId,
-                        string.IsNullOrEmpty(usageState.TargetParticipantId) ? participantId : usageState.TargetParticipantId,
+                        targetParticipantId,
                         source.SourceInstanceId,
                         source.SourceKind,
                         turnState.SelectedDice.Value,
@@ -49,6 +54,17 @@ namespace Blackset.Duel.Sequence.States
                         usageState);
 
                     source.Effect.TryApplyEffect(applyContext);
+                    bool applied = source.Effect.TryApplyEffect(applyContext);
+                    if (applied)
+                    {
+                        eventHub.Publish(new EffectAppliedEvent(
+                            participantId,
+                            targetParticipantId,
+                            source.SourceInstanceId,
+                            Phase,
+                            source.Effect.GetType().Name
+                            ));
+                    }
                 }
             }
         }

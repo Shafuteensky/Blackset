@@ -14,7 +14,6 @@ namespace Blackset.Duel.Participants
         /// Может действовать
         /// </summary>
         public bool CanAct => !HasPassed.Value && !AllActionsDone;
-
         /// <summary>
         /// Все ли обязательные действия за ход выполнены
         /// </summary>
@@ -29,17 +28,14 @@ namespace Blackset.Duel.Participants
         /// Объявлен ли дайс в этот ход
         /// </summary>
         public ReactiveProperty<bool> IsDiceDeclared { get; private set; } = new(false);
-        
         /// <summary>
         /// Объявленный в этом ходу дайс
         /// </summary>
         public ReactiveProperty<string> DeclaredDice { get; private set; } = new(string.Empty);
-
         /// <summary>
         /// Использован ли дайс в этот ход
         /// </summary>
         public ReactiveProperty<bool> IsDiceChosen { get; private set; } = new(false);
-
         /// <summary>
         /// Выбранный для броска в этом ходу дайс
         /// </summary>
@@ -49,12 +45,16 @@ namespace Blackset.Duel.Participants
         /// Использован ли расходник в этот ход
         /// </summary>
         public ReactiveProperty<bool> IsConsumableChosen { get; private set; } = new(false);
-
         /// <summary>
         /// Выбранный для использования в этом ходу расходник
         /// </summary>
         public ReactiveProperty<string> SelectedConsumable { get; private set; } = new(string.Empty);
-
+        
+        /// <summary>
+        /// Модификаторы текущего броска
+        /// </summary>
+        public CurrentRollModifiersState RollModifiers { get; private set; } = new();
+        
         private FightParticipantState fightState;
         
         public void InitFightState(FightParticipantState fightState) => this.fightState = fightState;
@@ -71,6 +71,8 @@ namespace Blackset.Duel.Participants
             ClearDeclaredDice();
             ClearSelectedDice();
             ClearSelectedConsumable();
+            
+            RollModifiers.Reset();
         }
 
         /// <summary>
@@ -87,6 +89,8 @@ namespace Blackset.Duel.Participants
             clone.SelectedDice.Value = SelectedDice.Value;
             clone.IsConsumableChosen.Value = IsConsumableChosen.Value;
             clone.SelectedConsumable.Value = SelectedConsumable.Value;
+            
+            clone.RollModifiers = RollModifiers.Clone();
 
             return clone;
         }

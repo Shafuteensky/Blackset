@@ -1,3 +1,5 @@
+using Blackset.Duel.Sequence;
+using Blackset.DuelEvents.EventTypes;
 using UnityEngine;
 
 namespace Blackset.Effects
@@ -18,6 +20,7 @@ namespace Blackset.Effects
 
             bool applied = ApplyInternal(context);
             if (applied) context.UsageState.MarkApplied(context.ThrowIndex);
+
             return applied;
         }
 
