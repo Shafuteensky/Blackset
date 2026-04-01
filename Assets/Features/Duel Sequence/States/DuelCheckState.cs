@@ -37,9 +37,6 @@ namespace Blackset.Duel.Sequence.States
                 return StateResult.Switch<BattleStartState>();
         }
         
-        public void Exit(DuelContext context)
-        {
-            
-        }
+        public void Exit(DuelContext context) { }
     }
 }

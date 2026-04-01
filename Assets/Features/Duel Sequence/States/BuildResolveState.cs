@@ -32,9 +32,6 @@ namespace Blackset.Duel.Sequence.States
             return StateResult.Switch<TargetValueSetupState>();
         }
         
-        public void Exit(DuelContext context)
-        {
-            
-        }
+        public void Exit(DuelContext context) { }
     }
 }

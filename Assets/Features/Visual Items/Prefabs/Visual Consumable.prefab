@@ -742,6 +742,7 @@ GameObject:
   - component: {fileID: 3385745180663081838}
   - component: {fileID: 4982052129392634665}
   - component: {fileID: 5465909479288427035}
+  - component: {fileID: 3635005890891611590}
   - component: {fileID: 5344105797481517764}
   - component: {fileID: 4351025924490762769}
   - component: {fileID: 7488319753299089846}
@@ -790,6 +791,7 @@ MonoBehaviour:
   - {fileID: 6536461567142214127}
   - {fileID: 3385745180663081838}
   - {fileID: 5465909479288427035}
+  - {fileID: 3635005890891611590}
   viewRepresentation: {fileID: 4982052129392634665}
 --- !u!114 &6741705545251219199
 MonoBehaviour:
@@ -868,6 +870,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Blackset.Data.Items.Visual.Modules.KnownIndicator
   knownIndicator: {fileID: 5902656290253790626}
+--- !u!114 &3635005890891611590
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5036757616722752098}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bec1cbc4b1734f18b2d73ddb987ba801, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Blackset.Data.Items.Visual.Modules.ConsumableBurnView
+  burnSound: {fileID: 8300000, guid: ce7b79d3c7e81a544a0ecef2d4723b5a, type: 3}
 --- !u!65 &5344105797481517764
 BoxCollider:
   m_ObjectHideFlags: 0

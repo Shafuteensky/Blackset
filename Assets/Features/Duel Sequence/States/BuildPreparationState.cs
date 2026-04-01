@@ -68,9 +68,6 @@ namespace Blackset.Duel.Sequence.States
             return StateResult.Switch<BuildResolveState>();
         }
         
-        public void Exit(DuelContext context)
-        {
-            
-        }
+        public void Exit(DuelContext context) { }
     }
 }

@@ -186,6 +186,7 @@ namespace Blackset.Inventories.Cells
         public bool IsContentSame(ItemContext itemContext)
         {
             return Item.ItemId == itemContext.ItemId && Item.ItemTypeId == itemContext.ItemTypeId;
+            // TODO добавить проверку на редкость
         }
 
         /// <summary>
@@ -195,8 +196,7 @@ namespace Blackset.Inventories.Cells
         /// <returns>true если предмет и тип совпадают, иначе false</returns>
         public bool IsContentSame(InventoryCell otherCell)
         {
-            return Item.ItemId == otherCell.Item.ItemId && Item.ItemTypeId == otherCell.Item.ItemTypeId; 
-            // TODO добавить проверку на редкость
+            return IsContentSame(otherCell.Item);
         }
         
         #endregion

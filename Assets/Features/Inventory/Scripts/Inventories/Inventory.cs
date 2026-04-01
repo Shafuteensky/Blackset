@@ -166,6 +166,27 @@ namespace Blackset.Inventories
             return itemTypeData;
         }
 
+        /// <summary>
+        /// Проверка на наличие схожего предмета в инвентаре
+        /// </summary>
+        /// <param name="itemContext">Предмет</param>
+        /// <param name="cellId">Идентификатор ячейки</param>
+        /// <returns>true если содержит хотя бы единицу аналогичного предмета, иначе false</returns>
+        public bool Contains(ItemContext itemContext, out string cellId)
+        {
+            foreach (var cell in Data)
+            {
+                if (cell.IsContentSame(itemContext))
+                {
+                    cellId = cell.Id;
+                    return true;
+                }
+            }
+            
+            cellId = String.Empty;
+            return false;
+        }
+        
         #endregion
 
         #region Манипуляции содержимым инвентаря
@@ -303,6 +324,7 @@ namespace Blackset.Inventories
                 }
                 else
                     onCellUpdated?.Invoke(GetIdByIndex(index));
+                Debug.LogWarning("Removed");
             }
 
             FillDefaultSlotsIfNeeded();
