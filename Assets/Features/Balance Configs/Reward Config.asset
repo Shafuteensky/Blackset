@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b28f37cefdb64211ba46605bb188f868, type: 3}
-  m_Name: Reward_Config
+  m_Name: Reward Config
   m_EditorClassIdentifier: Assembly-CSharp::Blackset.Rewards.RewardConfig
   baseMoneyReward:
     participation: 0

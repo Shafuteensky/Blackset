@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cf5536a852c14ccd95300cc55dd3848b, type: 3}
-  m_Name: DuelScore_Config
+  m_Name: Duel Score Config
   m_EditorClassIdentifier: Assembly-CSharp::Blackset.DuelScore.DuelScoreConfig
   UnusedItems:
     unusedDiceScore: 5

@@ -1,4 +1,5 @@
 using System;
+using Blackset.BalanceConfigs;
 using UnityEngine;
 
 namespace Blackset.DuelScore
@@ -9,7 +10,7 @@ namespace Blackset.DuelScore
     [CreateAssetMenu(
         fileName = nameof(DuelScoreConfig),
         menuName = "Blackset/Duel/" + nameof(DuelScoreConfig))]
-    public class DuelScoreConfig : ScriptableObject
+    public class DuelScoreConfig : BaseBalanceConfig
     {
         #region Инспектор
 

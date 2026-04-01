@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Blackset.BalanceConfigs;
 using Blackset.Opponents;
 using UnityEngine;
 
@@ -11,7 +12,7 @@ namespace Features.Progression
     [CreateAssetMenu(
         fileName = nameof(ProgressionConfig),
         menuName = "Blackset/Player/" + nameof(ProgressionConfig))]
-    public sealed class ProgressionConfig : ScriptableObject
+    public sealed class ProgressionConfig : BaseBalanceConfig
     {
         #region Дефолтные значения
 

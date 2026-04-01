@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 242b94d261a34b66a8ee6f01249f1cb9, type: 3}
+  m_Name: Duel Rules Config
+  m_EditorClassIdentifier: Assembly-CSharp::Blackset.Duel.Rules.DuelRulesConfig
+  SetComposition:
+    DicesInSet: 6
+    ConsumablesInSet: 6
+    DiceSetPolicy: 0
+    ConsumableSetPolicy: 0
+  TurnLimits:
+    MaxRerolls: 1
+    MaxFightsPerDuel: 5
+    MaxThrowsPerFight: 6
+  WinLossPolicy:
+    DuelWinPolicy: 0
+    FightWinPolicy: 0
+    FightLossPolicy: 0
+  MechanicsPolicy:
+    DiceThrowPolicy: 0
+    EffectsPolicy: 0
+    TargetValuePolicy: 0

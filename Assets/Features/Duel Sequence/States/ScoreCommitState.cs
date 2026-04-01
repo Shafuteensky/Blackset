@@ -1,3 +1,5 @@
+using System;
+using Blackset.Data.Registries;
 using Blackset.Duel.Context;
 using Blackset.Duel.Participants;
 using Blackset.DuelEvents.EventTypes;
@@ -10,10 +12,12 @@ namespace Blackset.Duel.Sequence.States
     /// </summary>
     public class ScoreCommitState : BaseDuelState, IState<DuelContext>
     {
+        
+        
         public void Enter(DuelContext context)
         {
             eventHub.Publish(new EffectsResolvedEvent(context));
-            ApplyParticipantsLastRollsToScore(context);
+            ApplyParticipantsScore(context);
         }
 
         public StateResult Tick(DuelContext context)
@@ -25,7 +29,7 @@ namespace Blackset.Duel.Sequence.States
 
         #region Inner
         
-        private void ApplyParticipantsLastRollsToScore(DuelContext context)
+        private void ApplyParticipantsScore(DuelContext context)
         {
             foreach (var participant in context.Participants.Values)
             {
@@ -35,7 +39,9 @@ namespace Blackset.Duel.Sequence.States
                 newScore += GetFinalRollResultsSum(fightState);
                 newScore += fightState.PersistentFightScoreModifier.Value;
 
-                fightState.FightScore.Value = newScore;
+                int minScore = GameData.Instance.DuelRulesConfig.Scores.MinFightScore;
+
+                fightState.FightScore.Value = Math.Max(newScore, minScore);
             }
         }
 

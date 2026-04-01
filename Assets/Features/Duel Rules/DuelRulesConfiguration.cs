@@ -1,3 +1,4 @@
+using Blackset.Data.Registries;
 using Blackset.Storms;
 
 namespace Blackset.Duel.Rules
@@ -7,27 +8,6 @@ namespace Blackset.Duel.Rules
     /// </summary>
     public struct DuelRulesConfiguration
     {
-        #region Стандартные правила игры
-        
-        private const int DEFAULT_DICES_IN_SET = 6;
-        private const int DEFAULT_CONSUMABLES_IN_SET = 3;
-        
-        private const DiceSetPolicy DEFAULT_DICES_SET_POLICY = DiceSetPolicy.OneInType;
-        private const ConsumableSetPolicy DEFAULT_CONSUMABLES_SET_POLICY = ConsumableSetPolicy.RandomLimited;
-        
-        private const int DEFAULT_MAX_REROLLS = 1;
-        private const int DEFAULT_MAX_FIGHTS_PER_DUEL = 5;
-        private const int DEFAULT_MAX_THROWS_PER_FIGHT = 6;
-        
-        private const DuelWinPolicy DEFAULT_DUEL_WIN_POLICY = DuelWinPolicy.WinMostFights;
-        private const FightWinPolicy DEFAULT_FIGHT_WIN_POLICY = FightWinPolicy.ExactOrClosest;
-        private const FightLossPolicy DEFAULT_FIGHT_LOSS_POLICY = FightLossPolicy.LessOrBust;
-        private const DiceThrowPolicy DEFAULT_DICE_THROW_POLICY = DiceThrowPolicy.Once;
-        private const EffectsPolicy DEFAULT_EFFECTS_POLICY = EffectsPolicy.Both;
-        private const TargetValuePolicy DEFAULT_TARGET_VALUE_POLICY = TargetValuePolicy.RandomSet;
-        
-        #endregion
-        
         /// <summary>
         /// Количество дайсов в сборке
         /// </summary>
@@ -36,16 +16,16 @@ namespace Blackset.Duel.Rules
         /// Количество расходников в сборке
         /// </summary>
         public int ConsumablesInSet;
-        
+
         /// <summary>
-        /// Политика составления сборки
+        /// Политика составления сборки дайсов
         /// </summary>
         public DiceSetPolicy DiceSetPolicy;
         /// <summary>
-        /// Политика составления сборки
+        /// Политика составления сборки расходников
         /// </summary>
         public ConsumableSetPolicy ConsumableSetPolicy;
-        
+
         /// <summary>
         /// Максимум рероллов на класс предметов (дайсы, расходники)
         /// </summary>
@@ -58,7 +38,7 @@ namespace Blackset.Duel.Rules
         /// Максимальное количество ходов (бросков дайсов) за битву
         /// </summary>
         public int MaxThrowsPerFight;
-        
+
         /// <summary>
         /// Политика победы в дуэли
         /// </summary>
@@ -71,7 +51,7 @@ namespace Blackset.Duel.Rules
         /// Политика проигрыша в битве в составе дуэли
         /// </summary>
         public FightLossPolicy FightLossPolicy;
-        
+
         /// <summary>
         /// Политика броска дайса в течении одной битвы
         /// </summary>
@@ -80,39 +60,41 @@ namespace Blackset.Duel.Rules
         /// Политика применения эффектов
         /// </summary>
         public EffectsPolicy EffectsPolicy;
-        
+
         /// <summary>
         /// Политика генерации целевого значения
         /// </summary>
         public TargetValuePolicy TargetValuePolicy;
 
         /// <summary>
-        /// Получить дефолтную конфигурацию правил
+        /// Получить конфигурацию правил из <see cref="DuelRulesConfig"/>, настроенного в редакторе
         /// </summary>
-        /// <returns>Конфигурация правил дуэли со стандартными установками</returns>
+        /// <returns>Конфигурация правил дуэли из <see cref="GameData"/></returns>
         public static DuelRulesConfiguration Default()
         {
+            DuelRulesConfig config = GameData.Instance.DuelRulesConfig;
+
             return new DuelRulesConfiguration
             {
-                DicesInSet = DEFAULT_DICES_IN_SET,
-                ConsumablesInSet = DEFAULT_CONSUMABLES_IN_SET,
-                
-                DiceSetPolicy = DEFAULT_DICES_SET_POLICY,
-                ConsumableSetPolicy = DEFAULT_CONSUMABLES_SET_POLICY,
-                
-                MaxRerolls = DEFAULT_MAX_REROLLS,
-                MaxFightsPerDuel = DEFAULT_MAX_FIGHTS_PER_DUEL,
-                MaxThrowsPerFight = DEFAULT_MAX_THROWS_PER_FIGHT,
-                
-                DuelWinPolicy = DEFAULT_DUEL_WIN_POLICY,
-                FightWinPolicy = DEFAULT_FIGHT_WIN_POLICY,
-                FightLossPolicy = DEFAULT_FIGHT_LOSS_POLICY,
-                DiceThrowPolicy = DEFAULT_DICE_THROW_POLICY,
-                EffectsPolicy = DEFAULT_EFFECTS_POLICY,
-                TargetValuePolicy = DEFAULT_TARGET_VALUE_POLICY
+                DicesInSet            = config.SetComposition.DicesInSet,
+                ConsumablesInSet      = config.SetComposition.ConsumablesInSet,
+                DiceSetPolicy         = config.SetComposition.DiceSetPolicy,
+                ConsumableSetPolicy   = config.SetComposition.ConsumableSetPolicy,
+
+                MaxRerolls            = config.TurnLimits.MaxRerolls,
+                MaxFightsPerDuel      = config.TurnLimits.MaxFightsPerDuel,
+                MaxThrowsPerFight     = config.TurnLimits.MaxThrowsPerFight,
+
+                DuelWinPolicy         = config.WinLossPolicy.DuelWinPolicy,
+                FightWinPolicy        = config.WinLossPolicy.FightWinPolicy,
+                FightLossPolicy       = config.WinLossPolicy.FightLossPolicy,
+
+                DiceThrowPolicy       = config.MechanicsPolicy.DiceThrowPolicy,
+                EffectsPolicy         = config.MechanicsPolicy.EffectsPolicy,
+                TargetValuePolicy     = config.MechanicsPolicy.TargetValuePolicy
             };
         }
-        
+
         /// <summary>
         /// Применить модификатор правил
         /// </summary>

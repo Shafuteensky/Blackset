@@ -1,4 +1,5 @@
 using System;
+using Blackset.BalanceConfigs;
 using Blackset.Opponents;
 using UnityEngine;
 
@@ -10,7 +11,7 @@ namespace Blackset.Rewards
     [CreateAssetMenu(
         fileName = nameof(RewardConfig),
         menuName = "Blackset/Rewards/" + nameof(RewardConfig))]
-    public class RewardConfig : ScriptableObject
+    public class RewardConfig : BaseBalanceConfig
     {
         #region Инспектор
 

@@ -1,4 +1,5 @@
 using System;
+using Blackset.BalanceConfigs;
 using UnityEngine;
 
 namespace Blackset.Shop
@@ -9,7 +10,7 @@ namespace Blackset.Shop
     [CreateAssetMenu(
         fileName = nameof(ShopConfig),
         menuName = "Blackset/Shop/" + nameof(ShopConfig))]
-    public class ShopConfig : ScriptableObject
+    public class ShopConfig : BaseBalanceConfig
     {
         private const float DEFAULT_SELL_MODIFIER = 1f;
         
