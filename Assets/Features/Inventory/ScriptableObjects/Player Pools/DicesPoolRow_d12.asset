@@ -15,7 +15,7 @@ MonoBehaviour:
   id: DicesPoolRow_d12
   autoSave: 1
   maxCellAmount: 1
-  slotsCount: 2
+  slotsCount: 1
   allowedItemClass: 1
   allowedItemType: {fileID: 11400000, guid: 62af0b23df6100641ba60be783e31f76, type: 2}
   fillCellsWithDefaults: 1

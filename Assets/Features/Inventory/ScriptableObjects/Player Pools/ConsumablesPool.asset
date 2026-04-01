@@ -15,7 +15,7 @@ MonoBehaviour:
   id: ConsumablesPoolInventory
   autoSave: 1
   maxCellAmount: 1
-  slotsCount: 4
+  slotsCount: 6
   allowedItemClass: 2
   allowedItemType: {fileID: 0}
   fillCellsWithDefaults: 1
