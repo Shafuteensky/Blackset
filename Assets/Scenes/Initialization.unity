@@ -449,7 +449,7 @@ MonoBehaviour:
     fadeSeconds: 0
     pitchMin: 0.9
     pitchMax: 1.1
-    spatialPreset: {fileID: 11400000, guid: 7b12d6a6129001a4c972c937b8f38862, type: 2}
+    spatialPreset: {fileID: 11400000, guid: 1cbc6afd28091a94ca3a2da12561c161, type: 2}
     priority: 0
   oneShotPrefab: {fileID: 8007241443552093141, guid: adf7dcf0bb9b6e9439818faa0789bccb, type: 3}
   oneShotRoot: {fileID: 749275885}

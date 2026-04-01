@@ -5,8 +5,8 @@ namespace Blackset.Duel.Rules
     /// </summary>
     public enum TargetValuePolicy
     {
-        RandomSet, // Бросок стандартного набора дайсов
-        RandomSetByDicesInSet, // Бросок стандартного набора дайсов (в количестве дайсов в сборке по правилам)
-        Blackjack // Фиксированное: 21
+        RandomSet = 0, // Бросок набора дайсов по правилам
+        RandomSetByDicesInSet = 1, // Бросок стандартного набора дайсов (в количестве дайсов в сборке по правилам)
+        Blackjack = 2, // Фиксированное: 21
     }
 }

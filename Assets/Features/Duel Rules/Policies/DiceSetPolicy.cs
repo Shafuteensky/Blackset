@@ -5,7 +5,8 @@ namespace Blackset.Duel.Rules
     /// </summary>
     public enum DiceSetPolicy
     {
-        OneInType, // Один случайный дайс на каждый тип
-        Chaos // Все дайсы случайны
+        OneInType = 0, // Один случайный дайс на каждый тип
+        Chaos = 1, // Все дайсы случайны
+        AllD20 = 2 // Все дайсы трансформируюстя в D20
     }
 }

@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using Blackset.Data.Items.Types;
 using Blackset.Data.Registries;
 using Blackset.Storms;
 
@@ -65,6 +67,10 @@ namespace Blackset.Duel.Rules
         /// Политика генерации целевого значения
         /// </summary>
         public TargetValuePolicy TargetValuePolicy;
+        /// <summary>
+        /// Политика генерации целевого значения
+        /// </summary>
+        public List<DiceType> DicesForTargetGeneration;
 
         /// <summary>
         /// Получить конфигурацию правил из <see cref="DuelRulesConfig"/>, настроенного в редакторе
@@ -91,7 +97,9 @@ namespace Blackset.Duel.Rules
 
                 DiceThrowPolicy       = config.MechanicsPolicy.DiceThrowPolicy,
                 EffectsPolicy         = config.MechanicsPolicy.EffectsPolicy,
-                TargetValuePolicy     = config.MechanicsPolicy.TargetValuePolicy
+                
+                TargetValuePolicy     = config.TargetValue.TargetValuePolicy,
+                DicesForTargetGeneration     = config.TargetValue.DefaultDicesForTargetGeneration
             };
         }
 

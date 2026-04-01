@@ -63,6 +63,12 @@ namespace Blackset.Duel.Modules
         
                 case DiceSetPolicy.Chaos:
                     return GetRandomDices(dicesPool, dicesInSet, random);
+                // TODO AllD20
+                // case DiceSetPolicy.AllD20:
+                //     var randomDices = GetRandomDices(dicesPool, dicesInSet, random);
+                //     foreach (var dice in randomDices)
+                //         dice.Type = 
+                //     return GetRandomDices(dicesPool, dicesInSet, random);
 
                 default:
                     ServiceDebug.LogError(

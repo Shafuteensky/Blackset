@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using Blackset.BalanceConfigs;
+using Blackset.Data.Items.Types;
 using UnityEngine;
 
 namespace Blackset.Duel.Rules
@@ -56,7 +58,14 @@ namespace Blackset.Duel.Rules
         {
             DiceThrowPolicy = DiceThrowPolicy.Once,
             EffectsPolicy = EffectsPolicy.Both,
-            TargetValuePolicy = TargetValuePolicy.RandomSet
+        };
+
+        [Header("Настройки целевого значения"), Space]
+        [SerializeField]
+        public TargetValueSettings TargetValue = new()
+        {
+            TargetValuePolicy = TargetValuePolicy.RandomSet,
+            DefaultDicesForTargetGeneration = new List<DiceType>()
         };
 
         #endregion
@@ -100,7 +109,13 @@ namespace Blackset.Duel.Rules
         {
             public DiceThrowPolicy DiceThrowPolicy;
             public EffectsPolicy EffectsPolicy;
+        }
+
+        [Serializable]
+        public struct TargetValueSettings
+        {
             public TargetValuePolicy TargetValuePolicy;
+            public List<DiceType> DefaultDicesForTargetGeneration;
         }
 
         #endregion

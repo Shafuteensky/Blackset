@@ -12,6 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 242b94d261a34b66a8ee6f01249f1cb9, type: 3}
   m_Name: Duel Rules Config
   m_EditorClassIdentifier: Assembly-CSharp::Blackset.Duel.Rules.DuelRulesConfig
+  Scores:
+    MinFightScore: 0
+    MinDuelScore: 0
   SetComposition:
     DicesInSet: 6
     ConsumablesInSet: 6
@@ -28,4 +31,12 @@ MonoBehaviour:
   MechanicsPolicy:
     DiceThrowPolicy: 0
     EffectsPolicy: 0
+  TargetValue:
     TargetValuePolicy: 0
+    DefaultDicesForTargetGeneration:
+    - {fileID: 11400000, guid: fbd3a5ad0b3ef2940a4f73d042a419d7, type: 2}
+    - {fileID: 11400000, guid: 471cbfaa75a8b904fb3c95d36db6426f, type: 2}
+    - {fileID: 11400000, guid: 7b2c54bf4725d1a4db115c84e52f3363, type: 2}
+    - {fileID: 11400000, guid: 0ae8218b9522594459de916a9dc1bdfb, type: 2}
+    - {fileID: 11400000, guid: 62af0b23df6100641ba60be783e31f76, type: 2}
+    - {fileID: 11400000, guid: 98144d8369c0fd649a1a4aa9083c6aff, type: 2}

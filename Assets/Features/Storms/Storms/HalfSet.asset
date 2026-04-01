@@ -52,5 +52,8 @@ MonoBehaviour:
     enabled: 0
     value: 0
   targetValuePolicy:
+    enabled: 1
+    value: 1
+  dicesForTargetGeneration:
     enabled: 0
-    value: 0
+    value: []

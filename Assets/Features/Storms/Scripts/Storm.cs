@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using Blackset.Data.Base;
+using Blackset.Data.Items.Types;
 using Blackset.Duel.Rules;
 using UnityEngine;
 
@@ -47,6 +49,8 @@ namespace Blackset.Storms
         [Header("Целевое значение"), Space]
         [SerializeField]
         private RuleOverride<TargetValuePolicy> targetValuePolicy;
+        [SerializeField]
+        private RuleOverride<List<DiceType>> dicesForTargetGeneration;
         
         // [Header("Целевое значение"), Space] // TODO модификация ЦЗ
         // [SerializeField]
@@ -73,6 +77,7 @@ namespace Blackset.Storms
             diceThrowPolicy.Apply(ref config.DiceThrowPolicy);
             effectsPolicy.Apply(ref config.EffectsPolicy);
             targetValuePolicy.Apply(ref config.TargetValuePolicy);
+            dicesForTargetGeneration.Apply(ref config.DicesForTargetGeneration);
         }
     }
 }

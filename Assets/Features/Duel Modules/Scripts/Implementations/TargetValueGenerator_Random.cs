@@ -30,7 +30,7 @@ namespace Blackset.Duel.Modules
                 // Бросок стандартного набора дайсов
                 case TargetValuePolicy.RandomSet:
                 {
-                    Dictionary<DiceType, int> setRolls = ThrowSet(request.Seed.GetHashCode());
+                    Dictionary<DiceType, int> setRolls = ThrowSet(request.Seed.GetHashCode(), request.DuelRules.DicesForTargetGeneration);
                     int newValue = GetValueFromSet(setRolls);
                     targetValue.SetTargetValue(newValue, false, setRolls);
                     break;
@@ -40,7 +40,8 @@ namespace Blackset.Duel.Modules
                 case TargetValuePolicy.RandomSetByDicesInSet:
                 {
                     int dicesToRoll = request.DuelRules.MaxThrowsPerFight;
-                    Dictionary<DiceType, int> setRolls = ThrowSet(request.Seed.GetHashCode(), dicesToRoll);
+                    Dictionary<DiceType, int> setRolls = ThrowSet(request.Seed.GetHashCode(), 
+                        request.DuelRules.DicesForTargetGeneration, dicesToRoll);
                     int newValue = GetValueFromSet(setRolls);
                     targetValue.SetTargetValue(newValue, false, setRolls);
                     break;
@@ -77,19 +78,17 @@ namespace Blackset.Duel.Modules
             return result;
         }
         
-        private Dictionary<DiceType, int> ThrowSet(int seed, int throwCount = DEFAULT_ROLLS_NUMBER)
+        private Dictionary<DiceType, int> ThrowSet(int seed, List<DiceType> dices, int throwCount = DEFAULT_ROLLS_NUMBER)
         {
             System.Random random = new(seed);
             Dictionary<DiceType, int> rolls = new();
-            List<DiceType> rollTypes = GameData.Instance.DiceTypes.Data.OfType<DiceType>()
-                .Where(d => !d.IsRestricted).ToList();
 
-            if (rollTypes.Count == 0)
+            if (dices.Count == 0)
                 return rolls;
 
             for (int i = 0; i < throwCount; i++)
             {
-                DiceType diceType = rollTypes[i % rollTypes.Count];
+                DiceType diceType = dices[i % dices.Count];
                 rolls[diceType] = random.Next(1, diceType.SidesNumber + 1);
             }
 
