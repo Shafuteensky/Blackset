@@ -22,6 +22,7 @@ namespace Blackset.ObjectDistribution
 
         [Header("Точки распределения"), Space]
         [SerializeField] protected List<Transform> points = new();
+        [SerializeField] protected bool random = true;
 
         protected int nextPointIndex;
         protected bool isWrapWarningLogged;
@@ -47,24 +48,30 @@ namespace Blackset.ObjectDistribution
                 return;
             }
 
-            // Очистка существующих
             if (clearOnEnable)
             {
                 foreach (Transform child in factoryRoot)
+                {
                     Destroy(child.gameObject);
+                }
             }
 
-            // Детерминированно готовим shuffle по текущему списку EntryId
-            BuildDeterministicShuffleFromRoot();
+            if (random)
+            {
+                BuildDeterministicShuffleFromRoot();
+            }
+
             nextPointIndex = 0;
             isWrapWarningLogged = false;
-            
+
             factory.onObjectInstantiated += Place;
-            
-            // Раскладываем уже существующие элементы под root
-            if (!clearOnEnable) DistributeToPoint();
+
+            if (!clearOnEnable)
+            {
+                DistributeToPoint();
+            }
         }
-        
+
         protected virtual void OnDisable()
         {
             if (factory == null) return;
@@ -72,7 +79,7 @@ namespace Blackset.ObjectDistribution
         }
 
         /// <summary>
-        /// Распределить объекты в корне по заданным случайным координатам
+        /// Распределить объекты в корне по заданным координатам
         /// </summary>
         public void DistributeToPoint()
         {
@@ -98,7 +105,7 @@ namespace Blackset.ObjectDistribution
                 return;
             }
 
-            if (shuffledPointIndices == null || shuffledPointIndices.Length == 0)
+            if (random && (shuffledPointIndices == null || shuffledPointIndices.Length == 0))
             {
                 ServiceDebug.LogError("Точки не подготовлены (shuffle пуст), объект не распределен");
                 return;
@@ -111,7 +118,7 @@ namespace Blackset.ObjectDistribution
             }
 
             int orderIndex = nextPointIndex % points.Count;
-            int pointIndex = shuffledPointIndices[orderIndex];
+            int pointIndex = random ? shuffledPointIndices[orderIndex] : orderIndex;
 
             Transform targetPoint = points[pointIndex];
             if (targetPoint == null)
@@ -128,7 +135,7 @@ namespace Blackset.ObjectDistribution
         }
 
         #region Детерминированное случайное распределение
-        
+
         protected void BuildDeterministicShuffleFromRoot()
         {
             int seed = ComputeSeedFromOpponentsIds(factoryRoot);
@@ -156,7 +163,8 @@ namespace Blackset.ObjectDistribution
                 const uint prime = 16777619u;
 
                 int count = root.childCount;
-                hash ^= (uint)count; hash *= prime;
+                hash ^= (uint)count;
+                hash *= prime;
 
                 for (int i = 0; i < count; i++)
                 {
@@ -181,7 +189,7 @@ namespace Blackset.ObjectDistribution
                 return (int)hash;
             }
         }
-        
+
         #endregion
     }
 }

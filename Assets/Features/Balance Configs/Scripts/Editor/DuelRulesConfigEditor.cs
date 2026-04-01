@@ -15,12 +15,12 @@ namespace Blackset.Editor
 
         public override void OnInspectorGUI()
         {
-            DrawHeader();
+            DrawCustomHeader();
             EditorGUILayout.Space(4);
             DrawDefaultInspector();
         }
 
-        private void DrawHeader()
+        private void DrawCustomHeader()
         {
             Rect rect = GUILayoutUtility.GetRect(0f, 36f, GUILayout.ExpandWidth(true));
 

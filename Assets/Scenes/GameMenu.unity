@@ -3047,6 +3047,7 @@ GameObject:
   - component: {fileID: 696543040}
   - component: {fileID: 696543042}
   - component: {fileID: 696543041}
+  - component: {fileID: 696543043}
   m_Layer: 0
   m_Name: Point Light
   m_TagString: Untagged
@@ -3163,6 +3164,21 @@ Light:
   m_LightUnit: 1
   m_LuxAtDistance: 1
   m_EnableSpotReflector: 1
+--- !u!114 &696543043
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 696543039}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bade68216ee140e3a44a36ac8298c2be, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Features.Light_Tools.CandleLightFlicker
+  flickerStrength: 0.2
+  flickerSpeed: 6
+  smoothing: 12
 --- !u!1 &702741568
 GameObject:
   m_ObjectHideFlags: 0
@@ -4996,6 +5012,7 @@ GameObject:
   - component: {fileID: 1105907255}
   - component: {fileID: 1105907257}
   - component: {fileID: 1105907256}
+  - component: {fileID: 1105907258}
   m_Layer: 0
   m_Name: Point Light (1)
   m_TagString: Untagged
@@ -5112,6 +5129,21 @@ Light:
   m_LightUnit: 1
   m_LuxAtDistance: 1
   m_EnableSpotReflector: 1
+--- !u!114 &1105907258
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1105907254}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bade68216ee140e3a44a36ac8298c2be, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Features.Light_Tools.CandleLightFlicker
+  flickerStrength: 0.2
+  flickerSpeed: 6
+  smoothing: 12
 --- !u!1 &1116243014
 GameObject:
   m_ObjectHideFlags: 0
@@ -5600,6 +5632,7 @@ GameObject:
   - component: {fileID: 1350734917}
   - component: {fileID: 1350734919}
   - component: {fileID: 1350734918}
+  - component: {fileID: 1350734920}
   m_Layer: 0
   m_Name: Point Light (2)
   m_TagString: Untagged
@@ -5716,6 +5749,21 @@ Light:
   m_LightUnit: 1
   m_LuxAtDistance: 1
   m_EnableSpotReflector: 1
+--- !u!114 &1350734920
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1350734916}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bade68216ee140e3a44a36ac8298c2be, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Features.Light_Tools.CandleLightFlicker
+  flickerStrength: 0.2
+  flickerSpeed: 6
+  smoothing: 12
 --- !u!114 &1377067612 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1492540657575868658, guid: 039cbf86d2c961c4a8e79992d57ccfe5, type: 3}
@@ -5771,6 +5819,7 @@ GameObject:
   - component: {fileID: 1383757603}
   - component: {fileID: 1383757602}
   - component: {fileID: 1383757601}
+  - component: {fileID: 1383757604}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -5896,6 +5945,24 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
+--- !u!114 &1383757604
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1383757599}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d1712b1cea0e42d2bb394393b2a5b43b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Blackset.CameraEffects.CameraSwayTween
+  positionOffset: {x: 0.02, y: 0.015, z: 0}
+  rotationOffset: {x: 0.075, y: 0.2, z: 0}
+  duration: 4
+  ease: 4
+  playOnEnable: 1
+  useUnscaledTime: 0
 --- !u!1001 &1398654519
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6879,6 +6946,7 @@ MonoBehaviour:
   - {fileID: 1382235216}
   - {fileID: 286775282}
   - {fileID: 159691830}
+  random: 1
 --- !u!114 &1710665786 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4609305668720538349, guid: 039cbf86d2c961c4a8e79992d57ccfe5, type: 3}
