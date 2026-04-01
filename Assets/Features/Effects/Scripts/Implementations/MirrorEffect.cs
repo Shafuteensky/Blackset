@@ -21,7 +21,7 @@ namespace Blackset.Effects
             if (!participant.FightState.TryGetLastRoll(out RollHistoryEntry currentRoll))
                 return false;
             
-            string opponentId = ResolveOpponentId(context);
+            string opponentId = GetOpponentId(context);
             if (string.IsNullOrEmpty(opponentId))
                 return false;
 

@@ -1,5 +1,6 @@
 using Blackset.Data.Base;
 using Blackset.Data.Items.Types;
+using Blackset.Duel.Rules;
 using Blackset.DuelScore;
 using Blackset.Inventories;
 using Blackset.Inventories.Items;
@@ -28,28 +29,35 @@ namespace Blackset.Data.Registries
         [field: SerializeField]
         [field: Tooltip("Конфигурация прогресса игрока (баланса)")]
         public ProgressionConfig ProgressionConfig { get; private set; }
-        
+
         /// <summary>
         /// Конфигурация баланса наград за дуэли
         /// </summary>
         [field: SerializeField]
         [field: Tooltip("Конфигурация баланса наград за дуэли")]
         public RewardConfig RewardConfig { get; private set; }
-        
+
         /// <summary>
         /// Конфигурация баланса заработка очков дуэли
         /// </summary>
         [field: SerializeField]
         [field: Tooltip("Конфигурация баланса заработка очков дуэли")]
         public DuelScoreConfig DuelScoreConfig { get; private set; }
-        
+
+        /// <summary>
+        /// Конфигурация правил дуэли
+        /// </summary>
+        [field: SerializeField]
+        [field: Tooltip("Конфигурация правил дуэли")]
+        public DuelRulesConfig DuelRulesConfig { get; private set; }
+
         /// <summary>
         /// Конфигурация баланса магазина
         /// </summary>
         [field: SerializeField]
         [field: Tooltip("Конфигурация баланса магазина")]
         public ShopConfig ShopConfig { get; private set; }
-        
+
         // ==============================================
         [field: Header("Постоянные данные игрока"), Space]
 
@@ -59,14 +67,14 @@ namespace Blackset.Data.Registries
         [field: SerializeField]
         [field: Tooltip("Фасад данных игрока")]
         public PlayerDataFacade PlayerDataFacade { get; private set; }
-        
+
         /// <summary>
         /// Инвентарь для показа новых предметов
         /// </summary>
         [field: SerializeField]
         [field: Tooltip("Инвентарь показа новых предметов")]
         public Inventory NewItemsPresenterInventory { get; private set; }
-        
+
         // ==============================================
         [field: Header("Реестры предметов"), Space]
 

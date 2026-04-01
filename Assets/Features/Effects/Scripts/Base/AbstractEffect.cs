@@ -85,7 +85,7 @@ namespace Blackset.Effects
         /// <summary>
         /// Получить идентификатор соперника владельца эффекта
         /// </summary>
-        protected string ResolveOpponentId(EffectApplyContext context)
+        protected string GetOpponentId(EffectApplyContext context)
         {
             foreach (string participantId in context.DuelContext.Participants.Keys)
             {

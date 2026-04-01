@@ -27,7 +27,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 0ae8218b9522594459de916a9dc1bdfb, type: 2}
   - {fileID: 11400000, guid: 62af0b23df6100641ba60be783e31f76, type: 2}
   - {fileID: 11400000, guid: 98144d8369c0fd649a1a4aa9083c6aff, type: 2}
-  effect: {fileID: 0}
+  effect: {fileID: 11400000, guid: b5ff3c300945b5340892e3dbc640c374, type: 2}
   color: {r: 0.06058383, g: 0.4792453, b: 0.10389369, a: 1}
   budgetPrice: 2
   numbersConfig: {fileID: 11400000, guid: 7e62f7f30d5c99345886153742ab05fa, type: 2}

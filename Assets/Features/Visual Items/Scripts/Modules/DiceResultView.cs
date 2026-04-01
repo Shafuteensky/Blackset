@@ -16,8 +16,10 @@ namespace Blackset.Data.Items.Visual.Modules
         [Header("Билборд с результатом"), Space]
         [Tooltip("Корневой объект билборда (для show/hide)")]
         [SerializeField] private GameObject billboard;
-        [Tooltip("Текстовое значение результата")]
-        [SerializeField] private TMP_Text resultText;
+        [Tooltip("Текстовое значение финального результата")]
+        [SerializeField] private TMP_Text finalResultText;
+        [Tooltip("Текстовое значение сырого результата")]
+        [SerializeField] private TMP_Text rawResultText;
 
         [Header("Цифры на сторонах"), Space]
         // TODO: Сделать как в Dice Roller (пара transform-text)?
@@ -54,17 +56,24 @@ namespace Blackset.Data.Items.Visual.Modules
 
         private void ShowRawResults(DiceRolledEvent handler)
         {
-            if (resultText == null) return;
             // Только если этот дайс принадлежит бросившему, и брошен был именно этот дайс
             if (handler.ParticipantId != ownerParticipantId || handler.ChosenDiceId != itemId) return;
 
+            DuelParticipantState owner = duelController.DuelContext.Participants[ownerParticipantId];
+            string rawResult = owner.FightState.RollHistory[itemId].RawResult.ToString();
+            
             // TODO: Заменить на показ нужной грани
-            resultText.text = handler.RollResult.ToString();
+            if (finalResultText != null) finalResultText.text = rawResult;
+            if (rawResultText != null) 
+            {
+                EnableRawResult(false);
+                rawResultText.text = rawResult;
+            }
         }
 
         private void ShowResolvedResults(EffectsResolvedEvent _)
         {
-            if (resultText == null) return;
+            if (finalResultText == null) return;
 
             // Только если этот дайс принадлежит бросившему
             DuelParticipantState owner = duelController.DuelContext.Participants[ownerParticipantId];
@@ -72,18 +81,35 @@ namespace Blackset.Data.Items.Visual.Modules
                 // и брошен был именно этот дайс
                 owner.FightState.TurnState.SelectedDice.Value != itemId) return;
 
-            resultText.text = owner.FightState.RollHistory[itemId].FinalResult.ToString();
-            resultText.gameObject.SetActive(true);
+            int finalResult = owner.FightState.RollHistory[itemId].FinalResult;
+            int rawResult = owner.FightState.RollHistory[itemId].RawResult;
+            
+            finalResultText.text = finalResult.ToString();
+            EnableFinalResult(true);
+
+            if (finalResult != rawResult) EnableRawResult(true);
         }
 
         private void HideResults(BattleStartEvent _)
         {
-            if (resultText != null) resultText.gameObject.SetActive(false);
+            EnableRawResult(false);
+            EnableFinalResult(false);
         }
 
         private void Reset()
         {
-            if (resultText != null) resultText.text = String.Empty;
+            if (finalResultText != null) finalResultText.text = String.Empty;
+            if (rawResultText != null) rawResultText.text = String.Empty;
+        }
+
+        private void EnableRawResult(bool isEnabled)
+        {
+            if (rawResultText != null) rawResultText.gameObject.SetActive(isEnabled);
+        }
+
+        private void EnableFinalResult(bool isEnabled)
+        {
+            if (finalResultText != null) finalResultText.gameObject.SetActive(isEnabled);
         }
     }
 }

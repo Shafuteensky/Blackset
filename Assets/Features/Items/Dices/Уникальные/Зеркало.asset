@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Blackset.Data.DiceData
   id: 0b4d5163c9534c0a9e64670f9c664d43
   dataName: Mirror
-  dataDescription: Copeis previous opponent roll result
+  dataDescription: Copies previous opponent roll result
   baseAvailability: -1
   restrictions: []
   price: 6

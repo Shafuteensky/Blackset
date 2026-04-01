@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Blackset.Data.DiceData
   id: ea09700805ac49c98fdfd4e81b7122e6
   dataName: Stone
-  dataDescription: Clamps roll result at 3 min
+  dataDescription: Result cant be less than 1/4 of max
   baseAvailability: -1
   restrictions: []
   price: 6
