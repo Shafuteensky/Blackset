@@ -42,7 +42,7 @@ namespace Blackset.Duel.Sequence.States
             {
                 TurnParticipantState turnState = participant.FightState.TurnState;
                 turnState.ResetForNewTurn();
-                turnState.SetSelectedTargetParticipantId(participant.ParticipantId);
+                turnState.EnsureSelectedTargetParticipantId(participant.ParticipantId);
             }
 
             this.context = context;

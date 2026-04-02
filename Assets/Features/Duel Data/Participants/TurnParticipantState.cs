@@ -80,7 +80,6 @@ namespace Blackset.Duel.Participants
             ClearDeclaredDice();
             ClearSelectedDice();
             ClearSelectedConsumable();
-            ClearSelectedTargetParticipantId();
 
             RollModifiers.Reset();
         }
@@ -105,7 +104,7 @@ namespace Blackset.Duel.Participants
 
             return clone;
         }
-
+        
         #endregion
 
         #region Обновление данных за текущий ход
@@ -244,12 +243,17 @@ namespace Blackset.Duel.Participants
                 : targetParticipantId;
         }
 
+        #endregion
+
+        #region Помошь
+
         /// <summary>
-        /// Сбросить выбранную цель применения расходника
+        /// Убедиться, что цель применения установлена
         /// </summary>
-        public void ClearSelectedTargetParticipantId()
+        public void EnsureSelectedTargetParticipantId(string defaultParticipantId)
         {
-            SelectedTargetParticipantId.Value = String.Empty;
+            if (string.IsNullOrEmpty(SelectedTargetParticipantId.Value))
+                SelectedTargetParticipantId.Value = defaultParticipantId;
         }
 
         #endregion

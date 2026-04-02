@@ -11,6 +11,10 @@ namespace Blackset.Data.Items.Visual.Modules
     public sealed class ItemPositionController : BaseVisualItemModule
     {
         [SerializeField] private DOTweenAnimation animationTween;
+        
+        private float diceMoveDist = 7.5f;
+        private float consumableSelfMoveDist = 6.2f;
+        private float consumableTargetMoveDist = 9.2f;
 
         private string itemId;
         private string ownerParticipantId;
@@ -18,7 +22,6 @@ namespace Blackset.Data.Items.Visual.Modules
         private Transform itemTransform;
         private Vector3 initialPosition;
         private readonly Vector3 moveDirLocal = new(-1, 0, 0);
-        private readonly float moveDist = 7f;
 
         private DuelController duelController;
         bool hasMoved;
@@ -68,18 +71,29 @@ namespace Blackset.Data.Items.Visual.Modules
         
         #region Реакция на события
         
-        private void OnItemUsed(string usedItemId, string ownerId)
+        private void OnItemUsed(string usedItemId, string ownerId, string targetId = null)
         {
             if (usedItemId != itemId || ownerId != ownerParticipantId) return;
-            if (hasMoved && animationTween != null) return;
+            if (hasMoved) return;
+
             hasMoved = true;
 
-            MoveToRollTable(GetWorldPosition());
+            float moveDistance = diceMoveDist;
+
+            if (!string.IsNullOrEmpty(targetId))
+            {
+                moveDistance = targetId == ownerParticipantId
+                    ? consumableSelfMoveDist
+                    : consumableTargetMoveDist;
+            }
+
+            MoveToRollTable(GetWorldPosition(moveDistance));
         }
 
         private void OnDiceRolled(DiceRolledEvent handler) => OnItemUsed(handler.ChosenDiceId, handler.ParticipantId);
 
-        private void OnConsumableUsed(ConsumableUsedEvent handler) => OnItemUsed(handler.ChosenConsumableId, handler.ParticipantId);
+        private void OnConsumableUsed(ConsumableUsedEvent handler) => OnItemUsed(handler.ChosenConsumableId, 
+            handler.ParticipantOwnerId, handler.ParticipantTargetId);
 
         private void OnBattleStart(BattleStartEvent _)
         {
@@ -106,10 +120,10 @@ namespace Blackset.Data.Items.Visual.Modules
             animationTween.tween.Restart();
         }
 
-        private Vector3 GetWorldPosition()
+        private Vector3 GetWorldPosition(float distance)
         {
             Vector3 worldDir = itemTransform.parent.TransformDirection(moveDirLocal);
-            Vector3 target = itemTransform.position + worldDir * moveDist;
+            Vector3 target = itemTransform.position + worldDir * distance;
             return target;
         }
         

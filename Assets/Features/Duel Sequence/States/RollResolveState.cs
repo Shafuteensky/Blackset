@@ -89,7 +89,7 @@ namespace Blackset.Duel.Sequence.States
 
             participantFightState.MarkConsumableUsed(chosenConsumableId, targetParticipantId);
 
-            eventHub.Publish(new ConsumableUsedEvent(participantId, chosenConsumableId));
+            eventHub.Publish(new ConsumableUsedEvent(participantId, targetParticipantId, chosenConsumableId));
         }
 
         private int ResolveDiceRollWithModifiers(

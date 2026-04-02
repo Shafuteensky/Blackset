@@ -5,12 +5,14 @@ namespace Blackset.DuelEvents.EventTypes
     /// </summary>
     public struct ConsumableUsedEvent
     {
-        public string ParticipantId;
-        public string ChosenConsumableId;
+        public readonly string ParticipantOwnerId;
+        public readonly string ParticipantTargetId;
+        public readonly string ChosenConsumableId;
         
-        public ConsumableUsedEvent(string participantId, string chosenConsumableId)
+        public ConsumableUsedEvent(string participantOwnerId, string participantTargetId, string chosenConsumableId)
         {
-            ParticipantId = participantId;
+            ParticipantOwnerId = participantOwnerId;
+            ParticipantTargetId = participantTargetId;
             ChosenConsumableId = chosenConsumableId;
         }
     }
