@@ -5,7 +5,6 @@ using Blackset.Duel.Rolls;
 using Blackset.Effects;
 using Extensions.Helpers;
 using Extensions.Reactive;
-using UnityEngine;
 
 namespace Blackset.Duel.Participants
 {

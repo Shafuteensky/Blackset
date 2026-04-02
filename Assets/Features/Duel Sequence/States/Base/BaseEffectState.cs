@@ -53,7 +53,6 @@ namespace Blackset.Duel.Sequence.States
                         turnState.SelectedConsumable.Value,
                         usageState);
 
-                    source.Effect.TryApplyEffect(applyContext);
                     bool applied = source.Effect.TryApplyEffect(applyContext);
                     if (applied)
                     {
