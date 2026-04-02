@@ -9,10 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d6f8ddb594984b4989a541149f5c279c, type: 3}
-  m_Name: PlusPointsEffect
-  m_EditorClassIdentifier: Assembly-CSharp::Blackset.Effects.PlusPointsEffect
+  m_Script: {fileID: 11500000, guid: 3eef32f714d14066a43cce01eeed1b29, type: 3}
+  m_Name: PlusFightScore_Effect
+  m_EditorClassIdentifier: Assembly-CSharp::Blackset.Effects.PlusScoreEffect
   applyPolicy: 0
   effectPhase: 0
-  amount: 40
-  step: 20
+  amount: 5
+  step: 5

@@ -11,12 +11,10 @@ namespace Blackset.Effects
         /// Контекст дуэли
         /// </summary>
         public DuelContext DuelContext { get; }
-
         /// <summary>
         /// Текущая фаза применения
         /// </summary>
         public EffectPhase CurrentPhase { get; }
-
         /// <summary>
         /// Номер текущего броска в бою
         /// </summary>
@@ -26,7 +24,6 @@ namespace Blackset.Effects
         /// Идентификатор владельца эффекта
         /// </summary>
         public string OwnerParticipantId { get; }
-
         /// <summary>
         /// Идентификатор цели применения эффекта
         /// </summary>
@@ -36,7 +33,6 @@ namespace Blackset.Effects
         /// Идентификатор источника эффекта
         /// </summary>
         public string SourceInstanceId { get; }
-
         /// <summary>
         /// Тип источника эффекта
         /// </summary>
@@ -46,7 +42,6 @@ namespace Blackset.Effects
         /// Идентификатор выбранного дайса в текущем броске
         /// </summary>
         public string SelectedDiceInstanceId { get; }
-
         /// <summary>
         /// Идентификатор выбранного расходника в текущем броске
         /// </summary>

@@ -6,9 +6,9 @@ namespace Blackset.Effects
     /// Эффект добавления очков битвы владельцу
     /// </summary>
     [CreateAssetMenu(
-        fileName = nameof(PlusScoreEffect),
-        menuName = "Blackset/Effects/" + nameof(PlusScoreEffect))]
-    public class PlusScoreEffect : AbstractEffect
+        fileName = nameof(PlusFightScoreEffect),
+        menuName = "Blackset/Effects/" + nameof(PlusFightScoreEffect))]
+    public class PlusFightScoreEffect : AbstractEffect
     {
         [Header("Количество начисляемых очков битвы"), Space]
         [SerializeField] private int amount;
@@ -20,7 +20,10 @@ namespace Blackset.Effects
         
         protected override bool ApplyInternal(EffectApplyContext context)
         {
-            context.DuelContext.Participants[context.OwnerParticipantId].FightState.PersistentFightScoreModifier.Value += amount;
+            if (!context.DuelContext.Participants.TryGetValue(context.TargetParticipantId, out var participant))
+                return false;
+
+            participant.FightState.PersistentFightScoreModifier.Value += amount;
             return true;
         }
     }

@@ -15,7 +15,7 @@ namespace Blackset.Effects
 
         protected override bool ApplyInternal(EffectApplyContext context)
         {
-            if (!context.DuelContext.Participants.TryGetValue(context.OwnerParticipantId, out var participant))
+            if (!context.DuelContext.Participants.TryGetValue(context.TargetParticipantId, out var participant))
                 return false;
 
             participant.FightState.TurnState.RollModifiers.SetAdvantage();

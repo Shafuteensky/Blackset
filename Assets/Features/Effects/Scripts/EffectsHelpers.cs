@@ -1,8 +1,5 @@
-using Blackset.Data;
-using Blackset.Data.Items.Types;
 using Blackset.Data.Registries;
-using Blackset.Inventories.Cells;
-using UnityEngine;
+using Blackset.Duel.Participants;
 
 namespace Blackset.Effects
 {
@@ -11,6 +8,40 @@ namespace Blackset.Effects
     /// </summary>
     public static class EffectsHelpers
     {
+        #region Цель применения эффектов
+
+        /// <summary>
+        /// Определить целевого участника по типу источника эффекта
+        /// </summary>
+        /// <param name="ownerParticipantId">Идентификатор владельца источника</param>
+        /// <param name="turnState">Состояние участника на текущий ход</param>
+        /// <param name="sourceKind">Тип источника эффекта</param>
+        /// <returns>Идентификатор целевого участника</returns>
+        public static string ResolveTargetParticipantId(
+            string ownerParticipantId,
+            TurnParticipantState turnState,
+            EffectSourceKind sourceKind)
+        {
+            switch (sourceKind)
+            {
+                case EffectSourceKind.Consumable:
+                {
+                    if (turnState == null || string.IsNullOrEmpty(turnState.SelectedTargetParticipantId.Value))
+                        return ownerParticipantId;
+                    else
+                        return turnState.SelectedTargetParticipantId.Value;
+                }
+
+                case EffectSourceKind.Dice:
+                default:
+                    return ownerParticipantId;
+            }
+        }
+
+        #endregion
+        
+        #region Данные дайсов
+        
         /// <summary>
         /// Получить максимальное значение граней выбранного дайса
         /// </summary>
@@ -45,5 +76,7 @@ namespace Blackset.Effects
 
             return diceData.NumbersConfig.GetSideNumbers(diceType);
         }
+        
+        #endregion
     }
 }
