@@ -104,6 +104,7 @@ namespace Blackset.DecisionInput
 
             playerTurnState.IsDiceDeclared.Subscribe(OnReactiveChanged, true);
             playerTurnState.IsDiceChosen.Subscribe(OnReactiveChanged, true);
+            playerTurnState.IsConsumableChosen.Subscribe(OnReactiveChanged, true);
             playerTurnState.HasPassed.Subscribe(OnHasPassedChanged, true);
 
             ApplyStateToElements();
@@ -115,6 +116,7 @@ namespace Blackset.DecisionInput
 
             playerTurnState.IsDiceDeclared.Unsubscribe(OnReactiveChanged);
             playerTurnState.IsDiceChosen.Unsubscribe(OnReactiveChanged);
+            playerTurnState.IsConsumableChosen.Unsubscribe(OnReactiveChanged);
             playerTurnState.HasPassed.Unsubscribe(OnHasPassedChanged);
 
             playerTurnState = null;

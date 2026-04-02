@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Blackset.Data.ConsumableData
   id: 053592b8641143ddb7a8a75d9c08f92b
   dataName: Minus fight score
-  dataDescription: Remove 5 points from your fight score
+  dataDescription: Remove 5 points from fight score
   baseAvailability: -1
   restrictions: []
   price: 2

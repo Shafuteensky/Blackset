@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: PlusFightScore
   m_EditorClassIdentifier: Assembly-CSharp::Blackset.Data.ConsumableData
   id: 200d0a1a0e0f4d6da25b7a78090ba1e2
-  dataName: Plus score
-  dataDescription: Add 40 points to your duel score
+  dataName: Plus fight score
+  dataDescription: Add 5 points to fight score
   baseAvailability: -1
   restrictions: []
   price: 2

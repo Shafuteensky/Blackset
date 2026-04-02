@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: MinusDuelScore
   m_EditorClassIdentifier: Assembly-CSharp::Blackset.Data.ConsumableData
   id: 0f7a433bc7734ad289c13cb6e8754804
-  dataName: Minus points
-  dataDescription: Remove 40 points from your duel score
+  dataName: Minus duel score
+  dataDescription: Remove 40 points from duel score
   baseAvailability: -1
   restrictions: []
   price: 2

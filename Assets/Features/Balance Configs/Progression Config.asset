@@ -32,7 +32,7 @@ MonoBehaviour:
     buildValueWeight: 1
     masteryWeight: 1
     cunningWeight: 1
-    minMultiplier: 0.8
-    maxMultiplier: 1.4
+    minMultiplier: 0.5
+    maxMultiplier: 2
     sumModifierWeight: 1
   leagueGates: []

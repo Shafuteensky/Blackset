@@ -12,7 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3eef32f714d14066a43cce01eeed1b29, type: 3}
   m_Name: PlusFightScore_Effect
   m_EditorClassIdentifier: Assembly-CSharp::Blackset.Effects.PlusScoreEffect
-  applyPolicy: 0
-  effectPhase: 0
   amount: 5
   step: 5
