@@ -16,25 +16,24 @@ namespace Blackset.Effects
         
         protected override bool ApplyInternal(EffectApplyContext context)
         {
-            if (!context.DuelContext.Participants.TryGetValue(context.OwnerParticipantId, out var participant))
+            if (!TryGetTargetParticipant(context, out var participant))
                 return false;
             if (!participant.FightState.TryGetLastRoll(out RollHistoryEntry currentRoll))
                 return false;
-            
-            string opponentId = GetOpponentId(context);
-            if (string.IsNullOrEmpty(opponentId))
+
+            string counterpartId = GetCounterpartId(context, context.TargetParticipantId);
+            if (string.IsNullOrEmpty(counterpartId))
+                return false;
+            if (!context.DuelContext.Participants.TryGetValue(counterpartId, out var counterpartParticipant))
+                return false;
+            if (!counterpartParticipant.FightState.TryGetPreviousRoll(out RollHistoryEntry counterpartPreviousRoll))
                 return false;
 
-            if (!context.DuelContext.Participants.TryGetValue(opponentId, out var opponentParticipant))
-                return false;
-            if (!opponentParticipant.FightState.TryGetPreviousRoll(out RollHistoryEntry opponentLastRoll))
-                return false;
-
-            int ownerDiceMaxValue = EffectsHelpers.GetCurrentDiceMaxValue(context);
-            if (ownerDiceMaxValue <= 0)
+            int targetDiceMaxValue = EffectsHelpers.GetTargetCurrentDiceMaxValue(context);
+            if (targetDiceMaxValue <= 0)
                 return false;
 
-            currentRoll.FinalResult = Mathf.Min(opponentLastRoll.FinalResult, ownerDiceMaxValue);
+            currentRoll.FinalResult = Mathf.Min(counterpartPreviousRoll.FinalResult, targetDiceMaxValue);
             return true;
         }
     }

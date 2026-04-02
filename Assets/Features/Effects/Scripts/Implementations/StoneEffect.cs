@@ -19,13 +19,16 @@ namespace Blackset.Effects
 
         protected override bool ApplyInternal(EffectApplyContext context)
         {
-            if (!context.DuelContext.Participants.TryGetValue(context.OwnerParticipantId, out var participant))
+            if (!TryGetTargetParticipant(context, out var participant))
                 return false;
             if (!participant.FightState.TryGetLastRoll(out RollHistoryEntry currentRoll))
                 return false;
 
-            int minValue = GetCurrentDiceExpectedClamp(context, expectedValueFactor);
-            int maxValue = EffectsHelpers.GetCurrentDiceMaxValue(context);
+            int minValue = GetTargetDiceExpectedClamp(context, expectedValueFactor);
+            int maxValue = EffectsHelpers.GetTargetCurrentDiceMaxValue(context);
+
+            if (maxValue <= 0)
+                return false;
 
             currentRoll.FinalResult = Mathf.Min(
                 Mathf.Max(currentRoll.FinalResult, minValue),
@@ -34,9 +37,9 @@ namespace Blackset.Effects
             return true;
         }
 
-        public static int GetCurrentDiceExpectedClamp(EffectApplyContext context, float expectedValueFactor)
+        public static int GetTargetDiceExpectedClamp(EffectApplyContext context, float expectedValueFactor)
         {
-            int[] sideNumbers = EffectsHelpers.GetCurrentDiceSideNumbers(context);
+            int[] sideNumbers = EffectsHelpers.GetTargetCurrentDiceSideNumbers(context);
             if (sideNumbers == null || sideNumbers.Length == 0) return 0;
 
             float sum = 0f;

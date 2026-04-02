@@ -1,3 +1,4 @@
+using Blackset.Duel.Participants;
 using Blackset.Duel.Sequence;
 using Blackset.DuelEvents.EventTypes;
 using UnityEngine;
@@ -94,6 +95,27 @@ namespace Blackset.Effects
             }
 
             return string.Empty;
+        }
+
+        protected string GetCounterpartId(EffectApplyContext context, string participantId)
+        {
+            foreach (string currentParticipantId in context.DuelContext.Participants.Keys)
+            {
+                if (currentParticipantId != participantId)
+                    return currentParticipantId;
+            }
+
+            return string.Empty;
+        }
+        
+        protected bool TryGetOwnerParticipant(EffectApplyContext context, out DuelParticipantState participant)
+        {
+            return context.DuelContext.Participants.TryGetValue(context.OwnerParticipantId, out participant);
+        }
+
+        protected bool TryGetTargetParticipant(EffectApplyContext context, out DuelParticipantState participant)
+        {
+            return context.DuelContext.Participants.TryGetValue(context.TargetParticipantId, out participant);
         }
     }
 }

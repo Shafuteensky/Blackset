@@ -16,20 +16,22 @@ namespace Blackset.Effects
 
         protected override bool ApplyInternal(EffectApplyContext context)
         {
-            if (!context.DuelContext.Participants.TryGetValue(context.OwnerParticipantId, out var participant))
+            if (!TryGetTargetParticipant(context, out var participant))
                 return false;
             if (!participant.FightState.TryGetLastRoll(out RollHistoryEntry currentRoll))
                 return false;
-            
-            string opponentId = GetOpponentId(context);
-            int amount = currentRoll.RawResult;
-            context.DuelContext.Participants[opponentId].FightState.PersistentFightScoreModifier.Value -= amount;
 
+            string counterpartId = GetCounterpartId(context, context.TargetParticipantId);
+            if (string.IsNullOrEmpty(counterpartId))
+                return false;
+            if (!context.DuelContext.Participants.TryGetValue(counterpartId, out var counterpartParticipant))
+                return false;
+
+            int amount = currentRoll.RawResult;
+            counterpartParticipant.FightState.PersistentFightScoreModifier.Value -= amount;
 
             currentRoll.FinalResult = 0;
-            
             return true;
         }
-        
     }
 }
