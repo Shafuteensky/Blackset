@@ -45,6 +45,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3368080902617953602}
   - component: {fileID: 8337742511915947241}
+  - component: {fileID: 8505139495643868844}
   m_Layer: 0
   m_Name: Toggle
   m_TagString: Untagged
@@ -122,6 +123,22 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_IsOn: 1
+--- !u!114 &8505139495643868844
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2339178777051926295}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7011a51033254833ab61f25b49b20a35, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp-firstpass::Extensions.Audio.PointerSoundsPlayer
+  model: 2
+  spatialPreset: {fileID: 11400000, guid: b10f41c08c193e348a4d9399e7a45926, type: 2}
+  enterSound: {fileID: 0}
+  downSound: {fileID: 8300000, guid: 357da955262efa148aa88a65eb2a2c9f, type: 3}
 --- !u!1 &4945479139023538670
 GameObject:
   m_ObjectHideFlags: 0
@@ -412,8 +429,8 @@ MonoBehaviour:
   toggle: {fileID: 8337742511915947241}
   handle: {fileID: 2170635801585363285}
   background: {fileID: 3967005921519421897}
-  offPoint: {fileID: 780044221109834289}
   onPoint: {fileID: 931035824370658956}
+  offPoint: {fileID: 780044221109834289}
   offColor: {r: 1, g: 0.48235294, b: 0.48235294, a: 1}
   onColor: {r: 1, g: 1, b: 1, a: 1}
   duration: 0.3
