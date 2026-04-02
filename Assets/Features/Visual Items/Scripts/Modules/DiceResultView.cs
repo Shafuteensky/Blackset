@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Blackset.Duel.Participants;
+using Blackset.Duel.Rolls;
 using Blackset.Duel.Sequence;
 using Blackset.DuelEvents.EventTypes;
 using TMPro;
@@ -56,15 +57,19 @@ namespace Blackset.Data.Items.Visual.Modules
 
         private void ShowRawResults(DiceRolledEvent handler)
         {
-            // Только если этот дайс принадлежит бросившему, и брошен был именно этот дайс
             if (handler.ParticipantId != ownerParticipantId || handler.ChosenDiceId != itemId) return;
 
             DuelParticipantState owner = duelController.DuelContext.Participants[ownerParticipantId];
-            string rawResult = owner.FightState.RollHistory[itemId].RawResult.ToString();
-            
             // TODO: Заменить на показ нужной грани
+            Dictionary<string, RollHistoryEntry> rollHistory = owner.FightState.RollHistory;
+
+            if (!rollHistory.TryGetValue(itemId, out RollHistoryEntry rollEntry))
+                return;
+
+            string rawResult = rollEntry.RawResult.ToString();
+
             if (finalResultText != null) finalResultText.text = rawResult;
-            if (rawResultText != null) 
+            if (rawResultText != null)
             {
                 EnableRawResult(false);
                 rawResultText.text = rawResult;
@@ -75,15 +80,17 @@ namespace Blackset.Data.Items.Visual.Modules
         {
             if (finalResultText == null) return;
 
-            // Только если этот дайс принадлежит бросившему
             DuelParticipantState owner = duelController.DuelContext.Participants[ownerParticipantId];
-            if (owner.ParticipantId != ownerParticipantId ||
-                // и брошен был именно этот дайс
-                owner.FightState.TurnState.SelectedDice.Value != itemId) return;
+            if (owner.ParticipantId != ownerParticipantId || owner.FightState.TurnState.SelectedDice.Value != itemId)
+                return;
 
-            int finalResult = owner.FightState.RollHistory[itemId].FinalResult;
-            int rawResult = owner.FightState.RollHistory[itemId].RawResult;
-            
+            Dictionary<string, RollHistoryEntry> rollHistory = owner.FightState.RollHistory;
+            if (!rollHistory.TryGetValue(itemId, out RollHistoryEntry rollEntry))
+                return;
+
+            int finalResult = rollEntry.FinalResult;
+            int rawResult = rollEntry.RawResult;
+
             finalResultText.text = finalResult.ToString();
             EnableFinalResult(true);
 

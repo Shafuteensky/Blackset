@@ -23,12 +23,12 @@ namespace Blackset.Effects
             if (!participant.FightState.TryGetPreviousRoll(out RollHistoryEntry previousRoll))
                 return false;
 
-            int ownerDiceMaxValue = EffectsHelpers.GetCurrentDiceMaxValue(context);
-            if (ownerDiceMaxValue <= 0)
+            int targetDiceMaxValue = EffectsHelpers.GetTargetCurrentDiceMaxValue(context);
+            if (targetDiceMaxValue <= 0)
                 return false;
 
             int bestValue = Mathf.Max(currentRoll.FinalResult, previousRoll.FinalResult);
-            currentRoll.FinalResult = Mathf.Min(bestValue, ownerDiceMaxValue);
+            currentRoll.FinalResult = Mathf.Min(bestValue, targetDiceMaxValue);
             return true;
         }
     }
