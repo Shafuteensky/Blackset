@@ -13,8 +13,8 @@ namespace Blackset.Data.Items.Visual.Modules
         [SerializeField] private DOTweenAnimation animationTween;
         
         private float diceMoveDist = 7.5f;
-        private float consumableSelfMoveDist = 6.2f;
-        private float consumableTargetMoveDist = 9.2f;
+        private float consumableSelfMoveDist = 5.8f;
+        private float consumableTargetMoveDist = 9.4f;
 
         private string itemId;
         private string ownerParticipantId;
