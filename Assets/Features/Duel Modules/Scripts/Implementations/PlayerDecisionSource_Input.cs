@@ -83,6 +83,20 @@ namespace Blackset.Duel.Modules
             TurnParticipantState turnState = duelContext.Participants[participantId].FightState.TurnState;
             turnState.ToggleSelectedConsumable(selection.SelectedItemId);
         }
+        
+        /// <summary>
+        /// Вызывается UI при выборе цели расходника участником
+        /// </summary>
+        /// <param name="participantId">Участник, применяющий расходник</param>
+        /// <param name="targetParticipantId">Цель применения его расходника</param>
+        public void OnConsumableTargetSelected(string participantId, string targetParticipantId)
+        {
+            if (!CanAccept(participantId) || currentStage != PlanningStageType.Selection) return;
+
+            TurnParticipantState turnState = duelContext.Participants[participantId].FightState.TurnState;
+            turnState.SetSelectedTargetParticipantId(targetParticipantId);
+        }
+
 
         /// <summary>
         /// Вызывается UI при подтверждении текущего этапа

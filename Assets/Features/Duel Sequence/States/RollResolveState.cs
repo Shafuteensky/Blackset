@@ -2,6 +2,7 @@ using Blackset.Duel.Context;
 using Blackset.Duel.Modules;
 using Blackset.Duel.Participants;
 using Blackset.DuelEvents.EventTypes;
+using Blackset.Effects;
 using Extensions.FiniteStateMachine;
 using UnityEngine;
 
@@ -33,8 +34,8 @@ namespace Blackset.Duel.Sequence.States
 
         public void Exit(DuelContext context) { }
 
-        #region Inner
-        
+        #region Обработка данных о броске и примененных расходниках
+
         private void ProcessParticipant(
             DuelContext context,
             string participantId,
@@ -81,11 +82,16 @@ namespace Blackset.Duel.Sequence.States
             if (!participantFightState.TurnState.IsConsumableChosen.Value) return;
 
             string chosenConsumableId = participantFightState.TurnState.SelectedConsumable.Value;
-            participantFightState.MarkConsumableUsed(chosenConsumableId, participantId);
-            
+            string targetParticipantId = EffectsHelpers.ResolveTargetParticipantId(
+                participantId,
+                participantFightState.TurnState,
+                EffectSourceKind.Consumable);
+
+            participantFightState.MarkConsumableUsed(chosenConsumableId, targetParticipantId);
+
             eventHub.Publish(new ConsumableUsedEvent(participantId, chosenConsumableId));
         }
-        
+
         private int ResolveDiceRollWithModifiers(
             DuelContext context,
             string participantId,
@@ -94,11 +100,13 @@ namespace Blackset.Duel.Sequence.States
             IDiceRollPipeline diceRoller,
             out bool isCrit)
         {
+            
             if (rollModifiers.HasAdvantage.Value)
             {
                 int first = diceRoller.RollDice(context, participantId, chosenDiceId, out bool firstCrit);
                 int second = diceRoller.RollDice(context, participantId, chosenDiceId, out bool secondCrit);
 
+                Debug.LogError(context.Participants[participantId].IsPlayer + ", " + first + "/"+second);
                 int best = Mathf.Max(first, second);
                 isCrit = best == first ? firstCrit : secondCrit;
                 return best;
@@ -109,6 +117,7 @@ namespace Blackset.Duel.Sequence.States
                 int first = diceRoller.RollDice(context, participantId, chosenDiceId, out bool firstCrit);
                 int second = diceRoller.RollDice(context, participantId, chosenDiceId, out bool secondCrit);
 
+                Debug.LogError(context.Participants[participantId].IsPlayer + ", " + first + "/"+second);
                 int worst = Mathf.Min(first, second);
                 isCrit = worst == first ? firstCrit : secondCrit;
                 return worst;
@@ -116,7 +125,7 @@ namespace Blackset.Duel.Sequence.States
 
             return diceRoller.RollDice(context, participantId, chosenDiceId, out isCrit);
         }
-        
+
         #endregion
     }
 }

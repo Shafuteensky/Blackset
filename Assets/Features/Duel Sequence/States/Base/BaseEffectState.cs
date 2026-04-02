@@ -4,7 +4,6 @@ using Blackset.Duel.Modules;
 using Blackset.Duel.Participants;
 using Blackset.DuelEvents.EventTypes;
 using Blackset.Effects;
-using UnityEngine;
 
 namespace Blackset.Duel.Sequence.States
 {
@@ -34,13 +33,20 @@ namespace Blackset.Duel.Sequence.States
                     ItemUsageState usageState = ResolveUsageState(participant.FightState, source);
                     if (usageState == null) continue;
 
+                    string selectedTargetParticipantId = EffectsHelpers.ResolveTargetParticipantId(
+                        participantId,
+                        turnState,
+                        source.SourceKind);
+
                     if (IsCurrentlySelectedSource(turnState, source) && !usageState.IsUsed)
-                        usageState.MarkUsed(context.Progress.ThrowNumber.Value, participantId);
+                    {
+                        usageState.MarkUsed(context.Progress.ThrowNumber.Value, selectedTargetParticipantId);
+                    }
 
                     string targetParticipantId = string.IsNullOrEmpty(usageState.TargetParticipantId)
-                        ? participantId
+                        ? selectedTargetParticipantId
                         : usageState.TargetParticipantId;
-                        
+
                     EffectApplyContext applyContext = new EffectApplyContext(
                         context,
                         Phase,
@@ -62,7 +68,7 @@ namespace Blackset.Duel.Sequence.States
                             source.SourceInstanceId,
                             Phase,
                             source.Effect.GetType().Name
-                            ));
+                        ));
                     }
                 }
             }
@@ -74,12 +80,12 @@ namespace Blackset.Duel.Sequence.States
         {
             switch (source.SourceKind)
             {
-                case EffectSourceKind.Dice:       return fightState.GetOrCreateDiceUsageState(source.SourceInstanceId);
+                case EffectSourceKind.Dice:
+                    return fightState.GetOrCreateDiceUsageState(source.SourceInstanceId);
                 case EffectSourceKind.Consumable:
-                {
                     return fightState.GetOrCreateConsumableUsageState(source.SourceInstanceId);
-                }
-                default:                          return null;
+                default:
+                    return null;
             }
         }
 
@@ -90,7 +96,8 @@ namespace Blackset.Duel.Sequence.States
                 case EffectSourceKind.Dice:
                     return turnState.IsDiceChosen.Value && turnState.SelectedDice.Value == source.SourceInstanceId;
                 case EffectSourceKind.Consumable:
-                    return turnState.IsConsumableChosen.Value && turnState.SelectedConsumable.Value == source.SourceInstanceId;
+                    return turnState.IsConsumableChosen.Value &&
+                           turnState.SelectedConsumable.Value == source.SourceInstanceId;
                 default:
                     return false;
             }

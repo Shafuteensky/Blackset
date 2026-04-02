@@ -27,6 +27,8 @@ namespace Blackset.DecisionInput
         /// </summary>
         public override void RefreshInteractable()
         {
+            if (button == null) return;
+            
             switch (currentStage)
             {
                 case PlanningStageType.Declaration:

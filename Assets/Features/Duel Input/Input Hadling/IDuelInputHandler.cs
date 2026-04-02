@@ -17,10 +17,15 @@ namespace Blackset.DecisionInput
         public void OnConsumableSelected(string participantId, SelectionState selection);
 
         /// <summary>
+        /// Вызывается в UI при выборе цели применения расходника
+        /// </summary>
+        public void OnConsumableTargetSelected(string participantId, string targetParticipantId);
+
+        /// <summary>
         /// Вызывается в UI при запросе броска выбранного дайса
         /// </summary>
         public void OnInputCompletion();
-        
+
         /// <summary>
         /// Вызывается в UI при запросе паса
         /// </summary>

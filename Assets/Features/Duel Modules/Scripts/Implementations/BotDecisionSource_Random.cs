@@ -21,16 +21,17 @@ namespace Blackset.Duel.Modules
     {
         private const float PASS_CHANCE = 0.05f;
         private const float CONSUMABLE_USE_CHANCE = 0.2f;
+        private const float CONSUMABLE_SELF_TARGET_CHANCE = 0.5f;
 
         private string declaredDice = String.Empty;
-        
+
         public SelectionState BuildDeclaration(DuelContext context)
         {
             SelectionState selection = new();
             DuelParticipantState bot = context.Participants[context.OpponentId];
-            
+
             bool passed = Random.value <= PASS_CHANCE;
-            if (!passed && 
+            if (!passed &&
                 TryGetRandomUnused(bot.Sets.DiceSetInventory, bot.FightState.GetUsedDices(), out string unusedDiceId))
             {
                 selection.SelectItem(unusedDiceId);
@@ -41,25 +42,22 @@ namespace Blackset.Duel.Modules
                 selection.SelectItem(string.Empty);
                 declaredDice = string.Empty;
             }
-            
+
             return selection;
         }
-        
+
         public SelectionState BuildDiceSelection(DuelContext context)
         {
             SelectionState selection = new();
             DuelParticipantState bot = context.Participants[context.OpponentId];
-            
+
             OpponentData opponent = GameData.Instance.GetOpponent(context.Contract.OpponentId);
             bool isHonest = Random.value < opponent.CunningLevel;
-            if (!isHonest && 
-                TryGetRandomUnused(bot.Sets.DiceSetInventory, bot.FightState.GetUsedDices(), out string unusedDiceId))
-            {
+            if (!isHonest && TryGetRandomUnused(bot.Sets.DiceSetInventory, bot.FightState.GetUsedDices(), out string unusedDiceId))
                 selection.SelectItem(unusedDiceId);
-            }
             else
                 selection.SelectItem(declaredDice);
-            
+
             return selection;
         }
 
@@ -67,19 +65,29 @@ namespace Blackset.Duel.Modules
         {
             SelectionState selection = new();
             DuelParticipantState bot = context.Participants[context.OpponentId];
-            
+            TurnParticipantState turnState = bot.FightState.TurnState;
+
             bool consumableChosen = Random.value <= CONSUMABLE_USE_CHANCE;
-            if (consumableChosen && 
-                TryGetRandomUnused(bot.Sets.ConsumableSetInventory, bot.FightState.GetUsedConsumables(), out string unusedConsId))
+            if (consumableChosen && TryGetRandomUnused(bot.Sets.ConsumableSetInventory, bot.FightState.GetUsedConsumables(), out string unusedConsId))
             {
                 selection.SelectItem(unusedConsId);
+                turnState.SetSelectedTargetParticipantId(GetRandomTargetParticipantId(context));
             }
-            
+            else
+                turnState.SetSelectedTargetParticipantId(context.OpponentId);
+
             return selection;
         }
 
         #region Internal
-        
+
+        private string GetRandomTargetParticipantId(DuelContext context)
+        {
+            return Random.value < CONSUMABLE_SELF_TARGET_CHANCE
+                ? context.OpponentId
+                : context.PlayerId;
+        }
+
         private bool TryGetRandomUnused(
             Inventory registry,
             List<string> usedKeys,
@@ -87,7 +95,7 @@ namespace Blackset.Duel.Modules
         {
             resultKey = default;
             if (registry.Data.Count == 0) return false;
-            var availableKeys = new List<string>(registry.Data.Count);
+            List<string> availableKeys = new(registry.Data.Count);
 
             foreach (var inventoryCell in registry.Data)
             {
@@ -101,7 +109,7 @@ namespace Blackset.Duel.Modules
 
             return true;
         }
-        
+
         #endregion
     }
 }

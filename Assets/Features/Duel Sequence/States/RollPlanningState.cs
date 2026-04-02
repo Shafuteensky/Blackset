@@ -37,17 +37,19 @@ namespace Blackset.Duel.Sequence.States
         public void Enter(DuelContext context)
         {
             context.Progress.OnNewThrow();
-            
+
             foreach (DuelParticipantState participant in context.Participants.Values)
             {
-                participant.FightState.TurnState.ResetForNewTurn();
+                TurnParticipantState turnState = participant.FightState.TurnState;
+                turnState.ResetForNewTurn();
+                turnState.SetSelectedTargetParticipantId(participant.ParticipantId);
             }
 
             this.context = context;
-            
+
             botState = context.Participants[context.OpponentId].FightState.TurnState;
             playerState = context.Participants[context.PlayerId].FightState.TurnState;
-            
+
             botDecisionSource = modules.Get<IBotDecisionSource>();
             playerDecisionSource = modules.Get<IPlayerDecisionSource>();
 

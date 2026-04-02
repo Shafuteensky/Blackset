@@ -1,30 +1,26 @@
 using Blackset.Duel;
 using Blackset.Duel.Participants;
 using Blackset.Duel.Sequence;
-using Extensions.Generics;
+using UnityEngine;
 
 namespace Blackset.DecisionInput
 {
     /// <summary>
-    /// Базовая кнопка для окна планирования
+    /// Базовый элемент окна планирования
     /// </summary>
-    public abstract class AbstractPlanningButton : AbstractButton
+    public abstract class AbstractPlanningElement : MonoBehaviour
     {
         protected IDuelInputHandler inputHandler;
         protected TurnParticipantState turnState;
         protected PlanningStageType currentStage = PlanningStageType.None;
-
-        protected override void Awake()
-        {
-            base.Awake();
-            button.interactable = false;
-        }
 
         protected virtual void Start()
         {
             if (DuelController.Instance == null) return;
 
             inputHandler = InputRegistrar.Instance.InputHandler;
+            RefreshVisualState();
+            RefreshInteractable();
         }
 
         /// <summary>
@@ -33,6 +29,7 @@ namespace Blackset.DecisionInput
         public virtual void SetTurnState(TurnParticipantState state)
         {
             turnState = state;
+            RefreshVisualState();
             RefreshInteractable();
         }
 
@@ -42,20 +39,34 @@ namespace Blackset.DecisionInput
         public virtual void SetStage(PlanningStageType stage)
         {
             currentStage = stage;
+            RefreshVisualState();
             RefreshInteractable();
         }
 
         /// <summary>
-        /// Сбросить состояние кнопки
+        /// Сбросить состояние элемента
         /// </summary>
         public virtual void ResetState()
         {
             currentStage = PlanningStageType.None;
-            button.interactable = false;
+            SetInteractable(false);
+            RefreshVisualState();
         }
 
         /// <summary>
-        /// Обновить доступность кнопки
+        /// Установить доступность UI-элемента
+        /// </summary>
+        protected abstract void SetInteractable(bool state);
+
+        /// <summary>
+        /// Обновить визуальное состояние элемента
+        /// </summary>
+        protected virtual void RefreshVisualState()
+        {
+        }
+
+        /// <summary>
+        /// Обновить доступность элемента
         /// </summary>
         public abstract void RefreshInteractable();
     }

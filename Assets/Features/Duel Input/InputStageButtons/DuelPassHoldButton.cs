@@ -2,7 +2,6 @@ using Blackset.Duel.Sequence;
 using Blackset.DuelEvents.EventTypes;
 using Extensions.Events;
 using Extensions.Generics;
-using UnityEngine;
 
 namespace Blackset.DecisionInput
 {

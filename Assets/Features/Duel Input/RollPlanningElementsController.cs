@@ -11,8 +11,8 @@ namespace Blackset.DecisionInput
     /// </summary>
     public sealed class RollPlanningElementsController : MonoBehaviour
     {
-        [Header("Кнопки"), Space]
-        [SerializeField] private AbstractPlanningButton[] planningButtons;
+        [Header("Элементы планирования"), Space]
+        [SerializeField] private AbstractPlanningElement[] planningElements;
 
         private DuelController duelController;
         private TurnParticipantState playerTurnState;
@@ -21,8 +21,8 @@ namespace Blackset.DecisionInput
 
         private void Awake()
         {
-            if (planningButtons == null || planningButtons.Length == 0)
-                planningButtons = GetComponentsInChildren<AbstractPlanningButton>(true);
+            if (planningElements == null || planningElements.Length == 0)
+                planningElements = GetComponentsInChildren<AbstractPlanningElement>(true);
         }
 
         private void OnEnable()
@@ -54,8 +54,8 @@ namespace Blackset.DecisionInput
         public void ShowDeclaration()
         {
             currentStage = PlanningStageType.Declaration;
-            ApplyStateToButtons();
-            RefreshButtons();
+            ApplyStateToElements();
+            RefreshElements();
         }
 
         /// <summary>
@@ -64,8 +64,8 @@ namespace Blackset.DecisionInput
         public void ShowSelection()
         {
             currentStage = PlanningStageType.Selection;
-            ApplyStateToButtons();
-            RefreshButtons();
+            ApplyStateToElements();
+            RefreshElements();
         }
 
         private void OnDuelInited(DuelInitedEvent _)
@@ -89,6 +89,7 @@ namespace Blackset.DecisionInput
 
         private void OnDuelFinished(DuelFinishEvent _)
         {
+            ResetElements();
             UnbindTurnState();
             isInitialized = false;
         }
@@ -105,7 +106,7 @@ namespace Blackset.DecisionInput
             playerTurnState.IsDiceChosen.Subscribe(OnReactiveChanged, true);
             playerTurnState.HasPassed.Subscribe(OnHasPassedChanged, true);
 
-            ApplyStateToButtons();
+            ApplyStateToElements();
         }
 
         private void UnbindTurnState()
@@ -119,34 +120,39 @@ namespace Blackset.DecisionInput
             playerTurnState = null;
         }
 
-        private void ApplyStateToButtons()
+        private void ApplyStateToElements()
         {
-            if (planningButtons == null) return;
+            if (planningElements == null) return;
 
-            foreach (AbstractPlanningButton button in planningButtons)
+            foreach (AbstractPlanningElement element in planningElements)
             {
-                if (button == null) continue;
-                button.SetTurnState(playerTurnState);
-                button.SetStage(currentStage);
+                if (element == null) continue;
+                element.SetTurnState(playerTurnState);
+                element.SetStage(currentStage);
             }
         }
 
-        private void RefreshButtons()
+        private void RefreshElements()
         {
-            if (planningButtons == null) return;
+            if (planningElements == null) return;
 
-            foreach (AbstractPlanningButton button in planningButtons)
-                button?.RefreshInteractable();
+            foreach (AbstractPlanningElement element in planningElements)
+                element?.RefreshInteractable();
+        }
+
+        private void ResetElements()
+        {
+            if (planningElements == null) return;
+
+            foreach (AbstractPlanningElement element in planningElements)
+                element?.ResetState();
         }
 
         private void TryRestoreCurrentView()
         {
             if (!isInitialized || playerTurnState == null || playerTurnState.HasPassed.Value)
-            {
                 return;
-            }
 
-            // Если дайс уже объявлен — восстанавливаем стадию выбора
             if (playerTurnState.IsDiceDeclared.Value)
                 ShowSelection();
             else
@@ -156,13 +162,13 @@ namespace Blackset.DecisionInput
         private void OnReactiveChanged(bool _)
         {
             if (currentStage != PlanningStageType.None)
-                RefreshButtons();
+                RefreshElements();
         }
 
         private void OnHasPassedChanged(bool passed)
         {
             if (!passed && currentStage != PlanningStageType.None)
-                RefreshButtons();
+                RefreshElements();
         }
     }
 }
