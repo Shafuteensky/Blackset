@@ -67,7 +67,7 @@ namespace Blackset.Inventories.Items
             {
                 if (restriction == null) continue;
 
-                ItemAvailability blockedAvailability = restriction.GetBLockedAvailability(this);
+                ItemAvailability blockedAvailability = restriction.GetBlockedAvailability(this);
                 availability &= ~blockedAvailability;
 
                 if (availability == ItemAvailability.None) break;

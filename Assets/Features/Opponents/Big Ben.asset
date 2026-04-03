@@ -15,6 +15,9 @@ MonoBehaviour:
   id: ca7f595374214204863dabdfb86a5fb2
   dataName: Big Ben *
   dataDescription: Big balls
+  baseAvailability: -1
+  restrictions:
+  - {fileID: 11400000, guid: 420ff9c73fa017e4f8a3006b8e00f654, type: 2}
   buildValue: 1
   masteryLevel: 0.75
   cunningLevel: 0

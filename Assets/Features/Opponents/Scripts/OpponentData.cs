@@ -3,6 +3,8 @@ using Blackset.Data;
 using Blackset.Data.Base;
 using Blackset.Data.Items.Types;
 using Blackset.Data.Registries;
+using Blackset.ItemsRestrictions;
+using Blackset.OpponentsRestrictions;
 using UnityEngine;
 
 namespace Blackset.Opponents
@@ -28,6 +30,10 @@ namespace Blackset.Opponents
         /// </summary>
         public float CunningLevel => cunningLevel;
         
+        [Header("Доступ"), Space]
+        [SerializeField] private OpponentAvailability baseAvailability = OpponentAvailability.All;
+        [SerializeField] private List<OpponentRestriction> restrictions = new();
+        
         [Header("Параметры сложности"), Space]
         [SerializeField]
         [Tooltip("Ценность сборки: определяет распределение редкостей на сборку (0 — все редкости минимальные, 1 — максимальные)")]
@@ -50,6 +56,8 @@ namespace Blackset.Opponents
         [Tooltip("Пул расходников (для дуэли берутся случайные)")]
         protected List<ConsumableData> consumables = new();
 
+        #region Доступность предмета
+        
         /// <summary>
         /// Пул дайсов
         /// </summary>
@@ -94,6 +102,10 @@ namespace Blackset.Opponents
             return consumablesInPool;
         }
 
+        /// <summary>
+        /// Общий уровень сложности соперника
+        /// </summary>
+        /// <returns>Значение от 0 до 1</returns>
         public float DifficultyLevel()
         {
             float raw = 0f;
@@ -104,5 +116,43 @@ namespace Blackset.Opponents
             float average = raw / 3f;
             return average;
         }
+        
+        #endregion
+        
+        #region Доступность предмета
+        
+        /// <summary>
+        /// Уровень доступности предмета
+        /// </summary>
+        public OpponentAvailability GetAvailability()
+        {
+            OpponentAvailability availability = baseAvailability;
+
+            foreach (OpponentRestriction restriction in restrictions)
+            {
+                if (restriction == null) continue;
+
+                OpponentAvailability blockedAvailability = restriction.GetBlockedAvailability(this);
+                availability &= ~blockedAvailability;
+
+                if (availability == OpponentAvailability.None) break;
+            }
+
+            return availability;
+        }
+
+        /// <summary>
+        /// Доступен ли соперник к дуэли
+        /// </summary>
+        /// <returns>true если доступен, иначе false</returns>
+        public bool IsAvailableForDuel() => (GetAvailability() & OpponentAvailability.Duel) != 0;
+
+        /// <summary>
+        /// Доступен ли предмет к лиге
+        /// </summary>
+        /// <returns>true если доступен, иначе false</returns>
+        public bool IsAvailableForLeague() => (GetAvailability() & OpponentAvailability.League) != 0;
+        
+        #endregion
     }
 }

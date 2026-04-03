@@ -15,6 +15,9 @@ MonoBehaviour:
   id: 602807ea98c54e7cba0a9728a0ecce50
   dataName: 'Terry Fying '
   dataDescription: Very hard opponent
+  baseAvailability: -1
+  restrictions:
+  - {fileID: 11400000, guid: f08bd8ede37bada438c1f72deff716b7, type: 2}
   buildValue: 1
   masteryLevel: 1
   cunningLevel: 1

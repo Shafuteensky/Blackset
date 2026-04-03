@@ -15,6 +15,6 @@ namespace Blackset.ItemsRestrictions
         /// <summary>
         /// Получить флаги доступности, которые нужно заблокировать
         /// </summary>
-        public abstract ItemAvailability GetBLockedAvailability(InventoryItem item);
+        public abstract ItemAvailability GetBlockedAvailability(InventoryItem item);
     }
 }

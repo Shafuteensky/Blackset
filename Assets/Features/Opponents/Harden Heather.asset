@@ -15,6 +15,9 @@ MonoBehaviour:
   id: fa587991251b437d9f3d9a6c89cdb3f9
   dataName: Harden Heather
   dataDescription: Hard opponent
+  baseAvailability: -1
+  restrictions:
+  - {fileID: 11400000, guid: f08bd8ede37bada438c1f72deff716b7, type: 2}
   buildValue: 0.75
   masteryLevel: 0.75
   cunningLevel: 0.75

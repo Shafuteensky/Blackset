@@ -15,6 +15,9 @@ MonoBehaviour:
   id: b1419b4147854730ba79b39a3427eaeb
   dataName: Copy Cat *
   dataDescription: Thats you... In the mirror
+  baseAvailability: -1
+  restrictions:
+  - {fileID: 11400000, guid: 420ff9c73fa017e4f8a3006b8e00f654, type: 2}
   buildValue: 1
   masteryLevel: 1
   cunningLevel: 0.5

@@ -15,6 +15,9 @@ MonoBehaviour:
   id: 053a9e2287c0407384204789fec8b2bf
   dataName: Mid-Miles
   dataDescription: Medium opponent
+  baseAvailability: -1
+  restrictions:
+  - {fileID: 11400000, guid: 7901bc3bee7590b46b32ae7fb0ac8378, type: 2}
   buildValue: 0.5
   masteryLevel: 0.6
   cunningLevel: 0.4

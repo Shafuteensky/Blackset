@@ -15,6 +15,9 @@ MonoBehaviour:
   id: 8b96fce7322246a98d14a60b5db0d79e
   dataName: Norm
   dataDescription: Medium opponent
+  baseAvailability: -1
+  restrictions:
+  - {fileID: 11400000, guid: 7901bc3bee7590b46b32ae7fb0ac8378, type: 2}
   buildValue: 0.5
   masteryLevel: 0.4
   cunningLevel: 0.6

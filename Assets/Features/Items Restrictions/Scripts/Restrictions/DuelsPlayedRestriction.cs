@@ -4,23 +4,25 @@ using UnityEngine;
 
 namespace Blackset.ItemsRestrictions
 {
+    /// <summary>
+    /// Ограничение доступа к предмету по количеству сыграных дуэлей
+    /// </summary>
     [CreateAssetMenu(
         menuName = "Blackset/Items/Restrictions/Duels Played Restriction",
         fileName = "ItemRestriction_DuelsPlayed")]
     public sealed class DuelsPlayedRestriction : ItemRestriction
     {
-        [Header("Условие"), Space]
+        [Header("Количество дуэлей"), Space]
         [SerializeField] private int requiredDuels;
         
         /// <summary>
         /// Блокирует доступность предмета, если сыграно меньше требуемого количества дуэлей
         /// </summary>
-        public override ItemAvailability GetBLockedAvailability(InventoryItem item)
+        public override ItemAvailability GetBlockedAvailability(InventoryItem item)
         {
             int duelsPlayed = GameData.Instance.PlayerDataFacade.ProgressData.Data.DuelsPlayed;
 
             if (duelsPlayed < requiredDuels) return blockedAvailability;
-
             return ItemAvailability.None;
         }
     }
