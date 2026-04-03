@@ -3,6 +3,7 @@ using Blackset.Duel.Participants;
 using Blackset.DuelEvents.EventTypes;
 using Extensions.FiniteStateMachine;
 using Extensions.Helpers;
+using UnityEngine;
 
 namespace Blackset.Duel.Sequence.States
 {

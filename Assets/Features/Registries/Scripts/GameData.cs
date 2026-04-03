@@ -52,6 +52,13 @@ namespace Blackset.Data.Registries
         public DuelRulesConfig DuelRulesConfig { get; private set; }
 
         /// <summary>
+        /// Конфигурация баланса лиг
+        /// </summary>
+        [field: SerializeField]
+        [field: Tooltip("Конфигурация баланса лиг")]
+        public LeagueConfig LeagueConfig { get; private set; }
+
+        /// <summary>
         /// Конфигурация баланса магазина
         /// </summary>
         [field: SerializeField]

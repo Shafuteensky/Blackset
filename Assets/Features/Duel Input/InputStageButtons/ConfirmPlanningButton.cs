@@ -1,4 +1,5 @@
 using Blackset.Duel;
+using UnityEngine;
 
 namespace Blackset.DecisionInput
 {

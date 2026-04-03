@@ -324,7 +324,6 @@ namespace Blackset.Inventories
                 }
                 else
                     onCellUpdated?.Invoke(GetIdByIndex(index));
-                Debug.LogWarning("Removed");
             }
 
             FillDefaultSlotsIfNeeded();

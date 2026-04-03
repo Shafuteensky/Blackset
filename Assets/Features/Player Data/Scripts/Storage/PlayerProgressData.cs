@@ -34,6 +34,8 @@ namespace Blackset.Player
         /// </summary>
         public void OpponentDefeat(string opponentId)
         {
+            EnsureOpponentsList();
+
             for (int i = 0; i < DefeatedOpponents.Count; i++)
             {
                 if (DefeatedOpponents[i].OpponentId == opponentId)
@@ -58,6 +60,8 @@ namespace Blackset.Player
         /// </summary>
         public void OpponentWon(string opponentId)
         {
+            EnsureOpponentsList();
+
             for (int i = 0; i < DefeatedOpponents.Count; i++)
             {
                 if (DefeatedOpponents[i].OpponentId == opponentId)
@@ -76,5 +80,7 @@ namespace Blackset.Player
                 LossesNumber = 1
             });
         }
+        
+        private void EnsureOpponentsList() => DefeatedOpponents ??= new List<PlayedOpponentData>();
     }
 }

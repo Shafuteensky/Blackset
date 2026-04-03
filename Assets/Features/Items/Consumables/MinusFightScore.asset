@@ -17,7 +17,7 @@ MonoBehaviour:
   dataDescription: Remove 5 points from fight score
   baseAvailability: -1
   restrictions: []
-  price: 2
+  price: 1
   itemClass: 2
   set: {fileID: 11400000, guid: 121386a12336b73448b8d431d37a61d5, type: 2}
   availableTypes:

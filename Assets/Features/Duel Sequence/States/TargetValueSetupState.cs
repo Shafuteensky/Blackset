@@ -19,7 +19,7 @@ namespace Blackset.Duel.Sequence.States
         public void Enter(DuelContext context)
         {
             ITargetValueGenerator tvGenerator = modules.Get<ITargetValueGenerator>();
-            TargetValueRequest request = new TargetValueRequest(context.Seed, context.Rules, context.Contract.Mode);
+            TargetValueRequest request = new TargetValueRequest(context.Seed, context.Rules);
             TargetValueContext tvContext = tvGenerator.Generate(request);
             context.TargetValue = tvContext;
             

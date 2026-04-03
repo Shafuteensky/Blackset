@@ -1,3 +1,4 @@
+using Blackset.Data.Registries;
 using Extensions.Data;
 using Extensions.Generics;
 using Extensions.Helpers;
@@ -14,15 +15,11 @@ namespace Blackset.Player
         /// <summary>
         /// Данные об игроке
         /// </summary>
-        public PlayerDataFacade PlayerData => playerData;
+        public PlayerDataFacade PlayerData => GameData.Instance.PlayerDataFacade;
         
         [Header("Сохранение данных об обновлениях"), Space] 
         [SerializeField]
         protected string saveKey;
-        
-        [Header("Игровые данные"), Space]
-        [SerializeField]
-        protected PlayerDataFacade playerData;
         
         private int cachedDuelsPlayed;
 
@@ -45,13 +42,13 @@ namespace Blackset.Player
         /// <returns>true если с момента последнего запроса игрок сыграл в дуэль, иначе false</returns>
         private bool IsPlayerPlayedDuel()
         {
-            if (string.IsNullOrEmpty(saveKey) || playerData == null)
+            if (string.IsNullOrEmpty(saveKey) || PlayerData == null)
             {
                 ServiceDebug.LogError("Идентификатор ключа сохранения не задан или данные об игроке отсутствуют");
                 return false;
             }
             
-            int duelsPlayed = playerData.ProgressData.Data.DuelsPlayed;
+            int duelsPlayed = PlayerData.ProgressData.Data.DuelsPlayed;
             cachedDuelsPlayed = JsonSaveLoad.Load(saveKey, -1);
 
             if (duelsPlayed == cachedDuelsPlayed) return false;

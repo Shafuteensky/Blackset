@@ -55,20 +55,9 @@ namespace Blackset.Duel.Sequence
         
         private readonly EventHub eventHub = new();
 
-        protected override void Awake()
-        {
-            base.Awake();
-            
-            ServiceGuard.NotNull(modules, nameof(modules));
-            ServiceGuard.NotNull(selectedContract, nameof(selectedContract));
-            
-            DuelStartRequest request = new DuelStartRequest(selectedContract.GetSelectedData());
-            StartDuel(request);
-        }
-
         private void Update()
         {
-            if (stateMachine.IsRunning) stateMachine.Tick(context);
+            if (stateMachine is { IsRunning: true }) stateMachine.Tick(context);
         }
 
         // TODO Публикация событий состояний машины
@@ -84,7 +73,19 @@ namespace Blackset.Duel.Sequence
         /// <summary>
         /// Начать дуэль
         /// </summary>
-        /// <param name="request">Запрос начала дуэли</param>
+        public void StartDuel()
+        {
+            ServiceGuard.NotNull(modules, nameof(modules));
+            ServiceGuard.NotNull(selectedContract, nameof(selectedContract));
+            
+            DuelStartRequest request = new DuelStartRequest(selectedContract.GetSelectedData());
+            StartDuel(request);
+        }
+        
+        /// <summary>
+        /// Начать дуэль
+        /// </summary>
+        /// <param name="request">Запрос на начало дуэли</param>
         public void StartDuel(DuelStartRequest request)
         {
             if (!TryInitializeContext(out context)) return;
@@ -103,7 +104,7 @@ namespace Blackset.Duel.Sequence
         }
         
         #endregion
-
+        
         #region Инициализация
 
         private bool TryInitializeContext(out DuelContext duelContext)

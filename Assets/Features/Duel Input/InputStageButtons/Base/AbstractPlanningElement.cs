@@ -61,9 +61,7 @@ namespace Blackset.DecisionInput
         /// <summary>
         /// Обновить визуальное состояние элемента
         /// </summary>
-        protected virtual void RefreshVisualState()
-        {
-        }
+        protected virtual void RefreshVisualState() { }
 
         /// <summary>
         /// Обновить доступность элемента

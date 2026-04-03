@@ -17,7 +17,7 @@ namespace Blackset.Opponents
         /// Получить список соперников по доступности
         /// </summary>
         /// <param name="availability">Требуемая доступность</param>
-        public List<OpponentData> GetUnrestricted(OpponentAvailability availability = OpponentAvailability.None)
+        public List<OpponentData> GetUnrestricted(OpponentAvailability availability)
         {
             List<OpponentData> availableOpponents = new();
 
@@ -26,7 +26,6 @@ namespace Blackset.Opponents
                 if (GetAvailability(opponent, availability)) 
                     availableOpponents.Add(opponent);
             }
-            
             return availableOpponents;
         }
 

@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Blackset.Data.Registries;
 using Blackset.Opponents;
+using Blackset.OpponentsRestrictions;
 using UnityEngine;
 
 namespace Blackset.DuelContracts
@@ -47,7 +48,8 @@ namespace Blackset.DuelContracts
 
             if (number <= 0) return result;
 
-            int opponentsCount = gameData.Opponents.Data.Count;
+            List<OpponentData> availableOpponents = gameData.Opponents.GetUnrestricted(OpponentAvailability.Duel);
+            int opponentsCount = availableOpponents.Count;
 
             // 1) Сколько можем выдать без повторов
             int uniqueToTake = Mathf.Min(number, opponentsCount);
@@ -65,19 +67,19 @@ namespace Blackset.DuelContracts
 
                 (indices[i], indices[swapIndex]) = (indices[swapIndex], indices[i]);
 
-                OpponentData opponent = gameData.Opponents.Data[indices[i]];
+                OpponentData opponent = availableOpponents[indices[i]];
                 result.Add(new DuelContract(opponent));
             }
 
             // 3) Если нужно больше, чем есть — добираем с повторами
-            if (number > opponentsCount)
-            {
-                for (int i = uniqueToTake; i < number; i++)
-                {
-                    OpponentData opponent = gameData.Opponents.Data[Random.Range(0, opponentsCount)];
-                    result.Add(new DuelContract(opponent));
-                }
-            }
+            // if (number > opponentsCount)
+            // {
+            //     for (int i = uniqueToTake; i < number; i++)
+            //     {
+            //         OpponentData opponent = availableOpponents[Random.Range(0, opponentsCount)];
+            //         result.Add(new DuelContract(opponent));
+            //     }
+            // }
 
             return result;
         }

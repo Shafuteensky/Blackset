@@ -6,7 +6,6 @@ using Blackset.Duel.Participants;
 using Blackset.DuelEvents.EventTypes;
 using Blackset.Inventories;
 using Blackset.Inventories.Cells;
-using Blackset.Opponents;
 using Blackset.Player;
 using Extensions.FiniteStateMachine;
 using Extensions.Log;
@@ -82,7 +81,7 @@ namespace Blackset.Duel.Sequence.States
             foreach (DuelParticipantState participantData in context.Participants.Values)
             {
                 Inventory consumableInventory;
-                if (participantData.IsPlayer) consumableInventory = GameData.Instance.PlayerDataFacade.ConsumablesPool;
+                if (!participantData.IsPlayer) consumableInventory = GameData.Instance.PlayerDataFacade.ConsumablesPool;
                 else consumableInventory = participantData.Sets.ConsumableSetInventory;
                 
                 List<string> usedConsumables = participantData.FightState.GetUsedConsumables();
@@ -95,7 +94,10 @@ namespace Blackset.Duel.Sequence.States
         {
             foreach (string consumableId in usedConsumables)
             {
-                ItemContext consumableInSet = participantData.Sets.ConsumableSetInventory.GetById(consumableId).Item;
+                InventoryCell consumableItem = participantData.Sets.ConsumableSetInventory.GetById(consumableId);
+                if (consumableItem == null) continue;
+                
+                ItemContext consumableInSet = consumableItem.Item;
                 bool containsInPool = consumableInventory.Contains(consumableInSet, out string poolCellId);
                 if (!containsInPool) return;
                 

@@ -32,15 +32,10 @@ namespace Blackset.DuelContracts
         public ItemContext ItemReward { get; private set; }
         
         /// <summary>
-        /// Режим дуэли
-        /// </summary>
-        public DuelMode Mode { get; private set; }
-        
-        /// <summary>
         /// Новый контракт
         /// </summary>
         /// <param name="opponent">Данные соперника</param>
-        public DuelContract(OpponentData opponent, DuelMode mode = DuelMode.Standard) 
+        public DuelContract(OpponentData opponent) 
         {
             if (opponent == null)
             {
@@ -49,7 +44,6 @@ namespace Blackset.DuelContracts
             }
             
             OpponentId = opponent.Id;
-            Mode = mode;
 
             ItemsGenerator itemsGenerator = new ItemsGenerator();
             ItemClass rewardItemClass = GetRandomRewardItemClass();

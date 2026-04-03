@@ -3,7 +3,6 @@ using Blackset.Data;
 using Blackset.Data.Base;
 using Blackset.Data.Items.Types;
 using Blackset.Data.Registries;
-using Blackset.ItemsRestrictions;
 using Blackset.OpponentsRestrictions;
 using UnityEngine;
 

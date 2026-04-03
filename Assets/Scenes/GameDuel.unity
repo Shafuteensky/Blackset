@@ -699,6 +699,52 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 119165123}
   m_CullTransparentMesh: 1
+--- !u!1 &150740499
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 150740500}
+  - component: {fileID: 150740501}
+  m_Layer: 0
+  m_Name: League Controller
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &150740500
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 150740499}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1468159042}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &150740501
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 150740499}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf7f3814e6944d938ee8748bc53bff48, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Features.Leagues.LeagueController
+  dontDestroyOnLoad: 0
+  leagueDataContainer: {fileID: 11400000, guid: 003e92044b144de4eba9cdcd1e6d7744, type: 2}
 --- !u!1001 &167676873
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3238,6 +3284,54 @@ Transform:
   m_Children: []
   m_Father: {fileID: 831398243}
   m_LocalEulerAnglesHint: {x: 0, y: 310, z: 0}
+--- !u!1 &708624257
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 708624258}
+  - component: {fileID: 708624259}
+  m_Layer: 0
+  m_Name: Game Controller
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &708624258
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 708624257}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1468159042}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &708624259
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 708624257}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cfe093fc7475421aa962476954c4cd86, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Blackset.GameController.GameController
+  gameMode: {fileID: 11400000, guid: fa599cccdfac7cb469496bbb25f2241f, type: 2}
+  leagueWindowsController: {fileID: 1039883217}
+  DuelEndWindowController: {fileID: 272472058}
+  fallbackScene: {fileID: 11400000, guid: b512cbc5b8b44784e84fe8ca06c10592, type: 2}
 --- !u!1 &730690251
 GameObject:
   m_ObjectHideFlags: 0
@@ -5528,6 +5622,53 @@ CapsuleCollider:
   m_Height: 1.65
   m_Direction: 1
   m_Center: {x: 0, y: 0.98, z: 0}
+--- !u!1 &1039883215
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1039883216}
+  - component: {fileID: 1039883217}
+  m_Layer: 0
+  m_Name: LeagueResultsWindows
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1039883216
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1039883215}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1312721234}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1039883217
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1039883215}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 296c75f10bca44f0af0528e7a9115001, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Blackset.DuelUI.LeagueWindowsOpen
+  duelWinWindow: {fileID: 11400000, guid: d6403be0e50830b4693de00ec8441a6e, type: 2}
+  leagueWinWindow: {fileID: 11400000, guid: 86a03a328eaec2d43ab5ea6f614b3411, type: 2}
+  leagueLoseWindow: {fileID: 11400000, guid: 1a90263ae40e0f846832a76394950944, type: 2}
 --- !u!1 &1066487677
 GameObject:
   m_ObjectHideFlags: 0
@@ -6193,6 +6334,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 272472057}
+  - {fileID: 1039883216}
   m_Father: {fileID: 1936877674}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1312721235
@@ -6217,6 +6359,9 @@ MonoBehaviour:
   - {fileID: 1781865935141483434, guid: 224762deda9843042bb6ff723c6b7491, type: 3}
   - {fileID: 4212926667585172122, guid: d249de835d1c543469ce0dd83496e84a, type: 3}
   - {fileID: 4212926667585172122, guid: a46fba16639f00949bceadf3ea6aea2a, type: 3}
+  - {fileID: 4221296626000215803, guid: 990a74852931c2f44a3047f204f30733, type: 3}
+  - {fileID: 4636298011792682437, guid: 05027501a8139924cb8ae59190983db9, type: 3}
+  - {fileID: 7304694210355963892, guid: cb84686f0ec201648acfe0584b786581, type: 3}
   root: {fileID: 1501306726}
   openedUIWindows: []
   focusedWindow: {fileID: 0}
@@ -6245,12 +6390,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1327738398}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1936877674}
+  m_Father: {fileID: 1468159042}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1327738401
 MonoBehaviour:
@@ -6993,6 +7138,40 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4868997670459332151, guid: 5f80835addf1ae546b7526a156656d47, type: 3}
   m_PrefabInstance: {fileID: 1456062377}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1468159041
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1468159042}
+  m_Layer: 0
+  m_Name: Game
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1468159042
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1468159041}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 708624258}
+  - {fileID: 1327738399}
+  - {fileID: 150740500}
+  m_Father: {fileID: 1936877674}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1501306725
 GameObject:
   m_ObjectHideFlags: 0
@@ -8805,10 +8984,10 @@ Transform:
   - {fileID: 1312721234}
   - {fileID: 1921198931}
   - {fileID: 1677291257}
+  - {fileID: 1468159042}
   - {fileID: 397302197}
   - {fileID: 2105554652}
   - {fileID: 936905390}
-  - {fileID: 1327738399}
   - {fileID: 1004408825}
   - {fileID: 1226738810}
   - {fileID: 1085225381}
