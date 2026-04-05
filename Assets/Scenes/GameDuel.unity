@@ -745,6 +745,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Features.Leagues.LeagueController
   dontDestroyOnLoad: 0
   leagueDataContainer: {fileID: 11400000, guid: 003e92044b144de4eba9cdcd1e6d7744, type: 2}
+  selectedContract: {fileID: 11400000, guid: 453bec2cc2989fd44bcd049e2d00dec9, type: 2}
+  contractListContainer: {fileID: 11400000, guid: 2701bc2e283ae024f9feadaf1bba8a0d, type: 2}
 --- !u!1001 &167676873
 PrefabInstance:
   m_ObjectHideFlags: 0

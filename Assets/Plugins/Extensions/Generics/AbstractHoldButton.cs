@@ -11,8 +11,7 @@ namespace Extensions.Generics
     /// <summary>
     /// Абстракция зажимаемой кнопки
     /// </summary>
-    [RequireComponent(typeof(Button))]
-    public abstract class AbstractHoldButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IPointerExitHandler
+    public abstract class AbstractHoldButton : BaseAbstractButton, IPointerDownHandler, IPointerUpHandler, IPointerExitHandler
     {
         protected const float DEFAULT_HOLD_DURATION = 1f;
         
@@ -47,7 +46,6 @@ namespace Extensions.Generics
         [SerializeField]
         protected bool useUnscaledTime = true;
 
-        protected Button button;
         protected CoroutineTask holdTask;
 
         protected bool isHolding;
@@ -56,7 +54,7 @@ namespace Extensions.Generics
 
         protected virtual void Awake()
         {
-            button = GetComponent<Button>();
+            base.Awake();
             holdTask = new CoroutineTask(this);
         }
 
@@ -87,11 +85,6 @@ namespace Extensions.Generics
         public virtual void OnPointerExit(PointerEventData eventData) => TryCancelHold();
         
         #endregion
-        
-        /// <summary>
-        /// Нажатие на кнопку (зажатие выполнено)
-        /// </summary>
-        public abstract void OnButtonClick();
 
         #region Internal
 

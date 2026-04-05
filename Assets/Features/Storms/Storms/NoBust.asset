@@ -15,7 +15,19 @@ MonoBehaviour:
   id: 1c355731354745738a532f574683e262
   dataName: No bust
   dataDescription: "No loss on target value bust \u2014 the winner is the one who
-    was closer to the target value modulo!"
+    was closer to the target value!"
+  dicesInSet:
+    enabled: 0
+    value: 0
+  consumablesInSet:
+    enabled: 0
+    value: 0
+  dicesSetPolicy:
+    enabled: 0
+    value: 0
+  consumablesSetPolicy:
+    enabled: 0
+    value: 0
   maxRerolls:
     enabled: 0
     value: 0
@@ -30,7 +42,7 @@ MonoBehaviour:
     value: 0
   fightLossPolicy:
     enabled: 1
-    value: 1
+    value: 2
   maxThrowsPerFight:
     enabled: 0
     value: 0
@@ -40,3 +52,9 @@ MonoBehaviour:
   effectsPolicy:
     enabled: 0
     value: 0
+  targetValuePolicy:
+    enabled: 0
+    value: 0
+  dicesForTargetGeneration:
+    enabled: 0
+    value: []

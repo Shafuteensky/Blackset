@@ -225,6 +225,25 @@ namespace Blackset.Duel.Modules
                     break;
                 }
                 
+                case FightLossPolicy.Furthest:
+                {
+                    // Наибольшее отклонение от ЦЗ по модулю — кандидат на проигрыш
+                    int absDelta = Math.Abs(target - score);
+ 
+                    if (absDelta > minScore)
+                    {
+                        minScore = absDelta;
+                        candidateLoserId = participant.ParticipantId;
+                    }
+                    // Оба одинаково далеки от ЦЗ — нет однозначного проигравшего
+                    else if (absDelta == minScore)
+                    {
+                        candidateLoserId = string.Empty;
+                    }
+ 
+                    break;
+                }
+                
                 default:
                 {
                     ServiceDebug.LogError(

@@ -8,17 +8,13 @@ namespace Extensions.Generics
     /// Абстракция кнопки
     /// </summary>
     [RequireComponent(typeof(Button))]
-    public abstract class AbstractButton : MonoBehaviour
+    public abstract class AbstractButton : BaseAbstractButton
     {
         /// <summary>
         /// Событие, вызываемое после клика кнопки
         /// </summary>
         public event Action onButtonClicked;
         
-        protected Button button = default;
-
-        protected virtual void Awake() => button = GetComponent<Button>();
-
         protected virtual void OnEnable() => button.onClick.AddListener(OnButtonAction);
 
         protected virtual void OnDisable() => button.onClick.RemoveListener(OnButtonAction);
@@ -28,10 +24,5 @@ namespace Extensions.Generics
             OnButtonClick();
             onButtonClicked?.Invoke();
         }
-        
-        /// <summary>
-        /// Код, выполняемый по клику кнопки
-        /// </summary>
-        public abstract void OnButtonClick();
     }
 }

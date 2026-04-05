@@ -124,6 +124,9 @@ PrefabInstance:
       addedObject: {fileID: -1984379066966115446}
     - targetCorrespondingSourceObject: {fileID: 3759911328242118469, guid: 3665a06125009f44ea825be2e4e33ba7, type: 3}
       insertIndex: -1
+      addedObject: {fileID: 8433455876449458417}
+    - targetCorrespondingSourceObject: {fileID: 3759911328242118469, guid: 3665a06125009f44ea825be2e4e33ba7, type: 3}
+      insertIndex: -1
       addedObject: {fileID: 8171616465663320379}
     - targetCorrespondingSourceObject: {fileID: 3759911328242118469, guid: 3665a06125009f44ea825be2e4e33ba7, type: 3}
       insertIndex: -1
@@ -191,6 +194,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Extensions.Generics.HoldButtonFillIndicator
   fillImage: {fileID: 3775995702214263909}
+--- !u!114 &8433455876449458417
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7678346698542929376}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 203f0e2bfe1e46959f59a8b858fe8380, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Blackset.Game.SetGameModeButton
+  gameModeValue: {fileID: 11400000, guid: fa599cccdfac7cb469496bbb25f2241f, type: 2}
+  gameMode: 0
 --- !u!114 &8171616465663320379
 MonoBehaviour:
   m_ObjectHideFlags: 0

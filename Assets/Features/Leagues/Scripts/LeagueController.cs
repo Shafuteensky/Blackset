@@ -1,10 +1,13 @@
 using System;
+using System.Collections.Generic;
 using Blackset.Duel.Requests;
 using Blackset.Duel.Sequence;
+using Blackset.DuelContracts;
 using Blackset.DuelEvents.EventTypes;
 using Extensions.Log;
 using Extensions.Singleton;
 using Features.Duel.Data.FightEnd;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Features.Leagues
@@ -28,6 +31,8 @@ namespace Features.Leagues
         public event Action LeagueDuelWonEvent;
 
         [SerializeField] private LeagueDataContainer leagueDataContainer;
+        [SerializeField] private SelectedContract selectedContract;
+        [SerializeField] private ContractListContainer contractListContainer;
 
         private DuelController duelController;
 
@@ -65,6 +70,16 @@ namespace Features.Leagues
             currentDuelIndex = 0;
             isLeagueActive = true;
 
+            contractListContainer.Clear();
+            Debug.Log(leagueDataContainer.Data.DuelContracts.Count);
+            leagueDataContainer.GenerateNewLeague();
+            Debug.Log(leagueDataContainer.Data.DuelContracts.Count);
+            foreach (DuelContract contract in leagueDataContainer.Data.DuelContracts)
+            {
+                contractListContainer.Add(contract);
+                Debug.Log(contract);
+            }
+            
             StartCurrentDuel();
         }
 
@@ -80,7 +95,10 @@ namespace Features.Leagues
                 return;
             }
 
-            DuelStartRequest request = new DuelStartRequest(leagueDataContainer.Data.DuelContracts[currentDuelIndex]);
+            DuelContract activeContract = leagueDataContainer.Data.DuelContracts[currentDuelIndex];
+            selectedContract.Select(activeContract.Id);
+            
+            DuelStartRequest request = new DuelStartRequest(activeContract);
             duelController.StartDuel(request);
         }
 

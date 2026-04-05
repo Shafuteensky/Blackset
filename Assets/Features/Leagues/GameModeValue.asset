@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: GameModeValue
   m_EditorClassIdentifier: Assembly-CSharp::Blackset.GameController.GameModeValue
   id: GameModeValue
-  defaultValue: 1
-  isSaveable: 0
+  defaultValue: 0
+  isSaveable: 1
