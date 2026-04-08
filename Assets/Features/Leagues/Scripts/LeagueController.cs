@@ -98,6 +98,14 @@ namespace Features.Leagues
             LeagueStart?.Invoke();
         }
 
+        /// <summary>
+        /// Завершить лигу принужденно
+        /// </summary>
+        public void EndLeague()
+        {
+            LeagueLoseEvent?.Invoke();
+        }
+
         private void StartCurrentDuel()
         {
             if (leagueDataContainer.Data == null) return;

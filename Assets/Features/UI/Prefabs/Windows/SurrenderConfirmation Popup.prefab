@@ -172,6 +172,10 @@ PrefabInstance:
       propertyPath: m_Alpha
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6609229869543379841, guid: 7e25937fa10770f4ab1380c011bbd1a7, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6803290253558642765, guid: 7e25937fa10770f4ab1380c011bbd1a7, type: 3}
       propertyPath: loops
       value: 0
@@ -250,28 +254,16 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 3063516621963105634, guid: 7e25937fa10770f4ab1380c011bbd1a7, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 532470051411449920}
+      addedObject: {fileID: 5848608111744803047}
     - targetCorrespondingSourceObject: {fileID: 3063516621963105634, guid: 7e25937fa10770f4ab1380c011bbd1a7, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 5848608111744803047}
+      addedObject: {fileID: 1354494666168941751}
   m_SourcePrefab: {fileID: 100100000, guid: 7e25937fa10770f4ab1380c011bbd1a7, type: 3}
 --- !u!1 &8479120277977694220 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3063516621963105634, guid: 7e25937fa10770f4ab1380c011bbd1a7, type: 3}
   m_PrefabInstance: {fileID: 6856781925557835118}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &532470051411449920
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8479120277977694220}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 60d5e803afe749438a85dce5922f903b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Blackset.DuelUI.Controls.EndDuelButton
 --- !u!114 &5848608111744803047
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -284,3 +276,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0fcce01ad4348aaad3ac942e5e2dcaa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp-firstpass::Extensions.UIWindows.ButtonCloseUIWindow
+--- !u!114 &1354494666168941751
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8479120277977694220}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac12af58afa143ebb0783c1099351ac9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Blackset.Game.Controls.EndGameButton

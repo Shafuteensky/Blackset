@@ -3,6 +3,7 @@ using Blackset.DuelUI;
 using Blackset.LeaguesUI;
 using Extensions.Log;
 using Extensions.SceneFlow;
+using Extensions.Singleton;
 using Features.Leagues;
 using UnityEngine;
 
@@ -11,7 +12,8 @@ namespace Blackset.Game
     /// <summary>
     /// Контроллер режимов игры
     /// </summary>
-    public class GameController : MonoBehaviour
+    // TODO Перевести контроллеры режимов в не-синглтоны, вызывать через этот контроллер
+    public class GameController : MonoBehaviourSingleton<GameController>
     {
         [Header("Режимы игры"), Space]
         [SerializeField] private GameModeValue gameMode;
@@ -41,7 +43,21 @@ namespace Blackset.Game
                 leagueWindowsController.enabled = gameMode.Value == GameMode.League;
             if (DuelEndWindowController != null) 
                 DuelEndWindowController.enabled = gameMode.Value == GameMode.Duel;
+            
+            StartGame();
+        }
 
+        private void LoadFallbackScene()
+        {
+            if (fallbackScene != null) 
+                SceneController.Instance.LoadSceneByID(fallbackScene.Id);
+        }
+
+        /// <summary>
+        /// Начать игру по текущему режиму
+        /// </summary>
+        public void StartGame()
+        {
             switch (gameMode.Value)
             {
                 case GameMode.Duel:
@@ -59,10 +75,25 @@ namespace Blackset.Game
             }
         }
 
-        private void LoadFallbackScene()
+        /// <summary>
+        /// Завершить игру по текущему режиму
+        /// </summary>
+        public void EndGame()
         {
-            if (fallbackScene != null) 
-                SceneController.Instance.LoadSceneByID(fallbackScene.Id);
+            switch (gameMode.Value)
+            {
+                case GameMode.Duel:
+                    duelController.EndDuel();
+                    break;
+                
+                case GameMode.League:
+                    leagueController.EndLeague();
+                    break;
+                
+                default:
+                    ServiceDebug.LogError("Необработанный режим игры, игра не завершена");
+                    break;
+            }
         }
     }
 }
