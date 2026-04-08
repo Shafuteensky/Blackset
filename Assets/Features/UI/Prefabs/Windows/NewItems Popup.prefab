@@ -479,7 +479,6 @@ GameObject:
   - component: {fileID: 7304694210355963892}
   - component: {fileID: 755668823988314249}
   - component: {fileID: 7875064420772969097}
-  - component: {fileID: 676898300264772405}
   m_Layer: 0
   m_Name: NewItems Popup
   m_TagString: Untagged
@@ -693,18 +692,6 @@ MonoBehaviour:
   optionalScrambleMode: 0
   optionalShakeRandomnessMode: 0
   optionalString: 
---- !u!114 &676898300264772405
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6520272835044793193}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 382e506283544d80a2a6beefe1a98dbd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Blackset.Shop.PresenterInventoryCleaner
 --- !u!1 &7245319436221447348
 GameObject:
   m_ObjectHideFlags: 0
@@ -1103,6 +1090,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 4100400362722513085, guid: 5756bfce9e19bfe458725eda32eaa84a, type: 3}
       insertIndex: -1
       addedObject: {fileID: 7076671879064834246}
+    - targetCorrespondingSourceObject: {fileID: 4100400362722513085, guid: 5756bfce9e19bfe458725eda32eaa84a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6962212935107914530}
   m_SourcePrefab: {fileID: 100100000, guid: 5756bfce9e19bfe458725eda32eaa84a, type: 3}
 --- !u!224 &2021312734629950185 stripped
 RectTransform:
@@ -1126,6 +1116,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0fcce01ad4348aaad3ac942e5e2dcaa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp-firstpass::Extensions.UIWindows.ButtonCloseUIWindow
+--- !u!114 &6962212935107914530
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3063516621963105634}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 494fc9686a994764aad03e2e396e6c69, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Blackset.Shop.PresenterButtonInventoryCleaner
 --- !u!1001 &1713394514009389823
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -13,16 +13,23 @@ namespace Blackset.Shop
         [Header("Параметры показа"), Space]
         [Tooltip("Показать предметы при включении контроллера, если есть новые предметы")]
         [SerializeField] protected bool showOnEnable = true;
+        [Tooltip("Показать предметы при включении контроллера, если есть новые предметы")]
+        [SerializeField] protected bool showOnStart = false;
         
         protected Inventory presenterInventory;
 
-        protected virtual  void Awake() => presenterInventory = GameData.Instance.NewItemsPresenterInventory;
+        protected virtual void Awake() => presenterInventory = GameData.Instance.NewItemsPresenterInventory;
         
-        protected virtual  void OnEnable()
+        protected virtual void OnEnable()
         {
             presenterInventory.onItemAdded += ShowNewItems;
 
             if (showOnEnable && !presenterInventory.IsEmpty) ShowNewItems();
+        }
+
+        protected virtual void Start()
+        {
+            if (showOnStart && !presenterInventory.IsEmpty) ShowNewItems();
         }
         
         protected virtual  void OnDisable() => presenterInventory.onItemAdded -= ShowNewItems;

@@ -552,7 +552,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Blackset.Storms.StormController
   saveKey: StormController
-  playerData: {fileID: 11400000, guid: 2c23989d68545684e9ab72265b43e0bc, type: 2}
   stormChance: 0.5
   activeStorm: {fileID: 11400000, guid: 0772085f33c31274f95bac69b5e2deba, type: 2}
 --- !u!1 &155343132
@@ -929,7 +928,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 863cd563b5204217887a36a18daf165f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Blackset.Shop.AddedItemsWindowController
-  showOnEnable: 1
+  showOnEnable: 0
+  showOnStart: 1
   windowID: {fileID: 11400000, guid: 2ad7d848644627142bb2427508bfd84d, type: 2}
 --- !u!114 &222405587
 MonoBehaviour:
@@ -2881,7 +2881,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Features.Shop.ShopController
   saveKey: ShopListController
-  playerData: {fileID: 11400000, guid: 2c23989d68545684e9ab72265b43e0bc, type: 2}
   dicesToSell: 2
   consumablesToSell: 2
   dicesPacksToSell: 2
@@ -5618,7 +5617,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Blackset.Opponents.ContractListController
   saveKey: ContractsListController
-  playerData: {fileID: 11400000, guid: 2c23989d68545684e9ab72265b43e0bc, type: 2}
   contractList: {fileID: 11400000, guid: 2701bc2e283ae024f9feadaf1bba8a0d, type: 2}
   contractsToGenerate: 3
 --- !u!1 &1350734916
