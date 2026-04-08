@@ -15,26 +15,14 @@ namespace Extensions.SceneFlow
     /// <remarks>
     /// Управляет переключением сцен и ответственен за переходы между ними
     /// </remarks>
-    public class SceneController : MonoBehaviourSingleton<SceneController>
+    public sealed class SceneController : MonoBehaviourSingleton<SceneController>
     {
-        /// <summary>
-        /// Пара (связка) сцена-идентификатор
-        /// </summary>
-        [System.Serializable]
-        protected class SceneBinding
-        {
-            [field: SerializeField] public SceneID Id { get; private set; }
-
-            [field: SerializeField] public string SceneName { get; private set; }
-        }
-        
         #region Events
         
         /// <summary>
         /// Событие начала загрузки сцены
         /// </summary>
         public event Action onLoadingStart;
-        
         /// <summary>
         /// Событие обновления прогресса загрузки
         /// </summary>
@@ -42,7 +30,6 @@ namespace Extensions.SceneFlow
         /// Процент загрузки от 0 до 1
         /// </returns>
         public event Action<float> onLoadingProgressUpdate;
-        
         /// <summary>
         /// Событие окончания загрузки сцены
         /// </summary>
@@ -50,37 +37,48 @@ namespace Extensions.SceneFlow
 
         #endregion
         
+        #region Свойства
+        
         /// <summary>
         /// Состояние перехода между сценами
         /// </summary>
         /// <returns>true если в стадии перехода, false если переход завершен</returns>
         public bool IsTransitionInProgress => isTransitionInProgress;
-        
         /// <summary>
         /// Текущий прогресс
         /// </summary>
         public float CurrentProgress => currentProgress;
 
-        [Header("Стартовая сцена")]
-        [SerializeField]
-        protected SceneID firstScene = default;
-        [SerializeField]
-        protected bool loadFirstSceneOnStart = true;
+        #endregion
+        
+        #region Параметры
+        
+        [Header("Стартовая сцена"), Space]
+        [SerializeField] private SceneID firstScene;
+        [SerializeField] private bool loadFirstSceneOnStart = true;
 
-        [Header("Сцены проекта")]
-        [SerializeField]
-        protected SceneID loadingScene = default;
-        [SerializeField]
-        protected List<SceneBinding> scenes = new List<SceneBinding>();
+        [Header("Настройки перехода"), Space]
+        [Range(0f, 4f), Tooltip("Задержка перед загрузкой сцены (0 — моментальная загрузка на следующий кадр)")]
+        [SerializeField] private float transitionDelay;
+        [Min(0f), Tooltip("Таймаут попытки загрузки сцены перед уходом в fallback-сцену")]
+        [SerializeField] private float targetTimeout = 20f;
 
-        protected bool isTransitionInProgress = false;
-        protected float currentProgress = 0f;
+        [Header("Сцены проекта"), Space]
+        [SerializeField] private SceneID loadingScene;
+        [SerializeField] private List<SceneBinding> scenes = new();
 
-        protected CoroutineTask transitionTask = default;
-        [SerializeField]
-        protected float loadingTimeout = 20f;
-        [SerializeField]
-        protected float targetTimeout = 60f;
+        #endregion
+        
+        #region Внутренние переменные
+        
+        private bool isTransitionInProgress;
+        private float currentProgress;
+
+        private CoroutineTask transitionTask;
+        
+        #endregion
+        
+        #region MonoBehaviour
         
         protected override void Awake()
         {
@@ -88,7 +86,7 @@ namespace Extensions.SceneFlow
             transitionTask = new CoroutineTask(this);
         }
 
-        protected virtual void Start()
+        private void Start()
         {
             if (!loadFirstSceneOnStart)
                 return;
@@ -99,8 +97,12 @@ namespace Extensions.SceneFlow
                 return;
             }
 
-            LoadSceneByID(firstScene.Id, false);
+            LoadSceneByID(firstScene.Id);
         }
+
+        #endregion
+
+        #region Загрузка сцены
         
         /// <summary>
         /// Загрузка сцены по идентификатору
@@ -118,49 +120,17 @@ namespace Extensions.SceneFlow
                 return;
             }
 
-            string sceneName = String.Empty;
-            if (!TryGetSceneName(id, out sceneName))
+            if (!TryGetSceneName(id, out string sceneName))
             {
-                ServiceDebug.LogError( $"Сцена с идентификатором «{id}» не найдена");
+                ServiceDebug.LogError($"Сцена с идентификатором «{id}» не найдена");
                 return;
             }
 
+            isTransitionInProgress = true;
             transitionTask.Start(TransitionRoutine(sceneName, additive));
         }
-
-        protected bool TryGetSceneName(string id, out string sceneName)
-        {
-            sceneName = string.Empty;
-
-            foreach (SceneBinding binding in scenes)
-            {
-                if (binding == null)
-                    continue;
-
-                if (binding.Id == null)
-                    continue;
-
-                if (binding.Id.Id == id)
-                {
-                    sceneName = binding.SceneName;
-                    return !string.IsNullOrEmpty(sceneName);
-                }
-            }
-
-            return false;
-        }
-
-        protected bool TryGetLoadingSceneName(out string sceneName)
-        {
-            sceneName = string.Empty;
-
-            if (loadingScene == null)
-                return false;
-
-            return TryGetSceneName(loadingScene.Id, out sceneName);
-        }
-
-        protected IEnumerator WaitForAsyncOperation(
+        
+        private IEnumerator WaitForAsyncOperation(
             AsyncOperation operation,
             float timeoutSeconds,
             string label,
@@ -192,14 +162,17 @@ namespace Extensions.SceneFlow
             }
         }
 
-        protected IEnumerator TransitionRoutine(string targetSceneName, bool additive)
+        private IEnumerator TransitionRoutine(string targetSceneName, bool additive)
         {
-            isTransitionInProgress = true;
+            if (transitionDelay <= 0f)
+                yield return null;
+            else
+                yield return new WaitForSecondsRealtime(transitionDelay);
+
             currentProgress = 0f;
             onLoadingStart?.Invoke();
 
-            string loadingSceneName;
-            if (!TryGetLoadingSceneName(out loadingSceneName))
+            if (!TryGetLoadingSceneName(out string loadingSceneName))
             {
                 ServiceDebug.LogError($"Не найдена loading-сцена в {nameof(SceneController)}");
                 isTransitionInProgress = false;
@@ -216,7 +189,7 @@ namespace Extensions.SceneFlow
                 yield break;
             }
 
-            yield return WaitForAsyncOperation(loadLoading, loadingTimeout, loadingSceneName, false);
+            yield return WaitForAsyncOperation(loadLoading, targetTimeout, loadingSceneName, false);
             if (!isTransitionInProgress)
                 yield break;
 
@@ -247,7 +220,7 @@ namespace Extensions.SceneFlow
             onSceneLoaded?.Invoke();
         }
         
-        protected void FallbackToFirstScene()
+        private void FallbackToFirstScene()
         {
             if (firstScene == null)
             {
@@ -255,16 +228,68 @@ namespace Extensions.SceneFlow
                 return;
             }
 
-            string fallbackSceneName;
-            if (!TryGetSceneName(firstScene.Id, out fallbackSceneName))
+            if (!TryGetSceneName(firstScene.Id, out string fallbackSceneName))
             {
                 ServiceDebug.LogError($"Фолбэк невозможен: стартовая сцена не найдена в списке сцен");
                 return;
             }
 
             ServiceDebug.LogWarning($"Переход в фолбэк-сцену «{fallbackSceneName}»");
+            isTransitionInProgress = true;
             transitionTask.Start(TransitionRoutine(fallbackSceneName, false));
         }
 
+        #endregion
+        
+        #region Внутренние геттеры
+        
+        private bool TryGetSceneName(string id, out string sceneName)
+        {
+            sceneName = string.Empty;
+
+            foreach (SceneBinding binding in scenes)
+            {
+                if (binding == null)
+                    continue;
+
+                if (binding.Id == null)
+                    continue;
+
+                if (binding.Id.Id == id)
+                {
+                    sceneName = binding.SceneName;
+                    return !string.IsNullOrEmpty(sceneName);
+                }
+            }
+
+            return false;
+        }
+
+        private bool TryGetLoadingSceneName(out string sceneName)
+        {
+            sceneName = string.Empty;
+
+            if (loadingScene == null)
+                return false;
+
+            return TryGetSceneName(loadingScene.Id, out sceneName);
+        }
+
+        #endregion
+        
+        #region Дополнительные структуры
+        
+        /// <summary>
+        /// Пара (связка) сцена-идентификатор
+        /// </summary>
+        [Serializable]
+        private class SceneBinding
+        {
+            [field: SerializeField] public SceneID Id { get; private set; }
+
+            [field: SerializeField] public string SceneName { get; private set; }
+        }
+        
+        #endregion
     }
 }
