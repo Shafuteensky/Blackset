@@ -7,7 +7,6 @@ using Blackset.DuelEvents.EventTypes;
 using Extensions.Log;
 using Extensions.Singleton;
 using Features.Duel.Data.FightEnd;
-using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Features.Leagues
@@ -17,6 +16,15 @@ namespace Features.Leagues
     /// </summary>
     public sealed class LeagueController : MonoBehaviourSingleton<LeagueController>
     {
+        /// <summary>
+        /// Событие начала лиги
+        /// </summary>
+        public event Action LeagueStart;
+        /// <summary>
+        /// Событие начала новой дуэли лиги
+        /// </summary>
+        /// <typeparam name="int">Индекс новой дуэли</typeparam>
+        public event Action<int> LeagueDuelStart;
         /// <summary>
         /// Событие победы игроком в лиге (победы в последней дуэле лиге)
         /// </summary>
@@ -30,6 +38,15 @@ namespace Features.Leagues
         /// </summary>
         public event Action LeagueDuelWonEvent;
 
+        /// <summary>
+        /// Индекс текущей дуэли
+        /// </summary>
+        public int CurrentDuelIndex => currentDuelIndex;
+        /// <summary>
+        /// Количество дуэдей в лиге
+        /// </summary>
+        public int TotalDuelsNumber => leagueDataContainer.Data.DuelContracts.Count;
+        
         [SerializeField] private LeagueDataContainer leagueDataContainer;
         [SerializeField] private SelectedContract selectedContract;
         [SerializeField] private ContractListContainer contractListContainer;
@@ -65,64 +82,61 @@ namespace Features.Leagues
 
             if (leagueDataContainer.Data == null) return;
             if (leagueDataContainer.Data.DuelContracts == null) return;
-            if (leagueDataContainer.Data.DuelContracts.Count == 0) return;
+            if (TotalDuelsNumber == 0) return;
 
             currentDuelIndex = 0;
             isLeagueActive = true;
 
             contractListContainer.Clear();
-            Debug.Log(leagueDataContainer.Data.DuelContracts.Count);
             leagueDataContainer.GenerateNewLeague();
-            Debug.Log(leagueDataContainer.Data.DuelContracts.Count);
             foreach (DuelContract contract in leagueDataContainer.Data.DuelContracts)
             {
                 contractListContainer.Add(contract);
-                Debug.Log(contract);
             }
             
             StartCurrentDuel();
+            LeagueStart?.Invoke();
         }
 
         private void StartCurrentDuel()
         {
-            if (!isLeagueActive) return;
             if (leagueDataContainer.Data == null) return;
             if (leagueDataContainer.Data.DuelContracts == null) return;
-
-            if (currentDuelIndex >= leagueDataContainer.Data.DuelContracts.Count)
-            {
-                isLeagueActive = false;
-                return;
-            }
 
             DuelContract activeContract = leagueDataContainer.Data.DuelContracts[currentDuelIndex];
             selectedContract.Select(activeContract.Id);
             
             DuelStartRequest request = new DuelStartRequest(activeContract);
             duelController.StartDuel(request);
+            
+            LeagueDuelStart?.Invoke(currentDuelIndex);
         }
 
         private void OnDuelEnded(DuelEndEvent handler)
         {
-            if (!isLeagueActive)
-            {
-                LeagueWonEvent?.Invoke();
-                return;
-            }
+            if (!isLeagueActive) return;
 
             switch (handler.DuelEndResult.Winner.Value)
             {
                 case FightWinner.Player:
-                    LeagueDuelWonEvent?.Invoke();
-                    break;
-                
+                    currentDuelIndex++;
+                    if (currentDuelIndex >= TotalDuelsNumber)
+                    {
+                        isLeagueActive = false;
+                        LeagueWonEvent?.Invoke();
+                    }
+                    else
+                    {
+                        LeagueDuelWonEvent?.Invoke();
+                        StartCurrentDuel();
+                    }
+                    return;
+        
                 case FightWinner.Opponent:
+                    isLeagueActive = false;
                     LeagueLoseEvent?.Invoke();
                     return;
             }
-            
-            currentDuelIndex++;
-            StartCurrentDuel();
         }
     }
 }

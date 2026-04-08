@@ -1,5 +1,6 @@
 using Blackset.Duel.Sequence;
 using Blackset.DuelUI;
+using Blackset.LeaguesUI;
 using Extensions.Log;
 using Extensions.SceneFlow;
 using Features.Leagues;
@@ -41,7 +42,6 @@ namespace Blackset.Game
             if (DuelEndWindowController != null) 
                 DuelEndWindowController.enabled = gameMode.Value == GameMode.Duel;
 
-            Debug.Log(gameMode.Value);
             switch (gameMode.Value)
             {
                 case GameMode.Duel:

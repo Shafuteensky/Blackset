@@ -256,6 +256,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5296554415702501629, guid: b44d46fad908f4d41b06695664e0869c, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5354933218797082364, guid: b44d46fad908f4d41b06695664e0869c, type: 3}
       propertyPath: m_AnchorMax.y
       value: 1
@@ -360,8 +364,32 @@ PrefabInstance:
       propertyPath: m_SizeDelta.y
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 2831813943403097339, guid: b44d46fad908f4d41b06695664e0869c, type: 3}
+    - {fileID: 7687755759615708639, guid: b44d46fad908f4d41b06695664e0869c, type: 3}
+    - {fileID: 1842926220114865379, guid: b44d46fad908f4d41b06695664e0869c, type: 3}
+    - {fileID: 6358330859144572449, guid: b44d46fad908f4d41b06695664e0869c, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 3063516621963105634, guid: b44d46fad908f4d41b06695664e0869c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 9202800362883883441}
   m_SourcePrefab: {fileID: 100100000, guid: b44d46fad908f4d41b06695664e0869c, type: 3}
+--- !u!1 &8451495521617382509 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3063516621963105634, guid: b44d46fad908f4d41b06695664e0869c, type: 3}
+  m_PrefabInstance: {fileID: 6902455018726791439}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &9202800362883883441
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8451495521617382509}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0fcce01ad4348aaad3ac942e5e2dcaa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp-firstpass::Extensions.UIWindows.ButtonCloseUIWindow

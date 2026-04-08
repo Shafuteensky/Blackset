@@ -518,7 +518,7 @@ CanvasGroup:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6520272835044793193}
-  m_Enabled: 0
+  m_Enabled: 1
   m_Alpha: 0
   m_Interactable: 1
   m_BlocksRaycasts: 1
@@ -869,7 +869,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1192666857568915192, guid: 5756bfce9e19bfe458725eda32eaa84a, type: 3}
       propertyPath: m_text
-      value: Next duel
+      value: Continue
       objectReference: {fileID: 0}
     - target: {fileID: 4100400362722513085, guid: 5756bfce9e19bfe458725eda32eaa84a, type: 3}
       propertyPath: m_Name
@@ -885,7 +885,7 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 4100400362722513085, guid: 5756bfce9e19bfe458725eda32eaa84a, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 8093948670951048593}
+      addedObject: {fileID: 745453368319401107}
   m_SourcePrefab: {fileID: 100100000, guid: 5756bfce9e19bfe458725eda32eaa84a, type: 3}
 --- !u!224 &2021312734629950185 stripped
 RectTransform:
@@ -897,7 +897,7 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 4100400362722513085, guid: 5756bfce9e19bfe458725eda32eaa84a, type: 3}
   m_PrefabInstance: {fileID: 1325254857051391455}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &8093948670951048593
+--- !u!114 &745453368319401107
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -906,9 +906,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 3063516621963105634}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f0fcce01ad4348aaad3ac942e5e2dcaa, type: 3}
+  m_Script: {fileID: 11500000, guid: e5ca4435f03446b38041d5dafd98588d, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp-firstpass::Extensions.UIWindows.ButtonCloseUIWindow
+  m_EditorClassIdentifier: Assembly-CSharp-firstpass::Extensions.SceneFlow.LoadSceneButton
+  targetScene: {fileID: 11400000, guid: f729dc3cc20cd0f4d9014ce6b0993e28, type: 2}
+  additive: 0
 --- !u!1001 &1713394514009389823
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1666,7 +1668,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1192666857568915192, guid: 5756bfce9e19bfe458725eda32eaa84a, type: 3}
       propertyPath: m_text
-      value: Surrender
+      value: Quit
       objectReference: {fileID: 0}
     - target: {fileID: 4100400362722513085, guid: 5756bfce9e19bfe458725eda32eaa84a, type: 3}
       propertyPath: m_Name
@@ -1682,14 +1684,14 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 4100400362722513085, guid: 5756bfce9e19bfe458725eda32eaa84a, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 6269799411327803406}
+      addedObject: {fileID: 355845121230005349}
   m_SourcePrefab: {fileID: 100100000, guid: 5756bfce9e19bfe458725eda32eaa84a, type: 3}
 --- !u!1 &127988011358684279 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4100400362722513085, guid: 5756bfce9e19bfe458725eda32eaa84a, type: 3}
   m_PrefabInstance: {fileID: 4116633161276740810}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &6269799411327803406
+--- !u!114 &355845121230005349
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1698,11 +1700,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 127988011358684279}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 36bf6a4d50dc44a2a06ad2bc36aa773d, type: 3}
+  m_Script: {fileID: 11500000, guid: e5ca4435f03446b38041d5dafd98588d, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp-firstpass::Extensions.UIWindows.ButtonOpenUIWindow
-  needToCloseFocused: 0
-  UIWindowToOpen: {fileID: 11400000, guid: d9d988808ffc70341b7c4edfcb49a72c, type: 2}
+  m_EditorClassIdentifier: Assembly-CSharp-firstpass::Extensions.SceneFlow.LoadSceneButton
+  targetScene: {fileID: 11400000, guid: b512cbc5b8b44784e84fe8ca06c10592, type: 2}
+  additive: 0
 --- !u!224 &3983536610196186108 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 1038472773829113654, guid: 5756bfce9e19bfe458725eda32eaa84a, type: 3}

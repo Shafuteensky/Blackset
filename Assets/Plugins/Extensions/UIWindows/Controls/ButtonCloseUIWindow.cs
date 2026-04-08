@@ -20,7 +20,7 @@ namespace Extensions.UIWindows
 
             if (!windowsController.FocusedWindow.PreviousWindow)
             {
-                Debug.LogError($"PreviousWindow is not set to {windowsController.FocusedWindow.name}");
+                Debug.LogError($"Предыдущее окно не назначено для {windowsController.FocusedWindow.name}");
                 return;
             }
 

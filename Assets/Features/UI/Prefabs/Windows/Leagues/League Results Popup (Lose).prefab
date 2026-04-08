@@ -36,6 +36,10 @@ PrefabInstance:
       propertyPath: m_Color.r
       value: 0.9019608
       objectReference: {fileID: 0}
+    - target: {fileID: 1842926220114865379, guid: cb84686f0ec201648acfe0584b786581, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1898563243431441753, guid: cb84686f0ec201648acfe0584b786581, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -124,6 +128,10 @@ PrefabInstance:
       propertyPath: m_text
       value: Quit
       objectReference: {fileID: 0}
+    - target: {fileID: 6358330859144572449, guid: cb84686f0ec201648acfe0584b786581, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6365178161411438375, guid: cb84686f0ec201648acfe0584b786581, type: 3}
       propertyPath: m_text
       value: League is lost!
@@ -136,6 +144,10 @@ PrefabInstance:
       propertyPath: id
       value: 
       objectReference: {fileID: 11400000, guid: 1a90263ae40e0f846832a76394950944, type: 2}
+    - target: {fileID: 7687755759615708639, guid: cb84686f0ec201648acfe0584b786581, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7969241635835081643, guid: cb84686f0ec201648acfe0584b786581, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
@@ -163,6 +175,9 @@ PrefabInstance:
     m_RemovedComponents:
     - {fileID: 8093948670951048593, guid: cb84686f0ec201648acfe0584b786581, type: 3}
     - {fileID: 6269799411327803406, guid: cb84686f0ec201648acfe0584b786581, type: 3}
+    - {fileID: 6358330859144572449, guid: cb84686f0ec201648acfe0584b786581, type: 3}
+    - {fileID: 1842926220114865379, guid: cb84686f0ec201648acfe0584b786581, type: 3}
+    - {fileID: 7687755759615708639, guid: cb84686f0ec201648acfe0584b786581, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:

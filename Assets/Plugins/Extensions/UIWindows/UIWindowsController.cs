@@ -11,10 +11,16 @@ namespace Extensions.UIWindows
     /// </summary>
     public class UIWindowsController : MonoBehaviourSingleton<UIWindowsController>
     {
+        #region Свойства
+        
         /// <summary>
         /// Текущее окно в фокусе
         /// </summary>
         public UIWindow FocusedWindow => focusedWindow;
+        
+        #endregion
+        
+        #region Параметры
         
         [Header("Настройки"), Space]
         [SerializeField]
@@ -30,9 +36,17 @@ namespace Extensions.UIWindows
         [SerializeField]
         protected UIWindow focusedWindow;
         
+        #endregion
+        
+        #region Переменные
+        
         protected UIWindowID previousWindow;
         protected bool transitionInProgress = false;
+        
+        #endregion
 
+        #region MonoBehaviour
+        
         protected override void Awake()
         {
             base.Awake();
@@ -41,6 +55,10 @@ namespace Extensions.UIWindows
             if (root == null) root = transform;
             OpenNewWindow(startWindow);
         }
+        
+        #endregion
+
+        #region Управление окнами
         
         /// <summary>
         /// Открыть окно по идентификатору
@@ -105,5 +123,7 @@ namespace Extensions.UIWindows
             focusedWindow.transform.SetAsLastSibling();
             openedUIWindows.Add(focusedWindow);
         }
+        
+        #endregion
     }
 }
